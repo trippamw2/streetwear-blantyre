@@ -30,10 +30,19 @@ const CATEGORIES = [
   { id: "t-shirts", label: "T-Shirts" },
   { id: "hoodies", label: "Hoodies" },
   { id: "caps", label: "Caps" },
-  { id: "sneakers", label: "Sneakers" },
-  { id: "pants", label: "Pants" },
-  { id: "jackets", label: "Jackets" },
-  { id: "accessories", label: "Accessories" },
+  { id: "hut-caps", label: "Hut Caps" },
+  { id: "bracelets", label: "Bracelets" },
+  { id: "socks", label: "Socks" },
+  { id: "stickers", label: "Stickers" },
+  { id: "earbuds", label: "Earbuds" },
+];
+
+const CULTURE_PILLARS = [
+  { id: "", label: "None" },
+  { id: "music", label: "Music Culture" },
+  { id: "sports", label: "Sports Culture" },
+  { id: "faith", label: "Faith Culture" },
+  { id: "hustle", label: "Hustle Culture" },
 ];
 
 interface Supplier {
@@ -84,6 +93,7 @@ const AdminProducts = () => {
     types: [] as { id: string; name: string }[],
     supplier_id: "",
     stock_quantity: 0,
+    culture_pillar: "",
   });
 
   useEffect(() => {
@@ -134,6 +144,7 @@ const AdminProducts = () => {
         sort_order: 0,
         supplier_id: formData.supplier_id || null,
         stock_quantity: formData.stock_quantity || 0,
+        culture_pillar: formData.culture_pillar || null,
       };
 
       if (editingProduct) {
@@ -215,6 +226,7 @@ const AdminProducts = () => {
       types: product.types,
       supplier_id: product.supplier_id || "",
       stock_quantity: product.stock_quantity || 0,
+      culture_pillar: (product as any).culture_pillar || "",
     });
     setIsDialogOpen(true);
   };
@@ -234,6 +246,7 @@ const AdminProducts = () => {
       types: [],
       supplier_id: "",
       stock_quantity: 0,
+      culture_pillar: "",
     });
   };
 
@@ -399,6 +412,19 @@ const AdminProducts = () => {
                 >
                   {CATEGORIES.map((c) => (
                     <option key={c.id} value={c.id}>{c.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Culture Pillar</Label>
+                <select
+                  value={formData.culture_pillar}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, culture_pillar: e.target.value }))}
+                  className="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm"
+                >
+                  {CULTURE_PILLARS.map((p) => (
+                    <option key={p.id} value={p.id}>{p.label}</option>
                   ))}
                 </select>
               </div>

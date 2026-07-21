@@ -40,6 +40,7 @@ import AdminPromos from "./pages/admin/Promos";
 import AdminCRM from "./pages/admin/CRM";
 import AdminLoyalty from "./pages/admin/Loyalty";
 import AdminReferrals from "./pages/admin/Referrals";
+import AdminCategories from "./pages/admin/Categories";
 import Terms from "./pages/policy/Terms";
 import Privacy from "./pages/policy/Privacy";
 import FAQ from "./pages/policy/FAQ";
@@ -106,6 +107,7 @@ const App = () => (
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />
                   <Route path="products" element={<AdminProducts />} />
+                  <Route path="categories" element={<AdminCategories />} />
                   <Route path="combos" element={<AdminCombos />} />
                   <Route path="orders" element={<AdminOrders />} />
                   <Route path="promotions" element={<AdminPromotions />} />

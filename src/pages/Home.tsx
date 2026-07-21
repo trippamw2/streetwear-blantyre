@@ -1,7 +1,7 @@
 ﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { formatMWK, getKitPrice, getKitRealSaving, getKitProducts } from "@/data/products";
+import { formatMWK, getKitPrice, getKitRealSaving, getKitProducts, culturePillars } from "@/data/products";
 import { useCombos } from "@/hooks/useCombos";
 import { useProducts } from "@/hooks/useProducts";
 import { KitCard } from "@/components/KitCard";
@@ -11,6 +11,7 @@ import {
   Truck, MessageCircle, ShieldCheck, Heart,
   BookOpen, Briefcase, Headphones, Luggage,
   ArrowRight, CheckCircle, Zap, BadgePercent,
+  Music, Trophy,
 } from "lucide-react";
 import hero from "@/assets/hero-lifestyle.jpg";
 
@@ -117,33 +118,32 @@ const Home = () => {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {[
-            { icon: Headphones, title: "Music", tag: "music", desc: "Beats. Lyrics. Style. Wear your sound.", color: "from-blue-500 to-cyan-500" },
-            { icon: Heart, title: "Faith", tag: "faith", desc: "Purpose-driven. Wear what you believe.", color: "from-purple-500 to-indigo-500" },
-            { icon: Zap, title: "Sports", tag: "sports", desc: "Game day to every day. Athletic street.", color: "from-green-500 to-teal-500" },
-            { icon: Briefcase, title: "Hustle", tag: "hustle", desc: "Work hard. Look good. Make moves.", color: "from-blue-500 to-red-500" },
-          ].map((item, i) => (
-            <motion.div
-              key={item.tag}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="group relative rounded-xl sm:rounded-2xl p-5 sm:p-6 bg-white border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-200"
-            >
-              <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
-                <item.icon className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="font-display font-bold text-lg mb-1">{item.title}</h3>
-              <p className="text-sm text-gray-500 mb-4">{item.desc}</p>
-              <Link
-                to="/combos"
-                className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+          {culturePillars.map((pillar, i) => {
+            const iconMap: Record<string, any> = { Music, Trophy, Heart, Zap };
+            const PillarIcon = iconMap[pillar.icon] || Zap;
+            return (
+              <motion.div
+                key={pillar.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group relative rounded-xl sm:rounded-2xl p-5 sm:p-6 bg-white border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-200"
               >
-                View Bundle <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </motion.div>
-          ))}
+                <div className="h-12 w-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: pillar.color + "20" }}>
+                  <PillarIcon className="h-6 w-6" style={{ color: pillar.color }} />
+                </div>
+                <h3 className="font-display font-bold text-lg mb-1">{pillar.label}</h3>
+                <p className="text-sm text-gray-500 mb-4">{pillar.description}</p>
+                <Link
+                  to={`/shop?culture=${pillar.id}`}
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                >
+                  Shop Now <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
 

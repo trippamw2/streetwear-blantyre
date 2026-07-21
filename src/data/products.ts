@@ -1,4 +1,4 @@
-﻿export type Category = "all" | "t-shirts" | "hoodies" | "caps" | "sneakers" | "pants" | "jackets" | "accessories";
+﻿export type Category = "all" | "t-shirts" | "bracelets" | "caps" | "stickers" | "earbuds" | "hoodies" | "hut-caps" | "socks";
 
 export interface ProductType {
   id: string;
@@ -23,6 +23,7 @@ export interface Product {
   specs?: Record<string, string>;
   reward_points?: number;
   rating?: number;
+  culture_pillar?: string;
 }
 
 export const BRANDS = [
@@ -30,76 +31,93 @@ export const BRANDS = [
   { id: "sb-street", name: "SB Street", color: "#1a1a1a" },
 ] as const;
 
-export const categoryGroups = {
-  tops: {
-    label: "Tops",
-    description: "T-shirts, hoodies & jackets",
-    categories: ["t-shirts", "hoodies", "jackets"] as Category[],
-  },
-  bottoms: {
-    label: "Bottoms",
-    description: "Pants & sneakers",
-    categories: ["pants", "sneakers"] as Category[],
-  },
-  accessories: {
-    label: "Accessories",
-    description: "Caps & accessories",
-    categories: ["caps", "accessories"] as Category[],
-  },
-};
+// ─── Culture Pillars ────────────────────────────────────────────────
 
-export const categories: { id: Category; label: string; parent?: string }[] = [
-  { id: "all", label: "All Products" },
-  { id: "t-shirts", label: "T-Shirts", parent: "Tops" },
-  { id: "hoodies", label: "Hoodies", parent: "Tops" },
-  { id: "jackets", label: "Jackets", parent: "Tops" },
-  { id: "pants", label: "Pants", parent: "Bottoms" },
-  { id: "sneakers", label: "Sneakers", parent: "Bottoms" },
-  { id: "caps", label: "Caps", parent: "Accessories" },
-  { id: "accessories", label: "Accessories", parent: "Accessories" },
+export interface CulturePillar {
+  id: string;
+  label: string;
+  description: string;
+  icon: string;
+  color: string;
+}
+
+export const culturePillars: CulturePillar[] = [
+  { id: "music", label: "Music Culture", description: "Express through sound and rhythm", icon: "Music", color: "#8B5CF6" },
+  { id: "sports", label: "Sports Culture", description: "Rep your team, rep your city", icon: "Trophy", color: "#F59E0B" },
+  { id: "faith", label: "Faith Culture", description: "Wear your beliefs with pride", icon: "Heart", color: "#10B981" },
+  { id: "hustle", label: "Hustle Culture", description: "Grind never stops. Dress like it.", icon: "Zap", color: "#EF4444" },
 ];
+
+// ─── Wearable Categories ────────────────────────────────────────────
+
+export const categories: { id: Category; label: string }[] = [
+  { id: "all", label: "All Products" },
+  { id: "t-shirts", label: "T-Shirts" },
+  { id: "hoodies", label: "Hoodies" },
+  { id: "caps", label: "Caps" },
+  { id: "hut-caps", label: "Hut Caps" },
+  { id: "bracelets", label: "Bracelets" },
+  { id: "socks", label: "Socks" },
+  { id: "stickers", label: "Stickers" },
+  { id: "earbuds", label: "Earbuds" },
+];
+
+// ─── Products ───────────────────────────────────────────────────────
 
 const PLACEHOLDER = "https://placehold.co/600x600/1a1a1a/ffffff?text=Streetwear+Blantyre";
 
 export const products: Product[] = [
-  // T-SHIRTS
-  { id: "sb-tee-001", name: "SB Classic Logo Tee", benefit: "100% cotton. Oversized fit. Iconic SB branding across the chest.", price: 12000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "white", name: "White" }], stock: 20, is_featured: true, is_best_seller: true },
-  { id: "sb-tee-002", name: "SB Street Graphic Tee", benefit: "Premium cotton blend. Street art print. Relaxed fit.", price: 15000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "olive", name: "Olive" }], stock: 15, is_featured: true },
-  { id: "sb-tee-003", name: "SB Minimalist Tee", benefit: "Clean design. Soft-touch cotton. Embroidered logo.", price: 14000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "navy", name: "Navy" }, { id: "grey", name: "Grey" }], stock: 12 },
-  { id: "sb-tee-004", name: "SB Malawi Pride Tee", benefit: "Celebrate the culture. Cotton. Regular fit.", price: 13000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "green", name: "Green" }, { id: "red", name: "Red" }], stock: 18, is_featured: true },
-  { id: "sb-tee-005", name: "SB Tie-Dye Tee", benefit: "Hand-dyed. One-of-a-kind pattern. 100% cotton.", price: 16000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "multi", name: "Multi" }], stock: 8 },
+  // ── T-SHIRTS ──
+  { id: "sb-tee-001", name: "SB Classic Logo Tee", benefit: "100% cotton. Oversized fit. Iconic SB branding across the chest.", price: 12000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "white", name: "White" }], stock: 20, is_featured: true, is_best_seller: true, culture_pillar: "hustle" },
+  { id: "sb-tee-002", name: "SB Street Graphic Tee", benefit: "Premium cotton blend. Street art print. Relaxed fit.", price: 15000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "olive", name: "Olive" }], stock: 15, is_featured: true, culture_pillar: "music" },
+  { id: "sb-tee-003", name: "SB Minimalist Tee", benefit: "Clean design. Soft-touch cotton. Embroidered logo.", price: 14000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "navy", name: "Navy" }, { id: "grey", name: "Grey" }], stock: 12, culture_pillar: "faith" },
+  { id: "sb-tee-004", name: "SB Malawi Pride Tee", benefit: "Celebrate the culture. Cotton. Regular fit.", price: 13000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "green", name: "Green" }, { id: "red", name: "Red" }], stock: 18, is_featured: true, culture_pillar: "sports" },
+  { id: "sb-tee-005", name: "SB Tie-Dye Tee", benefit: "Hand-dyed. One-of-a-kind pattern. 100% cotton.", price: 16000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "multi", name: "Multi" }], stock: 8, culture_pillar: "music" },
 
-  // HOODIES
-  { id: "sb-hood-001", name: "SB Classic Pullover Hoodie", benefit: "Heavyweight cotton. Kangaroo pocket. Ribbed cuffs.", price: 28000, category: "hoodies", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "grey", name: "Grey" }], stock: 15, is_featured: true, is_best_seller: true },
-  { id: "sb-hood-002", name: "SB Zip-Up Hoodie", benefit: "Full zip. Brushed fleece interior. Two side pockets.", price: 32000, category: "hoodies", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "navy", name: "Navy" }], stock: 10, is_featured: true },
-  { id: "sb-hood-003", name: "SB Street Oversized Hoodie", benefit: "Drop shoulder. Heavy 380gsm. Oversized fit.", price: 35000, category: "hoodies", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "charcoal", name: "Charcoal" }, { id: "sand", name: "Sand" }], stock: 8 },
-  { id: "sb-hood-004", name: "SB Crop Hoodie", benefit: "Cropped silhouette. Soft fleece. Embroidered logo.", price: 26000, category: "hoodies", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "pink", name: "Pink" }, { id: "white", name: "White" }], stock: 12 },
+  // ── HOODIES ──
+  { id: "sb-hood-001", name: "SB Classic Pullover Hoodie", benefit: "Heavyweight cotton. Kangaroo pocket. Ribbed cuffs.", price: 28000, category: "hoodies", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "grey", name: "Grey" }], stock: 15, is_featured: true, is_best_seller: true, culture_pillar: "hustle" },
+  { id: "sb-hood-002", name: "SB Zip-Up Hoodie", benefit: "Full zip. Brushed fleece interior. Two side pockets.", price: 32000, category: "hoodies", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "navy", name: "Navy" }], stock: 10, is_featured: true, culture_pillar: "sports" },
+  { id: "sb-hood-003", name: "SB Street Oversized Hoodie", benefit: "Drop shoulder. Heavy 380gsm. Oversized fit.", price: 35000, category: "hoodies", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "charcoal", name: "Charcoal" }, { id: "sand", name: "Sand" }], stock: 8, culture_pillar: "music" },
+  { id: "sb-hood-004", name: "SB Crop Hoodie", benefit: "Cropped silhouette. Soft fleece. Embroidered logo.", price: 26000, category: "hoodies", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "pink", name: "Pink" }, { id: "white", name: "White" }], stock: 12, culture_pillar: "faith" },
 
-  // JACKETS
-  { id: "sb-jack-001", name: "SB Bomber Jacket", benefit: "Lightweight bomber. Snap-button closure. Ribbed hem.", price: 45000, category: "jackets", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "olive", name: "Olive" }], stock: 6, is_featured: true },
-  { id: "sb-jack-002", name: "SB Windbreaker", benefit: "Water-resistant. Packable. Lightweight layering.", price: 38000, category: "jackets", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "orange", name: "Orange" }], stock: 5 },
+  // ── CAPS ──
+  { id: "sb-cap-001", name: "SB Logo Snapback", benefit: "Structured fit. Flat brim. Embroidered logo.", price: 8000, category: "caps", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "white", name: "White" }], stock: 25, is_featured: true, is_best_seller: true, culture_pillar: "hustle" },
+  { id: "sb-cap-002", name: "SB Dad Hat", benefit: "Unstructured. Curved brim. Adjustable strap.", price: 7500, category: "caps", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "navy", name: "Navy" }, { id: "khaki", name: "Khaki" }], stock: 20, is_featured: true, culture_pillar: "sports" },
+  { id: "sb-cap-003", name: "SB Trucker Cap", benefit: "Mesh back. Foam front. Snapback closure.", price: 8500, category: "caps", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "camo", name: "Camo" }], stock: 15, culture_pillar: "music" },
 
-  // PANTS
-  { id: "sb-pant-001", name: "SB Cargo Joggers", benefit: "Relaxed fit. Cargo pockets. Elastic cuffs.", price: 22000, category: "pants", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "khaki", name: "Khaki" }], stock: 14, is_featured: true, is_best_seller: true },
-  { id: "sb-pant-002", name: "SB Classic Sweatpants", benefit: "French terry cotton. Tapered fit. Drawstring waist.", price: 20000, category: "pants", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "grey", name: "Grey" }, { id: "black", name: "Black" }], stock: 18 },
-  { id: "sb-pant-003", name: "SB Wide Leg Denim", benefit: "Premium denim. Wide leg. High waist.", price: 30000, category: "pants", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "indigo", name: "Indigo" }, { id: "washed", name: "Washed Blue" }], stock: 8 },
+  // ── HUT CAPS ──
+  { id: "sb-hut-001", name: "SB Knit Beanie", benefit: "Knit acrylic. One size fits all. Folded cuff.", price: 5500, category: "hut-caps", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "blue", name: "Blue" }], stock: 22, is_featured: true, culture_pillar: "hustle" },
+  { id: "sb-hut-002", name: "SB Malawi Kufi Cap", benefit: "Traditional embroidered design. Premium cotton.", price: 8000, category: "hut-caps", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "white", name: "White" }, { id: "gold", name: "Gold" }], stock: 12, is_featured: true, culture_pillar: "faith" },
+  { id: "sb-hut-003", name: "SB Fleece Trapper", benefit: "Warm fleece lining. Ear flaps. Snap-button chin.", price: 10000, category: "hut-caps", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "olive", name: "Olive" }], stock: 8, culture_pillar: "sports" },
+  { id: "sb-hut-004", name: "SB Corduroy Bucket Hat", benefit: "Soft corduroy. Wide brim. Relaxed fit.", price: 7000, category: "hut-caps", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "sand", name: "Sand" }, { id: "brown", name: "Brown" }], stock: 10, culture_pillar: "music" },
 
-  // SNEAKERS
-  { id: "sb-snk-001", name: "SB Classic Low", benefit: "Canvas upper. Vulcanised sole. Clean silhouette.", price: 25000, category: "sneakers", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "white", name: "White" }], stock: 12, is_featured: true, is_best_seller: true },
-  { id: "sb-snk-002", name: "SB Chunky Runner", benefit: "Chunky sole. Mesh and leather upper. Cushioned insole.", price: 35000, category: "sneakers", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "grey", name: "Grey" }, { id: "black", name: "Black" }], stock: 7, is_featured: true },
-  { id: "sb-snk-003", name: "SB Slip-On", benefit: "Easy on/off. Memory foam insole. Canvas.", price: 18000, category: "sneakers", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "check", name: "Checkered" }], stock: 10 },
+  // ── BRACELETS ──
+  { id: "sb-brac-001", name: "SB Woven Festival Band", benefit: "Hand-woven cotton. Adjustable tie. Waterproof.", price: 3500, category: "bracelets", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "blue", name: "Blue" }, { id: "red", name: "Red" }], stock: 40, is_featured: true, is_best_seller: true, culture_pillar: "music" },
+  { id: "sb-brac-002", name: "SB Leather Cuff", benefit: "Genuine leather. Embossed SB logo. Snap closure.", price: 6000, category: "bracelets", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "brown", name: "Brown" }], stock: 18, is_featured: true, culture_pillar: "hustle" },
+  { id: "sb-brac-003", name: "SB Faith Bead Set", benefit: "Wooden beads. Cross charm. Stretch fit.", price: 4000, category: "bracelets", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "natural", name: "Natural" }, { id: "black", name: "Black" }], stock: 25, culture_pillar: "faith" },
+  { id: "sb-brac-004", name: "SB Silicone Sports Band", benefit: "Soft silicone. Debossed logo. One size.", price: 3000, category: "bracelets", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "blue", name: "Blue" }, { id: "green", name: "Green" }], stock: 35, culture_pillar: "sports" },
+  { id: "sb-brac-005", name: "SB Chain Link Bracelet", benefit: "Stainless steel. Adjustable clasp. Tarnish-free.", price: 7500, category: "bracelets", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "silver", name: "Silver" }, { id: "gold", name: "Gold" }], stock: 12, culture_pillar: "hustle" },
 
-  // CAPS
-  { id: "sb-cap-001", name: "SB Logo Snapback", benefit: "Structured fit. Flat brim. Embroidered logo.", price: 8000, category: "caps", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "white", name: "White" }], stock: 25, is_featured: true, is_best_seller: true },
-  { id: "sb-cap-002", name: "SB Dad Hat", benefit: "Unstructured. Curved brim. Adjustable strap.", price: 7500, category: "caps", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "navy", name: "Navy" }, { id: "khaki", name: "Khaki" }], stock: 20, is_featured: true },
-  { id: "sb-cap-003", name: "SB Trucker Cap", benefit: "Mesh back. Foam front. Snapback closure.", price: 8500, category: "caps", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "camo", name: "Camo" }], stock: 15 },
+  // ── SOCKS ──
+  { id: "sb-sock-001", name: "SB Logo Crew Socks", benefit: "Cushioned sole. Ribbed cuff. Premium cotton blend.", price: 3500, category: "socks", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "classic", name: "Classic Mix" }, { id: "dark", name: "Dark Mix" }], stock: 40, is_featured: true, is_best_seller: true, culture_pillar: "hustle" },
+  { id: "sb-sock-002", name: "SB Stripe Athletic Socks", benefit: "Moisture-wicking. Arch support. 3-pack.", price: 4500, category: "socks", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "white", name: "White" }, { id: "black", name: "Black" }], stock: 30, culture_pillar: "sports" },
+  { id: "sb-sock-003", name: "SB Ankle No-Show Socks", benefit: "Invisible fit. Anti-slip grip. Breathable mesh.", price: 2500, category: "socks", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "white", name: "White" }, { id: "black", name: "Black" }], stock: 35, culture_pillar: "music" },
+  { id: "sb-sock-004", name: "SB Thick Wool Winter Socks", benefit: "Merino wool blend. Thermal. Knee-high.", price: 5000, category: "socks", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "charcoal", name: "Charcoal" }, { id: "navy", name: "Navy" }], stock: 15, culture_pillar: "hustle" },
 
-  // ACCESSORIES
-  { id: "sb-acc-001", name: "SB Tote Bag", benefit: "Heavy canvas. Reinforced handles. Large pocket.", price: 6000, category: "accessories", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "natural", name: "Natural" }, { id: "black", name: "Black" }], stock: 30, is_featured: true },
-  { id: "sb-acc-002", name: "SB Beanie", benefit: "Knit acrylic. One size fits all. Folded cuff.", price: 5500, category: "accessories", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "orange", name: "Orange" }], stock: 22 },
-  { id: "sb-acc-003", name: "SB Backpack", benefit: "Water-resistant. Laptop sleeve. Multiple pockets.", price: 18000, category: "accessories", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }], stock: 8 },
-  { id: "sb-acc-004", name: "SB Socks (3-Pack)", benefit: "Cushioned sole. Ribbed cuff. Premium cotton blend.", price: 5000, category: "accessories", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "classic", name: "Classic Mix" }, { id: "dark", name: "Dark Mix" }], stock: 40 },
+  // ── STICKERS ──
+  { id: "sb-stk-001", name: "SB Logo Die-Cut Sticker", benefit: "Vinyl. Weatherproof. 3-inch. Glossy finish.", price: 1500, category: "stickers", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "blue", name: "Blue" }, { id: "white", name: "White" }], stock: 100, is_featured: true, is_best_seller: true, culture_pillar: "hustle" },
+  { id: "sb-stk-002", name: "SB Culture Pack (6 Stickers)", benefit: "6 unique designs. Vinyl. Weatherproof.", price: 4000, category: "stickers", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "mixed", name: "Mixed" }], stock: 50, is_featured: true, culture_pillar: "music" },
+  { id: "sb-stk-003", name: "SB Malawi Map Sticker", benefit: "Oversized vinyl. Malawi outline with SB logo.", price: 2000, category: "stickers", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "blue", name: "Blue" }, { id: "green", name: "Green" }], stock: 60, culture_pillar: "sports" },
+  { id: "sb-stk-004", name: "SB Faith Collection Sticker", benefit: "Inspirational designs. Vinyl. 4-pack.", price: 3000, category: "stickers", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "gold", name: "Gold" }, { id: "white", name: "White" }], stock: 40, culture_pillar: "faith" },
+
+  // ── EARBUDS ──
+  { id: "sb-ear-001", name: "SB Wireless Earbuds", benefit: "Bluetooth 5.0. 8hr battery. IPX4 water resistant.", price: 15000, category: "earbuds", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "white", name: "White" }], stock: 20, is_featured: true, is_best_seller: true, culture_pillar: "music" },
+  { id: "sb-ear-002", name: "SB Sport Earbuds", benefit: "Secure fit. Sweatproof. Built-in mic.", price: 12000, category: "earbuds", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "blue", name: "Blue" }, { id: "black", name: "Black" }], stock: 15, is_featured: true, culture_pillar: "sports" },
+  { id: "sb-ear-003", name: "SB Bass Pro Earbuds", benefit: "Deep bass. ANC. 12hr battery. Fast charge.", price: 22000, category: "earbuds", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "silver", name: "Silver" }], stock: 10, culture_pillar: "music" },
+  { id: "sb-ear-004", name: "SB Kids Earbuds", benefit: "Volume-limited. Fun colors. Durable cable.", price: 8000, category: "earbuds", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "blue", name: "Blue" }, { id: "pink", name: "Pink" }], stock: 20, culture_pillar: "faith" },
 ];
+
+// ─── Kits / Combos ──────────────────────────────────────────────────
 
 export interface Kit {
   id: string;
@@ -120,12 +138,12 @@ export const kits: Kit[] = [
   {
     id: "k1",
     name: "Campus Starter Kit",
-    hook: "Tee, cap, tote. Ready for class.",
+    hook: "Tee, cap, stickers. Ready for class.",
     lifestyle: "student",
     tagline: "The everyday essentials. Clean and fresh.",
-    description: "Classic logo tee, dad hat, and a tote bag. Everything you need to look right on campus. Affordable, versatile, and always in style.",
+    description: "Classic logo tee, snapback cap, and logo stickers. Everything you need to look right on campus. Affordable, versatile, and always in style.",
     discountPercent: 15,
-    productIds: ["sb-tee-001", "sb-cap-002", "sb-acc-001"],
+    productIds: ["sb-tee-001", "sb-cap-001", "sb-stk-001"],
     image: PLACEHOLDER,
     vibe: "Look fresh. Spend less.",
     badge: "Best for Students",
@@ -133,41 +151,41 @@ export const kits: Kit[] = [
   },
   {
     id: "k2",
-    name: "Office Flex Kit",
-    hook: "Hoodie, joggers, sneakers. Work to weekend.",
+    name: "Studio Sessions Kit",
+    hook: "Hoodie, earbuds, bracelet. Create in comfort.",
     lifestyle: "work",
-    tagline: "Professional comfort. Streetwear edge.",
-    description: "Zip-up hoodie, cargo joggers, and classic low sneakers. Clean enough for the office, comfortable enough for after hours.",
+    tagline: "Music meets style. Studio ready.",
+    description: "Oversized hoodie, wireless earbuds, and woven band. Built for creators who live for the beat. Comfort and sound in one bundle.",
     discountPercent: 15,
-    productIds: ["sb-hood-002", "sb-pant-001", "sb-snk-001"],
+    productIds: ["sb-hood-003", "sb-ear-001", "sb-brac-001"],
     image: PLACEHOLDER,
-    vibe: "Work hard. Dress harder.",
+    vibe: "Create. Repeat. Drip.",
     badge: "Most Popular",
     stock: 10,
   },
   {
     id: "k3",
-    name: "Weekend Wanderer Kit",
-    hook: "Jacket, tee, sneakers. Out the door.",
+    name: "Match Day Kit",
+    hook: "Cap, socks, bracelet. Rep the team.",
     lifestyle: "travel",
-    tagline: "Pack light. Look right.",
-    description: "Bomber jacket, graphic tee, and chunky runners. Built for movement. From Blantyre to wherever you're headed.",
+    tagline: "Game day ready. Head to toe.",
+    description: "Dad hat, athletic socks, and sports band. Show up for your team looking fresh. Light, comfortable, and ready for anything.",
     discountPercent: 15,
-    productIds: ["sb-jack-001", "sb-tee-002", "sb-snk-002"],
+    productIds: ["sb-cap-002", "sb-sock-002", "sb-brac-004"],
     image: PLACEHOLDER,
-    vibe: "Explore in style.",
+    vibe: "Rep your team. Rep your city.",
     badge: "Best Value",
     stock: 8,
   },
   {
     id: "k4",
-    name: "Full Fit Kit",
-    hook: "Head to toe. The complete look.",
+    name: "Full Culture Kit",
+    hook: "Hoodie, hut cap, earbuds, socks. The whole look.",
     lifestyle: "premium",
-    tagline: "The whole outfit. No compromises.",
-    description: "Oversized hoodie, wide leg denim, snapback cap, and beanie. The full Streetwear Blantyre look. Premium pieces, bundle price.",
+    tagline: "The full culture upgrade. No compromises.",
+    description: "Street oversized hoodie, knit beanie, bass pro earbuds, and crew socks. The complete Streetwear Blantyre experience. Premium pieces, bundle price.",
     discountPercent: 15,
-    productIds: ["sb-hood-003", "sb-pant-003", "sb-cap-001", "sb-acc-002"],
+    productIds: ["sb-hood-003", "sb-hut-001", "sb-ear-003", "sb-sock-001"],
     image: PLACEHOLDER,
     vibe: "The full culture upgrade.",
     badge: "Premium",
@@ -176,6 +194,8 @@ export const kits: Kit[] = [
 ];
 
 export const combos: Kit[] = kits;
+
+// ─── Utilities ──────────────────────────────────────────────────────
 
 const itemImageMap: Record<string, string> = {};
 
@@ -227,6 +247,8 @@ export const getRecommendations = (product: Product, allProducts: Product[], lim
       if (p.price >= priceMin && p.price <= priceMax) score += 50;
       
       if (p.category === product.category) score += 30;
+      
+      if (product.culture_pillar && p.culture_pillar === product.culture_pillar) score += 40;
       
       const comboMatch = combos.some(c => 
         c.productIds.some(pid => pid === product.id) &&

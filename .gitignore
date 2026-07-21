@@ -32,3 +32,5 @@ supabase.tar.gz
 *.sln
 *.sw?
 .vercel
+
+.vercel

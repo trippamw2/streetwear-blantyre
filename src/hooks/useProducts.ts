@@ -82,6 +82,7 @@ export function useProducts() {
         specs: p.specs || {},
         reward_points: p.reward_points || Math.round(p.price / 100),
         rating: p.rating || 0,
+        culture_pillar: p.culture_pillar || "",
       }));
 
       console.log("✅ Products loaded from DB:", mappedProducts.length);
@@ -108,6 +109,12 @@ export function useProducts() {
   const getProductsByCategory = useCallback((category: string) => {
     if (category === "all") return products;
     return products.filter((p) => p.category?.toLowerCase() === category.toLowerCase());
+  }, [products]);
+
+  // Get products by culture pillar
+  const getProductsByCulture = useCallback((culture: string) => {
+    if (culture === "all") return products;
+    return products.filter((p) => p.culture_pillar === culture);
   }, [products]);
 
   // Check and reserve stock (for checkout)
@@ -236,6 +243,7 @@ export function useProducts() {
     refresh: fetchProducts,
     getProduct,
     getProductsByCategory,
+    getProductsByCulture,
     checkAndReserveStock,
     reserveStock,
     releaseStock,
