@@ -4,7 +4,7 @@ import { Product, formatMWK } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { useCompare } from "@/contexts/CompareContext";
-import { ShoppingBag, Plus, Heart, Star, Check, Zap, GitCompare } from "lucide-react";
+import { ShoppingBag, Plus, Heart, Star, Check, Zap, GitCompare, Music, Dumbbell, Cross, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "@/hooks/use-toast";
 
@@ -94,6 +94,13 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                 </span>
               ))}
             </div>
+          )}
+
+          {/* Culture Pillar Badge */}
+          {(product as any).culture_pillar && (
+            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[10px] font-bold bg-purple-500 text-white rounded">
+              {String((product as any).culture_pillar).toUpperCase()}
+            </span>
           )}
 
           {/* Wishlist */}

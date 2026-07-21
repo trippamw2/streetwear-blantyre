@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { categories, Category, BRANDS } from "@/data/products";
+import { categories, Category, BRANDS, culturePillars } from "@/data/products";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
 import { PromotionSlider } from "@/components/PromotionSlider";
@@ -14,8 +14,12 @@ import { motion, AnimatePresence } from "framer-motion";
 const PRODUCTS_PER_PAGE = 12;
 
 const Shop = () => {
-  const { products, loading, getProductsByCategory } = useProducts();
+  const { products, loading, getProductsByCategory, getProductsByCulture } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">("all");
+  const [selectedCulture, setSelectedCulture] = useState<string>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("culture") || "";
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"newest" | "price-low" | "price-high" | "name">("newest");
   const [showFilters, setShowFilters] = useState(false);
@@ -37,10 +41,11 @@ const Shop = () => {
 
   const filtered = productsToShow.filter(p => {
     const matchesCategory = selectedCategory === "all" || p.category?.toLowerCase() === selectedCategory.toLowerCase();
+    const matchesCulture = !selectedCulture || (p as any).culture_pillar === selectedCulture;
     const matchesSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.benefit.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes((p as any).brand?.toLowerCase() || "");
     const matchesPrice = p.price >= priceMin && p.price <= priceMax;
-    return matchesCategory && matchesSearch && matchesBrand && matchesPrice;
+    return matchesCategory && matchesCulture && matchesSearch && matchesBrand && matchesPrice;
   });
 
   const sorted = [...filtered].sort((a, b) => {
@@ -58,6 +63,7 @@ const Shop = () => {
 
   const clearFilters = () => {
     setSelectedCategory("all");
+    setSelectedCulture("");
     setSearchQuery("");
     setSelectedBrands([]);
     setVisibleCount(PRODUCTS_PER_PAGE);
@@ -86,7 +92,7 @@ const Shop = () => {
     setVisibleCount(prev => prev + PRODUCTS_PER_PAGE);
   };
 
-  const hasFilters = selectedCategory !== "all" || searchQuery || selectedBrands.length > 0;
+  const hasFilters = selectedCategory !== "all" || selectedCulture !== "" || searchQuery || selectedBrands.length > 0;
 
   if (loading) {
     return (
@@ -251,8 +257,8 @@ const Shop = () => {
         )}
       </AnimatePresence>
 
-      {/* Categories */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      {/* Wearable Categories */}
+      <div className="flex flex-wrap gap-2 mb-3">
         <button
           onClick={() => setSelectedCategory("all")}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
@@ -278,6 +284,34 @@ const Shop = () => {
         ))}
       </div>
 
+      {/* Culture Pillars */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider self-center mr-1">Vibe:</span>
+        <button
+          onClick={() => setSelectedCulture("")}
+          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+            selectedCulture === ""
+              ? "bg-blue-500 text-white"
+              : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+          }`}
+        >
+          All Vibes
+        </button>
+        {culturePillars.map((cp) => (
+          <button
+            key={cp.id}
+            onClick={() => setSelectedCulture(selectedCulture === cp.id ? "" : cp.id)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              selectedCulture === cp.id
+                ? "bg-blue-500 text-white"
+                : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+            }`}
+          >
+            {cp.label}
+          </button>
+        ))}
+      </div>
+
       {/* Active Filters */}
       {hasFilters && (
         <div className="flex flex-wrap gap-2 mb-4">
@@ -285,6 +319,12 @@ const Shop = () => {
             <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
               {categories.find(c => c.id === selectedCategory)?.label}
               <button onClick={() => setSelectedCategory("all")}><X className="h-3 w-3" /></button>
+            </span>
+          )}
+          {selectedCulture && (
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+              {culturePillars.find(cp => cp.id === selectedCulture)?.label}
+              <button onClick={() => setSelectedCulture("")}><X className="h-3 w-3" /></button>
             </span>
           )}
           {searchQuery && (
