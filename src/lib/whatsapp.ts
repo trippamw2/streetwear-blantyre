@@ -1,6 +1,6 @@
 // Streetwear Blantyre WhatsApp helpers
-export const WHATSAPP_NUMBER = "265991234567"; // Replace with real number
-export const STORE_URL = "https://streetwearblantyre-store.vercel.app";
+export const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"; // Set in Vercel env
+export const STORE_URL = "https://www.wearsb.com";
 
 export const buildWhatsAppLink = (message: string) => {
   const encoded = encodeURIComponent(message);
@@ -43,6 +43,7 @@ export interface CustomerDetails {
   phone: string;
   location: string;
   deliveryMethod: string;
+  deliveryFee?: number;
   notes?: string;
 }
 
@@ -83,10 +84,10 @@ ${itemsTxt}
 
 *PAYMENT SUMMARY*
 ================================
-Subtotal: MK ${total.toLocaleString("en-US")}
-Delivery: FREE
-================================
-*TOTAL: MK ${total.toLocaleString("en-US")}*
+    Subtotal: MK ${total.toLocaleString("en-US")}
+    Delivery: MK ${customer.deliveryFee ? customer.deliveryFee.toLocaleString("en-US") : "TBD"}
+    ================================
+    *TOTAL: MK ${total.toLocaleString("en-US")}*
 ================================
 
 Please confirm order and send payment link. Thank you.`;

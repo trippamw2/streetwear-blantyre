@@ -97,9 +97,9 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           )}
 
           {/* Culture Pillar Badge */}
-          {(product as any).culture_pillar && (
-            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[10px] font-bold bg-purple-500 text-white rounded">
-              {String((product as any).culture_pillar).toUpperCase()}
+          {product.culture_pillar && (
+            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[10px] font-bold text-white rounded" style={{ backgroundColor: product.culture_pillar_color || '#8B5CF6' }}>
+              {product.culture_pillar.toUpperCase()}
             </span>
           )}
 

@@ -89,8 +89,8 @@ export default {
           "50%": { transform: "translateY(-12px)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--brand-pink) / 0.6)" },
-          "50%": { boxShadow: "0 0 0 18px hsl(var(--brand-pink) / 0)" },
+          "0%, 100%": { boxShadow: "0 0 0 0 hsl(221 83% 53% / 0.6)" },
+          "50%": { boxShadow: "0 0 0 18px hsl(221 83% 53% / 0)" },
         },
         "shimmer": {
           "0%": { backgroundPosition: "-200% 0" },

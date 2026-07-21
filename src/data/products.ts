@@ -24,6 +24,7 @@ export interface Product {
   reward_points?: number;
   rating?: number;
   culture_pillar?: string;
+  culture_pillar_color?: string;
 }
 
 export const BRANDS = [

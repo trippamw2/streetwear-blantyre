@@ -1,4 +1,4 @@
-﻿/* PowerPod - Mobile-first e-commerce for Malawi & Africa */
+﻿/* Streetwear Blantyre — Premium Streetwear E-commerce */
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Dongle:wght@400;700&display=swap');
 
 @tailwind base;
@@ -68,19 +68,19 @@ html {
     --card-foreground: 0 0% 6%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 6%;
-    --primary: 28 100% 50%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 6%;
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
-    --accent: 28 100% 50%;
+    --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 28 100% 50%;
+    --ring: 221 83% 53%;
     --radius: 0.75rem;
 
     /* Streetwear Blantyre Brand Colors */
@@ -99,8 +99,8 @@ html {
     /* Premium Shadows */
     --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.2);
     --shadow-card: 0 25px 80px -20px rgba(0, 0, 0, 0.15);
-    --shadow-button: 0 8px 30px -8px rgba(255, 107, 0, 0.3);
-    --shadow-card-hover: 0 30px 60px -15px rgba(255, 107, 0, 0.15);
+    --shadow-button: 0 8px 30px -8px rgba(37, 99, 235, 0.3);
+    --shadow-card-hover: 0 30px 60px -15px rgba(37, 99, 235, 0.15);
   }
 }
 
@@ -148,8 +148,8 @@ html {
 
   /* Pulse animation for CTAs */
   @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 0 0 hsl(25 100% 50% / 0.4); }
-    50% { box-shadow: 0 0 20px 5px hsl(25 100% 50% / 0.2); }
+    0%, 100% { box-shadow: 0 0 0 0 hsl(221 83% 53% / 0.4); }
+    50% { box-shadow: 0 0 20px 5px hsl(221 83% 53% / 0.2); }
   }
 
   .animate-pulse-glow {

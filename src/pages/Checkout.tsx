@@ -99,27 +99,20 @@ const Checkout = () => {
     const promoToApply = code || promoCode;
     if (!promoToApply.trim()) return;
     try {
-      const { data } = await supabase.from("promo_codes").select("*")
-        .eq("code", promoToApply.toUpperCase()).eq("is_active", true).single();
+      const { data } = await supabase.from("promotions").select("*")
+        .ilike("name", promoToApply.trim()).eq("is_active", true).single();
       if (!data) { toast({ title: "Invalid code", variant: "destructive" }); return; }
       
       const now = new Date();
-      if (new Date(data.start_date) > now || new Date(data.end_date) < now) {
+      if (data.start_date && new Date(data.start_date) > now) {
+        toast({ title: "Code not yet active", variant: "destructive" }); return;
+      }
+      if (data.end_date && new Date(data.end_date) < now) {
         toast({ title: "Code expired", variant: "destructive" }); return;
       }
       
-      if (data.max_uses && data.used_count >= data.max_uses) {
-        toast({ title: "Code usage limit reached", variant: "destructive" }); return;
-      }
-      
-      if (data.min_order && subtotal < data.min_order) {
-        toast({ title: `Minimum order ${formatMWK(data.min_order)} required`, variant: "destructive" }); return;
-      }
-      
-      const disc = data.type === "percentage" 
-        ? Math.round(subtotal * (data.value / 100))
-        : Math.min(data.value, subtotal);
-      setPromoApplied({ code: data.code, discount: disc });
+      const disc = Math.round(subtotal * (data.discount_percent / 100));
+      setPromoApplied({ code: data.name, discount: disc });
       toast({ title: "Promo applied!", description: `-${formatMWK(disc)}` });
     } catch { toast({ title: "Invalid code", variant: "destructive" }); }
   };
@@ -175,10 +168,8 @@ const Checkout = () => {
         notes: formData.deliveryNote,
         subtotal_mwk: subtotal,
         delivery_fee_mwk: deliveryFee,
-        discount_mwk: totalDiscount,
         total_mwk: total,
         payment_method: paymentMethod,
-        delivery_method: selectedDeliveryCompany?.slug || "standard",
         status: "new",
       }).select().single();
 
@@ -189,7 +180,7 @@ const Checkout = () => {
       try {
         const { sendOrderConfirmationEmail, sendAdminNotificationEmail } = await import("@/lib/brevo");
         await sendOrderConfirmationEmail({
-          to: formData.phone ? `${formData.phone}@streetwearblantyre.mw` : "customer@streetwearblantyre.mw",
+          to: formData.phone ? `${formData.phone}@wearsb.com` : "customer@wearsb.com",
           customerName: formData.name,
           orderId: orderId.slice(0, 8).toUpperCase(),
           total: formatMWK(total),
@@ -207,7 +198,6 @@ const Checkout = () => {
       // Add order items
       const orderItems = items.map(item => ({
         order_id: orderId,
-        product_id: item.productKey.split("-")[0],
         product_key: item.productKey,
         product_name: item.name,
         unit_price_mwk: item.price,
@@ -215,21 +205,11 @@ const Checkout = () => {
       }));
       await supabase.from("order_items").insert(orderItems);
 
-      // Use promo code - increment usage using RPC
-      if (promoApplied) {
-        await supabase.rpc("increment_promo_usage", { promo_code: promoApplied.code });
-      }
+      // TODO: Implement promo usage tracking when promotions table supports usage counts
 
       // Use loyalty points - deduct redeemed points
       if (usePoints && loyalty && program) {
-        const pointsToRedeem = Math.min(loyalty.available_points, program.points_to_redeem);
-        await supabase
-          .from("customer_loyalty")
-          .update({
-            available_points: loyalty.available_points - pointsToRedeem,
-            redeemed_points: (loyalty.redeemed_points || 0) + pointsToRedeem,
-          })
-          .eq("user_id", user?.id);
+        // TODO: Implement loyalty points when customer_loyalty table is created
       }
 
       // Award loyalty points for purchase (1 point per 1000 MWK)
@@ -258,7 +238,7 @@ const Checkout = () => {
         const payment = await createPayChanguPayment({
           amount: total,
           currency: "MWK",
-          email: `${cleanPhone}@streetwearblantyre.mw`,
+          email: `${cleanPhone}@wearsb.com`,
           firstName: formData.name.split(" ")[0],
           lastName: formData.name.split(" ").slice(1).join(" ") || "",
           txRef: `SB-${orderId.slice(0, 8).toUpperCase()}`,

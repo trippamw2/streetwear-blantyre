@@ -177,14 +177,14 @@ export const Footer = () => {
               <li><Link to="/shop" className="hover:text-blue-500 transition-colors">All Products</Link></li>
               <li><Link to="/shop?cat=t-shirts" className="hover:text-blue-500 transition-colors">T-Shirts</Link></li>
               <li><Link to="/shop?cat=hoodies" className="hover:text-blue-500 transition-colors">Hoodies</Link></li>
-              <li><Link to="/shop?cat=sneakers" className="hover:text-blue-500 transition-colors">Sneakers</Link></li>
+              <li><Link to="/shop?cat=caps" className="hover:text-blue-500 transition-colors">Caps</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-display font-semibold mb-3">Support</h4>
             <ul className="space-y-2 text-sm text-gray-500">
-              <li><Link to="/track/order123" className="hover:text-blue-500 transition-colors">Track Order</Link></li>
+              <li><Link to="/orders" className="hover:text-blue-500 transition-colors">Track Order</Link></li>
               <li><Link to="/contact" className="hover:text-blue-500 transition-colors">Contact Us</Link></li>
               <li><a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors inline-flex items-center gap-2"><MessageCircle className="h-4 w-4" /> WhatsApp</a></li>
               <li><Link to="/about" className="hover:text-blue-500 transition-colors">About Us</Link></li>
