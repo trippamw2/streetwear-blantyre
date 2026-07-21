@@ -10,7 +10,7 @@ const LoadingSpinner = () => (
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+    background: 'linear-gradient(135deg, #1e40af 0%, #2563eb 100%)',
   }}>
     <div style={{
       width: 40,

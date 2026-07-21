@@ -1,5 +1,4 @@
 const PAYCHANGU_PUBLIC_KEY = import.meta.env.VITE_PAYCHANGU_PUBLIC_KEY;
-const PAYCHANGU_SECRET_KEY = import.meta.env.VITE_PAYCHANGU_SECRET_KEY;
 
 export interface PayChanguPaymentParams {
   amount: number;
@@ -14,59 +13,46 @@ export interface PayChanguPaymentParams {
   description?: string;
 }
 
-export interface PayChanguResponse {
-  link: string;
-  txRef: string;
-}
+/**
+ * Creates a hidden HTML form and submits it to PayChangu's hosted payment page.
+ * This is the correct client-side integration method (no secret key exposed).
+ * The user is redirected to PayChangu's checkout page to complete payment.
+ */
+export const redirectToPayChangu = (params: PayChanguPaymentParams): void => {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "https://api.paychangu.com/hosted-payment-page";
+  form.style.display = "none";
 
-export const createPayChanguPayment = async (params: PayChanguPaymentParams): Promise<PayChanguResponse> => {
-  const PAYCHANGU_API_URL = "https://api.paychangu.com/payment";
-  
-  const payload = {
+  const fields: Record<string, string> = {
+    public_key: PAYCHANGU_PUBLIC_KEY || "",
+    callback_url: params.callbackUrl,
+    return_url: params.returnUrl,
+    tx_ref: params.txRef,
     amount: params.amount.toString(),
     currency: params.currency || "MWK",
     email: params.email,
     first_name: params.firstName,
     last_name: params.lastName,
-    tx_ref: params.txRef,
-    callback_url: params.callbackUrl,
-    return_url: params.returnUrl,
-    customization: {
-      title: params.title || "Streetwear Blantyre Order",
-      description: params.description || "Order payment",
-    },
+    title: params.title || "Streetwear Blantyre Order",
+    description: params.description || "Order payment",
   };
 
-  try {
-    const response = await fetch(PAYCHANGU_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${PAYCHANGU_SECRET_KEY}`,
-      },
-      body: JSON.stringify(payload),
-    });
+  Object.entries(fields).forEach(([name, value]) => {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  });
 
-    const data = await response.json();
-    if (response.ok && (data.data?.checkout_url || data.link || data.checkout_url)) {
-      const checkoutUrl = data.data?.checkout_url || data.checkout_url || data.link;
-      const txRef = data.data?.tx_ref || data.tx_ref;
-      return {
-        link: checkoutUrl,
-        txRef: txRef,
-      };
-    }
-
-    console.error("PayChangu full response:", JSON.stringify(data, null, 2));
-    throw new Error(data.message || data.data?.message || `Payment creation failed: ${response.status}`);
-  } catch (error) {
-    console.error("PayChangu error:", error);
-    throw error;
-  }
+  document.body.appendChild(form);
+  form.submit();
+  // Form is removed by the browser after redirect
 };
 
 export const PAYCHANGU_CONFIG = {
   publicKey: PAYCHANGU_PUBLIC_KEY,
-  testMode: !PAYCHANGU_PUBLIC_KEY || !PAYCHANGU_SECRET_KEY || PAYCHANGU_SECRET_KEY?.startsWith("your_"),
-  hasKeys: !!(PAYCHANGU_PUBLIC_KEY && PAYCHANGU_SECRET_KEY),
+  testMode: !PAYCHANGU_PUBLIC_KEY || PAYCHANGU_PUBLIC_KEY?.startsWith("your_"),
+  hasKeys: !!PAYCHANGU_PUBLIC_KEY,
 };

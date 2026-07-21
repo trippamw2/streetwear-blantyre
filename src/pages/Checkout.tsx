@@ -177,18 +177,19 @@ const Checkout = () => {
       // Send order confirmation email
       try {
         const { sendOrderConfirmationEmail, sendAdminNotificationEmail } = await import("@/lib/brevo");
-        await sendOrderConfirmationEmail({
+        const emailParams = {
           to: formData.phone ? `${formData.phone}@wearsb.com` : "customer@wearsb.com",
-          customerName: formData.name,
-          orderId: orderId.slice(0, 8).toUpperCase(),
-          total: formatMWK(total),
-        });
-        await sendAdminNotificationEmail({
-          orderId: orderId.slice(0, 8).toUpperCase(),
-          customerName: formData.name,
-          total: formatMWK(total),
-          paymentMethod,
-        });
+          toName: formData.name,
+          orderId,
+          items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
+          total,
+          location: formData.location,
+          deliveryMethod: selectedDelivery?.label || "Standard",
+          eta: selectedDelivery?.eta,
+          type: "confirmation" as const,
+        };
+        await sendOrderConfirmationEmail(emailParams);
+        await sendAdminNotificationEmail({ ...emailParams, type: "payment" as const });
       } catch (e) {
         console.log("Email sending failed (non-critical):", e);
       }
@@ -229,36 +230,14 @@ const Checkout = () => {
         }));
       } catch {}
 
-      // Generate a PayChangu payment link for use in both flows
-      let paymentLink: string | null = null;
-      try {
-        const { createPayChanguPayment } = await import("@/lib/paychangu");
-        const payment = await createPayChanguPayment({
-          amount: total,
-          currency: "MWK",
-          email: `${cleanPhone}@wearsb.com`,
-          firstName: formData.name.split(" ")[0],
-          lastName: formData.name.split(" ").slice(1).join(" ") || "",
-          txRef: `SB-${orderId.slice(0, 8).toUpperCase()}`,
-          callbackUrl: `${window.location.origin}/api/payment/callback?orderId=${orderId}`,
-          returnUrl: `${window.location.origin}/orders/${orderId}?payment=complete`,
-          title: "Streetwear Blantyre Order",
-          description: `Order #${orderId.slice(0, 8).toUpperCase()}`,
-        });
-        if (payment.link) paymentLink = payment.link;
-      } catch (e) {
-        console.log("PayChangu pre-link failed (non-critical):", e);
-      }
+      const orderRef = orderId.slice(0, 8).toUpperCase();
+      const txRef = `SB-${orderRef}`;
 
       // Payment flow
       if (paymentMethod === "offline") {
         const businessPhone = import.meta.env.VITE_WHATSAPP_BUSINESS || "265884400000";
-        const bankDetails = `Bank: Standard Bank\nAccount: 9100000380567\nStreetwear Blantyre\nReference: SB${orderId.slice(0, 8).toUpperCase()}`;
-        let whatsAppMessage = `Hello Streetwear Blantyre! I want to pay for my order #${orderId.slice(0, 8).toUpperCase()} (${formatMWK(total)}).\n\n`;
-        if (paymentLink) {
-          whatsAppMessage += `Pay online now: ${paymentLink}\n\n`;
-        }
-        whatsAppMessage += `Or bank transfer:\n${bankDetails}\n\nMy Name: ${formData.name}\nMy Phone: ${formData.phone}\nDelivery: ${formData.location}`;
+        const bankDetails = `Bank: Standard Bank\nAccount: 9100000380567\nStreetwear Blantyre\nReference: SB${orderRef}`;
+        const whatsAppMessage = `Hello Streetwear Blantyre! I want to pay for my order #${orderRef} (${formatMWK(total)}).\n\nOr bank transfer:\n${bankDetails}\n\nMy Name: ${formData.name}\nMy Phone: ${formData.phone}\nDelivery: ${formData.location}`;
         const whatsAppLink = `https://wa.me/${businessPhone}?text=${encodeURIComponent(whatsAppMessage)}`;
         clear();
         window.open(whatsAppLink, "_blank");
@@ -271,15 +250,22 @@ const Checkout = () => {
         return;
       }
 
-      // PayChangu online payment
-      if (paymentLink) {
-        clear();
-        window.location.replace(paymentLink);
-      } else {
-        toast({ title: "Order placed! We'll contact you for payment." });
-        clear();
-        navigate(`/orders/${orderId}`);
-      }
+      // PayChangu online payment — redirect via form POST (no secret key exposed)
+      clear();
+      const { redirectToPayChangu } = await import("@/lib/paychangu");
+      redirectToPayChangu({
+        amount: total,
+        currency: "MWK",
+        email: `${cleanPhone}@wearsb.com`,
+        firstName: formData.name.split(" ")[0],
+        lastName: formData.name.split(" ").slice(1).join(" ") || "",
+        txRef,
+        callbackUrl: `${window.location.origin}/orders/${orderId}?payment=callback`,
+        returnUrl: `${window.location.origin}/orders/${orderId}?payment=complete`,
+        title: "Streetwear Blantyre Order",
+        description: `Order #${orderRef}`,
+      });
+      // Browser navigates to PayChangu via form submit — no code after this runs
     } catch (err: any) {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     } finally {

@@ -71,7 +71,7 @@ const wrapEmail = (content: string, title: string) => `
           <!-- Divider -->
           <tr>
             <td style="padding: 0 32px;">
-              <div style="height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(255,107,0,0.4) 50%, transparent 100%);"></div>
+              <div style="height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(37,99,235,0.4) 50%, transparent 100%);"></div>
             </td>
           </tr>
           
@@ -83,7 +83,7 @@ const wrapEmail = (content: string, title: string) => `
                   <td align="center">
                     
                     <!-- Brand badge -->
-                    <div style="display: inline-block; background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.3); border-radius: 12px; padding: 8px 16px; margin-bottom: 20px;">
+                    <div style="display: inline-block; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.3); border-radius: 12px; padding: 8px 16px; margin-bottom: 20px;">
                       <span style="color: #2563eb; font-size: 12px; font-weight: 600; letter-spacing: 1px;">${BRAND.businessName}</span>
                     </div>
                     
@@ -112,7 +112,7 @@ const wrapEmail = (content: string, title: string) => `
         
         <!-- Tagline badge -->
         <div style="margin-top: 24px; text-align: center;">
-          <span style="display: inline-block; background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.2); border-radius: 20px; padding: 8px 20px;">
+          <span style="display: inline-block; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2); border-radius: 20px; padding: 8px 20px;">
             <span style="color: #2563eb; font-size: 11px; font-weight: 600; letter-spacing: 2px;">${BRAND.tagline}</span>
           </span>
         </div>

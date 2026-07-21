@@ -9,9 +9,9 @@ interface SEOProps {
 }
 
 const SITE_NAME = "Streetwear Blantyre";
-const SITE_URL = "https://streetwearblantyre.mw";
-const DEFAULT_DESC = "Streetwear fashion in Malawi. T-shirts, hoodies, caps, sneakers, pants, and jackets. Free delivery over MK 50,000.";
-const DEFAULT_IMAGE = "https://placehold.co/600x600/FF6B00/ffffff?text=Streetwear+Blantyre";
+const SITE_URL = "https://www.wearsb.com";
+const DEFAULT_DESC = "Streetwear fashion in Malawi. T-shirts, hoodies, caps, bracelets, earbuds, stickers, and more. Free delivery over MK 50,000.";
+const DEFAULT_IMAGE = "https://placehold.co/600x600/2563eb/ffffff?text=Streetwear+Blantyre";
 
 export const SEO = ({
   title,
@@ -65,11 +65,11 @@ export const defaultSEO = {
   },
   shop: {
     title: "Shop — T-Shirts, Hoodies, Caps, Sneakers & More",
-    description: "Browse t-shirts, hoodies, caps, sneakers, pants, and jackets. Fast delivery across Malawi.",
+    description: "Browse t-shirts, hoodies, caps, bracelets, earbuds, stickers, and more. Fast delivery across Malawi.",
   },
   combos: {
     title: "Fashion Bundles — Save 15-25% vs Buying Separate",
-    description: "Curated fashion bundles for every style. T-shirt + cap + sneakers in one box. Cheaper together. Free delivery.",
+    description: "Curated culture kits for every style. T-shirt + cap + bracelet in one box. Cheaper together. Free delivery.",
   },
   about: {
     title: "About Streetwear Blantyre — Malawi's Streetwear Brand",
