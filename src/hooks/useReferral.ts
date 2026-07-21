@@ -38,7 +38,7 @@ export const useReferral = () => {
     
 try {
       const shortCode = user.id.slice(0, 8).toUpperCase();
-      const code = `PP${shortCode}`;
+      const code = `SB${shortCode}`;
       
       // Try insert first, if dup then upsert
       const { data: newCode, error: insertErr } = await supabase
@@ -56,7 +56,7 @@ try {
       }
     } catch (e) {
       const shortCode = user.id.slice(0, 8).toUpperCase();
-      const code = `PP${shortCode}`;
+      const code = `SB${shortCode}`;
       const { data: newCode } = await supabase
         .from("user_referral_codes")
         .upsert({ user_id: user.id, code }, { onConflict: "user_id" })

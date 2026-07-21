@@ -9,17 +9,16 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { formatMWK } from "@/data/products";
 import { SEO, defaultSEO } from "@/components/SEO";
-import { useDeliverySettings } from "@/hooks/useDeliverySettings";
 import { useLoyalty } from "@/hooks/useLoyalty";
 import { useReferral } from "@/hooks/useReferral";
-import { DeliveryOptions, type DeliveryCompany } from "@/components/DeliveryOptions";
+import { DeliveryOptions } from "@/components/DeliveryOptions";
+import { type DeliveryOption, FREE_DELIVERY_THRESHOLD } from "@/lib/deliveryRules";
 import { ArrowLeft, Check, Loader2, CreditCard, Zap, Gift } from "lucide-react";
 
 const Checkout = () => {
   const { user } = useAuth();
   const { items, subtotal, clear } = useCart();
   const navigate = useNavigate();
-  const { settings, loading: settingsLoading } = useDeliverySettings();
   const { loyalty, program, getRewardValue, redeemPoints, earnPoints } = useLoyalty(user?.id, user?.email);
   const { stats: referralStats } = useReferral();
 
@@ -33,7 +32,7 @@ const Checkout = () => {
       deliveryNote: parsed.deliveryNote || "",
     };
   });
-  const [selectedDeliveryCompany, setSelectedDeliveryCompany] = useState<DeliveryCompany | null>(null);
+  const [selectedDelivery, setSelectedDelivery] = useState<DeliveryOption | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"paychangu" | "offline">("paychangu");
   const [submitting, setSubmitting] = useState(false);
   const [promoCode, setPromoCode] = useState("");
@@ -56,8 +55,7 @@ const Checkout = () => {
   }, [items]);
 
   // Calculate totals
-  const rawDeliveryFee = selectedDeliveryCompany?.base_fee_mwk || 0;
-  const deliveryFee = (subtotal >= (settings.freeDeliveryThreshold || 50000)) ? 0 : rawDeliveryFee;
+  const deliveryFee = selectedDelivery?.fee ?? 0;
   const promoDiscount = promoApplied?.discount || 0;
   
   // Calculate loyalty discount
@@ -357,9 +355,10 @@ const Checkout = () => {
             </div>
             {formData.location.trim().length >= 3 && (
               <DeliveryOptions
-                selectedCompany={selectedDeliveryCompany}
-                onSelect={setSelectedDeliveryCompany}
+                selectedOption={selectedDelivery}
+                onSelect={setSelectedDelivery}
                 location={formData.location}
+                subtotal={subtotal}
               />
             )}
             {formData.location.trim().length < 3 && (
@@ -529,12 +528,12 @@ const Checkout = () => {
             <div className="flex justify-between">
               <span>
                 Delivery
-                {selectedDeliveryCompany && (
+                {selectedDelivery && (
                   <span className="text-xs text-gray-400 ml-1">
-                    ({selectedDeliveryCompany.name}
-                    {selectedDeliveryCompany.estimated_days > 0 
-                    ? ` - ~${selectedDeliveryCompany.estimated_days} days`
-                    : " - same day"}
+                    ({selectedDelivery.label}
+                    {selectedDelivery.id === "same_day"
+                    ? " - same day"
+                    : ` - ${selectedDelivery.estimatedDays}`}
                     )
                   </span>
                 )}
@@ -554,7 +553,7 @@ const Checkout = () => {
 
         <Button 
           type="submit" 
-          disabled={submitting || settingsLoading}
+          disabled={submitting}
           className="w-full py-3 text-lg bg-blue-500 hover:bg-blue-600"
         >
           {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : (

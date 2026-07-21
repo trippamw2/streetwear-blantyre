@@ -33,15 +33,28 @@ export const AdminLayout = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [checkingRole, setCheckingRole] = useState(true);
 
-  // Simple admin check - allow logged in users (RLS complex)
+  // Check if user has admin role in user_roles table
   useEffect(() => {
     if (authLoading) return;
     
     if (user) {
-      // Allow any logged-in user to access admin
-      setIsAdmin(true);
+      supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle()
+        .then(({ data }) => {
+          setIsAdmin(!!data);
+          setCheckingRole(false);
+        })
+        .catch(() => {
+          setIsAdmin(false);
+          setCheckingRole(false);
+        });
+    } else {
+      setCheckingRole(false);
     }
-    setCheckingRole(false);
   }, [user, authLoading]);
 
   useEffect(() => {
