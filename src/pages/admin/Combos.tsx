@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -124,7 +124,7 @@ const AdminCombos = () => {
     setProducts(data || []);
   };
 
-  // Computed pricing from selected products × discount percent
+  // Computed pricing from selected products Ã— discount percent
   const computedPricing = useMemo(() => {
     const selectedProducts = products.filter((p) =>
       formData.selectedProductIds.includes(p.id)
@@ -452,8 +452,8 @@ const AdminCombos = () => {
 
               {/* Computed Price Display */}
               {formData.selectedProductIds.length > 0 && (
-                <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl border border-orange-200 p-4 space-y-1 text-sm">
-                  <p className="font-semibold text-orange-800 mb-2">Pricing Preview</p>
+                <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-xl border border-blue-200 p-4 space-y-1 text-sm">
+                  <p className="font-semibold text-blue-800 mb-2">Pricing Preview</p>
                   <div className="flex justify-between text-gray-600">
                     <span>Separate total</span>
                     <span>{formatMWK(computedPricing.separateTotal)}</span>
@@ -462,7 +462,7 @@ const AdminCombos = () => {
                     <span>Kit price ({formData.discount_percent}% off)</span>
                     <span>{formatMWK(computedPricing.kitPrice)}</span>
                   </div>
-                  <div className="flex justify-between text-green-700 font-bold border-t border-orange-200 pt-1 mt-1">
+                  <div className="flex justify-between text-green-700 font-bold border-t border-blue-200 pt-1 mt-1">
                     <span>Savings</span>
                     <span>{formatMWK(computedPricing.saving)}</span>
                   </div>
@@ -501,14 +501,14 @@ const AdminCombos = () => {
                               onClick={() => toggleProduct(product.id)}
                               className={`flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm transition-all ${
                                 selected
-                                  ? "bg-orange-50 border border-orange-300"
+                                  ? "bg-blue-50 border border-blue-300"
                                   : "hover:bg-gray-50 border border-transparent"
                               }`}
                             >
                               <div
                                 className={`h-5 w-5 rounded border-2 flex items-center justify-center shrink-0 ${
                                   selected
-                                    ? "bg-orange-500 border-orange-500 text-white"
+                                    ? "bg-blue-500 border-blue-500 text-white"
                                     : "border-gray-300"
                                 }`}
                               >
@@ -573,7 +573,7 @@ const AdminCombos = () => {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-bold text-xl">{combo.name}</h3>
-                  <p className="text-xs text-orange-500 font-medium">
+                  <p className="text-xs text-blue-500 font-medium">
                     {combo.hook || combo.tagline}
                   </p>
                   {combo.lifestyle && (
@@ -617,7 +617,7 @@ const AdminCombos = () => {
                     </p>
                   )}
                 </div>
-                <span className="px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full">
+                <span className="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">
                   {combo.vibe || combo.lifestyle}
                 </span>
               </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
 import { Button } from "@/components/ui/button";
@@ -153,7 +153,7 @@ const AdminPromos = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-orange-500 hover:bg-orange-600">
+            <Button className="bg-blue-500 hover:bg-blue-600">
               <Plus className="h-4 w-4" /> Add Promo Code
             </Button>
           </DialogTrigger>
@@ -255,7 +255,7 @@ const AdminPromos = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600">
+              <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
                 {editingPromo ? "Update Promo Code" : "Create Promo Code"}
               </Button>
             </form>
@@ -319,7 +319,7 @@ const AdminPromos = () => {
           <div className="text-center py-16 bg-card rounded-xl border border-border/60">
             <Tag className="h-10 w-10 mx-auto text-muted-foreground" />
             <p className="mt-3 text-muted-foreground">No promo codes yet</p>
-            <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-orange-500">
+            <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-blue-500">
               <Plus className="h-4 w-4" /> Create First Promo Code
             </Button>
           </div>

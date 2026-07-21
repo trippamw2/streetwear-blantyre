@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -119,7 +119,7 @@ const AdminLoyalty = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-4">
-            <Users className="h-8 w-8 text-orange-500 mb-2" />
+            <Users className="h-8 w-8 text-blue-500 mb-2" />
             <p className="text-2xl font-bold">{stats.total_members}</p>
             <p className="text-sm text-gray-500">Total Members</p>
           </CardContent>
@@ -160,7 +160,7 @@ const AdminLoyalty = () => {
                   <p className="font-semibold">{prog.name}</p>
                   <p className="text-sm text-gray-500">{prog.description}</p>
                   <p className="text-xs mt-1">
-                    Earn 1 pt per MK {prog.points_per_mwk.toLocaleString()} • 
+                    Earn 1 pt per MK {prog.points_per_mwk.toLocaleString()} â€¢ 
                     Redeem {prog.points_to_redeem} pts = MK {prog.reward_value_mwk.toLocaleString()}
                   </p>
                 </div>

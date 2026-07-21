@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
@@ -401,7 +401,7 @@ const Checkout = () => {
               onClick={() => setPaymentMethod("paychangu")}
               className={`w-full py-4 px-4 rounded-xl border-2 flex items-center gap-3 transition-all ${
                 paymentMethod === "paychangu"
-                  ? "border-orange-500 bg-orange-50 shadow-sm"
+                  ? "border-blue-500 bg-blue-50 shadow-sm"
                   : "bg-white border-gray-200 hover:border-gray-300"
               }`}
             >
@@ -412,7 +412,7 @@ const Checkout = () => {
                 <p className="font-semibold">Pay Online</p>
                 <p className="text-xs text-gray-500">Airtel Money, TNM Mpamba, Visa, Mastercard</p>
               </div>
-              <div className={`h-5 w-5 rounded-full border-2 ${paymentMethod === "paychangu" ? "bg-orange-500 border-orange-500" : "border-gray-300"}`}>
+              <div className={`h-5 w-5 rounded-full border-2 ${paymentMethod === "paychangu" ? "bg-blue-500 border-blue-500" : "border-gray-300"}`}>
                 {paymentMethod === "paychangu" && <Check className="h-4 w-4 text-white" />}
               </div>
             </button>
@@ -421,7 +421,7 @@ const Checkout = () => {
               onClick={() => setPaymentMethod("offline")}
               className={`w-full py-4 px-4 rounded-xl border-2 flex items-center gap-3 transition-all ${
                 paymentMethod === "offline"
-                  ? "border-orange-500 bg-orange-50 shadow-sm"
+                  ? "border-blue-500 bg-blue-50 shadow-sm"
                   : "bg-white border-gray-200 hover:border-gray-300"
               }`}
             >
@@ -434,7 +434,7 @@ const Checkout = () => {
                 <p className="font-semibold">Pay with WhatsApp</p>
                 <p className="text-xs text-gray-500">Get a payment link + bank details sent to you</p>
               </div>
-              <div className={`h-5 w-5 rounded-full border-2 ${paymentMethod === "offline" ? "bg-orange-500 border-orange-500" : "border-gray-300"}`}>
+              <div className={`h-5 w-5 rounded-full border-2 ${paymentMethod === "offline" ? "bg-blue-500 border-blue-500" : "border-gray-300"}`}>
                 {paymentMethod === "offline" && <Check className="h-4 w-4 text-white" />}
               </div>
             </button>
@@ -489,7 +489,7 @@ const Checkout = () => {
               </button>
             </div>
             {loyaltyDiscount > 0 && (
-              <p className="text-xs text-green-600 mt-2">✓ -{formatMWK(loyaltyDiscount)} discount applied!</p>
+              <p className="text-xs text-green-600 mt-2">âœ“ -{formatMWK(loyaltyDiscount)} discount applied!</p>
             )}
           </div>
         )}
@@ -521,7 +521,7 @@ const Checkout = () => {
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="truncate">{item.quantity} x {item.name}</span>
                     {lowStock && (
-                      <span className="shrink-0 text-[10px] text-orange-300 font-medium">Only {stock} left</span>
+                      <span className="shrink-0 text-[10px] text-blue-300 font-medium">Only {stock} left</span>
                     )}
                   </div>
                   <span className="shrink-0 ml-2">{formatMWK(item.price * item.quantity)}</span>
@@ -575,7 +575,7 @@ const Checkout = () => {
         <Button 
           type="submit" 
           disabled={submitting || settingsLoading}
-          className="w-full py-3 text-lg bg-orange-500 hover:bg-orange-600"
+          className="w-full py-3 text-lg bg-blue-500 hover:bg-blue-600"
         >
           {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : (
             <> {paymentMethod === "offline" ? "Place Order" : "Pay Now"} <Zap className="h-5 w-5 ml-2" /></>

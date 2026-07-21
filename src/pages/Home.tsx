@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { formatMWK, getKitPrice, getKitRealSaving, getKitProducts } from "@/data/products";
@@ -21,14 +21,14 @@ const Home = () => {
   return (
     <div>
       <SEO {...defaultSEO.home} />
-      {/* ─── FLASH SALE BAR ─── */}
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-2 text-center text-xs sm:text-sm font-medium">
+      {/* â”€â”€â”€ FLASH SALE BAR â”€â”€â”€ */}
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 text-center text-xs sm:text-sm font-medium">
         <span className="inline-flex items-center gap-2">
-          Free delivery over MK 50,000 &middot; 30-day guarantee &middot; Selling fast
+          Free delivery over MK 50,000 &middot; 30-day guarantee &middot; Wear the Culture
         </span>
       </div>
 
-      {/* ─── HERO ─── */}
+      {/* â”€â”€â”€ HERO â”€â”€â”€ */}
       <section className="relative overflow-hidden">
         <div className="container relative grid lg:grid-cols-2 gap-6 sm:gap-8 items-center py-8 sm:py-12 lg:py-20">
           <motion.div
@@ -37,19 +37,19 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             className="space-y-5 sm:space-y-6"
           >
-            <span className="inline-flex px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold tracking-wide">
+            <span className="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold tracking-wide">
               Streetwear for Malawi
             </span>
 
             <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-6xl leading-tight">
-              Style That Speaks for You.
+              Wear the Culture.
               <br />
-              <span className="text-gradient">We Curated That.</span>
+              <span className="text-gradient">Express Who You Are.</span>
             </h1>
 
             <p className="text-gray-500 text-sm sm:text-base lg:text-lg max-w-lg">
-              Outfit running stale? No idea what fits? We picked the tee, hoodie,
-              cap, and kicks you need. One box. Fresh look. Less cash.
+              Your wardrobe doesn't say what you mean. It should speak for your music, faith, sports, hustle.
+              We curate fits that say what you want the world to hear.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
@@ -84,7 +84,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── TRUST BAR ─── */}
+      {/* â”€â”€â”€ TRUST BAR â”€â”€â”€ */}
       <section className="border-y border-gray-100 bg-gray-50/50">
         <div className="container py-5 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
@@ -106,22 +106,22 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── SHOP BY LIFESTYLE ─── */}
+      {/* â”€â”€â”€ CULTURE PILLARS â”€â”€â”€ */}
       <section className="container py-12 sm:py-16">
         <div className="text-center mb-8 sm:mb-10">
-          <p className="text-sm font-semibold text-gradient uppercase tracking-widest">Choose Your Lifestyle</p>
-          <h2 className="font-display font-bold text-2xl sm:text-3xl mt-1">Shop by Lifestyle</h2>
+          <p className="text-sm font-semibold text-gradient uppercase tracking-widest">Four Cultures. One Brand.</p>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl mt-1">What Moves You?</h2>
           <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
-            Kits built for how you live. Style for every vibe.
+            Your identity isn't one thing. It's the music, faith, sports, hustle. We get it.
           </p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {[
-            { icon: BookOpen, title: "Student", tag: "student", desc: "Tee, cap, tote. Fresh on campus.", color: "from-blue-500 to-cyan-500" },
-            { icon: Briefcase, title: "Work", tag: "work", desc: "Hoodie, joggers, sneakers. Work to weekend.", color: "from-purple-500 to-indigo-500" },
-            { icon: Luggage, title: "Travel", tag: "travel", desc: "Jacket, tee, kicks. Out the door.", color: "from-green-500 to-teal-500" },
-            { icon: Headphones, title: "Casual", tag: "casual", desc: "Hoodie, denim, cap. Street-ready.", color: "from-orange-500 to-red-500" },
+            { icon: Headphones, title: "Music", tag: "music", desc: "Beats. Lyrics. Style. Wear your sound.", color: "from-blue-500 to-cyan-500" },
+            { icon: Heart, title: "Faith", tag: "faith", desc: "Purpose-driven. Wear what you believe.", color: "from-purple-500 to-indigo-500" },
+            { icon: Zap, title: "Sports", tag: "sports", desc: "Game day to every day. Athletic street.", color: "from-green-500 to-teal-500" },
+            { icon: Briefcase, title: "Hustle", tag: "hustle", desc: "Work hard. Look good. Make moves.", color: "from-blue-500 to-red-500" },
           ].map((item, i) => (
             <motion.div
               key={item.tag}
@@ -129,7 +129,7 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group relative rounded-xl sm:rounded-2xl p-5 sm:p-6 bg-white border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-200"
+              className="group relative rounded-xl sm:rounded-2xl p-5 sm:p-6 bg-white border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-200"
             >
               <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
                 <item.icon className="h-6 w-6 text-white" />
@@ -138,27 +138,27 @@ const Home = () => {
               <p className="text-sm text-gray-500 mb-4">{item.desc}</p>
               <Link
                 to="/combos"
-                className="inline-flex items-center gap-1 text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors"
+                className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
               >
-                View Kit <ArrowRight className="h-3.5 w-3.5" />
+                View Bundle <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* ─── WHY KITS ─── */}
-      <section className="bg-gradient-to-b from-orange-50/50 to-white py-12 sm:py-16">
+      {/* â”€â”€â”€ WHY BUNDLES â”€â”€â”€ */}
+      <section className="bg-gradient-to-b from-blue-50/50 to-white py-12 sm:py-16">
         <div className="container">
           <div className="text-center mb-8 sm:mb-10">
-            <p className="text-sm font-semibold text-gradient uppercase tracking-widest">Why Kits</p>
+            <p className="text-sm font-semibold text-gradient uppercase tracking-widest">Why Bundles</p>
             <h2 className="font-display font-bold text-2xl sm:text-3xl mt-1">Better Than Buying Separate</h2>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-6 sm:gap-8">
             {[
               { icon: CheckCircle, title: "No Guesswork", desc: "We matched the right pieces for your vibe. No research needed." },
-              { icon: BadgePercent, title: "Save 15-25%", desc: "Kits cost less than separate. Better deal. Always." },
+              { icon: BadgePercent, title: "Save 15-25%", desc: "Bundles cost less than separate. Better deal. Always." },
               { icon: Heart, title: "30-Day Guarantee", desc: "Not happy? Send it back. No questions asked." },
             ].map((item) => (
               <motion.div
@@ -179,11 +179,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── FEATURED KITS ─── */}
+      {/* â”€â”€â”€ FEATURED BUNDLES â”€â”€â”€ */}
       <section className="container py-12 sm:py-16">
         <div className="flex items-center justify-between mb-6 sm:mb-8">
           <div>
-            <p className="text-sm font-semibold text-gradient uppercase tracking-widest">Featured Kits</p>
+            <p className="text-sm font-semibold text-gradient uppercase tracking-widest">Featured Bundles</p>
             <h2 className="font-display font-bold text-2xl sm:text-3xl">Top Picks</h2>
           </div>
           <Button asChild variant="outline" size="sm">
@@ -206,19 +206,19 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── HOW IT WORKS ─── */}
-      <section className="bg-gradient-to-b from-white to-orange-50/50 py-12 sm:py-16">
+      {/* â”€â”€â”€ HOW IT WORKS â”€â”€â”€ */}
+      <section className="bg-gradient-to-b from-white to-blue-50/50 py-12 sm:py-16">
         <div className="container">
           <div className="text-center mb-8 sm:mb-10">
             <p className="text-sm font-semibold text-gradient uppercase tracking-widest">How It Works</p>
-            <h2 className="font-display font-bold text-2xl sm:text-3xl mt-1">Three Steps</h2>
+            <h2 className="font-display font-bold text-2xl sm:text-3xl mt-1">Three Simple Steps</h2>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-8 sm:gap-12 max-w-3xl mx-auto">
             {[
-              { step: "01", title: "Pick Your Bundle", desc: "Student, work, travel, or casual. Pick the one that fits." },
+              { step: "01", title: "Pick Your Bundle", desc: "Student, work, travel, or casual. Pick the one that fits your vibe." },
               { step: "02", title: "Order", desc: "Checkout online or order in 30 seconds on WhatsApp." },
-              { step: "03", title: "Delivered", desc: "Fast delivery across Malawi. Love it or send it back within 30 days." },
+              { step: "03", title: "Wear It", desc: "Fast delivery across Malawi. Love it or send it back within 30 days." },
             ].map((item) => (
               <motion.div
                 key={item.step}
@@ -238,21 +238,21 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── FINAL CTA ─── */}
+      {/* â”€â”€â”€ FINAL CTA â”€â”€â”€ */}
       <section className="container pb-12 sm:pb-16">
-        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-orange-500 to-orange-600 p-8 sm:p-12 md:p-16 text-center text-white">
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 p-8 sm:p-12 md:p-16 text-center text-white">
           <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/5" />
           <div className="absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-white/5" />
 
           <h2 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl relative">
-            Love Your Kit or Send It Back
+            Wear the Culture. Make a Statement.
           </h2>
           <p className="text-white/80 text-sm sm:text-base mt-2 max-w-lg mx-auto relative">
-            30-day guarantee. Join 2,500+ customers in Malawi.
+            Your style should say what you mean. Join 2,500+ Malawians wearing the culture.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6 relative">
             <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-white/90">
-              <Link to="/combos">Get Your Kit Now</Link>
+              <Link to="/combos">Get Your Bundle Now</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10">
               <Link to="/shop">Shop Individual Items</Link>

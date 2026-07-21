@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { SEO, defaultSEO } from "@/components/SEO";
-import { Headphones, Zap, Globe, ArrowRight } from "lucide-react";
+import { Headphones, Zap, Globe, ArrowRight, Heart } from "lucide-react";
 import lifestyleMusic from "@/assets/lifestyle-music.jpg";
 
 const About = () => (
@@ -11,10 +11,11 @@ const About = () => (
       <div className="max-w-3xl space-y-5">
         <p className="text-sm font-semibold text-gradient uppercase tracking-widest">Our Story</p>
         <h1 className="font-display font-bold text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.05]">
-          Built for people who <span className="text-gradient">move.</span>
+          Built for people who <span className="text-gradient">wear the culture.</span>
         </h1>
         <p className="text-lg sm:text-xl text-gray-500 leading-relaxed">
           Streetwear Blantyre brings you the culture. Premium fits for the streets of Malawi.
+          We believe your style should say what you mean—whether that's music, faith, sports, or hustle.
         </p>
       </div>
     </section>
@@ -34,11 +35,12 @@ const About = () => (
     </section>
 
     <section className="container py-16">
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-4 gap-6">
         {[
-          { icon: Zap, title: "Style", text: "Streetwear that speaks for you." },
-          { icon: Headphones, title: "Quality", text: "Premium fabrics. Clean stitching." },
-          { icon: Globe, title: "Local", text: "Made for Malawi. Made for you." },
+          { icon: Headphones, title: "Music Culture", text: "Beats. Lyrics. Style. Wear your sound." },
+          { icon: Heart, title: "Faith Culture", text: "Purpose-driven. Wear what you believe." },
+          { icon: Zap, title: "Sports Culture", text: "Game day to every day. Athletic street." },
+          { icon: Globe, title: "Hustle Culture", text: "Work hard. Look good. Make moves." },
         ].map((v) => (
           <div key={v.title} className="rounded-3xl p-8 bg-card border border-gray-100 space-y-3">
             <div className="h-12 w-12 rounded-2xl bg-gradient-brand flex items-center justify-center">
@@ -54,7 +56,7 @@ const About = () => (
     <section className="container pb-14">
       <div className="rounded-3xl p-10 sm:p-16 bg-gradient-brand text-white text-center space-y-5">
         <h2 className="font-display font-bold text-3xl sm:text-5xl">This is Streetwear Blantyre.</h2>
-        <p className="text-white/85 max-w-xl mx-auto">Wear the Culture. Order on WhatsApp.</p>
+        <p className="text-white/85 max-w-xl mx-auto">Wear the Culture. Express Who You Are.</p>
         <Button asChild size="xl" className="bg-background text-foreground hover:bg-background/90">
           <Link to="/shop">Shop Now <ArrowRight className="h-5 w-5" /></Link>
         </Button>

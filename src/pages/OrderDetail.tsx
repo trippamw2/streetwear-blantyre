@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -109,7 +109,7 @@ const OrderDetailPage = () => {
           <h2 className="font-display font-semibold">Items</h2>
           {items.map((i) => (
             <div key={i.id} className="flex items-center justify-between gap-3 py-2 border-b border-border/60 last:border-0">
-              <p className="text-sm">{i.quantity} × {i.product_name}</p>
+              <p className="text-sm">{i.quantity} Ã— {i.product_name}</p>
               <p className="text-sm font-semibold">{formatMWK(i.unit_price_mwk * i.quantity)}</p>
             </div>
           ))}
@@ -129,12 +129,12 @@ const OrderDetailPage = () => {
 
         {/* Payment Instructions */}
         {order.status === "new" && (
-          <div className="rounded-2xl bg-orange-50 border border-orange-200 p-5 space-y-3">
+          <div className="rounded-2xl bg-blue-50 border border-blue-200 p-5 space-y-3">
             <p className="font-display font-bold text-lg">
               Make Payment
             </p>
             <p className="text-sm text-muted-foreground">
-              Pay <span className="font-bold text-orange-600">{formatMWK(order.total_mwk)}</span> via PayChangu:
+              Pay <span className="font-bold text-blue-600">{formatMWK(order.total_mwk)}</span> via PayChangu:
             </p>
             <div className="text-sm space-y-2 bg-white p-3 rounded-lg">
               <p><span className="text-muted-foreground">Airtel Money:</span> <span className="font-mono font-bold">{import.meta.env.VITE_PAYMENT_PHONE || "+265 991 234 567"}</span></p>

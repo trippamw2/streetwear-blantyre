@@ -1,4 +1,4 @@
-/* PowerPod - Mobile-first e-commerce for Malawi & Africa */
+﻿/* PowerPod - Mobile-first e-commerce for Malawi & Africa */
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Dongle:wght@400;700&display=swap');
 
 @tailwind base;
@@ -83,21 +83,21 @@ html {
     --ring: 28 100% 50%;
     --radius: 0.75rem;
 
-    /* PowerPod Brand Colors */
-    --color-orange: #FF6B00;
-    --color-orange-light: #FF8C00;
+    /* Streetwear Blantyre Brand Colors */
+    --color-blue: #2563eb;
+    --color-blue-light: #60a5fa;
     --color-teal: #0d9488;
     --color-black: #0a0a0a;
 
     /* Premium Gradients */
-    --gradient-brand: linear-gradient(135deg, #FF6B00 0%, #FF8C00 50%, #FF6B00 100%);
-    --gradient-brand-soft: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
-    --gradient-text: linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%);
+    --gradient-brand: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #2563eb 100%);
+    --gradient-brand-soft: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    --gradient-text: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     --gradient-dark: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
     --gradient-card: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
     
     /* Premium Shadows */
-    --shadow-glow: 0 0 40px rgba(255, 107, 0, 0.2);
+    --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.2);
     --shadow-card: 0 25px 80px -20px rgba(0, 0, 0, 0.15);
     --shadow-button: 0 8px 30px -8px rgba(255, 107, 0, 0.3);
     --shadow-card-hover: 0 30px 60px -15px rgba(255, 107, 0, 0.15);
@@ -231,16 +231,16 @@ html {
 
 .glass-card {
   background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
-  border: 1px solid rgba(255, 107, 0, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.15);
   box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.1);
 }
 
-.glow-orange {
-  box-shadow: 0 0 40px rgba(255, 107, 0, 0.15);
+.glow-blue {
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.15);
 }
 
-.glow-orange-sm {
-  box-shadow: 0 0 20px rgba(255, 107, 0, 0.1);
+.glow-blue-sm {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
 }
 
 .card-hover {
@@ -250,11 +250,11 @@ html {
 .card-hover:hover {
   transform: translateY(-2px);
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-  border-color: rgba(255, 107, 0, 0.3);
+  border-color: rgba(37, 99, 235, 0.3);
 }
 
-.text-gradient-orange {
-  background: linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%);
+.text-gradient-blue {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

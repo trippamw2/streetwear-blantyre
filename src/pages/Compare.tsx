@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useCompare } from "@/contexts/CompareContext";
 import { formatMWK, getKitPrice } from "@/data/products";
 import { SEO, defaultSEO } from "@/components/SEO";
@@ -32,19 +32,19 @@ const Compare = () => {
         <p className="text-gray-500 mb-6">Nothing to compare yet.</p>
         
         {/* Kit upsell */}
-        <div className="max-w-md mx-auto bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl border border-orange-200 p-6">
-          <Package className="h-10 w-10 text-orange-500 mx-auto mb-3" />
+        <div className="max-w-md mx-auto bg-gradient-to-r from-blue-50 to-amber-50 rounded-2xl border border-blue-200 p-6">
+          <Package className="h-10 w-10 text-blue-500 mx-auto mb-3" />
           <h3 className="font-display font-bold text-lg mb-2">Compare Kits Instead</h3>
           <p className="text-sm text-gray-500 mb-4">Curated kits. Better value. One delivery.</p>
           <Link to="/combos">
-            <Button className="bg-orange-500 hover:bg-orange-600 rounded-full">
+            <Button className="bg-blue-500 hover:bg-blue-600 rounded-full">
               View Kits <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </Link>
         </div>
 
         <div className="text-sm text-gray-400 mt-4">
-          <Link to="/shop" className="text-orange-500 hover:underline">Browse individual items &rarr;</Link>
+          <Link to="/shop" className="text-blue-500 hover:underline">Browse individual items &rarr;</Link>
         </div>
       </div>
     );
@@ -66,7 +66,7 @@ const Compare = () => {
       </div>
 
       {/* Kit upsell banner */}
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-4 sm:p-5 mb-6 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-4 sm:p-5 mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3 text-white">
           <Package className="h-6 w-6" />
           <div>
@@ -75,7 +75,7 @@ const Compare = () => {
           </div>
         </div>
         <Link to="/combos">
-          <Button className="bg-white text-orange-600 hover:bg-orange-50 rounded-full text-sm px-4 py-2 h-auto">
+          <Button className="bg-white text-blue-600 hover:bg-blue-50 rounded-full text-sm px-4 py-2 h-auto">
             See Kits <ArrowRight className="h-3 w-3 ml-1" />
           </Button>
         </Link>
@@ -104,7 +104,7 @@ const Compare = () => {
               ))}
               {[...Array(4 - compareList.length)].map((_, i) => (
                 <th key={`empty-${i}`} className="p-3 bg-gray-50 border-dashed border-2 border-gray-200">
-                  <Link to="/shop" className="text-orange-500 text-sm hover:underline">
+                  <Link to="/shop" className="text-blue-500 text-sm hover:underline">
                     + Add Product
                   </Link>
                 </th>
@@ -189,7 +189,7 @@ const Compare = () => {
                     size="sm"
                     onClick={() => handleAddToCart(p)}
                     disabled={!p.stock || p.stock <= 0}
-                    className="bg-orange-500 hover:bg-orange-600"
+                    className="bg-blue-500 hover:bg-blue-600"
                   >
                     <ShoppingBag className="h-4 w-4 mr-2" />
                     Add to Cart

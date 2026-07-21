@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,9 +15,8 @@ import { Plus, Edit, Trash2, Image as ImageIcon, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const BRANDS = [
-  { id: "sb-original", name: "SB Original", color: "#FF6B00" },
+  { id: "sb-original", name: "SB Original", color: "#2563eb" },
   { id: "sb-street", name: "SB Street", color: "#1a1a1a" },
-];
   { id: "oppo", name: "OPPO", color: "#00B5AD" },
   { id: "vivo", name: "Vivo", color: "#415FFF" },
   { id: "realme", name: "realme", color: "#FFB700" },
@@ -305,7 +304,7 @@ const AdminProducts = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-orange-500 hover:bg-orange-600">
+            <Button className="bg-blue-500 hover:bg-blue-600">
               <Plus className="h-4 w-4" /> Add Product
             </Button>
           </DialogTrigger>
@@ -502,7 +501,7 @@ const AdminProducts = () => {
               
               <Button 
                 onClick={handleSave} 
-                className="w-full bg-orange-500 hover:bg-orange-600"
+                className="w-full bg-blue-500 hover:bg-blue-600"
                 disabled={saving || !formData.name}
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
@@ -547,7 +546,7 @@ const AdminProducts = () => {
                   </div>
                 </td>
                 <td className="p-4">
-                  <span className="px-2 py-1 bg-orange-50 text-orange-700 rounded text-xs font-medium">
+                  <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-medium">
                     {getBrandName(product.brand || "generic")}
                   </span>
                 </td>

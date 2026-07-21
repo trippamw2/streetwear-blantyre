@@ -105,20 +105,20 @@ const Shop = () => {
       </div>
 
       <div className="max-w-3xl space-y-2 sm:space-y-3 mb-4 sm:mb-8">
-        <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight">Shop by Item</h1>
-        <p className="text-gray-500 text-sm sm:text-base">Single items. Add to your setup one piece at a time.</p>
+        <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight">Shop Streetwear</h1>
+        <p className="text-gray-500 text-sm sm:text-base">Single pieces. Build your style, one item at a time.</p>
       </div>
 
-      {/* Kit upsell banner */}
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-5 sm:p-7 mb-6 sm:mb-10 text-white">
+      {/* Outfit bundles upsell banner */}
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-5 sm:p-7 mb-6 sm:mb-10 text-white">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <p className="font-display font-bold text-base sm:text-lg">Get a Kit. Save 15-25%.</p>
-            <p className="text-white/80 text-xs sm:text-sm">Same items. One box. Less cash.</p>
+            <p className="font-display font-bold text-base sm:text-lg">Get a Bundle. Save 15-25%.</p>
+            <p className="text-white/80 text-xs sm:text-sm">Curated outfits. One order. Better value.</p>
           </div>
           <Link to="/combos">
-            <Button className="bg-white text-orange-600 hover:bg-orange-50 px-5 py-2 h-auto rounded-full font-semibold text-xs sm:text-sm gap-1.5">
-              See Kits <ArrowRight className="h-3.5 w-3.5" />
+            <Button className="bg-white text-blue-600 hover:bg-blue-50 px-5 py-2 h-auto rounded-full font-semibold text-xs sm:text-sm gap-1.5">
+              See Bundles <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </Link>
         </div>
@@ -210,8 +210,8 @@ const Shop = () => {
                       onClick={() => toggleBrand(brand.id)}
                       className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
                         selectedBrands.includes(brand.id)
-                          ? "bg-orange-500 text-white"
-                          : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
                       }`}
                     >
                       {brand.name}
@@ -257,8 +257,8 @@ const Shop = () => {
           onClick={() => setSelectedCategory("all")}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
             selectedCategory === "all"
-              ? "bg-orange-500 text-white"
-              : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+              ? "bg-blue-500 text-white"
+              : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
           }`}
         >
           All
@@ -269,8 +269,8 @@ const Shop = () => {
             onClick={() => setSelectedCategory(c.id)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               selectedCategory === c.id
-                ? "bg-orange-500 text-white"
-                : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+                ? "bg-blue-500 text-white"
+                : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
             }`}
           >
             {c.label}
@@ -282,13 +282,13 @@ const Shop = () => {
       {hasFilters && (
         <div className="flex flex-wrap gap-2 mb-4">
           {selectedCategory !== "all" && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
               {categories.find(c => c.id === selectedCategory)?.label}
               <button onClick={() => setSelectedCategory("all")}><X className="h-3 w-3" /></button>
             </span>
           )}
           {searchQuery && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
               "{searchQuery}"
               <button onClick={() => setSearchQuery("")}><X className="h-3 w-3" /></button>
             </span>
@@ -322,7 +322,7 @@ const Shop = () => {
                 onClick={loadMore} 
                 variant="outline" 
                 size="sm"
-                className="px-6 sm:px-8 border-orange-500 text-orange-500 hover:bg-orange-50 text-sm"
+                className="px-6 sm:px-8 border-blue-500 text-blue-500 hover:bg-blue-50 text-sm"
               >
                 Load More ({sorted.length - visibleCount} left)
                 <ChevronRight className="ml-1.5 sm:ml-2 h-3.5 sm:h-4 w-3.5 sm:w-4" />
@@ -333,7 +333,7 @@ const Shop = () => {
       ) : (
         <div className="text-center py-12 sm:py-20 space-y-3 sm:space-y-4">
           <p className="text-muted-foreground text-base sm:text-lg">No products found</p>
-          <button onClick={clearFilters} className="px-4 sm:px-6 py-2 sm:py-2.5 bg-orange-500 text-white rounded-full text-sm font-medium">
+          <button onClick={clearFilters} className="px-4 sm:px-6 py-2 sm:py-2.5 bg-blue-500 text-white rounded-full text-sm font-medium">
             Clear filters
           </button>
         </div>

@@ -17,16 +17,16 @@ const Combos = () => {
       <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
         <div className="container relative py-10 sm:py-14 lg:py-20">
           {/* bg accent */}
-          <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-orange-500/10 blur-3xl" />
-          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-orange-500/5 blur-3xl" />
+          <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-blue-500/5 blur-3xl" />
 
           <div className="relative max-w-2xl mx-auto text-center">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 text-xs font-semibold mb-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold mb-4">
               <BadgePercent className="h-3.5 w-3.5" /> Save 15% vs buying separate
             </span>
             <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight">
               Your Outfit. <br />
-              <span className="text-orange-400">One Box. Less Cash.</span>
+              <span className="text-blue-400">One Box. Less Cash.</span>
             </h1>
             <p className="text-gray-400 text-sm sm:text-base mt-3 max-w-lg mx-auto leading-relaxed">
               Outfit looking stale? Nothing goes together? We picked the tee, hoodie,
@@ -108,7 +108,7 @@ const Combos = () => {
               <Link
                 key={item.cat}
                 to={`/shop?cat=${item.cat}`}
-                className="px-5 py-3 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 hover:border-orange-300 hover:text-orange-600 hover:shadow-sm transition-all"
+                className="px-5 py-3 rounded-full bg-white border border-gray-200 text-sm font-medium text-gray-700 hover:border-blue-300 hover:text-blue-600 hover:shadow-sm transition-all"
               >
                 {item.label}
               </Link>

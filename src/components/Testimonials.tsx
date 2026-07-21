@@ -234,7 +234,7 @@ export const AdminTestimonials = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-orange-500 hover:bg-orange-600">
+            <Button className="bg-blue-500 hover:bg-blue-600">
               <Plus className="h-4 w-4" /> Add Testimonial
             </Button>
           </DialogTrigger>
@@ -307,7 +307,7 @@ export const AdminTestimonials = () => {
 
               <Button
                 onClick={handleSave}
-                className="w-full bg-orange-500 hover:bg-orange-600"
+                className="w-full bg-blue-500 hover:bg-blue-600"
                 disabled={saving || !formData.name || !formData.message}
               >
                 {saving && <Loader2 className="h-4 w-4 animate-spin" />}

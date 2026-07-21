@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminLayout } from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
@@ -133,7 +133,7 @@ export default function AdminReferrals() {
           </div>
           <div className="bg-card border rounded-lg p-4">
             <p className="text-sm text-muted-foreground">Pending</p>
-            <p className="text-2xl font-bold text-orange-600">{stats.pending}</p>
+            <p className="text-2xl font-bold text-blue-600">{stats.pending}</p>
           </div>
           <div className="bg-card border rounded-lg p-4">
             <p className="text-sm text-muted-foreground">Completed</p>

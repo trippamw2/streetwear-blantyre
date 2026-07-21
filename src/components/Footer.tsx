@@ -60,7 +60,7 @@ export const Footer = () => {
   return (
     <footer className="bg-white border-t border-gray-200 mt-24">
       {/* Newsletter & Trust Strip */}
-      <div className="bg-orange-500">
+      <div className="bg-blue-500">
         <div className="container py-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             {/* Newsletter */}
@@ -100,28 +100,28 @@ export const Footer = () => {
         <div className="container py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex items-center gap-3">
-              <Shield className="h-8 w-8 text-orange-500" />
+              <Shield className="h-8 w-8 text-blue-500" />
               <div>
                 <p className="font-semibold text-sm">Secure Checkout</p>
                 <p className="text-xs text-gray-500">256-bit SSL encryption</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-8 w-8 text-orange-500" />
+              <CheckCircle className="h-8 w-8 text-blue-500" />
               <div>
                 <p className="font-semibold text-sm">Genuine Products</p>
                 <p className="text-xs text-gray-500">100% authentic brands</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Truck className="h-8 w-8 text-orange-500" />
+              <Truck className="h-8 w-8 text-blue-500" />
               <div>
                 <p className="font-semibold text-sm">Fast Delivery</p>
                 <p className="text-xs text-gray-500">Across all Malawi</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <CreditCard className="h-8 w-8 text-orange-500" />
+              <CreditCard className="h-8 w-8 text-blue-500" />
               <div>
                 <p className="font-semibold text-sm">Easy Payments</p>
                 <p className="text-xs text-gray-500">Mobile money & cards</p>
@@ -139,17 +139,17 @@ export const Footer = () => {
             <p className="text-gray-500 max-w-sm text-sm">
               Streetwear Blantyre brings you the culture. Fits picked for your life. Delivered to your door.
             </p>
-            <p className="text-sm text-orange-600 font-semibold">Upgrade your everyday.</p>
+            <p className="text-sm text-blue-600 font-semibold">Upgrade your everyday.</p>
             
             {/* Social */}
             <div className="flex gap-4 pt-2">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-orange-100 hover:text-orange-600 transition-colors">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 hover:text-blue-600 transition-colors">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-orange-100 hover:text-orange-600 transition-colors">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 hover:text-blue-600 transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href={buildWhatsAppLink("Hi Streetwear Blantyre!")} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-orange-100 hover:text-orange-600 transition-colors">
+              <a href={buildWhatsAppLink("Hi Streetwear Blantyre!")} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 hover:text-blue-600 transition-colors">
                 <MessageCircle className="h-5 w-5" />
               </a>
             </div>
@@ -173,32 +173,32 @@ export const Footer = () => {
           <div>
             <h4 className="font-display font-semibold mb-3">Shop</h4>
             <ul className="space-y-2 text-sm text-gray-500">
-              <li><Link to="/combos" className="hover:text-orange-500 transition-colors">Fashion Bundles</Link></li>
-              <li><Link to="/shop" className="hover:text-orange-500 transition-colors">All Products</Link></li>
-              <li><Link to="/shop?cat=t-shirts" className="hover:text-orange-500 transition-colors">T-Shirts</Link></li>
-              <li><Link to="/shop?cat=hoodies" className="hover:text-orange-500 transition-colors">Hoodies</Link></li>
-              <li><Link to="/shop?cat=sneakers" className="hover:text-orange-500 transition-colors">Sneakers</Link></li>
+              <li><Link to="/combos" className="hover:text-blue-500 transition-colors">Fashion Bundles</Link></li>
+              <li><Link to="/shop" className="hover:text-blue-500 transition-colors">All Products</Link></li>
+              <li><Link to="/shop?cat=t-shirts" className="hover:text-blue-500 transition-colors">T-Shirts</Link></li>
+              <li><Link to="/shop?cat=hoodies" className="hover:text-blue-500 transition-colors">Hoodies</Link></li>
+              <li><Link to="/shop?cat=sneakers" className="hover:text-blue-500 transition-colors">Sneakers</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-display font-semibold mb-3">Support</h4>
             <ul className="space-y-2 text-sm text-gray-500">
-              <li><Link to="/track/order123" className="hover:text-orange-500 transition-colors">Track Order</Link></li>
-              <li><Link to="/contact" className="hover:text-orange-500 transition-colors">Contact Us</Link></li>
-              <li><a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition-colors inline-flex items-center gap-2"><MessageCircle className="h-4 w-4" /> WhatsApp</a></li>
-              <li><Link to="/about" className="hover:text-orange-500 transition-colors">About Us</Link></li>
+              <li><Link to="/track/order123" className="hover:text-blue-500 transition-colors">Track Order</Link></li>
+              <li><Link to="/contact" className="hover:text-blue-500 transition-colors">Contact Us</Link></li>
+              <li><a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors inline-flex items-center gap-2"><MessageCircle className="h-4 w-4" /> WhatsApp</a></li>
+              <li><Link to="/about" className="hover:text-blue-500 transition-colors">About Us</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-display font-semibold mb-3">Legal</h4>
             <ul className="space-y-2 text-sm text-gray-500">
-              <li><Link to="/terms" className="hover:text-orange-500 transition-colors">Terms & Conditions</Link></li>
-              <li><Link to="/privacy" className="hover:text-orange-500 transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/returns" className="hover:text-orange-500 transition-colors">Returns & Refunds</Link></li>
-              <li><Link to="/warranty" className="hover:text-orange-500 transition-colors">Warranty Info</Link></li>
-              <li><Link to="/faq" className="hover:text-orange-500 transition-colors">FAQ</Link></li>
+              <li><Link to="/terms" className="hover:text-blue-500 transition-colors">Terms & Conditions</Link></li>
+              <li><Link to="/privacy" className="hover:text-blue-500 transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/returns" className="hover:text-blue-500 transition-colors">Returns & Refunds</Link></li>
+              <li><Link to="/warranty" className="hover:text-blue-500 transition-colors">Warranty Info</Link></li>
+              <li><Link to="/faq" className="hover:text-blue-500 transition-colors">FAQ</Link></li>
             </ul>
           </div>
         </div>

@@ -1,4 +1,4 @@
-export type Category = "all" | "t-shirts" | "hoodies" | "caps" | "sneakers" | "pants" | "jackets" | "accessories";
+﻿export type Category = "all" | "t-shirts" | "hoodies" | "caps" | "sneakers" | "pants" | "jackets" | "accessories";
 
 export interface ProductType {
   id: string;
@@ -26,7 +26,7 @@ export interface Product {
 }
 
 export const BRANDS = [
-  { id: "sb-original", name: "SB Original", color: "#FF6B00" },
+  { id: "sb-original", name: "SB Original", color: "#2563eb" },
   { id: "sb-street", name: "SB Street", color: "#1a1a1a" },
 ] as const;
 

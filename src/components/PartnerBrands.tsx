@@ -40,7 +40,7 @@ export const PartnerBrands = ({ className }: { className?: string }) => {
               transition={{ delay: i * 0.1 }}
               className="flex items-center gap-2 group"
             >
-              <span className="text-xl md:text-2xl font-bold text-gray-400 group-hover:text-orange-500 transition-colors">
+              <span className="text-xl md:text-2xl font-bold text-gray-400 group-hover:text-blue-500 transition-colors">
                 {brand.name}
               </span>
             </motion.a>

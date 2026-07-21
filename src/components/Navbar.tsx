@@ -75,7 +75,7 @@ export const Navbar = () => {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
       {/* Promo Banner - hidden on mobile */}
-      <div className="hidden md:block bg-orange-500 text-white text-center py-1.5 text-xs sm:text-sm">
+      <div className="hidden md:block bg-blue-500 text-white text-center py-1.5 text-xs sm:text-sm">
         {promoText}
       </div>
 
@@ -110,7 +110,7 @@ export const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="w-32 sm:w-40 md:w-64 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 focus:outline-none focus:border-orange-500 text-sm"
+                  className="w-32 sm:w-40 md:w-64 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-gray-200 focus:outline-none focus:border-blue-500 text-sm"
                   autoFocus
                 />
                 <button type="button" onClick={() => setSearchOpen(false)} className="absolute right-3">
@@ -133,7 +133,7 @@ export const Navbar = () => {
             <button className="relative p-2 sm:p-2.5 rounded-full hover:bg-gray-100" aria-label="Open cart">
               <ShoppingBag className="h-5 sm:h-6 w-5 sm:w-6 text-gray-900" />
               {count > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 sm:h-5 min-w-5 px-1 rounded-full bg-orange-500 text-white text-[10px] sm:text-[11px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 h-5 sm:h-5 min-w-5 px-1 rounded-full bg-blue-500 text-white text-[10px] sm:text-[11px] font-bold flex items-center justify-center">
                   {count}
                 </span>
               )}

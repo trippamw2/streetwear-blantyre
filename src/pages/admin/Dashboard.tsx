@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
 import { Link } from "react-router-dom";
@@ -105,8 +105,8 @@ const AdminDashboard = () => {
       label: "Gross Orders", 
       value: formatMWK(stats.grossOrders), 
       icon: Receipt,
-      color: "text-orange-500",
-      bgColor: "bg-orange-500/10",
+      color: "text-blue-500",
+      bgColor: "bg-blue-500/10",
     },
     { 
       label: "Net Revenue", 

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   formatMWK, getKitPrice, getKitSeparateTotal,
@@ -7,7 +7,7 @@ import {
 } from "@/data/products";
 import { BookOpen, Briefcase, Headphones, Luggage, Zap, ArrowRight } from "lucide-react";
 
-/* ─── lifestyle config ─── */
+/* â”€â”€â”€ lifestyle config â”€â”€â”€ */
 const lifestyleConfig: Record<
   Kit["lifestyle"],
   { icon: typeof BookOpen; label: string; color: string }
@@ -15,8 +15,8 @@ const lifestyleConfig: Record<
   student: { icon: BookOpen, label: "Student", color: "from-blue-500 to-cyan-500" },
   work:    { icon: Briefcase, label: "Work",    color: "from-purple-500 to-indigo-500" },
   travel:  { icon: Luggage,  label: "Travel",   color: "from-green-500 to-teal-500" },
-  casual:   { icon: Headphones, label: "Casual",  color: "from-orange-500 to-red-500" },
-  premium: { icon: Zap,      label: "Premium",  color: "from-orange-500 to-orange-600" },
+  casual:   { icon: Headphones, label: "Casual",  color: "from-blue-500 to-red-500" },
+  premium: { icon: Zap,      label: "Premium",  color: "from-blue-500 to-blue-600" },
 };
 
 interface KitCardProps {
@@ -45,17 +45,17 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
     >
       <Link
         to={`/kits/${kit.id}`}
-        className="group relative block rounded-xl sm:rounded-2xl bg-white border border-gray-100 overflow-hidden hover:border-orange-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 h-full"
+        className="group relative block rounded-xl sm:rounded-2xl bg-white border border-gray-100 overflow-hidden hover:border-blue-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 h-full"
       >
-        {/* ─── Image ─── */}
+        {/* â”€â”€â”€ Image â”€â”€â”€ */}
         <div className="relative bg-gray-50 border-b border-gray-100">
           {kit.badge && (
-            <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-orange-500 text-white text-[10px] sm:text-xs font-semibold">
+            <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-blue-500 text-white text-[10px] sm:text-xs font-semibold">
               {kit.badge}
             </span>
           )}
           {lowStock && (
-            <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full border border-orange-300 bg-white text-orange-600 text-[10px] font-medium">
+            <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full border border-blue-300 bg-white text-blue-600 text-[10px] font-medium">
               Only {kit.stock} left
             </span>
           )}
@@ -68,7 +68,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
           </div>
         </div>
 
-        {/* ─── Content ─── */}
+        {/* â”€â”€â”€ Content â”€â”€â”€ */}
         <div className="p-4 sm:p-5">
           {/* lifestyle tag */}
           <div className="flex items-center gap-2 mb-2.5">
@@ -81,7 +81,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
           </div>
 
           <h3 className="font-display font-bold text-lg sm:text-xl text-gray-900 leading-tight">{kit.name}</h3>
-          <p className="text-sm font-medium text-orange-600 mt-0.5">{kit.hook}</p>
+          <p className="text-sm font-medium text-blue-600 mt-0.5">{kit.hook}</p>
 
           {!compact && (
             <p className="text-xs text-gray-500 mt-2 leading-relaxed line-clamp-2">{kit.description}</p>
@@ -123,14 +123,14 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-1 text-sm font-semibold text-orange-600 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex items-center gap-1 text-sm font-semibold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
               View Kit <ArrowRight className="h-4 w-4" />
             </div>
           </div>
 
           {/* Discount badge */}
           <div className="mt-2">
-            <span className="text-[10px] font-semibold text-orange-500 bg-orange-50 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-semibold text-blue-500 bg-blue-50 px-2 py-0.5 rounded">
               {discount}% cheaper than separate
             </span>
           </div>

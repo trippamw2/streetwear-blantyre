@@ -60,7 +60,7 @@ export const PromotionSlider = ({ page, className }: PromotionSliderProps) => {
   if (promotions.length === 0) return null;
 
   const promo = promotions[current];
-  const bgColor = promo.background_color || "from-orange-500 to-orange-600";
+  const bgColor = promo.background_color || "from-blue-500 to-blue-600";
   const textColor = promo.text_color || "text-white";
 
   return (

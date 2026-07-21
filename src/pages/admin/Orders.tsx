@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
 import { Button } from "@/components/ui/button";
@@ -199,11 +199,11 @@ const AdminOrders = () => {
     }
     // 6. Generic status update
     else {
-      message = `📦 *Order Update* @${order.customer_name.split(' ')[0]}
+      message = `ðŸ“¦ *Order Update* @${order.customer_name.split(' ')[0]}
 
 Your order #${order.id.slice(0, 8).toUpperCase()} status: *${newStatus.toUpperCase()}*
 
-${itemsList.map(i => `• ${i.quantity}× ${i.name}`).join('\n')}
+${itemsList.map(i => `â€¢ ${i.quantity}Ã— ${i.name}`).join('\n')}
 
 Total: MK ${order.total_mwk.toLocaleString()}
 
@@ -346,7 +346,7 @@ Track: https://streetwearblantyre-store.vercel.app/track/${order.id}`;
                   <div className="flex items-center gap-2">
                     <h3 className="font-bold">#{order.id.slice(0, 8).toUpperCase()}</h3>
                     <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${statusColors[order.status]}`}>{order.status}</span>
-                    {order.delivery_method === "express" && <Zap className="h-3 w-3 text-orange-500" />}
+                    {order.delivery_method === "express" && <Zap className="h-3 w-3 text-blue-500" />}
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">{format(new Date(order.created_at), "PPp")}</span>
@@ -412,7 +412,7 @@ Track: https://streetwearblantyre-store.vercel.app/track/${order.id}`;
               <div className="space-y-2">
                 {orderItems.map((item) => (
                   <div key={item.id} className="flex justify-between py-2 border-b border-border/30">
-                    <span>{item.quantity} × {item.product_name}</span>
+                    <span>{item.quantity} Ã— {item.product_name}</span>
                     <span className="font-semibold">{formatMWK(item.unit_price_mwk * item.quantity)}</span>
                   </div>
                 ))}

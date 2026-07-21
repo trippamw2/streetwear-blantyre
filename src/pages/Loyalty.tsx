@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -29,7 +29,7 @@ const Loyalty = () => {
     return (
       <div className="container py-6 sm:py-12">
         <div className="max-w-2xl mx-auto text-center space-y-4">
-          <Gift className="h-12 w-12 mx-auto text-orange-500" />
+          <Gift className="h-12 w-12 mx-auto text-blue-500" />
           <h1 className="font-display font-bold text-2xl sm:text-3xl">Join Streetwear Blantyre Rewards</h1>
           <p className="text-muted-foreground">Sign in to earn points on every purchase!</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -148,7 +148,7 @@ const Loyalty = () => {
           { icon: Crown, title: "Upgrade", desc: "Unlock perks" },
         ].map((step) => (
           <div key={step.title} className="text-center p-3 sm:p-4 bg-gray-50 rounded-xl">
-            <step.icon className="h-5 sm:h-6 w-5 sm:w-6 mx-auto mb-1 text-orange-500" />
+            <step.icon className="h-5 sm:h-6 w-5 sm:w-6 mx-auto mb-1 text-blue-500" />
             <p className="font-semibold text-xs sm:text-sm">{step.title}</p>
             <p className="text-xs text-muted-foreground">{step.desc}</p>
           </div>
@@ -182,19 +182,19 @@ const Loyalty = () => {
 
       {/* Referral Program */}
       <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2">
-        <Users className="h-5 w-5 text-orange-500" /> Refer & Earn
+        <Users className="h-5 w-5 text-blue-500" /> Refer & Earn
       </h2>
-      <div className="rounded-2xl border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-white p-4 sm:p-6 mb-6">
+      <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-4 sm:p-6 mb-6">
         <div className="flex flex-col sm:flex-row gap-4 sm:items-start">
           <div className="flex-1">
             <p className="text-sm text-gray-500 mb-3">Share your code. Earn 500 points per friend who signs up.</p>
             {referralCode ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <code className="flex-1 bg-white border-2 border-orange-300 rounded-xl px-4 py-4 font-mono text-xl font-bold text-orange-600 text-center">
+                  <code className="flex-1 bg-white border-2 border-blue-300 rounded-xl px-4 py-4 font-mono text-xl font-bold text-blue-600 text-center">
                     {referralCode.code}
                   </code>
-                  <Button size="icon" variant="outline" onClick={copyCode} className="h-14 w-14 border-orange-200 hover:bg-orange-50">
+                  <Button size="icon" variant="outline" onClick={copyCode} className="h-14 w-14 border-blue-200 hover:bg-blue-50">
                     {copied ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5" />}
                   </Button>
                 </div>
@@ -204,7 +204,7 @@ const Loyalty = () => {
                   </Button>
                 </div>
                 <p className="text-xs text-center text-muted-foreground">
-                  Your friend gets K200 off • You earn 500 pts
+                  Your friend gets K200 off â€¢ You earn 500 pts
                 </p>
               </div>
             ) : (
@@ -213,7 +213,7 @@ const Loyalty = () => {
           </div>
           <div className="flex sm:flex-col gap-3">
             <div className="bg-white rounded-xl p-4 text-center min-w-[80px]">
-              <p className="text-3xl font-bold text-orange-600">{stats.totalReferrals}</p>
+              <p className="text-3xl font-bold text-blue-600">{stats.totalReferrals}</p>
               <p className="text-xs font-medium text-muted-foreground">Friends</p>
             </div>
             <div className="bg-white rounded-xl p-4 text-center min-w-[80px]">

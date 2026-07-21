@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ const KitDetail = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-500 mb-2">Kit not found</p>
-          <Link to="/combos" className="text-orange-500 hover:underline">
+          <Link to="/combos" className="text-blue-500 hover:underline">
             Back to Kits
           </Link>
         </div>
@@ -57,7 +57,7 @@ const KitDetail = () => {
   return (
     <div>
       <SEO title={kit?.name || "Fashion Bundle"} description={kit?.description || "Curated fashion bundle for your style"} path={"/kits/" + kit?.id} />
-      {/* ─── BACK LINK ─── */}
+      {/* â”€â”€â”€ BACK LINK â”€â”€â”€ */}
       <div className="container pt-4 sm:pt-6">
         <button
           onClick={() => navigate("/combos")}
@@ -67,7 +67,7 @@ const KitDetail = () => {
         </button>
       </div>
 
-      {/* ─── KIT HERO ─── */}
+      {/* â”€â”€â”€ KIT HERO â”€â”€â”€ */}
       <section className="container py-6 sm:py-10">
         <div className="grid lg:grid-cols-5 gap-8 sm:gap-12">
           {/* Left - Kit Info */}
@@ -79,12 +79,12 @@ const KitDetail = () => {
             {/* Badges */}
             <div className="flex flex-wrap gap-2">
               {kit.badge && (
-                <span className="inline-flex px-3 py-1 rounded-full bg-orange-500 text-white text-xs font-semibold">
+                <span className="inline-flex px-3 py-1 rounded-full bg-blue-500 text-white text-xs font-semibold">
                   {kit.badge}
                 </span>
               )}
               {lowStock && (
-                <span className="inline-flex px-3 py-1 rounded-full border border-orange-300 bg-white text-orange-600 text-xs font-medium">
+                <span className="inline-flex px-3 py-1 rounded-full border border-blue-300 bg-white text-blue-600 text-xs font-medium">
                   Only {kit.stock} left
                 </span>
               )}
@@ -96,10 +96,10 @@ const KitDetail = () => {
             <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl leading-tight">
               {kit.name}
             </h1>
-            <p className="text-lg sm:text-xl text-orange-600 font-medium">{kit.hook}</p>
+            <p className="text-lg sm:text-xl text-blue-600 font-medium">{kit.hook}</p>
             <p className="text-sm text-gray-500 leading-relaxed">{kit.description}</p>
 
-            {/* ─── Price Block ─── */}
+            {/* â”€â”€â”€ Price Block â”€â”€â”€ */}
             <div className="bg-gray-50 rounded-xl p-5 sm:p-6 space-y-4">
               <div>
                 <div className="flex items-baseline gap-3">
@@ -126,7 +126,7 @@ const KitDetail = () => {
                   onClick={handleAdd}
                   variant="hero"
                   size="lg"
-                  className="text-sm flex-1 shadow-lg shadow-orange-500/20"
+                  className="text-sm flex-1 shadow-lg shadow-blue-500/20"
                   disabled={adding}
                 >
                   {adding ? (
@@ -157,15 +157,15 @@ const KitDetail = () => {
               {/* Guarantees */}
               <div className="grid grid-cols-2 gap-3 text-xs text-gray-500 pt-1">
                 <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4 text-orange-500 shrink-0" /> Free delivery over MK 50,000
+                  <Truck className="h-4 w-4 text-blue-500 shrink-0" /> Free delivery over MK 50,000
                 </div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-orange-500 shrink-0" /> 30-day guarantee
+                  <ShieldCheck className="h-4 w-4 text-blue-500 shrink-0" /> 30-day guarantee
                 </div>
               </div>
             </div>
 
-            {/* ─── Why This Kit ─── */}
+            {/* â”€â”€â”€ Why This Kit â”€â”€â”€ */}
             <div className="rounded-xl border border-gray-100 p-4 sm:p-5 space-y-3">
               <h3 className="font-display font-semibold text-sm">Why this kit?</h3>
               <ul className="space-y-2 text-sm text-gray-600">
@@ -185,7 +185,7 @@ const KitDetail = () => {
             </div>
           </motion.div>
 
-          {/* ─── Right - What's Inside ─── */}
+          {/* â”€â”€â”€ Right - What's Inside â”€â”€â”€ */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -224,7 +224,7 @@ const KitDetail = () => {
                 ))}
               </div>
 
-              {/* ─── Price Breakdown ─── */}
+              {/* â”€â”€â”€ Price Breakdown â”€â”€â”€ */}
               <div className="mt-6 pt-6 border-t border-gray-100 space-y-2 text-sm">
                 <div className="flex justify-between text-gray-500">
                   <span>Separate total</span>
@@ -236,7 +236,7 @@ const KitDetail = () => {
                 </div>
                 <div className="flex justify-between font-bold text-base border-t border-gray-200 pt-2">
                   <span>Kit price</span>
-                  <span className="text-orange-600">{formatMWK(kitPrice)}</span>
+                  <span className="text-blue-600">{formatMWK(kitPrice)}</span>
                 </div>
               </div>
 
@@ -254,7 +254,7 @@ const KitDetail = () => {
         </div>
       </section>
 
-      {/* ─── OTHER KITS ─── */}
+      {/* â”€â”€â”€ OTHER KITS â”€â”€â”€ */}
       {otherKits.length > 0 && (
         <section className="bg-gray-50/50 py-10 sm:py-14">
           <div className="container">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -159,7 +159,7 @@ const AdminDelivery = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-orange-500 hover:bg-orange-600">
+            <Button className="bg-blue-500 hover:bg-blue-600">
               <Plus className="h-4 w-4" /> Add Delivery Company
             </Button>
           </DialogTrigger>
@@ -232,7 +232,7 @@ const AdminDelivery = () => {
               
               <Button 
                 onClick={handleSave} 
-                className="w-full bg-orange-500 hover:bg-orange-600"
+                className="w-full bg-blue-500 hover:bg-blue-600"
                 disabled={saving || !formData.name}
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
@@ -248,7 +248,7 @@ const AdminDelivery = () => {
         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
           <Truck className="h-12 w-12 mx-auto text-gray-300" />
           <p className="mt-4 text-gray-500">No delivery companies yet</p>
-          <Button onClick={() => setIsDialogOpen(true)} className="mt-4 bg-orange-500">Add First Company</Button>
+          <Button onClick={() => setIsDialogOpen(true)} className="mt-4 bg-blue-500">Add First Company</Button>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

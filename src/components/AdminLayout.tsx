@@ -60,7 +60,7 @@ export const AdminLayout = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin h-10 w-10 border-4 border-orange-500 border-t-transparent rounded-full mx-auto" />
+          <div className="animate-spin h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full mx-auto" />
           <p className="mt-4 text-gray-500">Loading...</p>
         </div>
       </div>
@@ -105,7 +105,7 @@ export const AdminLayout = () => {
                   className={cn(
                     "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
                     isActive
-                      ? "bg-orange-500 text-white"
+                      ? "bg-blue-500 text-white"
                       : "text-gray-600 hover:bg-gray-100"
                   )}
                 >

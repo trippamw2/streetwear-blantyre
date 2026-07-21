@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -139,7 +139,7 @@ const AdminCRM = () => {
           if (sub.email) {
             await sendEmail(sub.email, campaignForm.name || "Streetwear Blantyre Update", `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #FF6B00;">💫 Streetwear Blantyre Update</h2>
+                <h2 style="color: #2563eb;">ðŸ’« Streetwear Blantyre Update</h2>
                 <p>${campaignForm.message.replace(/\n/g, "<br/>")}</p>
                 <p style="margin-top: 20px; color: #666;">Thanks for being a valued customer!</p>
                 <p>- Streetwear Blantyre Team</p>
@@ -158,7 +158,7 @@ const AdminCRM = () => {
             const phone = customer.phone.replace(/[^0-9]/g, "");
             const waPhone = phone.startsWith("0") ? `265${phone.slice(1)}` : phone;
             
-            const msg = `💫 *Streetwear Blantyre Update* 💫
+            const msg = `ðŸ’« *Streetwear Blantyre Update* ðŸ’«
 
 ${campaignForm.message}
 
@@ -286,8 +286,8 @@ Thanks for being a valued customer!
 
         <div className="bg-white border border-gray-100 rounded-xl p-5">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-orange-100 flex items-center justify-center">
-              <ShoppingCart className="h-5 w-5 text-orange-600" />
+            <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
+              <ShoppingCart className="h-5 w-5 text-blue-600" />
             </div>
             <div>
               <p className="text-2xl font-bold">{customers.reduce((s, c) => s + c.total_orders, 0)}</p>
@@ -335,7 +335,7 @@ Thanks for being a valued customer!
           <button onClick={() => setFilter("all")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "all" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
             All
           </button>
-          <button onClick={() => setFilter("vip")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "vip" ? "bg-orange-500 text-white" : "bg-card border border-border"}`}>
+          <button onClick={() => setFilter("vip")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "vip" ? "bg-blue-500 text-white" : "bg-card border border-border"}`}>
             VIP (50K+)
           </button>
           <button onClick={() => setFilter("new")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "new" ? "bg-blue-500 text-white" : "bg-card border border-border"}`}>
@@ -476,7 +476,7 @@ Thanks for being a valued customer!
               <button onClick={() => setCampaignType("whatsapp")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "whatsapp" ? "bg-green-600 text-white" : "bg-gray-100"}`}>
                 <MessageCircle className="h-4 w-4" /> WhatsApp
               </button>
-              <button onClick={() => setCampaignType("email")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "email" ? "bg-orange-500 text-white" : "bg-gray-100"}`}>
+              <button onClick={() => setCampaignType("email")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "email" ? "bg-blue-500 text-white" : "bg-gray-100"}`}>
                 <Mail className="h-4 w-4" /> Email
               </button>
             </div>

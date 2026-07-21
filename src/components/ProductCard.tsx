@@ -56,7 +56,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const badgeConfig = {
     new: { label: "NEW", bg: "bg-green-500", text: "text-white" },
     sale: { label: `-${discountPercent}%`, bg: "bg-red-500", text: "text-white" },
-    best: { label: "BEST", bg: "bg-orange-500", text: "text-white" },
+    best: { label: "BEST", bg: "bg-blue-500", text: "text-white" },
     hot: { label: "HOT", bg: "bg-yellow-500", text: "text-gray-900" },
   };
   
@@ -75,7 +75,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     >
       <Link
         to={`/product/${product.id}`}
-        className="group block rounded-xl sm:rounded-2xl bg-white border border-gray-100 overflow-hidden hover:border-orange-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 max-w-full"
+        className="group block rounded-xl sm:rounded-2xl bg-white border border-gray-100 overflow-hidden hover:border-blue-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 max-w-full"
       >
         <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
           <img
@@ -124,7 +124,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           >
             <GitCompare
               className={`h-3.5 w-3.5 transition-colors ${
-                isInCompare(product.id) ? "fill-orange-500 text-orange-500" : "text-gray-400"
+                isInCompare(product.id) ? "fill-blue-500 text-blue-500" : "text-gray-400"
               }`}
             />
           </button>
@@ -191,7 +191,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                   }}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                     selectedType === type.id
-                      ? "bg-orange-500 text-white"
+                      ? "bg-blue-500 text-white"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
