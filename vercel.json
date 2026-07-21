@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/payment/callback", "destination": "/api/payment/callback" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}

@@ -1,0 +1,77 @@
+// Fix script for PowerPod Store production readiness
+// Run with: node fix-production. tsx
+
+import { readFileSync, writeFileSync } from "fs";
+import { supabase } from "./src/integrations/supabase/client";
+
+// Files to fix
+const filesToFix = [
+  "src/pages/Home. tsx",
+  "src/pages/Shop. tsx",
+  "src/pages/ProductDetail. tsx",
+  "src/pages/Combos. tsx",
+];
+
+// Fix imports from hardcoded data to database
+function fixFrontendProducts() {
+  console.log("Fixing frontend to use DB products...");
+
+  for (const file of filesToFix) {
+    try {
+      let content = readFileSync(file, "utf-8");
+      let modified = false;
+
+      // Replace hardcoded import
+      if (content.includes('from "@/data/products"')) {
+        content = content.replace(
+          'import { products, combos } from "@/data/products";',
+          `import { useProducts } from "@/hooks/useProducts";`
+        );
+        content = content.replace(
+          'import { products } from "@/data/products";',
+          `import { useProducts } from "@/hooks/useProducts";`
+        );
+        modified = true;
+      }
+
+      // Replace hardcoded products usage
+      if (content.includes("products.")) {
+        // Add hook call
+        content = content.replace(
+          "export default function",
+          `function useProducts() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.from("products").select("*").then(({ data }) => {
+      setProducts(data || []);
+      setLoading(false);
+    });
+  }, []);
+
+  return { products, loading };
+}
+
+export default function`
+        );
+        content = content.replace(
+          "products.map",
+          "products?.map"
+        );
+        modified = true;
+      }
+
+      if (modified) {
+        writeFileSync(file, content);
+        console.log(`Fixed: ${file}`);
+      }
+    } catch (e) {
+      console.error(`Error fixing ${file}:`, e.message);
+    }
+  }
+}
+
+// Main
+fixFrontendProducts();
+console.log("Done!");

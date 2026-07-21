@@ -1,0 +1,63 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/ supabase/ client";
+
+export interface Product {
+  id: string;
+  name: string;
+  brand: string;
+  category: string;
+  price_ mwk: number;
+  image_ url: string;
+  images?: string[];
+  description?: string;
+  features?: string;
+  stock: number;
+  is_ active: boolean;
+  created_ at: string;
+}
+
+export function useProducts(brand?: string) {
+  const [products, setProducts] = useState < Product[] > ([]);
+  const [combos, setCombos] = useState < Product[] > ([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState < Error | null > (null);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+        
+        // Fetch products
+        let query = supabase.from("products").select("*").eq("is_ active", true);
+        if (brand) {
+          query = query.eq("brand", brand);
+        }
+        const { data: productsData, error: productsError } = await query;
+        
+        if (productsError) throw productsError;
+        setProducts(productsData || []);
+        
+        // Fetch combos
+        const { data: combosData, error: combosError } = await supabase
+          .from("combos")
+          .select("*")
+          .eq("is_ active", true);
+        
+        if (combosError) throw combosError;
+        setCombos(combosData || []);
+        
+      } catch (e) {
+        console.error("Error fetching products:", e);
+        setError(e as Error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchProducts();
+  }, [brand]);
+
+  return { products, combos, loading, error };
+}
+
+export default useProducts;
