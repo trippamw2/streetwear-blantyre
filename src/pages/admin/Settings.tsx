@@ -23,6 +23,9 @@ const AdminSettings = () => {
     express_delivery_fee: "8500",
     whatsapp_number: "",
     whatsapp_default_message: "Hi! I'd like to place an order.",
+    paychangu_public_key: "",
+    paychangu_secret_key: "",
+    paychangu_webhook_key: "",
   });
 
   useEffect(() => {
@@ -47,6 +50,9 @@ const AdminSettings = () => {
         express_delivery_fee: settingsMap.express_delivery_fee || "8500",
         whatsapp_number: settingsMap.whatsapp_number || "",
         whatsapp_default_message: settingsMap.whatsapp_default_message || "",
+        paychangu_public_key: settingsMap.paychangu_public_key || "",
+        paychangu_secret_key: settingsMap.paychangu_secret_key || "",
+        paychangu_webhook_key: settingsMap.paychangu_webhook_key || "",
       }));
     }
     setLoading(false);
@@ -62,6 +68,9 @@ const AdminSettings = () => {
         { key: "express_delivery_fee", value: settings.express_delivery_fee },
         { key: "whatsapp_number", value: settings.whatsapp_number },
         { key: "whatsapp_default_message", value: settings.whatsapp_default_message },
+        { key: "paychangu_public_key", value: settings.paychangu_public_key },
+        { key: "paychangu_secret_key", value: settings.paychangu_secret_key },
+        { key: "paychangu_webhook_key", value: settings.paychangu_webhook_key },
       ];
 
       for (const setting of settingsToSave) {
@@ -193,6 +202,50 @@ const AdminSettings = () => {
                 onChange={e => setSettings(s => ({ ...s, whatsapp_default_message: e.target.value }))}
                 placeholder="Hi! I'd like to place an order."
               />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-xl border bg-white">
+        <div className="p-6 space-y-6">
+          <div className="flex items-center gap-2 pb-4 border-b">
+            <Settings className="h-5 w-5 text-blue-500" />
+            <h2 className="font-semibold">PayChangu Payment Settings</h2>
+          </div>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Public Key</Label>
+              <Input
+                type="password"
+                value={settings.paychangu_public_key}
+                onChange={e => setSettings(s => ({ ...s, paychangu_public_key: e.target.value }))}
+                placeholder="PUB-..."
+              />
+              <p className="text-xs text-muted-foreground">Used client-side for HTML Checkout form.</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Secret Key</Label>
+              <Input
+                type="password"
+                value={settings.paychangu_secret_key}
+                onChange={e => setSettings(s => ({ ...s, paychangu_secret_key: e.target.value }))}
+                placeholder="SEC-..."
+              />
+              <p className="text-xs text-muted-foreground">Used server-side for API verification. Never exposed to client.</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Webhook Key</Label>
+              <Input
+                type="password"
+                value={settings.paychangu_webhook_key}
+                onChange={e => setSettings(s => ({ ...s, paychangu_webhook_key: e.target.value }))}
+                placeholder="WHK-..."
+              />
+              <p className="text-xs text-muted-foreground">Used to verify incoming webhook callbacks from PayChangu.</p>
             </div>
           </div>
         </div>
