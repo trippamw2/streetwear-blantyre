@@ -86,7 +86,7 @@ export const Footer = () => {
       <div className="container py-12">
         <div className="grid md:grid-cols-5 gap-10">
           <div className="md:col-span-2 space-y-4">
-            <Logo className="h-14 sm:h-16 md:h-20" />
+            <Logo className="h-16 sm:h-20 md:h-24 lg:h-32 xl:h-36" />
             <p className="text-gray-500 max-w-sm text-sm leading-relaxed">
               Streetwear Blantyre brings you the culture. Fits picked for your life. Delivered to your door.
             </p>
