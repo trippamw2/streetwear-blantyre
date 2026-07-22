@@ -206,7 +206,7 @@ export const Footer = () => {
         <div className="border-t border-gray-100 mt-12">
           <div className="container py-6 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-gray-400">
             <p>© {new Date().getFullYear()} Streetwear Blantyre. Wear the Culture.</p>
-            <p className="uppercase tracking-wider">Malawi 🇲🇼</p>
+            <p className="uppercase tracking-wider">Malawi</p>
           </div>
         </div>
       </div>

@@ -107,8 +107,6 @@ const ProductDetail = () => {
     );
   }
 
-  console.log("Rendering ProductDetail, id:", id, "loading:", loading, "product:", product?.name);
-
   const avgRating = reviews.length > 0
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : 0;

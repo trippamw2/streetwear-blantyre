@@ -207,7 +207,7 @@ ${itemsList.map(i => `â€¢ ${i.quantity}Ã— ${i.name}`).join('\n')}
 
 Total: MK ${order.total_mwk.toLocaleString()}
 
-Track: https://streetwearblantyre-store.vercel.app/track/${order.id}`;
+Track: https://www.wearsb.com/track/${order.id}`;
     }
     
     window.open(buildWhatsAppLink(message, waPhone), "_blank");

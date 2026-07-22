@@ -61,7 +61,7 @@ export function useProducts() {
       }
 
       if (!productsArray || productsArray.length === 0) {
-        console.warn("⚠️ No products found in database");
+        console.warn("No products found in database");
         setProducts([]);
         setLoading(false);
         return;
@@ -101,10 +101,10 @@ export function useProducts() {
         culture_pillar_color: culturePillars.find(cp => cp.id === p.culture_pillar)?.color || "#8B5CF6",
       }));
 
-      console.log("✅ Products loaded from DB:", mappedProducts.length);
+      console.log("Products loaded from DB:", mappedProducts.length);
       setProducts(mappedProducts);
     } catch (err) {
-      console.error("❌ Products fetch error:", err);
+      console.error("Products fetch error:", err);
       setError("Failed to load products");
       setProducts([]);
     } finally {

@@ -48,7 +48,7 @@ Next Steps:
 2. We prepare your items
 3. We dispatch and notify you
 
-Track: https://streetwearblantyre-store.vercel.app/track/${details.orderId}`;
+Track: https://www.wearsb.com/track/${details.orderId}`;
 };
 
 export const paymentReceived = (details: OrderDetails) => {
@@ -71,7 +71,7 @@ Tracking: ${trackingCode}
 
 We will notify you when it is dispatched.
 
-Track: https://streetwearblantyre-store.vercel.app/track/${orderId}`;
+Track: https://www.wearsb.com/track/${orderId}`;
 };
 
 export const orderDispatched = (update: StatusUpdate) => {
@@ -91,7 +91,7 @@ Est. Delivery: ${eta}
 
 Please ensure someone is available to receive your order.
 
-Track: https://streetwearblantyre-store.vercel.app/track/${orderId}
+Track: https://www.wearsb.com/track/${orderId}
 
 Questions? Reply here.`;
 };
@@ -113,7 +113,7 @@ Ref: ${trackingCode}
 Thank you for choosing Streetwear Blantyre.
 
 Please leave a review to help other customers:
-https://streetwearblantyre-store.vercel.app/product/powerbank-001
+https://www.wearsb.com/product/powerbank-001
 
 Need anything else? Just reply.`;
 };
@@ -128,7 +128,7 @@ Your order ${trackingCode} (${formatMWK(total)}) has been cancelled.
 
 If this was a mistake, we would love to help you reorder.
 
-Browse: https://streetwearblantyre-store.vercel.app/shop
+Browse: https://www.wearsb.com/shop
 
 Questions? Reply here.`;
 };
@@ -143,7 +143,7 @@ ${eta ? `ETA: ${eta}` : ''}
 
 ${items.map(i => `  ${i.quantity}x ${i.name}`).join('\n')}
 
-Track: https://streetwearblantyre-store.vercel.app/track/${orderId}`;
+Track: https://www.wearsb.com/track/${orderId}`;
 };
 
 export const statusCheck = (status: string, eta?: string) => {
@@ -193,5 +193,5 @@ export const buildWhatsAppLink = (message: string, phone?: string) => {
 };
 
 export const STORE_PHONE = "265991234567";
-export const STORE_URL = "https://streetwearblantyre-store.vercel.app";
+export const STORE_URL = "https://www.wearsb.com";
 export const defaultMessage = "Hi Streetwear Blantyre. I want to order.";

@@ -16,7 +16,7 @@ interface AIGenerationRequest {
 // ============================================
 export class WhatsAppAIAgent {
   private storeName = "Streetwear Blantyre";
-  private storeUrl = "https://streetwearblantyre-store.vercel.app";
+  private storeUrl = "https://www.wearsb.com";
   
   // Generate message based on type and data
   generate(request: AIGenerationRequest): string {
@@ -43,78 +43,73 @@ export class WhatsAppAIAgent {
       .map(i => `• ${i.quantity}× ${i.name}`)
       .join('\n');
 
-    const emojis = { friendly: '😊', professional: '👍', excited: '🎉' };
+    const emojis = { friendly: '', professional: '', excited: '' };
     
-    return `${emojis[tone as keyof typeof emojis] || '✅'} *Order Confirmed!* ${data.customerName.split(' ')[0]}
+    return `${emojis[tone as keyof typeof emojis]} *Order Confirmed!* ${data.customerName.split(' ')[0]}
 
 Your ${this.storeName} order is in!
 
 ${itemsList}
 
-━━━━━━━━━━━━━━━━━━
-💰 Total: MK ${data.total.toLocaleString()}
-🚚 Delivery: ${data.location}
-━━━━━━━━━━━━━━━━━━
+Total: MK ${data.total.toLocaleString()}
+Delivery: ${data.location}
 
 We'll WhatsApp you when it's dispatched!`;
 
   }
 
   private generatePaymentConfirmation(data: OrderDetails, tone: string): string {
-    const emojis = { friendly: '🙏', professional: '✅', excited: '🎊' };
+    const emojis = { friendly: '', professional: '', excited: '' };
     
-    return `${emojis[tone as keyof typeof emojis] || '✅'} *Payment Confirmed!*
+    return `${emojis[tone as keyof typeof emojis]} *Payment Confirmed!*
 
 Thanks for paying, ${data.customerName.split(' ')[0]}! Your order is being prepared.
 
-📦 Order: PP-${data.orderId.slice(0, 6).toUpperCase()}
-💰 Paid: MK ${data.total.toLocaleString()}
+Order: PP-${data.orderId.slice(0, 6).toUpperCase()}
+Paid: MK ${data.total.toLocaleString()}
 
-On its way soon! 📦`;
+On its way soon!`;
   }
 
   private generateDispatch(data: StatusUpdate, tone: string): string {
     const itemsList = data.items.map(i => `• ${i.quantity}× ${i.name}`).join('\n');
-    const emojis = { friendly: '🚚', professional: '📦', excited: '🎯' };
+    const emojis = { friendly: '', professional: '', excited: '' };
     
-    return `${emojis[tone as keyof typeof emojis] || '🚚'} *On The Way!* 
+    return `${emojis[tone as keyof typeof emojis]} *On The Way!* 
 
 ${data.customerName.split(' ')[0]}, your order is out for delivery!
 
 ${itemsList}
 
-━━━━━━━━━━━━━━━━━━
 Est. delivery: ${data.eta || 'later today'}
-━━━━━━━━━━━━━━━━━━
 
 Track: ${this.storeUrl}/track/${data.orderId}`;
   }
 
   private generateDelivered(data: StatusUpdate, tone: string): string {
     const itemsList = data.items.map(i => `• ${i.quantity}× ${i.name}`).join('\n');
-    const emojis = { friendly: '🎁', professional: '✅', excited: '🎉' };
+    const emojis = { friendly: '', professional: '', excited: '' };
     
-    return `${emojis[tone as keyof typeof emojis] || '🎁'} *Delivered!* 
+    return `${emojis[tone as keyof typeof emojis]} *Delivered!* 
 
-You got it, ${data.customerName.split(' ')[0]}! 🙌
+You got it, ${data.customerName.split(' ')[0]}!
 
 ${itemsList}
 
-━━━━━━━━━━━━━━━━━━
-Thanks for choosing ${this.storeName}! 🙏⭐
+Thanks for choosing ${this.storeName}!
 
 Leave a review: ${this.storeUrl}/reviews`;
   }
 
   private generateReminder(data: OrderDetails, tone: string): string {
-    return `⏰ *Payment Reminder* 
+    return `*Payment Reminder* 
 
 Hi ${data.customerName.split(' ')[0]}!
 
 Just checking in about your ${this.storeName} order.
 
-💰 Outstanding: MK ${data.total.toLocaleString()}
-📍 Delivery: ${data.location}
+Outstanding: MK ${data.total.toLocaleString()}
+Delivery: ${data.location}
 
 Please confirm payment to secure your items!`;
   }

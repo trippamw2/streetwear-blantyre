@@ -204,11 +204,8 @@ const Checkout = () => {
       }));
       await supabase.from("order_items").insert(orderItems);
 
-      // TODO: Implement promo usage tracking when promotions table supports usage counts
-
       // Use loyalty points - deduct redeemed points
       if (usePoints && loyalty && program) {
-        // TODO: Implement loyalty points when customer_loyalty table is created
       }
 
       // Award loyalty points for purchase (1 point per 1000 MWK)

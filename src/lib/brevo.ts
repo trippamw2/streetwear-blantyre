@@ -307,7 +307,7 @@ export const sendDispatchedEmail = async (order: OrderEmailParams) => {
       <ul>${itemsHtml}</ul>
       
       <p>Est. delivery: ${order.eta || "later today"}</p>
-      <p style="margin-top: 16px;">Track: <a href="https://www.wearsb.com/track/${order.orderId}" style="color: #2563eb;">streetwearblantyre-store.vercel.app/track/${order.orderId.slice(0, 8)}</a></p>
+      <p style="margin-top: 16px;">Track: <a href="https://www.wearsb.com/track/${order.orderId}" style="color: #2563eb;">www.wearsb.com/track/${order.orderId.slice(0, 8)}</a></p>
       <p style="margin-top: 24px;">Thanks, Streetwear Blantyre Team</p>
     </div>
   `;
@@ -337,7 +337,7 @@ export const sendDeliveredEmail = async (order: OrderEmailParams) => {
       <ul>${itemsHtml}</ul>
       
       <p style="margin: 16px 0;">Hope you love your Streetwear Blantyre gear.</p>
-      <p>Please leave a review: <a href="https://www.wearsb.com/reviews" style="color: #2563eb;">streetwearblantyre-store.vercel.app/reviews</a></p>
+      <p>Please leave a review: <a href="https://www.wearsb.com/reviews" style="color: #2563eb;">www.wearsb.com/reviews</a></p>
       <p style="margin-top: 24px;">Thanks for choosing Streetwear Blantyre.</p>
     </div>
   `;

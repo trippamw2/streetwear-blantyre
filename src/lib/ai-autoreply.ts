@@ -51,7 +51,7 @@ export class AIAgent {
       const orderInfo = await checkOrderStatus(customerPhone || '');
       if (orderInfo) {
         return {
-          response: `📦 Your Order Status: ${orderInfo.status}\n${orderInfo.eta ? `📦 ETA: ${orderInfo.eta}` : ''}`,
+          response: `Your Order Status: ${orderInfo.status}\n${orderInfo.eta ? `ETA: ${orderInfo.eta}` : ''}`,
           action: 'reply'
         };
       }
@@ -62,7 +62,7 @@ export class AIAgent {
       return {
         response: `Our prices vary by product! What are you interested in?
 
-👕 T-Shirts, 🧥 Hoodies, 👟 Sneakers, 🧢 Caps
+T-Shirts, Hoodies, Sneakers, Caps
 
 Reply with the product type and I'll check current prices!`,
         action: 'reply'
@@ -72,11 +72,11 @@ Reply with the product type and I'll check current prices!`,
     // Check for delivery
     if (lowerMsg.includes('delivery') || lowerMsg.includes('shipping') || lowerMsg.includes('bring')) {
       return {
-        response: `🚚 Delivery Options:
+        response: `Delivery Options:
 
-📍 Blantyre CBD: Same day delivery!
-📍 Southern Region: 1-2 days
-📍 Central/Northern: 2-3 days
+Blantyre CBD: Same day delivery!
+Southern Region: 1-2 days
+Central/Northern: 2-3 days
 
 Delivery is FREE on orders over MK 50,000!
 
@@ -88,11 +88,11 @@ What's your location?`,
     // Check for location/address
     if (lowerMsg.includes('where') || lowerMsg.includes('location') || lowerMsg.includes('shop')) {
       return {
-        response: `📍 Streetwear Blantyre Store
+        response: `Streetwear Blantyre Store
 
 We're based in Blantyre, Malawi!
 
-Order online: streetwearblantyre-store.vercel.app
+Order online: https://wearsb.com
 Or visit our physical shop in Blantyre CBD.
 
 Open: Mon-Sat 8am-6pm, Sun 9am-4pm`,
@@ -103,7 +103,7 @@ Open: Mon-Sat 8am-6pm, Sun 9am-4pm`,
     // Check for hello/greeting
     if (lowerMsg.includes('hi') || lowerMsg.includes('hello') || lowerMsg.includes('hey')) {
       return {
-        response: `👋 Hey! Welcome to Streetwear Blantyre!
+        response: `Welcome to Streetwear Blantyre!
 
 We sell t-shirts, hoodies, caps, sneakers & more.
 
@@ -115,10 +115,10 @@ How can I help you today?`,
     // Check for warranty/returns
     if (lowerMsg.includes('warranty') || lowerMsg.includes('return') || lowerMsg.includes('repair')) {
       return {
-        response: `🛡️ Streetwear Blantyre Warranty & Returns:
+        response: `Streetwear Blantyre Warranty & Returns:
 
-✅ Warranty: 30 days on all items
-↩️ Returns: 7 days with receipt
+Warranty: 30 days on all items
+Returns: 7 days with receipt
 
 Have an issue with a recent order?`,
         action: 'reply'
