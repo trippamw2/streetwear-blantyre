@@ -53,7 +53,7 @@ export const Navbar = () => {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
       <nav className="container flex h-14 sm:h-16 items-center justify-between gap-2 sm:gap-4 px-2 sm:px-4">
-        <Logo className="h-9 sm:h-10 md:h-12" />
+        <Logo className="h-10 sm:h-12 md:h-14" />
 
         <div className="hidden lg:flex items-center gap-1">
           {links.map((l) => (
