@@ -9,7 +9,6 @@ import { PageSkeleton } from "@/components/Skeletons";
 import { Search, X, Grid3X3, List, SlidersHorizontal, ArrowUpDown, ChevronRight, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -116,14 +115,14 @@ const Shop = () => {
       </div>
 
       {/* Outfit bundles upsell banner */}
-      <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-5 sm:p-7 mb-6 sm:mb-10 text-white">
+      <div className="bg-gray-900 rounded-lg p-5 sm:p-7 mb-6 sm:mb-10 text-white">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
             <p className="font-display font-bold text-base sm:text-lg">Get a Bundle. Save 15-25%.</p>
-            <p className="text-white/80 text-xs sm:text-sm">Curated outfits. One order. Better value.</p>
+            <p className="text-white/70 text-xs sm:text-sm">Curated outfits. One order. Better value.</p>
           </div>
           <Link to="/combos">
-            <Button className="bg-white text-blue-600 hover:bg-blue-50 px-5 py-2 h-auto rounded-full font-semibold text-xs sm:text-sm gap-1.5">
+            <Button className="bg-white text-gray-900 hover:bg-gray-100 px-5 py-2 h-auto rounded-none font-semibold text-xs sm:text-sm gap-1.5">
               See Bundles <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </Link>
@@ -160,7 +159,7 @@ const Shop = () => {
             <SlidersHorizontal className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
             <span className="hidden sm:inline">Filters</span>
             {selectedBrands.length > 0 && (
-              <span className="ml-0.5 sm:ml-1 px-1.5 py-0.5 bg-white text-gray-900 rounded-full text-xs">{selectedBrands.length}</span>
+              <span className="ml-0.5 sm:ml-1 px-1.5 py-0.5 bg-white text-gray-900 rounded-none text-xs">{selectedBrands.length}</span>
             )}
           </Button>
 
@@ -169,7 +168,7 @@ const Shop = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="appearance-none pl-3 sm:px-4 pr-8 sm:pr-10 py-1.5 sm:py-2 rounded-full border border-gray-200 bg-white text-sm font-medium focus:outline-none focus:border-teal-500"
+              className="appearance-none pl-3 sm:px-4 pr-8 sm:pr-10 py-1.5 sm:py-2 rounded-none border border-gray-200 bg-white text-sm font-medium focus:outline-none focus:border-gray-900"
             >
               <option value="newest">Newest</option>
               <option value="price-low">Price: Low</option>
@@ -180,7 +179,7 @@ const Shop = () => {
           </div>
 
           {/* View Toggle - hidden on mobile */}
-          <div className="hidden md:flex border border-gray-200 rounded-full overflow-hidden">
+          <div className="hidden md:flex border border-gray-200 rounded-none overflow-hidden">
             <button
               onClick={() => setViewMode("grid")}
               className={`p-2 ${viewMode === "grid" ? "bg-gray-100" : "bg-white"}`}
@@ -198,15 +197,8 @@ const Shop = () => {
       </div>
 
       {/* Filter Panel */}
-      <AnimatePresence>
-        {showFilters && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <div className="bg-gray-50 rounded-xl sm:rounded-2xl p-3 sm:p-6 mb-4 sm:mb-6 space-y-3 sm:space-y-4">
+      {showFilters && (
+            <div className="bg-gray-50 p-3 sm:p-6 mb-4 sm:mb-6 space-y-3 sm:space-y-4">
               <div>
                 <h3 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Brand</h3>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -214,10 +206,10 @@ const Shop = () => {
                     <button
                       key={brand.id}
                       onClick={() => toggleBrand(brand.id)}
-                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none text-xs sm:text-sm font-medium transition-colors ${
                         selectedBrands.includes(brand.id)
-                          ? "bg-blue-500 text-white"
-                          : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+                          ? "bg-black text-white"
+                          : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
                       }`}
                     >
                       {brand.name}
@@ -253,18 +245,16 @@ const Shop = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      )}
 
       {/* Wearable Categories */}
       <div className="flex flex-wrap gap-2 mb-3">
         <button
           onClick={() => setSelectedCategory("all")}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+          className={`px-4 py-2 rounded-none text-sm font-medium transition-all ${
             selectedCategory === "all"
-              ? "bg-blue-500 text-white"
-              : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+              ? "bg-black text-white"
+              : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
           }`}
         >
           All
@@ -273,10 +263,10 @@ const Shop = () => {
           <button
             key={c.id}
             onClick={() => setSelectedCategory(c.id)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-none text-sm font-medium transition-all ${
               selectedCategory === c.id
-                ? "bg-blue-500 text-white"
-                : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+                ? "bg-black text-white"
+                : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
             }`}
           >
             {c.label}
@@ -289,10 +279,10 @@ const Shop = () => {
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider self-center mr-1">Vibe:</span>
         <button
           onClick={() => setSelectedCulture("")}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+          className={`px-3 py-1.5 rounded-none text-xs font-medium transition-all ${
             selectedCulture === ""
-              ? "bg-blue-500 text-white"
-              : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+              ? "bg-black text-white"
+              : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
           }`}
         >
           All Vibes
@@ -301,10 +291,10 @@ const Shop = () => {
           <button
             key={cp.id}
             onClick={() => setSelectedCulture(selectedCulture === cp.id ? "" : cp.id)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+            className={`px-3 py-1.5 rounded-none text-xs font-medium transition-all ${
               selectedCulture === cp.id
-                ? "bg-blue-500 text-white"
-                : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
+                ? "bg-black text-white"
+                : "bg-white border border-gray-200 text-gray-600 hover:border-gray-400"
             }`}
           >
             {cp.label}
@@ -316,19 +306,19 @@ const Shop = () => {
       {hasFilters && (
         <div className="flex flex-wrap gap-2 mb-4">
           {selectedCategory !== "all" && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-900 rounded-none text-sm">
               {categories.find(c => c.id === selectedCategory)?.label}
               <button onClick={() => setSelectedCategory("all")}><X className="h-3 w-3" /></button>
             </span>
           )}
           {selectedCulture && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-900 rounded-none text-sm">
               {culturePillars.find(cp => cp.id === selectedCulture)?.label}
               <button onClick={() => setSelectedCulture("")}><X className="h-3 w-3" /></button>
             </span>
           )}
           {searchQuery && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-900 rounded-none text-sm">
               "{searchQuery}"
               <button onClick={() => setSearchQuery("")}><X className="h-3 w-3" /></button>
             </span>
@@ -362,7 +352,7 @@ const Shop = () => {
                 onClick={loadMore} 
                 variant="outline" 
                 size="sm"
-                className="px-6 sm:px-8 border-blue-500 text-blue-500 hover:bg-blue-50 text-sm"
+                className="px-6 sm:px-8 border-gray-900 text-gray-900 hover:bg-gray-50 text-sm"
               >
                 Load More ({sorted.length - visibleCount} left)
                 <ChevronRight className="ml-1.5 sm:ml-2 h-3.5 sm:h-4 w-3.5 sm:w-4" />
@@ -373,7 +363,7 @@ const Shop = () => {
       ) : (
         <div className="text-center py-12 sm:py-20 space-y-3 sm:space-y-4">
           <p className="text-muted-foreground text-base sm:text-lg">No products found</p>
-          <button onClick={clearFilters} className="px-4 sm:px-6 py-2 sm:py-2.5 bg-blue-500 text-white rounded-full text-sm font-medium">
+          <button onClick={clearFilters} className="px-4 sm:px-6 py-2 sm:py-2.5 bg-black text-white rounded-none text-sm font-medium">
             Clear filters
           </button>
         </div>
