@@ -153,7 +153,7 @@ const AdminPromos = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-500 hover:bg-blue-600">
+            <Button className="bg-gray-900 hover:bg-gray-800">
               <Plus className="h-4 w-4" /> Add Promo Code
             </Button>
           </DialogTrigger>
@@ -255,7 +255,7 @@ const AdminPromos = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
+              <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800">
                 {editingPromo ? "Update Promo Code" : "Create Promo Code"}
               </Button>
             </form>
@@ -319,7 +319,7 @@ const AdminPromos = () => {
           <div className="text-center py-16 bg-card rounded-xl border border-border/60">
             <Tag className="h-10 w-10 mx-auto text-muted-foreground" />
             <p className="mt-3 text-muted-foreground">No promo codes yet</p>
-            <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-blue-500">
+            <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-gray-900">
               <Plus className="h-4 w-4" /> Create First Promo Code
             </Button>
           </div>

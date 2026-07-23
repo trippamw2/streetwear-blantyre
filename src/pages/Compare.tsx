@@ -3,6 +3,7 @@ import { useCompare } from "@/contexts/CompareContext";
 import { formatMWK, getKitPrice } from "@/data/products";
 import { SEO, defaultSEO } from "@/components/SEO";
 import { useCombos } from "@/hooks/useCombos";
+import { useProducts } from "@/hooks/useProducts";
 import { X, ArrowLeft, Star, ShoppingBag, Package, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
@@ -12,6 +13,7 @@ const Compare = () => {
   const { compareList, removeFromCompare, clearCompare } = useCompare();
   const { add } = useCart();
   const combos = useCombos();
+  const { products } = useProducts();
 
   const handleAddToCart = (product: typeof compareList[0]) => {
     add({
@@ -32,19 +34,19 @@ const Compare = () => {
         <p className="text-gray-500 mb-6">Nothing to compare yet.</p>
         
         {/* Kit upsell */}
-        <div className="max-w-md mx-auto bg-gradient-to-r from-blue-50 to-amber-50 rounded-2xl border border-blue-200 p-6">
-          <Package className="h-10 w-10 text-blue-500 mx-auto mb-3" />
+        <div className="max-w-md mx-auto bg-gradient-to-r from-gray-50 to-amber-50 rounded-2xl border border-gray-200 p-6">
+          <Package className="h-10 w-10 text-gray-900 mx-auto mb-3" />
           <h3 className="font-display font-bold text-lg mb-2">Compare Kits Instead</h3>
           <p className="text-sm text-gray-500 mb-4">Curated kits. Better value. One delivery.</p>
           <Link to="/combos">
-            <Button className="bg-blue-500 hover:bg-blue-600 rounded-full">
+            <Button className="bg-gray-900 hover:bg-gray-800 rounded-full">
               View Kits <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </Link>
         </div>
 
         <div className="text-sm text-gray-400 mt-4">
-          <Link to="/shop" className="text-blue-500 hover:underline">Browse individual items &rarr;</Link>
+          <Link to="/shop" className="text-gray-900 hover:underline">Browse individual items &rarr;</Link>
         </div>
       </div>
     );
@@ -66,22 +68,88 @@ const Compare = () => {
       </div>
 
       {/* Kit upsell banner */}
-      <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-4 sm:p-5 mb-6 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-4 sm:p-5 mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3 text-white">
           <Package className="h-6 w-6" />
           <div>
             <p className="font-semibold text-sm">A Kit Costs Less</p>
-            <p className="text-white/70 text-xs">Kits from {formatMWK(combos[0] ? getKitPrice(combos[0]) : 0)}. One box, better price.</p>
+            <p className="text-white/70 text-xs">Kits from {formatMWK(combos[0] ? getKitPrice(combos[0], products) : 0)}. One box, better price.</p>
           </div>
         </div>
         <Link to="/combos">
-          <Button className="bg-white text-blue-600 hover:bg-blue-50 rounded-full text-sm px-4 py-2 h-auto">
+          <Button className="bg-white text-gray-900 hover:bg-gray-100 rounded-full text-sm px-4 py-2 h-auto">
             See Kits <ArrowRight className="h-3 w-3 ml-1" />
           </Button>
         </Link>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Mobile: Card Layout */}
+      <div className="md:hidden space-y-4">
+        {compareList.map((p) => (
+          <div key={p.id} className="bg-white rounded-xl border border-gray-200 p-4 relative">
+            <button
+              onClick={() => removeFromCompare(p.id)}
+              className="absolute top-3 right-3 p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+              aria-label="Remove from compare"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            <div className="flex gap-4 mb-4">
+              <div className="h-24 w-24 rounded-lg overflow-hidden shrink-0 bg-gray-50">
+                <img src={p.image} alt={p.name} className="h-full w-full object-contain p-2" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-sm line-clamp-2 mb-1">{p.name}</p>
+                {p.is_on_sale ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-500 font-bold">{formatMWK(Math.round(p.price * (1 - p.discount_percent / 100)))}</span>
+                    <span className="text-gray-400 line-through text-xs">{formatMWK(p.price)}</span>
+                  </div>
+                ) : (
+                  <p className="font-bold">{formatMWK(p.price)}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="bg-gray-50 rounded-lg p-2.5">
+                <p className="text-gray-500 text-xs mb-0.5">Brand</p>
+                <p className="font-medium">{p.brand || "Generic"}</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-2.5">
+                <p className="text-gray-500 text-xs mb-0.5">Rating</p>
+                <div className="flex items-center gap-1">
+                  <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                  <span className="font-medium">{p.rating || "N/A"}</span>
+                </div>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-2.5">
+                <p className="text-gray-500 text-xs mb-0.5">Stock</p>
+                <span className={p.stock && p.stock > 0 ? "text-green-600 font-medium" : "text-red-500 font-medium"}>
+                  {p.stock && p.stock > 0 ? `${p.stock} available` : "Out of stock"}
+                </span>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-2.5">
+                <p className="text-gray-500 text-xs mb-0.5">Benefit</p>
+                <p className="font-medium text-xs line-clamp-2">{p.benefit}</p>
+              </div>
+            </div>
+
+            <Button
+              onClick={() => handleAddToCart(p)}
+              disabled={!p.stock || p.stock <= 0}
+              className="w-full mt-4 bg-gray-900 hover:bg-gray-800"
+            >
+              <ShoppingBag className="h-4 w-4 mr-2" />
+              Add to Cart
+            </Button>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: Table Layout */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr>
@@ -104,7 +172,7 @@ const Compare = () => {
               ))}
               {[...Array(4 - compareList.length)].map((_, i) => (
                 <th key={`empty-${i}`} className="p-3 bg-gray-50 border-dashed border-2 border-gray-200">
-                  <Link to="/shop" className="text-blue-500 text-sm hover:underline">
+                  <Link to="/shop" className="text-gray-900 text-sm hover:underline">
                     + Add Product
                   </Link>
                 </th>
@@ -161,7 +229,7 @@ const Compare = () => {
               <td className="p-3 font-medium text-gray-500">Stock</td>
               {compareList.map((p) => (
                 <td key={p.id} className="p-3 text-center">
-                  <span className={p.stock && p.stock > 0 ? "text-green-500" : "text-red-500"}>
+                  <span className={p.stock && p.stock > 0 ? "text-green-600" : "text-red-500"}>
                     {p.stock && p.stock > 0 ? `${p.stock} available` : "Out of stock"}
                   </span>
                 </td>
@@ -189,7 +257,7 @@ const Compare = () => {
                     size="sm"
                     onClick={() => handleAddToCart(p)}
                     disabled={!p.stock || p.stock <= 0}
-                    className="bg-blue-500 hover:bg-blue-600"
+                    className="bg-gray-900 hover:bg-gray-800"
                   >
                     <ShoppingBag className="h-4 w-4 mr-2" />
                     Add to Cart

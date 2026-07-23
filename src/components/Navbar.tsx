@@ -51,9 +51,9 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
-      <nav className="container flex h-14 sm:h-16 lg:h-20 items-center justify-between gap-2 sm:gap-4 px-2 sm:px-4">
-        <Logo className="h-10 sm:h-12 md:h-14 lg:h-16 xl:h-18" />
+    <header className="sticky top-0 z-40 bg-navy border-b border-white/10">
+      <nav className="container flex h-16 sm:h-20 lg:h-24 items-center justify-between gap-2 sm:gap-4 px-2 sm:px-4">
+        <Logo className="h-12 sm:h-14 md:h-16 lg:h-20" />
 
         <div className="hidden lg:flex items-center gap-1">
           {links.map((l) => (
@@ -64,7 +64,7 @@ export const Navbar = () => {
               className={({ isActive }) =>
                 cn(
                   "px-4 py-2 text-sm font-medium transition-colors",
-                  isActive ? "text-gray-900 font-semibold" : "text-gray-500 hover:text-gray-900"
+                  isActive ? "text-white font-semibold" : "text-white/60 hover:text-white"
                 )
               }
             >
@@ -83,42 +83,42 @@ export const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="w-32 sm:w-40 md:w-64 px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-200 focus:outline-none focus:border-gray-900 text-sm"
+                  className="w-32 sm:w-40 md:w-64 px-3 sm:px-4 py-1.5 sm:py-2 border border-white/20 bg-white/10 focus:outline-none focus:border-white/40 text-sm text-white placeholder:text-white/40"
                   autoFocus
                 />
                 <button type="button" onClick={() => setSearchOpen(false)} className="absolute right-3">
-                  <X className="h-4 w-4 text-gray-400" />
+                  <X className="h-4 w-4 text-white/40" />
                 </button>
               </form>
             ) : (
               <button
                 onClick={() => setSearchOpen(true)}
-                className="p-2 sm:p-2.5 hover:bg-gray-50"
+                className="p-2 sm:p-2.5 hover:bg-white/10 transition-colors"
                 aria-label="Search"
               >
-                <Search className="h-5 sm:h-6 w-5 sm:w-6 text-gray-900" />
+                <Search className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
               </button>
             )}
           </div>
 
           {/* Cart */}
           <CartDrawer>
-            <button className="relative p-2 sm:p-2.5 hover:bg-gray-50" aria-label="Open cart">
-              <ShoppingBag className="h-5 sm:h-6 w-5 sm:w-6 text-gray-900" />
+            <button className="relative p-2 sm:p-2.5 hover:bg-white/10 transition-colors" aria-label="Open cart">
+              <ShoppingBag className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
               {count > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 sm:h-5 min-w-5 px-1 rounded-full bg-gray-900 text-white text-[10px] sm:text-[11px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 h-5 sm:h-5 min-w-5 px-1 rounded-full bg-white text-navy text-[10px] sm:text-[11px] font-bold flex items-center justify-center">
                   {count}
                 </span>
               )}
             </button>
           </CartDrawer>
 
-{/* User Menu - icon only on mobile */}
+          {/* User Menu */}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="p-2 sm:p-2.5 hover:bg-gray-50" aria-label="Account">
-                  <User className="h-5 sm:h-6 w-5 sm:w-6 text-gray-900" />
+                <button className="p-2 sm:p-2.5 hover:bg-white/10 transition-colors" aria-label="Account">
+                  <User className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
@@ -128,23 +128,23 @@ export const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Link to="/auth" className="hidden sm:inline-flex px-4 py-2 text-sm font-medium hover:bg-gray-50 text-gray-700">Sign in</Link>
+            <Link to="/auth" className="hidden sm:inline-flex px-4 py-2 text-sm font-medium hover:bg-white/10 text-white/80 transition-colors">Sign in</Link>
           )}
 
           {/* Mobile Menu Toggle */}
           <button
-            className="lg:hidden p-2 hover:bg-gray-50"
+            className="lg:hidden p-2 hover:bg-white/10 transition-colors"
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle menu"
           >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {open ? <X className="h-6 w-6 text-white" /> : <Menu className="h-6 w-6 text-white" />}
           </button>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       {open && (
-        <div className="lg:hidden border-t border-gray-100 bg-white">
+        <div className="lg:hidden border-t border-white/10 bg-navy">
           <div className="container py-3 flex flex-col gap-1">
             {links.map((l) => (
               <NavLink
@@ -155,7 +155,7 @@ export const Navbar = () => {
                 className={({ isActive }) =>
                   cn(
                     "px-4 py-3 text-base font-medium transition-colors",
-                    isActive ? "text-gray-900 bg-gray-100" : "text-gray-500"
+                    isActive ? "text-white bg-white/10" : "text-white/60 hover:text-white"
                   )
                 }
               >
@@ -163,7 +163,7 @@ export const Navbar = () => {
               </NavLink>
             ))}
             {!user && (
-              <Link to="/auth" onClick={() => setOpen(false)} className="px-4 py-3 text-base font-medium text-gray-500">
+              <Link to="/auth" onClick={() => setOpen(false)} className="px-4 py-3 text-base font-medium text-white/60 hover:text-white">
                 Sign in
               </Link>
             )}

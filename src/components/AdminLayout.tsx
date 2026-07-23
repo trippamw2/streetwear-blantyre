@@ -74,7 +74,7 @@ export const AdminLayout = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full mx-auto" />
+          <div className="animate-spin h-10 w-10 border-4 border-navy border-t-transparent rounded-full mx-auto" />
           <p className="mt-4 text-gray-500">Loading...</p>
         </div>
       </div>
@@ -97,9 +97,9 @@ export const AdminLayout = () => {
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
-          <div className="p-4 border-b border-gray-100">
+          <div className="p-4 border-b border-gray-100 bg-navy">
             <Logo className="h-8" />
-            <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
+            <p className="text-xs text-white/60 mt-1">Admin Panel</p>
           </div>
 
           <nav className="flex-1 p-4 space-y-1">
@@ -118,9 +118,9 @@ export const AdminLayout = () => {
                   }}
                   className={cn(
                     "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                    isActive
-                      ? "bg-blue-500 text-white"
-                      : "text-gray-600 hover:bg-gray-100"
+                      isActive
+                        ? "bg-navy text-white"
+                        : "text-gray-600 hover:bg-gray-100"
                   )}
                 >
                   <link.icon className="h-5 w-5" />
@@ -159,13 +159,13 @@ export const AdminLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Mobile Header */}
-        <header className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-gray-200">
+        <header className="lg:hidden flex items-center justify-between p-4 bg-navy border-b border-white/10">
           <Logo className="h-8" />
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg hover:bg-gray-100"
+            className="p-2 rounded-lg hover:bg-white/10"
           >
-            {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {sidebarOpen ? <X className="h-5 w-5 text-white" /> : <Menu className="h-5 w-5 text-white" />}
           </button>
         </header>
 

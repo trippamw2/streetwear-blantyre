@@ -99,7 +99,7 @@ const STATUS_MESSAGES: Record<string, string> = {
 const statusColors: Record<string, string> = {
   new: "bg-accent text-white",
   confirmed: "bg-primary text-white",
-  processing: "bg-blue-500 text-white",
+  processing: "bg-amber-500 text-white",
   dispatched: "bg-purple-500 text-white",
   delivered: "bg-green-500 text-white",
   cancelled: "bg-destructive text-white",
@@ -346,12 +346,12 @@ Track: https://www.wearsb.com/track/${order.id}`;
                   <div className="flex items-center gap-2">
                     <h3 className="font-bold">#{order.id.slice(0, 8).toUpperCase()}</h3>
                     <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${statusColors[order.status]}`}>{order.status}</span>
-                    {order.delivery_method === "express" && <Zap className="h-3 w-3 text-blue-500" />}
+                    {order.delivery_method === "express" && <Zap className="h-3 w-3 text-amber-500" />}
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">{format(new Date(order.created_at), "PPp")}</span>
                     {order.payment_method === "whatsapp" && <span className="text-xs bg-green-100 text-green-700 px-1.5 rounded">WhatsApp</span>}
-                    {order.payment_method === "paychangu" && <span className="text-xs bg-blue-100 text-blue-700 px-1.5 rounded">PayChangu</span>}
+                    {order.payment_method === "paychangu" && <span className="text-xs bg-gray-100 text-gray-700 px-1.5 rounded">PayChangu</span>}
                     {order.is_paid && <span className="text-xs bg-green-500 text-white px-1.5 rounded">PAID</span>}
                   </div>
                 </div>

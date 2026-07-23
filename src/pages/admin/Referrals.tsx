@@ -133,7 +133,7 @@ export default function AdminReferrals() {
           </div>
           <div className="bg-card border rounded-lg p-4">
             <p className="text-sm text-muted-foreground">Pending</p>
-            <p className="text-2xl font-bold text-blue-600">{stats.pending}</p>
+            <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
           </div>
           <div className="bg-card border rounded-lg p-4">
             <p className="text-sm text-muted-foreground">Completed</p>
@@ -190,7 +190,7 @@ export default function AdminReferrals() {
                     </td>
                     <td className="p-3 text-sm">
                       {ref.order_id ? (
-                        <a href={`/admin/orders/${ref.order_id}`} className="text-blue-600 hover:underline">
+                        <a href={`/admin/orders/${ref.order_id}`} className="text-gray-900 hover:underline">
                           {ref.order_id.slice(0, 8)}
                         </a>
                       ) : (

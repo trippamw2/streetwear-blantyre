@@ -169,7 +169,7 @@ const AdminCategories = () => {
           </div>
           <Dialog open={catDialog} onOpenChange={(open) => { setCatDialog(open); if (!open) { setEditingCat(null); setCatForm(emptyCategory); } }}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-500 hover:bg-blue-600"><Plus className="h-4 w-4" /> Add Category</Button>
+              <Button className="bg-gray-900 hover:bg-gray-800"><Plus className="h-4 w-4" /> Add Category</Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -202,7 +202,7 @@ const AdminCategories = () => {
                   <input type="checkbox" checked={catForm.is_active} onChange={(e) => setCatForm(p => ({ ...p, is_active: e.target.checked }))} className="rounded" />
                   <Label>Active</Label>
                 </div>
-                <Button onClick={saveCategory} disabled={catSaving || !catForm.name} className="w-full bg-blue-500 hover:bg-blue-600">
+                <Button onClick={saveCategory} disabled={catSaving || !catForm.name} className="w-full bg-gray-900 hover:bg-gray-800">
                   {catSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                   {editingCat ? "Update" : "Create"}
                 </Button>
@@ -240,7 +240,7 @@ const AdminCategories = () => {
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
                       <Button variant="ghost" size="icon" onClick={() => { setEditingCat(cat); setCatForm({ name: cat.name, slug: cat.slug, description: cat.description || "", icon: cat.icon || "", sort_order: cat.sort_order, is_active: cat.is_active }); setCatDialog(true); }}>
-                        <Edit className="h-4 w-4 text-blue-500" />
+                        <Edit className="h-4 w-4 text-gray-600" />
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => deleteCategory(cat.id)}>
                         <Trash2 className="h-4 w-4 text-red-500" />
@@ -268,7 +268,7 @@ const AdminCategories = () => {
           </div>
           <Dialog open={pillarDialog} onOpenChange={(open) => { setPillarDialog(open); if (!open) { setEditingPillar(null); setPillarForm(emptyPillar); } }}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-500 hover:bg-blue-600"><Plus className="h-4 w-4" /> Add Pillar</Button>
+              <Button className="bg-gray-900 hover:bg-gray-800"><Plus className="h-4 w-4" /> Add Pillar</Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -310,7 +310,7 @@ const AdminCategories = () => {
                     <Label>Active</Label>
                   </div>
                 </div>
-                <Button onClick={savePillar} disabled={pillarSaving || !pillarForm.name} className="w-full bg-blue-500 hover:bg-blue-600">
+                <Button onClick={savePillar} disabled={pillarSaving || !pillarForm.name} className="w-full bg-gray-900 hover:bg-gray-800">
                   {pillarSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                   {editingPillar ? "Update" : "Create"}
                 </Button>
@@ -355,7 +355,7 @@ const AdminCategories = () => {
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
                       <Button variant="ghost" size="icon" onClick={() => { setEditingPillar(p); setPillarForm({ name: p.name, slug: p.slug, description: p.description || "", icon: p.icon || "", color: p.color || "#2563eb", sort_order: p.sort_order, is_active: p.is_active }); setPillarDialog(true); }}>
-                        <Edit className="h-4 w-4 text-blue-500" />
+                        <Edit className="h-4 w-4 text-gray-600" />
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => deletePillar(p.id)}>
                         <Trash2 className="h-4 w-4 text-red-500" />

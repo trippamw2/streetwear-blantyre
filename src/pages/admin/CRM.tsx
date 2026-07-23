@@ -262,8 +262,8 @@ Thanks for being a valued customer!
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white border border-gray-100 rounded-xl p-5">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-              <Users className="h-5 w-5 text-blue-600" />
+            <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center">
+              <Users className="h-5 w-5 text-gray-600" />
             </div>
             <div>
               <p className="text-2xl font-bold">{customers.length}</p>
@@ -286,8 +286,8 @@ Thanks for being a valued customer!
 
         <div className="bg-white border border-gray-100 rounded-xl p-5">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-              <ShoppingCart className="h-5 w-5 text-blue-600" />
+            <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center">
+              <ShoppingCart className="h-5 w-5 text-gray-600" />
             </div>
             <div>
               <p className="text-2xl font-bold">{customers.reduce((s, c) => s + c.total_orders, 0)}</p>
@@ -335,10 +335,10 @@ Thanks for being a valued customer!
           <button onClick={() => setFilter("all")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "all" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
             All
           </button>
-          <button onClick={() => setFilter("vip")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "vip" ? "bg-blue-500 text-white" : "bg-card border border-border"}`}>
+          <button onClick={() => setFilter("vip")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "vip" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
             VIP (50K+)
           </button>
-          <button onClick={() => setFilter("new")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "new" ? "bg-blue-500 text-white" : "bg-card border border-border"}`}>
+          <button onClick={() => setFilter("new")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "new" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
             New (30 days)
           </button>
           <button onClick={() => setFilter("inactive")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "inactive" ? "bg-red-500 text-white" : "bg-card border border-border"}`}>
@@ -374,7 +374,7 @@ Thanks for being a valued customer!
                 </td>
                 <td className="p-4">
                   {customer.phone ? (
-                    <a href={`tel:${customer.phone}`} className="text-blue-600 hover:underline">
+                    <a href={`tel:${customer.phone}`} className="text-gray-900 font-medium hover:underline">
                       {customer.phone}
                     </a>
                   ) : (
@@ -425,7 +425,7 @@ Thanks for being a valued customer!
               {subscribers.map(sub => (
                 <tr key={sub.id} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="p-4">
-                    <a href={`mailto:${sub.email}`} className="text-blue-600 hover:underline">{sub.email}</a>
+                    <a href={`mailto:${sub.email}`} className="text-gray-900 font-medium hover:underline">{sub.email}</a>
                   </td>
                   <td className="p-4">{sub.name || "-"}</td>
                   <td className="p-4">{sub.phone || "-"}</td>
@@ -476,7 +476,7 @@ Thanks for being a valued customer!
               <button onClick={() => setCampaignType("whatsapp")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "whatsapp" ? "bg-green-600 text-white" : "bg-gray-100"}`}>
                 <MessageCircle className="h-4 w-4" /> WhatsApp
               </button>
-              <button onClick={() => setCampaignType("email")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "email" ? "bg-blue-500 text-white" : "bg-gray-100"}`}>
+              <button onClick={() => setCampaignType("email")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "email" ? "bg-gray-900 text-white" : "bg-gray-100"}`}>
                 <Mail className="h-4 w-4" /> Email
               </button>
             </div>

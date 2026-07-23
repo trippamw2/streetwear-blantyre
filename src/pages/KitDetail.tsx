@@ -9,6 +9,7 @@ import {
   getKitSeparateTotal, getKitRealSaving, getKitDiscountPercent,
 } from "@/data/products";
 import { useCombos } from "@/hooks/useCombos";
+import { useProducts } from "@/hooks/useProducts";
 import { useCart } from "@/contexts/CartContext";
 import {
   ArrowLeft, ShoppingBag, MessageCircle, Check,
@@ -21,6 +22,7 @@ const KitDetail = () => {
   const navigate = useNavigate();
   const { add } = useCart();
   const combos = useCombos();
+  const { products } = useProducts();
   const kit = combos.find((k) => k.id === id);
   const [adding, setAdding] = useState(false);
 
@@ -29,7 +31,7 @@ const KitDetail = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-500 mb-2">Kit not found</p>
-          <Link to="/combos" className="text-blue-500 hover:underline">
+          <Link to="/combos" className="text-gray-900 font-medium hover:underline">
             Back to Kits
           </Link>
         </div>
@@ -37,10 +39,10 @@ const KitDetail = () => {
     );
   }
 
-  const kitProducts = getKitProducts(kit);
-  const kitPrice = getKitPrice(kit);
-  const separateTotal = getKitSeparateTotal(kit);
-  const realSaving = getKitRealSaving(kit);
+  const kitProducts = getKitProducts(kit, products);
+  const kitPrice = getKitPrice(kit, products);
+  const separateTotal = getKitSeparateTotal(kit, products);
+  const realSaving = getKitRealSaving(kit, products);
   const discountPercent = getKitDiscountPercent(kit);
   const otherKits = combos.filter((k) => k.id !== kit.id).slice(0, 3);
   const lowStock = kit.stock !== undefined && kit.stock <= 5;
@@ -79,12 +81,12 @@ const KitDetail = () => {
             {/* Badges */}
             <div className="flex flex-wrap gap-2">
               {kit.badge && (
-                <span className="inline-flex px-3 py-1 rounded-full bg-blue-500 text-white text-xs font-semibold">
+                <span className="inline-flex px-3 py-1 rounded-full bg-gray-900 text-white text-xs font-semibold">
                   {kit.badge}
                 </span>
               )}
               {lowStock && (
-                <span className="inline-flex px-3 py-1 rounded-full border border-blue-300 bg-white text-blue-600 text-xs font-medium">
+                <span className="inline-flex px-3 py-1 rounded-full border border-amber-300 bg-amber-50 text-amber-700 text-xs font-medium">
                   Only {kit.stock} left
                 </span>
               )}
@@ -96,7 +98,7 @@ const KitDetail = () => {
             <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl leading-tight">
               {kit.name}
             </h1>
-            <p className="text-lg sm:text-xl text-blue-600 font-medium">{kit.hook}</p>
+            <p className="text-lg sm:text-xl text-gray-600 font-medium">{kit.hook}</p>
             <p className="text-sm text-gray-500 leading-relaxed">{kit.description}</p>
 
             {/* â”€â”€â”€ Price Block â”€â”€â”€ */}
@@ -114,7 +116,7 @@ const KitDetail = () => {
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
                     <BadgePercent className="h-3 w-3" /> Save {formatMWK(realSaving)}
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-100 text-blue-600 text-xs font-medium">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-medium">
                     <Truck className="h-3 w-3" /> Free delivery over MK 50k
                   </span>
                 </div>
@@ -126,7 +128,7 @@ const KitDetail = () => {
                   onClick={handleAdd}
                   variant="hero"
                   size="lg"
-                  className="text-sm flex-1 shadow-lg shadow-blue-500/20"
+                  className="text-sm flex-1 shadow-lg shadow-gray-900/20"
                   disabled={adding}
                 >
                   {adding ? (
@@ -157,10 +159,10 @@ const KitDetail = () => {
               {/* Guarantees */}
               <div className="grid grid-cols-2 gap-3 text-xs text-gray-500 pt-1">
                 <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4 text-blue-500 shrink-0" /> Free delivery over MK 50,000
+                  <Truck className="h-4 w-4 text-gray-400 shrink-0" /> Free delivery over MK 50,000
                 </div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-blue-500 shrink-0" /> 30-day guarantee
+                  <ShieldCheck className="h-4 w-4 text-gray-400 shrink-0" /> 30-day guarantee
                 </div>
               </div>
             </div>
@@ -236,7 +238,7 @@ const KitDetail = () => {
                 </div>
                 <div className="flex justify-between font-bold text-base border-t border-gray-200 pt-2">
                   <span>Kit price</span>
-                  <span className="text-blue-600">{formatMWK(kitPrice)}</span>
+                  <span className="text-gray-900">{formatMWK(kitPrice)}</span>
                 </div>
               </div>
 

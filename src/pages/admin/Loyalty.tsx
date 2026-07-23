@@ -119,7 +119,7 @@ const AdminLoyalty = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-4">
-            <Users className="h-8 w-8 text-blue-500 mb-2" />
+            <Users className="h-8 w-8 text-gray-900 mb-2" />
             <p className="text-2xl font-bold">{stats.total_members}</p>
             <p className="text-sm text-gray-500">Total Members</p>
           </CardContent>
@@ -133,7 +133,7 @@ const AdminLoyalty = () => {
         </Card>
         <Card>
           <CardContent className="pt-4">
-            <TrendingUp className="h-8 w-8 text-blue-500 mb-2" />
+            <TrendingUp className="h-8 w-8 text-gray-900 mb-2" />
             <p className="text-2xl font-bold">{stats.redeemed_points.toLocaleString()}</p>
             <p className="text-sm text-gray-500">Points Redeemed</p>
           </CardContent>

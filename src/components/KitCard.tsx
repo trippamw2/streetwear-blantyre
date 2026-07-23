@@ -5,18 +5,19 @@ import {
   getKitRealSaving, getKitDiscountPercent, getKitProducts,
   type Kit,
 } from "@/data/products";
+import { useProducts } from "@/hooks/useProducts";
 import { BookOpen, Briefcase, Headphones, Luggage, Zap, ArrowRight } from "lucide-react";
 
-/* â”€â”€â”€ lifestyle config â”€â”€â”€ */
+/* ─── lifestyle config ─── */
 const lifestyleConfig: Record<
   Kit["lifestyle"],
   { icon: typeof BookOpen; label: string; color: string }
 > = {
-  student: { icon: BookOpen, label: "Student", color: "from-blue-500 to-cyan-500" },
+  student: { icon: BookOpen, label: "Student", color: "from-gray-800 to-gray-900" },
   work:    { icon: Briefcase, label: "Work",    color: "from-purple-500 to-indigo-500" },
   travel:  { icon: Luggage,  label: "Travel",   color: "from-green-500 to-teal-500" },
-  casual:   { icon: Headphones, label: "Casual",  color: "from-blue-500 to-red-500" },
-  premium: { icon: Zap,      label: "Premium",  color: "from-blue-500 to-blue-600" },
+  casual:   { icon: Headphones, label: "Casual",  color: "from-gray-700 to-gray-900" },
+  premium: { icon: Zap,      label: "Premium",  color: "from-gray-900 to-black" },
 };
 
 interface KitCardProps {
@@ -29,10 +30,11 @@ interface KitCardProps {
 export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
   const cfg = lifestyleConfig[kit.lifestyle] ?? lifestyleConfig.student;
   const Icon = cfg.icon;
-  const products = getKitProducts(kit);
-  const kitPrice = getKitPrice(kit);
-  const separateTotal = getKitSeparateTotal(kit);
-  const realSaving = getKitRealSaving(kit);
+  const { products } = useProducts();
+  const kitProducts = getKitProducts(kit, products);
+  const kitPrice = getKitPrice(kit, products);
+  const separateTotal = getKitSeparateTotal(kit, products);
+  const realSaving = getKitRealSaving(kit, products);
   const discount = getKitDiscountPercent(kit);
   const lowStock = kit.stock !== undefined && kit.stock <= 5;
 
@@ -45,17 +47,17 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
     >
       <Link
         to={`/kits/${kit.id}`}
-        className="group relative block rounded-xl sm:rounded-2xl bg-white border border-gray-100 overflow-hidden hover:border-blue-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 h-full"
+        className="group relative block rounded-xl sm:rounded-2xl bg-white border border-gray-100 overflow-hidden hover:border-gray-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 h-full"
       >
         {/* â”€â”€â”€ Image â”€â”€â”€ */}
         <div className="relative bg-gray-50 border-b border-gray-100">
           {kit.badge && (
-            <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-blue-500 text-white text-[10px] sm:text-xs font-semibold">
+            <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-gray-900 text-white text-[10px] sm:text-xs font-semibold">
               {kit.badge}
             </span>
           )}
           {lowStock && (
-            <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full border border-blue-300 bg-white text-blue-600 text-[10px] font-medium">
+            <span className="absolute top-3 left-3 z-10 px-2 py-0.5 rounded-full border border-amber-300 bg-white text-amber-600 text-[10px] font-medium">
               Only {kit.stock} left
             </span>
           )}
@@ -81,7 +83,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
           </div>
 
           <h3 className="font-display font-bold text-lg sm:text-xl text-gray-900 leading-tight">{kit.name}</h3>
-          <p className="text-sm font-medium text-blue-600 mt-0.5">{kit.hook}</p>
+          <p className="text-sm font-medium text-gray-900 mt-0.5">{kit.hook}</p>
 
           {!compact && (
             <p className="text-xs text-gray-500 mt-2 leading-relaxed line-clamp-2">{kit.description}</p>
@@ -123,14 +125,14 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-1 text-sm font-semibold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex items-center gap-1 text-sm font-semibold text-gray-900 opacity-0 group-hover:opacity-100 transition-opacity">
               View Kit <ArrowRight className="h-4 w-4" />
             </div>
           </div>
 
           {/* Discount badge */}
           <div className="mt-2">
-            <span className="text-[10px] font-semibold text-blue-500 bg-blue-50 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-semibold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">
               {discount}% cheaper than separate
             </span>
           </div>

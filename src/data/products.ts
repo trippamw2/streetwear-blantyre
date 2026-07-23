@@ -200,40 +200,40 @@ export const combos: Kit[] = kits;
 
 const itemImageMap: Record<string, string> = {};
 
-export const getItemImage = (nameOrId: string): string => {
-  const byProduct = products.find(p => p.id === nameOrId || p.name === nameOrId);
+export const getItemImage = (nameOrId: string, productsList: Product[] = products): string => {
+  const byProduct = productsList.find(p => p.id === nameOrId || p.name === nameOrId);
   if (byProduct) return byProduct.image;
   return itemImageMap[nameOrId] ?? PLACEHOLDER;
 };
 
 export const formatMWK = (n: number) => `MK ${n.toLocaleString("en-US")}`;
 
-export function getKitProducts(kit: Kit): Product[] {
-  return kit.productIds.map(id => products.find(p => p.id === id)).filter((p): p is Product => p !== undefined);
+export function getKitProducts(kit: Kit, productsList: Product[] = products): Product[] {
+  return kit.productIds.map(id => productsList.find(p => p.id === id)).filter((p): p is Product => p !== undefined);
 }
 
-export function getKitSeparateTotal(kit: Kit): number {
-  return getKitProducts(kit).reduce((sum, p) => sum + p.price, 0);
+export function getKitSeparateTotal(kit: Kit, productsList: Product[] = products): number {
+  return getKitProducts(kit, productsList).reduce((sum, p) => sum + p.price, 0);
 }
 
-export function getKitPrice(kit: Kit): number {
-  const total = getKitSeparateTotal(kit);
+export function getKitPrice(kit: Kit, productsList: Product[] = products): number {
+  const total = getKitSeparateTotal(kit, productsList);
   return Math.round(total * (1 - kit.discountPercent / 100));
 }
 
-export function getKitRealSaving(kit: Kit): number {
-  return getKitSeparateTotal(kit) - getKitPrice(kit);
+export function getKitRealSaving(kit: Kit, productsList: Product[] = products): number {
+  return getKitSeparateTotal(kit, productsList) - getKitPrice(kit, productsList);
 }
 
 export function getKitDiscountPercent(kit: Kit): number {
   return kit.discountPercent;
 }
 
-export function getKitItemNames(kit: Kit): string[] {
-  return getKitProducts(kit).map(p => p.name);
+export function getKitItemNames(kit: Kit, productsList: Product[] = products): string[] {
+  return getKitProducts(kit, productsList).map(p => p.name);
 }
 
-export const getRecommendations = (product: Product, allProducts: Product[], limit = 4): Product[] => {
+export const getRecommendations = (product: Product, allProducts: Product[], limit = 4, combosList: Kit[] = combos): Product[] => {
   const price = product.price;
   const priceMin = price * 0.7;
   const priceMax = price * 1.3;
@@ -251,7 +251,7 @@ export const getRecommendations = (product: Product, allProducts: Product[], lim
       
       if (product.culture_pillar && p.culture_pillar === product.culture_pillar) score += 40;
       
-      const comboMatch = combos.some(c => 
+      const comboMatch = combosList.some(c => 
         c.productIds.some(pid => pid === product.id) &&
         c.productIds.some(pid => pid === p.id)
       );

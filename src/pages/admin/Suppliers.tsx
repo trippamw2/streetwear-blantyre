@@ -112,7 +112,7 @@ const AdminSuppliers = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-gray-900" />
       </div>
     );
   }
@@ -127,7 +127,7 @@ const AdminSuppliers = () => {
         
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-500 hover:bg-blue-600" onClick={() => { setEditingSupplier(null); resetForm(); }}>
+            <Button className="bg-gray-900 hover:bg-gray-800" onClick={() => { setEditingSupplier(null); resetForm(); }}>
               <Plus className="h-4 w-4" /> Add Supplier
             </Button>
           </DialogTrigger>
@@ -183,7 +183,7 @@ const AdminSuppliers = () => {
                 />
               </div>
               
-              <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
+              <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800">
                 {editingSupplier ? "Update Supplier" : "Add Supplier"}
               </Button>
             </form>

@@ -89,7 +89,7 @@ const AdminSettings = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-gray-900" />
       </div>
     );
   }
@@ -101,7 +101,7 @@ const AdminSettings = () => {
           <h1 className="text-2xl font-bold">Site Settings</h1>
           <p className="text-sm text-muted-foreground">Configure your store settings</p>
         </div>
-        <Button onClick={saveSettings} disabled={saving} className="bg-blue-500 hover:bg-blue-600">
+        <Button onClick={saveSettings} disabled={saving} className="bg-gray-900 hover:bg-gray-800">
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Save Changes
         </Button>
@@ -110,7 +110,7 @@ const AdminSettings = () => {
       <div className="rounded-xl border bg-white">
         <div className="p-6 space-y-6">
           <div className="flex items-center gap-2 pb-4 border-b">
-            <Info className="h-5 w-5 text-blue-500" />
+            <Info className="h-5 w-5 text-gray-900" />
             <h2 className="font-semibold">Promotional Settings</h2>
           </div>
 
@@ -128,7 +128,7 @@ const AdminSettings = () => {
               </p>
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-sm font-medium mb-2">Preview:</p>
-                <div className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">
+                <div className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm">
                   {settings.promo_banner_text || "Enter your promotional text above..."}
                 </div>
               </div>
@@ -140,7 +140,7 @@ const AdminSettings = () => {
       <div className="rounded-xl border bg-white">
         <div className="p-6 space-y-6">
           <div className="flex items-center gap-2 pb-4 border-b">
-            <Settings className="h-5 w-5 text-blue-500" />
+            <Settings className="h-5 w-5 text-gray-900" />
             <h2 className="font-semibold">Delivery Settings</h2>
           </div>
 
@@ -181,7 +181,7 @@ const AdminSettings = () => {
       <div className="rounded-xl border bg-white">
         <div className="p-6 space-y-6">
           <div className="flex items-center gap-2 pb-4 border-b">
-            <Settings className="h-5 w-5 text-blue-500" />
+            <Settings className="h-5 w-5 text-gray-900" />
             <h2 className="font-semibold">WhatsApp Settings</h2>
           </div>
 
@@ -210,7 +210,7 @@ const AdminSettings = () => {
       <div className="rounded-xl border bg-white">
         <div className="p-6 space-y-6">
           <div className="flex items-center gap-2 pb-4 border-b">
-            <Settings className="h-5 w-5 text-blue-500" />
+            <Settings className="h-5 w-5 text-gray-900" />
             <h2 className="font-semibold">PayChangu Payment Settings</h2>
           </div>
 

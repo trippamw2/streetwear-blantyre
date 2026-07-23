@@ -86,8 +86,8 @@ const DeliveryTracking = () => {
   const statusColor: Record<string, string> = {
     new: "bg-accent",
     confirmed: "bg-primary",
-    processing: "bg-blue-500",
-    dispatched: "bg-purple-500",
+    processing: "bg-gray-800",
+    dispatched: "bg-gray-600",
     delivered: "bg-green-500",
     cancelled: "bg-destructive",
   };
@@ -120,22 +120,22 @@ const DeliveryTracking = () => {
               <Truck className="h-5 w-5" /> Track Delivery
             </h2>
             
-            <div className="grid grid-cols-5 gap-2">
+            <div className="flex items-start justify-between gap-1 overflow-x-auto">
               {TRACKING_STEPS.map((step, i) => {
                 const reached = i <= idx;
                 return (
-                  <div key={step.key} className="flex flex-col items-center text-center">
-                    <div className={`h-12 w-12 rounded-full flex items-center justify-center border-2 transition-colors ${
+                  <div key={step.key} className="flex flex-col items-center text-center min-w-0 flex-1">
+                    <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center border-2 transition-colors shrink-0 ${
                       reached 
                         ? "bg-gradient-brand border-transparent text-white" 
                         : "border-border text-muted-foreground bg-background"
                     }`}>
-                      <step.icon className="h-5 w-5" />
+                      <step.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                     </div>
-                    <p className={`text-xs mt-2 font-medium ${reached ? "text-foreground" : "text-muted-foreground"}`}>
+                    <p className={`text-[10px] sm:text-xs mt-2 font-medium leading-tight ${reached ? "text-foreground" : "text-muted-foreground"}`}>
                       {step.label}
                     </p>
-                    <p className="text-[10px] text-muted-foreground hidden sm:block">{step.desc}</p>
+                    <p className="text-[9px] text-muted-foreground hidden lg:block mt-0.5">{step.desc}</p>
                   </div>
                 );
               })}
@@ -149,8 +149,8 @@ const DeliveryTracking = () => {
             </div>
 
             {order.status === "dispatched" && (
-              <div className="flex items-center gap-2 p-3 bg-green-500/10 rounded-xl text-sm">
-                <MapPin className="h-4 w-4 text-green-500" />
+              <div className="flex items-center gap-2 p-3 bg-green-50 rounded-xl text-sm">
+                <MapPin className="h-4 w-4 text-green-600" />
                 <span>Your order is on the way! Track with the courier using your order number.</span>
               </div>
             )}

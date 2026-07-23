@@ -16,11 +16,11 @@ const PAGES_OPTIONS = [
 ];
 
 const PROMO_COLORS = [
-  "from-blue-500 to-blue-600",
+  "from-gray-900 to-gray-800",
   "from-purple-500 to-indigo-500",
   "from-green-500 to-teal-500",
-  "from-blue-500 to-cyan-500",
-  "from-red-500 to-blue-500",
+  "from-gray-800 to-gray-700",
+  "from-red-500 to-pink-500",
   "from-pink-500 to-rose-500",
 ];
 
@@ -37,7 +37,7 @@ const AdminPromotions = () => {
     images: [""] as string[],
     link: "/shop",
     link_text: "Shop Now",
-    background_color: "from-blue-500 to-blue-600",
+    background_color: "from-gray-900 to-gray-800",
     text_color: "text-white",
     is_active: true,
     is_featured: true,
@@ -146,7 +146,7 @@ const AdminPromotions = () => {
       images: [""],
       link: "/shop",
       link_text: "Shop Now",
-      background_color: "from-blue-500 to-blue-600",
+      background_color: "from-gray-900 to-gray-800",
       text_color: "text-white",
       is_active: true,
       is_featured: true,
@@ -217,7 +217,7 @@ const AdminPromotions = () => {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => { resetForm(); setEditingPromotion(null); }} className="bg-blue-500 hover:bg-blue-600">
+            <Button onClick={() => { resetForm(); setEditingPromotion(null); }} className="bg-gray-900 hover:bg-gray-800">
               <Plus className="h-4 w-4" /> Add Promotion
             </Button>
           </DialogTrigger>
@@ -336,7 +336,7 @@ const AdminPromotions = () => {
                       onClick={() => togglePage(page.value)}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         formData.pages.includes(page.value)
-                          ? "bg-blue-500 text-white"
+                          ? "bg-gray-900 text-white"
                           : "bg-gray-100 text-gray-600"
                       }`}
                     >
@@ -376,7 +376,7 @@ const AdminPromotions = () => {
                 />
               </div>
 
-              <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
+              <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800">
                 {editingPromotion ? "Update Promotion" : "Create Promotion"}
               </Button>
             </form>
@@ -389,7 +389,7 @@ const AdminPromotions = () => {
         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
           <ImageIcon className="h-12 w-12 mx-auto text-gray-300" />
           <p className="mt-4 text-gray-500">No promotions yet</p>
-          <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-blue-500">Create First Promotion</Button>
+          <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-gray-900 hover:bg-gray-800">Create First Promotion</Button>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

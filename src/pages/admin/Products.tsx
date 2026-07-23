@@ -78,6 +78,7 @@ const AdminProducts = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState<number | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -270,6 +271,47 @@ const AdminProducts = () => {
     }));
   };
 
+  const handleImageUpload = async (index: number, file: File) => {
+    try {
+      setUploadingImage(index);
+      
+      // Create a unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `products/${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+      
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('product-images')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+      
+      if (error) {
+        throw error;
+      }
+      
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
+      
+      if (urlData?.publicUrl) {
+        updateImage(index, urlData.publicUrl);
+        toast({ title: "Image uploaded successfully" });
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({ 
+        title: "Upload failed", 
+        description: error instanceof Error ? error.message : "Failed to upload image",
+        variant: "destructive" 
+      });
+    } finally {
+      setUploadingImage(null);
+    }
+  };
+
   const addType = () => {
     setFormData((prev) => ({
       ...prev,
@@ -317,7 +359,7 @@ const AdminProducts = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-500 hover:bg-blue-600">
+            <Button className="bg-gray-900 hover:bg-gray-800">
               <Plus className="h-4 w-4" /> Add Product
             </Button>
           </DialogTrigger>
@@ -346,26 +388,47 @@ const AdminProducts = () => {
                 </div>
                 <div className="space-y-2">
                   {formData.images.map((img, index) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={img}
-                        onChange={(e) => updateImage(index, e.target.value)}
-                        placeholder="https://example.com/image.jpg"
-                      />
-                      {formData.images.length > 1 && (
-                        <Button type="button" variant="ghost" size="icon" onClick={() => removeImage(index)}>
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
+                    <div key={index} className="space-y-2">
+                      <div className="flex gap-2">
+                        <Input
+                          value={img}
+                          onChange={(e) => updateImage(index, e.target.value)}
+                          placeholder="https://example.com/image.jpg"
+                        />
+                        <label className="flex items-center justify-center px-3 py-2 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-50 transition-colors">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleImageUpload(index, file);
+                            }}
+                          />
+                          {uploadingImage === index ? (
+                            <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
+                          ) : (
+                            <ImageIcon className="h-4 w-4 text-gray-500" />
+                          )}
+                        </label>
+                        {formData.images.length > 1 && (
+                          <Button type="button" variant="ghost" size="icon" onClick={() => removeImage(index)}>
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                          </Button>
+                        )}
+                      </div>
+                      {img && (
+                        <div className="flex gap-2 flex-wrap">
+                          <img 
+                            key={index}
+                            src={img} 
+                            alt={`Preview ${index}`} 
+                            className="h-20 w-20 rounded-lg object-cover border border-gray-200" 
+                          />
+                        </div>
                       )}
                     </div>
                   ))}
-                  {formData.images[0] && (
-                    <div className="flex gap-2 flex-wrap mt-2">
-                      {formData.images.filter(i => i).map((img, i) => (
-                        <img key={i} src={img} alt={`Preview ${i}`} className="h-16 w-16 rounded-lg object-cover" />
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
               
@@ -527,7 +590,7 @@ const AdminProducts = () => {
               
               <Button 
                 onClick={handleSave} 
-                className="w-full bg-blue-500 hover:bg-blue-600"
+                className="w-full bg-gray-900 hover:bg-gray-800"
                 disabled={saving || !formData.name}
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
@@ -572,7 +635,7 @@ const AdminProducts = () => {
                   </div>
                 </td>
                 <td className="p-4">
-                  <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-medium">
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
                     {getBrandName(product.brand || "generic")}
                   </span>
                 </td>
@@ -585,7 +648,7 @@ const AdminProducts = () => {
                   <span className="font-semibold">MK {product.price.toLocaleString()}</span>
                 </td>
                 <td className="p-4">
-                  <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
                     {getSupplierName(product.supplier_id)}
                   </span>
                 </td>

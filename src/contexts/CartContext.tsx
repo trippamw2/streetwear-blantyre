@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { useDeliverySettings } from "@/hooks/useDeliverySettings";
 
 export interface CartItem {
   productKey: string;
@@ -20,13 +21,11 @@ interface CartState {
   total: number;
 }
 
-const FREE_DELIVERY_THRESHOLD = 50000;
-const DELIVERY_FEE = 5000;
-
 const CartContext = createContext<CartState | undefined>(undefined);
 const STORAGE_KEY = "sb-cart";
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const { settings } = useDeliverySettings();
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -59,7 +58,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const count = items.reduce((s, i) => s + i.quantity, 0);
   const subtotal = items.reduce((s, i) => s + i.quantity * i.price, 0);
-  const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : subtotal > 0 ? DELIVERY_FEE : 0;
+  const deliveryFee = subtotal >= settings.freeDeliveryThreshold ? 0 : subtotal > 0 ? settings.deliveryFee : 0;
   const total = subtotal + deliveryFee;
 
   return (
@@ -87,5 +86,5 @@ export const useCart = () => {
   return ctx ?? fallback;
 };
 
-export const FREE_DELIVERY_THRESHOLD_MWK = FREE_DELIVERY_THRESHOLD;
-export const DELIVERY_FEE_MWK = DELIVERY_FEE;
+export const FREE_DELIVERY_THRESHOLD_MWK = 50000;
+export const DELIVERY_FEE_MWK = 5000;

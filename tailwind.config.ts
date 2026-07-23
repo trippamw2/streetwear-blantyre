@@ -20,6 +20,8 @@ export default {
       colors: {
         background: "#ffffff",
         foreground: "#0a0a0a",
+        navy: "#0f172a",
+        "navy-light": "#1e293b",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

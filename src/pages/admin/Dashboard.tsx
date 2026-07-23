@@ -105,8 +105,8 @@ const AdminDashboard = () => {
       label: "Gross Orders", 
       value: formatMWK(stats.grossOrders), 
       icon: Receipt,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
+      color: "text-gray-900",
+      bgColor: "bg-gray-100",
     },
     { 
       label: "Net Revenue", 
@@ -128,8 +128,8 @@ const AdminDashboard = () => {
       label: "Paid Orders", 
       value: stats.paidOrders.toString(), 
       icon: Wallet,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
+      color: "text-gray-900",
+      bgColor: "bg-gray-100",
     },
     { 
       label: "Pending", 

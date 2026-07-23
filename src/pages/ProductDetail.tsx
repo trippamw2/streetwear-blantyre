@@ -91,7 +91,7 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-10 w-10 border-4 border-gray-900 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -101,7 +101,7 @@ const ProductDetail = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-500">Product not found</p>
-          <Link to="/shop" className="text-blue-500 hover:underline">Back to shop</Link>
+          <Link to="/shop" className="text-gray-900 font-medium hover:underline">Back to shop</Link>
         </div>
       </div>
     );
@@ -314,7 +314,7 @@ const ProductDetail = () => {
                 key={i}
                 onClick={() => setSelectedImage(i)}
                 className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                  selectedImage === i ? "border-blue-500" : "border-transparent opacity-60 hover:opacity-100"
+                    selectedImage === i ? "border-gray-900" : "border-transparent opacity-60 hover:opacity-100"
                 }`}
               >
                 <img src={img} alt="" className="w-full h-full object-cover" />
@@ -327,7 +327,7 @@ const ProductDetail = () => {
         <div className="space-y-6">
           <div className="space-y-3">
             {product.brand && (
-              <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full inline-block">
+              <span className="text-sm font-semibold text-gray-700 bg-gray-100 px-3 py-1 rounded-full inline-block">
                 {product.brand}
               </span>
             )}
@@ -370,33 +370,33 @@ const ProductDetail = () => {
             if (matchingKits.length === 0) return null;
             
             return (
-              <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-xl border border-blue-200 p-4 sm:p-5 space-y-3">
+              <div className="bg-gradient-to-r from-gray-50 to-amber-50 rounded-xl border border-gray-200 p-4 sm:p-5 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Package className="h-5 w-5 text-blue-500" />
-                  <p className="font-semibold text-blue-800 text-sm">Also in these Kits</p>
+                  <Package className="h-5 w-5 text-gray-900" />
+                  <p className="font-semibold text-gray-800 text-sm">Also in these Kits</p>
                 </div>
                 <div className="grid gap-2">
-                  {matchingKits.map(kit => (
-                    <Link
-                      key={kit.id}
-                      to="/combos"
-                      className="flex items-center justify-between bg-white rounded-lg p-3 border border-blue-100 hover:border-blue-300 transition-all group"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">
-                          {kit.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
+{matchingKits.map(kit => (
+                      <Link
+                        key={kit.id}
+                        to="/combos"
+                        className="flex items-center justify-between bg-white rounded-lg p-3 border border-gray-100 hover:border-gray-300 transition-all group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 font-bold text-xs">
+                            {kit.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
+                          </div>
+                          <div>
+                            <p className="font-medium text-sm text-gray-900 group-hover:text-gray-700 transition-colors">{kit.name}</p>
+                            <p className="text-xs text-gray-500">Save {formatMWK(getKitRealSaving(kit, products))} • {kit.productIds.length} items</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium text-sm text-gray-900 group-hover:text-blue-600 transition-colors">{kit.name}</p>
-                          <p className="text-xs text-gray-500">Save {formatMWK(getKitRealSaving(kit))} â€¢ {kit.productIds.length} items</p>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-sm text-gray-900">{formatMWK(getKitPrice(kit, products))}</span>
+                          <ArrowRight className="h-4 w-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-blue-600">{formatMWK(getKitPrice(kit))}</span>
-                        <ArrowRight className="h-4 w-4 text-blue-400 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
                 </div>
                 <p className="text-xs text-gray-500 text-center">
                   Better value. One delivery. Everything you need.
@@ -417,7 +417,7 @@ const ProductDetail = () => {
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${
                 isInCompare(product.id)
-                  ? "bg-blue-50 border-blue-500 text-blue-600"
+                  ? "bg-gray-100 border-gray-900 text-gray-900"
                   : "border-border text-gray-500 hover:border-gray-300"
               }`}
             >
@@ -519,7 +519,17 @@ const ProductDetail = () => {
       <div className="mt-16">
         <h2 className="font-display font-bold text-2xl mb-6">Specifications</h2>
         <div className="rounded-2xl border border-border overflow-hidden">
-          <table className="w-full">
+          {/* Mobile: Card layout */}
+          <div className="md:hidden divide-y divide-border">
+            {specs.map((spec) => (
+              <div key={spec.label} className="flex justify-between items-center px-4 py-3">
+                <span className="text-sm font-medium text-gray-500">{spec.label}</span>
+                <span className="text-sm font-medium text-right">{spec.value}</span>
+              </div>
+            ))}
+          </div>
+          {/* Desktop: Table layout */}
+          <table className="w-full hidden md:table">
             <tbody>
               {specs.map((spec, i) => (
                 <tr key={spec.label} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
@@ -547,7 +557,7 @@ const ProductDetail = () => {
         <h2 className="font-display font-bold text-2xl mb-6">Customer Reviews</h2>
         
         {reviewsLoading ? (
-          <div className="text-center py-8"><Loader2 className="h-6 w-6 animate-spin mx-auto text-blue-500" /></div>
+          <div className="text-center py-8"><Loader2 className="h-6 w-6 animate-spin mx-auto text-gray-400" /></div>
         ) : reviews.length === 0 ? (
           <div className="rounded-2xl border border-gray-100 p-8 text-center">
             <Star className="h-12 w-12 text-gray-200 mx-auto mb-4" />
@@ -591,7 +601,7 @@ const ProductDetail = () => {
                 <div key={idx} className="rounded-2xl border border-border p-5">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600">
+                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600">
                         {review.customer_name?.[0]?.toUpperCase() || "?"}
                       </div>
                       <div>
@@ -661,7 +671,7 @@ const ProductDetail = () => {
             <Button 
               onClick={submitReview} 
               disabled={submitting || !userRating || !userName.trim()}
-              className="bg-blue-500 hover:bg-blue-600"
+              className="bg-gray-900 hover:bg-gray-800"
             >
               {submitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               Submit Review

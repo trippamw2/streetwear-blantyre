@@ -129,12 +129,12 @@ const OrderDetailPage = () => {
 
         {/* Payment Instructions */}
         {order.status === "new" && (
-          <div className="rounded-2xl bg-blue-50 border border-blue-200 p-5 space-y-3">
+          <div className="rounded-2xl bg-gray-50 border border-gray-200 p-5 space-y-3">
             <p className="font-display font-bold text-lg">
               Make Payment
             </p>
             <p className="text-sm text-muted-foreground">
-              Pay <span className="font-bold text-blue-600">{formatMWK(order.total_mwk)}</span> via PayChangu:
+              Pay <span className="font-bold text-gray-900">{formatMWK(order.total_mwk)}</span> via PayChangu:
             </p>
             <div className="text-sm space-y-2 bg-white p-3 rounded-lg">
               <p><span className="text-muted-foreground">Airtel Money:</span> <span className="font-mono font-bold">{import.meta.env.VITE_PAYMENT_PHONE || "+265 991 234 567"}</span></p>

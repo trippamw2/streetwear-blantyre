@@ -36,13 +36,13 @@ export const DeliveryOptions = ({ selectedOption, onSelect, location, subtotal }
   return (
     <div className="space-y-4">
       {/* Zone detection badge */}
-      <div className="flex items-center gap-2 p-3 rounded-xl bg-blue-50 border border-blue-100">
-        <MapPin className="h-4 w-4 text-blue-600 shrink-0" />
+      <div className="flex items-center gap-2 p-3 rounded-xl bg-gray-50 border border-gray-200">
+        <MapPin className="h-4 w-4 text-gray-600 shrink-0" />
         <div className="text-xs">
-          <span className="text-blue-800 font-medium">
+          <span className="text-gray-900 font-medium">
             {zone === "blantyre" ? "Blantyre" : "Outside Blantyre"}
           </span>
-          <span className="text-blue-600 ml-1.5">
+          <span className="text-gray-500 ml-1.5">
             detected from "{location}"
           </span>
         </div>
@@ -72,14 +72,14 @@ export const DeliveryOptions = ({ selectedOption, onSelect, location, subtotal }
               onClick={() => onSelect(option)}
               className={cn(
                 "relative p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-200",
-                "hover:border-blue-400/50",
+                "hover:border-gray-400/50",
                 isSelected
-                  ? "border-blue-500 bg-blue-50 shadow-sm"
+                  ? "border-gray-900 bg-gray-50 shadow-sm"
                   : "border-gray-200 bg-white hover:bg-gray-50"
               )}
             >
               {isSelected && (
-                <div className="absolute top-4 right-4 h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center">
+                <div className="absolute top-4 right-4 h-6 w-6 rounded-full bg-gray-900 flex items-center justify-center">
                   <Check className="h-4 w-4 text-white" />
                 </div>
               )}
@@ -87,12 +87,12 @@ export const DeliveryOptions = ({ selectedOption, onSelect, location, subtotal }
               <div className="flex items-start gap-4">
                 <div className={cn(
                   "h-12 w-12 rounded-xl flex items-center justify-center shrink-0",
-                  isSelected ? "bg-blue-500" : "bg-gray-100"
+                  isSelected ? "bg-gray-900" : "bg-gray-100"
                 )}>
                   {option.id === "same_day" ? (
                     <Zap className={cn("h-5 w-5", isSelected ? "text-white" : "text-amber-500")} />
                   ) : option.id === "express" ? (
-                    <Zap className={cn("h-5 w-5", isSelected ? "text-white" : "text-blue-500")} />
+                    <Zap className={cn("h-5 w-5", isSelected ? "text-white" : "text-amber-500")} />
                   ) : (
                     <Truck className={cn("h-5 w-5", isSelected ? "text-white" : "text-gray-500")} />
                   )}
