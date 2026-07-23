@@ -285,8 +285,8 @@ const ProductDetail = () => {
                       <MessageCircle className="h-8 w-8 text-green-500" />
                       <span className="text-xs font-medium">WhatsApp</span>
                     </button>
-                    <button onClick={() => handleShare("facebook")} className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-blue-50 hover:bg-blue-100 transition-colors">
-                      <Facebook className="h-8 w-8 text-blue-600" />
+                    <button onClick={() => handleShare("facebook")} className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                      <Facebook className="h-8 w-8 text-gray-700" />
                       <span className="text-xs font-medium">Facebook</span>
                     </button>
                     <button onClick={() => handleShare("twitter")} className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-black text-white hover:bg-gray-800 transition-colors">
