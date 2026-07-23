@@ -1,7 +1,7 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Menu, X, Building2, Warehouse, ChevronLeft, Zap, MessageCircle, Truck, Users, Tag, LayoutGrid } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Menu, X, Building2, Warehouse, ChevronLeft, Zap, MessageCircle, Truck, Users, Tag, LayoutGrid, Shield } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +19,7 @@ const adminLinks = [
   { to: "/admin/testimonials", label: "Testimonials", icon: MessageCircle },
   { to: "/admin/business", label: "Business", icon: Building2 },
   { to: "/admin/inventory", label: "Inventory", icon: Warehouse },
+  { to: "/admin/authentication", label: "Authentication", icon: Shield },
   { to: "/admin/delivery", label: "Delivery", icon: Zap },
   { to: "/admin/loyalty", label: "Loyalty", icon: Zap },
   { to: "/admin/referrals", label: "Referrals", icon: Users },

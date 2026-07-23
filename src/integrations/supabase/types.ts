@@ -754,6 +754,210 @@ export type Database = {
         }
         Relationships: []
       }
+      product_auth: {
+        Row: {
+          id: string
+          product_id: string
+          serial_number: string
+          qr_token: string
+          product_name: string
+          product_image: string | null
+          collection: string | null
+          category: string | null
+          color: string | null
+          size: string | null
+          material: string | null
+          print_technique: string | null
+          fabric_weight: string | null
+          edition_number: number | null
+          quantity_produced: number | null
+          country_of_manufacture: string | null
+          manufacturing_date: string | null
+          product_story: string | null
+          care_instructions: string | null
+          authentication_status: string
+          first_scan_date: string | null
+          last_scan_date: string | null
+          total_scans: number
+          registered_owner_name: string | null
+          registered_owner_phone: string | null
+          registered_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          product_id: string
+          serial_number: string
+          qr_token: string
+          product_name: string
+          product_image?: string | null
+          collection?: string | null
+          category?: string | null
+          color?: string | null
+          size?: string | null
+          material?: string | null
+          print_technique?: string | null
+          fabric_weight?: string | null
+          edition_number?: number | null
+          quantity_produced?: number | null
+          country_of_manufacture?: string | null
+          manufacturing_date?: string | null
+          product_story?: string | null
+          care_instructions?: string | null
+          authentication_status?: string
+          first_scan_date?: string | null
+          last_scan_date?: string | null
+          total_scans?: number
+          registered_owner_name?: string | null
+          registered_owner_phone?: string | null
+          registered_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          serial_number?: string
+          qr_token?: string
+          product_name?: string
+          product_image?: string | null
+          collection?: string | null
+          category?: string | null
+          color?: string | null
+          size?: string | null
+          material?: string | null
+          print_technique?: string | null
+          fabric_weight?: string | null
+          edition_number?: number | null
+          quantity_produced?: number | null
+          country_of_manufacture?: string | null
+          manufacturing_date?: string | null
+          product_story?: string | null
+          care_instructions?: string | null
+          authentication_status?: string
+          first_scan_date?: string | null
+          last_scan_date?: string | null
+          total_scans?: number
+          registered_owner_name?: string | null
+          registered_owner_phone?: string | null
+          registered_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      scan_logs: {
+        Row: {
+          id: string
+          product_auth_id: string
+          qr_token: string
+          scanned_at: string
+          scan_result: string
+          device_type: string | null
+          browser: string | null
+          os: string | null
+          approximate_location: string | null
+          ip_hash: string | null
+          is_suspicious: boolean
+          suspicious_reason: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_auth_id: string
+          qr_token: string
+          scanned_at?: string
+          scan_result: string
+          device_type?: string | null
+          browser?: string | null
+          os?: string | null
+          approximate_location?: string | null
+          ip_hash?: string | null
+          is_suspicious?: boolean
+          suspicious_reason?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_auth_id?: string
+          qr_token?: string
+          scanned_at?: string
+          scan_result?: string
+          device_type?: string | null
+          browser?: string | null
+          os?: string | null
+          approximate_location?: string | null
+          ip_hash?: string | null
+          is_suspicious?: boolean
+          suspicious_reason?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      product_ownership: {
+        Row: {
+          id: string
+          product_auth_id: string
+          owner_name: string
+          owner_phone: string | null
+          owner_email: string | null
+          registered_at: string
+          is_current_owner: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_auth_id: string
+          owner_name: string
+          owner_phone?: string | null
+          owner_email?: string | null
+          registered_at?: string
+          is_current_owner?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_auth_id?: string
+          owner_name?: string
+          owner_phone?: string | null
+          owner_email?: string | null
+          registered_at?: string
+          is_current_owner?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      auth_audit_log: {
+        Row: {
+          id: string
+          admin_user_id: string
+          action: string
+          target_type: string
+          target_id: string | null
+          details: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          admin_user_id: string
+          action: string
+          target_type: string
+          target_id?: string | null
+          details?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          admin_user_id?: string
+          action?: string
+          target_type?: string
+          target_id?: string | null
+          details?: Json | null
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -765,6 +969,27 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      generate_serial_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_qr_token: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      record_scan: {
+        Args: {
+          p_product_auth_id: string
+          p_qr_token: string
+          p_scan_result: string
+          p_device_type?: string
+          p_browser?: string
+          p_os?: string
+          p_approximate_location?: string
+          p_ip_hash?: string
+        }
+        Returns: string
       }
     }
     Enums: {

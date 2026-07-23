@@ -47,6 +47,9 @@ import FAQ from "./pages/policy/FAQ";
 import Returns from "./pages/policy/Returns";
 import Warranty from "./pages/policy/Warranty";
 import Loyalty from "./pages/Loyalty";
+import Verify from "./pages/Verify";
+import Passport from "./pages/Passport";
+import AdminAuthentication from "./pages/admin/Authentication";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -104,6 +107,9 @@ const App = () => (
                   <Route path="/rewards" element={<Loyalty />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
+                {/* Standalone pages (no header/footer) */}
+                <Route path="/verify/:token" element={<Verify />} />
+                <Route path="/passport/:token" element={<Passport />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />
                   <Route path="products" element={<AdminProducts />} />
@@ -121,6 +127,7 @@ const App = () => (
                   <Route path="suppliers" element={<AdminSuppliers />} />
                   <Route path="loyalty" element={<AdminLoyalty />} />
                   <Route path="referrals" element={<AdminReferrals />} />
+                  <Route path="authentication" element={<AdminAuthentication />} />
                 </Route>
               </Routes>
             </BrowserRouter>
