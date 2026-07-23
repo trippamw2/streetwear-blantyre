@@ -43,10 +43,10 @@ export interface CulturePillar {
 }
 
 export const culturePillars: CulturePillar[] = [
-  { id: "music", label: "Music Culture", description: "Express through sound and rhythm", icon: "Music", color: "#8B5CF6" },
-  { id: "sports", label: "Sports Culture", description: "Rep your team, rep your city", icon: "Trophy", color: "#F59E0B" },
-  { id: "faith", label: "Faith Culture", description: "Wear your beliefs with pride", icon: "Heart", color: "#10B981" },
-  { id: "hustle", label: "Hustle Culture", description: "Grind never stops. Dress like it.", icon: "Zap", color: "#EF4444" },
+  { id: "street", label: "Street Culture", description: "Proud of where you come from. Your neighborhood, your city, your story.", icon: "MapPin", color: "#6366f1" },
+  { id: "music", label: "Music Culture", description: "Feel the rhythm of Malawi in every stitch. Beats, lyrics, style.", icon: "Music", color: "#8B5CF6" },
+  { id: "hustle", label: "Hustle Culture", description: "Build what matters. Wear what you earned. Discipline, vision, legacy.", icon: "Zap", color: "#F59E0B" },
+  { id: "faith", label: "Faith Culture", description: "Faithfully crafted. Walk by purpose, not by sight.", icon: "Heart", color: "#10B981" },
 ];
 
 // ─── Wearable Categories ────────────────────────────────────────────

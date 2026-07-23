@@ -62,7 +62,7 @@ export const Footer = () => {
           ) : (
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-lg">
               <div className="flex-1 w-full">
-                <label htmlFor="footer-email" className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2 block">Newsletter</label>
+                <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2 block">Join Our Community</p>
                 <input
                   id="footer-email"
                   type="email"
@@ -88,9 +88,10 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-24 sm:h-28 md:h-32 lg:h-40 xl:h-48" />
             <p className="text-white/50 max-w-sm text-sm leading-relaxed">
-              Streetwear Blantyre brings you the culture. Fits picked for your life. Delivered to your door.
+              Premium African streetwear from Blantyre, Malawi. We celebrate people who create culture
+              instead of chasing it. Every piece tells a story.
             </p>
-            <p className="text-sm text-white/80 font-medium">Upgrade your everyday.</p>
+            <p className="text-sm text-white/80 font-medium">Wear Your Story. Build Your Legacy.</p>
 
             <div className="pt-4">
               <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">We accept</p>
@@ -138,7 +139,7 @@ export const Footer = () => {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-white/40">
-          <p>&copy; {new Date().getFullYear()} Streetwear Blantyre. Wear the Culture.</p>
+          <p>&copy; {new Date().getFullYear()} Streetwear Blantyre. Wear Your Story.</p>
           <p className="uppercase tracking-wider">Malawi</p>
         </div>
       </div>

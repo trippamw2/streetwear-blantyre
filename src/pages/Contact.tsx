@@ -6,12 +6,14 @@ const Contact = () => (
   <div className="container py-16 sm:py-24 md:py-32">
     <SEO {...defaultSEO.contact} />
     <div className="max-w-2xl space-y-3 mb-12 sm:mb-16">
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.15em]">Contact</p>
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.15em]">Connect</p>
       <h1 className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl tracking-tight">
         Let's talk.
       </h1>
       <p className="text-gray-500 text-sm sm:text-base sm:text-lg">
-        Fastest way to reach us is WhatsApp. We reply in minutes.
+        We're here to listen to your story. Whether you're an African creator looking to express
+        yourself, a community member wanting to connect, or someone interested in our mission.
+        Fastest way to reach us is WhatsApp — we reply in minutes.
       </p>
     </div>
 
@@ -19,7 +21,7 @@ const Contact = () => (
       <div className="bg-gray-900 p-8 sm:p-10 space-y-5">
         <div>
           <h2 className="font-display font-bold text-2xl sm:text-3xl text-white">WhatsApp us</h2>
-          <p className="text-white/60 mt-2 text-sm">Order, ask anything, get help fast.</p>
+          <p className="text-white/60 mt-2 text-sm">Order, ask anything, get help fast. We respond within minutes.</p>
         </div>
         <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
           <a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer">
@@ -29,7 +31,7 @@ const Contact = () => (
       </div>
 
       <div className="bg-gray-50 p-8 sm:p-10 space-y-5">
-        <h2 className="font-display font-bold text-2xl sm:text-3xl">Other ways to reach us</h2>
+        <h2 className="font-display font-bold text-2xl sm:text-3xl">Other ways to connect</h2>
         <ul className="space-y-5">
           <li>
             <p className="font-semibold text-sm">Phone</p>

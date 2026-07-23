@@ -139,7 +139,7 @@ const AdminDashboard = () => {
       bgColor: "bg-yellow-500/10",
     },
     { 
-      label: "Customers", 
+      label: "Creators", 
       value: stats.totalCustomers.toString(), 
       icon: Users,
       color: "text-purple-500",
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
     <div className="space-y-8">
       <div>
         <h1 className="font-display font-bold text-3xl">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's what's happening.</p>
+        <p className="text-muted-foreground">Welcome back. Here's what's happening with your community.</p>
       </div>
 
       {/* Stats Grid */}

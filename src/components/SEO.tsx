@@ -10,8 +10,8 @@ interface SEOProps {
 
 const SITE_NAME = "Streetwear Blantyre";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "Streetwear fashion in Malawi. T-shirts, hoodies, caps, bracelets, earbuds, stickers, and more. Free delivery over MK 50,000.";
-const DEFAULT_IMAGE = "https://placehold.co/600x600/2563eb/ffffff?text=Streetwear+Blantyre";
+const DEFAULT_DESC = "Premium African streetwear from Blantyre, Malawi. Celebrating creators, builders, dreamers, and cultural keepers. Every piece tells a story. Free delivery over MK 50,000.";
+const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Streetwear+Blantyre";
 
 export const SEO = ({
   title,
@@ -60,31 +60,31 @@ export const SEO = ({
 
 export const defaultSEO = {
   home: {
-    title: "Streetwear Blantyre — Fashion & Streetwear in Malawi",
+    title: "Streetwear Blantyre — Premium African Streetwear",
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop — T-Shirts, Hoodies, Caps, Sneakers & More",
-    description: "Browse t-shirts, hoodies, caps, bracelets, earbuds, stickers, and more. Fast delivery across Malawi.",
+    title: "Shop — Premium African Streetwear Collection",
+    description: "Browse t-shirts, hoodies, caps, bracelets, earbuds, and stickers. Every piece tells a story. Fast delivery across Malawi.",
   },
   combos: {
-    title: "Fashion Bundles — Save 15-25% vs Buying Separate",
-    description: "Curated culture kits for every style. T-shirt + cap + bracelet in one box. Cheaper together. Free delivery.",
+    title: "Culture Kits — Curated Streetwear Bundles",
+    description: "Curated culture kits for every lifestyle. T-shirt + cap + bracelet in one box. Better together. Free delivery over MK 50,000.",
   },
   about: {
-    title: "About Streetwear Blantyre — Malawi's Streetwear Brand",
-    description: "Streetwear Blantyre brings you the culture. Premium fits for the streets. Based in Blantyre, Malawi.",
+    title: "Our Story — Built in Blantyre, Loved Across Africa",
+    description: "Streetwear Blantyre celebrates people who create culture instead of chasing it. Premium African streetwear from Malawi.",
   },
   contact: {
-    title: "Contact Streetwear Blantyre — WhatsApp, Phone & Email",
-    description: "Reach us on WhatsApp, phone or email. Fast replies, fast delivery across Malawi.",
+    title: "Connect — Streetwear Blantyre Community",
+    description: "Reach us on WhatsApp, phone, or email. We're here to listen to your story. Fast replies, fast delivery across Malawi.",
   },
   auth: {
-    title: "Sign In or Create Account — Streetwear Blantyre Rewards",
-    description: "Sign in to checkout, track orders, and earn rewards on every purchase.",
+    title: "Sign In — Join the Streetwear Blantyre Community",
+    description: "Sign in to checkout, track orders, and join our community of creators, builders, and dreamers.",
   },
   checkout: {
-    title: "Checkout — Streetwear Blantyre Malawi",
+    title: "Checkout — Streetwear Blantyre",
     description: "Complete your order. Secure checkout with Airtel Money, TNM Mpamba, and bank transfer.",
   },
   orders: {
@@ -92,20 +92,20 @@ export const defaultSEO = {
     description: "Track your Streetwear Blantyre orders and deliveries.",
   },
   rewards: {
-    title: "Streetwear Blantyre Rewards — Earn Points & Redeem Discounts",
-    description: "Earn points on every purchase. Redeem for discounts. Refer friends and earn more.",
+    title: "Rewards — Earn Points & Join Our Community",
+    description: "Earn points on every purchase. Redeem for discounts. Refer friends and grow our community together.",
   },
   compare: {
     title: "Compare Products — Streetwear Blantyre",
-    description: "Compare streetwear side by side. Find the best fits for your style.",
+    description: "Compare streetwear side by side. Find the pieces that tell your story.",
   },
   faq: {
-    title: "FAQ — Streetwear Blantyre Malawi",
+    title: "FAQ — Streetwear Blantyre",
     description: "Frequently asked questions about ordering, delivery, warranty, and returns.",
   },
   terms: {
     title: "Terms & Conditions — Streetwear Blantyre",
-    description: "Terms and conditions for Streetwear Blantyre online store.",
+    description: "Terms and conditions for Streetwear Blantyre.",
   },
   privacy: {
     title: "Privacy Policy — Streetwear Blantyre",
@@ -116,7 +116,7 @@ export const defaultSEO = {
     description: "30-day return policy. Not happy? Send it back. No questions asked.",
   },
   warranty: {
-    title: "Warranty Information — Streetwear Blantyre",
+    title: "Warranty — Streetwear Blantyre",
     description: "30-day quality guarantee on all items. We replace defective products.",
   },
 };

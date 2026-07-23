@@ -31,35 +31,35 @@ const Home = () => {
         <div className="container grid lg:grid-cols-2 gap-8 sm:gap-12 items-center py-16 sm:py-20 lg:py-28">
           <div className="space-y-6 sm:space-y-8">
             <span className="inline-flex px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-gray-400">
-              Malawi's Streetwear Brand
+              Premium African Streetwear
             </span>
 
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl text-white leading-[0.95] tracking-tight">
-              WEAR THE
+              Wear Your
               <br />
-              CULTURE.
+              Story.
             </h1>
 
             <p className="text-gray-400 text-base sm:text-lg max-w-md leading-relaxed">
-              Your wardrobe should speak for your music, faith, sports, hustle.
-              We curate fits that say what you mean.
+              We celebrate people who create culture instead of chasing it.
+              Every piece tells a story. Every garment builds identity.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3.5 font-semibold text-sm sm:text-base">
-                <Link to="/combos">Shop Bundles</Link>
+                <Link to="/shop">Shop the Collection</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold text-sm sm:text-base">
-                <Link to="/shop">Individual Items</Link>
+                <Link to="/about">Our Story</Link>
               </Button>
             </div>
 
             <div className="flex items-center gap-6 pt-2 text-xs text-gray-500">
-              <span>30-Day Guarantee</span>
+              <span>Made in Malawi</span>
               <span className="w-px h-3 bg-gray-700" />
               <span>Free Delivery 50K+</span>
               <span className="w-px h-3 bg-gray-700" />
-              <span>2,500+ Happy Customers</span>
+              <span>2,500+ Creators</span>
             </div>
           </div>
 
@@ -67,7 +67,7 @@ const Home = () => {
             <div className="relative overflow-hidden">
               <img
                 src={hero}
-                alt="Streetwear Blantyre — wear the culture"
+                alt="Streetwear Blantyre — premium African streetwear from Blantyre, Malawi"
                 className="w-full aspect-[4/5] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-gray-950/40 via-transparent to-transparent" />
@@ -83,7 +83,7 @@ const Home = () => {
             "Free Delivery over MK 50,000",
             "WhatsApp Orders — Quick & Easy",
             "30-Day Guarantee on Everything",
-            "2,500+ Happy Customers",
+            "2,500+ Happy Creators",
           ].map((item) => (
             <p key={item} className="text-xs font-medium text-gray-500 uppercase tracking-wider">{item}</p>
           ))}
@@ -93,7 +93,7 @@ const Home = () => {
       {/* ─── CULTURE PILLARS ─── */}
       <section className="container py-24 sm:py-28">
         <div {...fadeUp}>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Four Cultures. One Brand.</p>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Four Pillars. One Movement.</p>
           <h2 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 mb-10 sm:mb-12">What Moves You?</h2>
         </div>
 
@@ -217,14 +217,14 @@ const Home = () => {
       <section className="bg-gray-950 py-24 sm:py-28">
         <div className="container">
           <div className="text-center mb-10 sm:mb-12">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Testimonials</p>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white">What People Say</h2>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">From Our Community</p>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white">Stories Worth Wearing</h2>
           </div>
           <div className="grid sm:grid-cols-3 gap-6">
             {[
-              { name: "Tendai M.", text: "Best bundles in Malawi. Saved money and got a full outfit delivered to my door.", stars: 5 },
-              { name: "Chimwemwe K.", text: "The quality is unmatched. Every piece feels premium. I keep coming back.", stars: 5 },
-              { name: "Fatsani P.", text: "Wear the Culture isn't just a slogan — it's real. I feel like myself in these fits.", stars: 5 },
+              { name: "Tendai M.", text: "Every time I wear SB, I feel like I belong to something bigger. The quality speaks for itself.", stars: 5 },
+              { name: "Chimwemwe K.", text: "I built my business wearing these fits. Street culture meets hustle — that's SB.", stars: 5 },
+              { name: "Fatsani P.", text: "Wear Your Story isn't just a slogan. I feel like myself in these clothes. Authentic.", stars: 5 },
             ].map((t) => (
               <div key={t.name} className="p-6 bg-white/5">
                 <div className="flex gap-0.5 mb-3">
@@ -244,17 +244,18 @@ const Home = () => {
       <section className="container py-24 sm:py-28">
         <div className="bg-gray-950 p-10 sm:p-14 md:p-20 text-center">
           <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
-            Wear the Culture.<br />Make a Statement.
+            Wear Your Story.<br />Build Your Legacy.
           </h2>
           <p className="text-gray-400 text-base sm:text-lg mt-4 max-w-lg mx-auto">
-            Join 2,500+ Malawians expressing who they are through what they wear.
+            Join 2,500+ creators who express who they are through what they wear.
+            Every piece tells a story. Yours starts here.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
             <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3.5 font-semibold">
-              <Link to="/combos">Get Your Bundle Now</Link>
+              <Link to="/shop">Shop the Collection</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold">
-              <Link to="/shop">Shop Individual Items</Link>
+              <Link to="/about">Our Story</Link>
             </Button>
           </div>
         </div>
