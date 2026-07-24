@@ -148,7 +148,7 @@ const Home = () => {
             {featuredProducts.map((p) => (
               <Link key={p.id} to={`/product/${p.id}`} className="group block bg-white overflow-hidden hover:opacity-95 transition-opacity duration-300">
                 <div className="relative aspect-square overflow-hidden bg-gray-50">
-                  <img src={p.image} alt={p.name} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" />
+                  <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   {p.is_best_seller && (
                     <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold bg-gray-900 text-white uppercase tracking-wider">Best Seller</span>
                   )}

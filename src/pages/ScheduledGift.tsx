@@ -201,7 +201,7 @@ const ScheduledGift = () => {
                   }`}
                 >
                   <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden mb-2">
-                    <img src={product.image} alt={product.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   </div>
                   <p className="text-[11px] text-gray-400 uppercase tracking-wider">{product.category}</p>
                   <p className="text-sm font-semibold text-gray-900 leading-tight mt-0.5">{product.name}</p>

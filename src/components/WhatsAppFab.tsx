@@ -7,7 +7,7 @@ export const WhatsAppFab = () => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="fixed bottom-16 sm:bottom-5 right-4 sm:right-5 z-50">
+    <div className="fixed bottom-5 right-4 sm:right-5 z-50">
       <AnimatePresence>
         {expanded && (
           <motion.div
