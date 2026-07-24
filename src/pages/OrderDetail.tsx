@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { PageSkeleton } from "@/components/Skeletons";
 import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
-import { ArrowLeft, Check, Truck, Package, MessageCircle, Sparkles } from "lucide-react";
+import { redirectToPayChangu } from "@/lib/paychangu";
+import { ArrowLeft, Check, Truck, Package, MessageCircle, Sparkles, CreditCard } from "lucide-react";
 import { format } from "date-fns";
 
 interface OrderDetail {
@@ -127,24 +128,34 @@ const OrderDetailPage = () => {
           {order.notes && <p><span className="text-muted-foreground">Notes:</span> {order.notes}</p>}
         </div>
 
-        {/* Payment Instructions */}
+        {/* Payment */}
         {order.status === "new" && (
           <div className="rounded-2xl bg-gray-50 border border-gray-200 p-5 space-y-3">
-            <p className="font-display font-bold text-lg">
-              Make Payment
-            </p>
+            <p className="font-display font-bold text-lg">Make Payment</p>
             <p className="text-sm text-muted-foreground">
-              Pay <span className="font-bold text-gray-900">{formatMWK(order.total_mwk)}</span> via PayChangu:
+              Pay <span className="font-bold text-gray-900">{formatMWK(order.total_mwk)}</span> securely online.
             </p>
-            <div className="text-sm space-y-2 bg-white p-3 rounded-lg">
-              <p><span className="text-muted-foreground">Airtel Money:</span> <span className="font-mono font-bold">{import.meta.env.VITE_PAYMENT_PHONE || "+265 991 234 567"}</span></p>
-              <p><span className="text-muted-foreground">TNM Mpamba:</span> <span className="font-mono font-bold">{import.meta.env.VITE_PAYMENT_PHONE || "+265 991 234 567"}</span></p>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Use order ref <span className="font-bold">{order.id.slice(0, 8).toUpperCase()}</span> as payment reference.
-            </p>
-            <p className="text-xs text-muted-foreground">
-              We'll confirm your payment via PayChangu.
+            <Button
+              onClick={() =>
+                redirectToPayChangu({
+                  amount: order.total_mwk,
+                  email: user?.email || "customer@wearsb.com",
+                  firstName: order.customer_name.split(" ")[0] || "Customer",
+                  lastName: order.customer_name.split(" ").slice(1).join(" ") || "",
+                  txRef: `SB-${order.id.slice(0, 12)}`,
+                  callbackUrl: `${window.location.origin}/api/payment/callback`,
+                  returnUrl: `${window.location.origin}/orders/${order.id}`,
+                  title: `Order #${order.id.slice(0, 8).toUpperCase()}`,
+                  description: "Streetwear Blantyre order payment",
+                })
+              }
+              className="w-full bg-gray-900 text-white hover:bg-gray-800 rounded-full py-3 font-semibold"
+            >
+              <CreditCard className="h-4 w-4 mr-2" />
+              Pay {formatMWK(order.total_mwk)} via PayChangu
+            </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              Ref: <span className="font-bold">SB-{order.id.slice(0, 8).toUpperCase()}</span>
             </p>
           </div>
         )}

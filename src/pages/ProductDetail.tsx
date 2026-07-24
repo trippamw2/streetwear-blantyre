@@ -237,13 +237,12 @@ const ProductDetail = () => {
         {/* Image Gallery */}
         <div className="space-y-4">
           <motion.div 
-            className="relative rounded-2xl overflow-hidden bg-gray-100 border border-border/60 w-full"
-            style={{ aspectRatio: "1/1", maxHeight: "min(400px, 60vw)" }}
+            className="relative rounded-2xl overflow-hidden bg-gray-100 border border-border/60 w-full aspect-square"
           >
             <img 
               src={selectedImageSrc} 
               alt={product.name} 
-              className="w-full h-full object-contain"
+              className="w-full h-full object-cover"
             />
             {/* Quick Actions */}
             <div className="absolute top-4 right-4 flex gap-2">

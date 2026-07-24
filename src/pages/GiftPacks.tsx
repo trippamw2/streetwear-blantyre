@@ -232,8 +232,8 @@ const GiftPacks = () => {
                   )}
 
                   <div className="bg-gray-50 border-b border-gray-100">
-                    <div className="w-full flex items-center justify-center p-4 sm:p-5 aspect-[4/3] max-h-[280px]">
-                      <img src={kit.image} alt={kit.name} className="w-full h-full object-contain" />
+                    <div className="w-full aspect-[4/3] overflow-hidden">
+                      <img src={kit.image} alt={kit.name} className="w-full h-full object-cover" />
                     </div>
                   </div>
 

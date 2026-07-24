@@ -82,7 +82,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             src={product.image}
             alt={product.name}
             loading="lazy"
-            className="h-full w-full object-contain p-2 sm:p-4 transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           
           {/* Badges */}
