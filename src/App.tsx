@@ -53,6 +53,8 @@ import Verify from "./pages/Verify";
 import Passport from "./pages/Passport";
 import AdminAuthentication from "./pages/admin/Authentication";
 import AdminGifts from "./pages/admin/Gifts";
+import AdminCultureStories from "./pages/admin/CultureStories";
+import AdminLookbooks from "./pages/admin/Lookbooks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GiftTrack from "./pages/GiftTrack";
 
@@ -113,7 +115,6 @@ const App = () => (
                   <Route path="/gifts" element={<ProtectedRoute><GiftPacks /></ProtectedRoute>} />
                   <Route path="/gift" element={<ProtectedRoute><ScheduledGift /></ProtectedRoute>} />
                   <Route path="/gift-track/:token" element={<GiftTrack />} />
-                  <Route path="*" element={<NotFound />} />
                 </Route>
                 {/* Standalone pages (no header/footer) */}
                 <Route path="/verify/:token" element={<Verify />} />
@@ -137,7 +138,11 @@ const App = () => (
                   <Route path="referrals" element={<AdminReferrals />} />
                   <Route path="authentication" element={<AdminAuthentication />} />
                   <Route path="gifts" element={<AdminGifts />} />
+                  <Route path="culture-stories" element={<AdminCultureStories />} />
+                  <Route path="lookbooks" element={<AdminLookbooks />} />
                 </Route>
+                {/* 404 catch-all — must be LAST so it doesn't swallow /admin */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
         </CompareProvider>
