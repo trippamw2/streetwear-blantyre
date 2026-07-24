@@ -350,7 +350,6 @@ Track: https://www.wearsb.com/track/${order.id}`;
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">{format(new Date(order.created_at), "PPp")}</span>
-                    {order.payment_method === "whatsapp" && <span className="text-xs bg-green-100 text-green-700 px-1.5 rounded">WhatsApp</span>}
                     {order.payment_method === "paychangu" && <span className="text-xs bg-gray-100 text-gray-700 px-1.5 rounded">PayChangu</span>}
                     {order.is_paid && <span className="text-xs bg-green-500 text-white px-1.5 rounded">PAID</span>}
                   </div>

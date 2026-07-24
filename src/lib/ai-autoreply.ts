@@ -20,7 +20,7 @@ Streetwear Blantyre Store Information:
 - We sell fashion: t-shirts, hoodies, caps, sneakers, pants, jackets
 - Brands: SB Original, SB Street
 - Delivery: Blantyre (same day), Southern (1-2 days), Central/Northern (2-3 days)
-- Payment: PayChangu (mobile money), WhatsApp bank transfer
+- Payment: PayChangu (online payment gateway)
 - Warranty: 30 days on all items
 - Returns: 7 days with receipt
 - Hours: 8am-6pm Mon-Sat, 9am-4pm Sun

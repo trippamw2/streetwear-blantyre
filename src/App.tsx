@@ -52,6 +52,8 @@ import Loyalty from "./pages/Loyalty";
 import Verify from "./pages/Verify";
 import Passport from "./pages/Passport";
 import AdminAuthentication from "./pages/admin/Authentication";
+import ProtectedRoute from "./components/ProtectedRoute";
+import GiftTrack from "./pages/GiftTrack";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -97,9 +99,9 @@ const App = () => (
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/auth" element={<Auth />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/orders" element={<Orders />} />
-                  <Route path="/orders/:id" element={<OrderDetail />} />
+                  <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+                  <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+                  <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
                   <Route path="/track/:id" element={<DeliveryTracking />} />
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/privacy" element={<Privacy />} />
@@ -107,8 +109,9 @@ const App = () => (
                   <Route path="/returns" element={<Returns />} />
                   <Route path="/warranty" element={<Warranty />} />
                   <Route path="/rewards" element={<Loyalty />} />
-                  <Route path="/gifts" element={<GiftPacks />} />
-                  <Route path="/gift" element={<ScheduledGift />} />
+                  <Route path="/gifts" element={<ProtectedRoute><GiftPacks /></ProtectedRoute>} />
+                  <Route path="/gift" element={<ProtectedRoute><ScheduledGift /></ProtectedRoute>} />
+                  <Route path="/gift-track/:token" element={<GiftTrack />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
                 {/* Standalone pages (no header/footer) */}

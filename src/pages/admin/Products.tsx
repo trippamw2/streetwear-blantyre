@@ -130,6 +130,7 @@ const AdminProducts = () => {
     try {
       const validImages = formData.images.filter(img => img.trim() !== "");
       const productData = {
+        id: editingProduct ? editingProduct.id : `sb-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
         name: formData.name,
         benefit: formData.benefit,
         price: formData.price,

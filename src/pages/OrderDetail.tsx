@@ -144,7 +144,7 @@ const OrderDetailPage = () => {
               Use order ref <span className="font-bold">{order.id.slice(0, 8).toUpperCase()}</span> as payment reference.
             </p>
             <p className="text-xs text-muted-foreground">
-              We'll confirm via WhatsApp once payment is received.
+              We'll confirm your payment via PayChangu.
             </p>
           </div>
         )}
