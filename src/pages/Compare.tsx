@@ -97,7 +97,7 @@ const Compare = () => {
 
             <div className="flex gap-4 mb-4">
               <div className="h-24 w-24 rounded-lg overflow-hidden shrink-0 bg-gray-50">
-                <img src={p.image} alt={p.name} className="h-full w-full object-contain p-2" />
+                <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-sm line-clamp-2 mb-1">{p.name}</p>
@@ -165,7 +165,7 @@ const Compare = () => {
                   <img
                     src={p.image}
                     alt={p.name}
-                    className="w-32 h-32 object-contain mx-auto mb-2"
+                    className="w-32 h-32 object-cover rounded-lg mx-auto mb-2"
                   />
                   <p className="font-medium text-sm line-clamp-2">{p.name}</p>
                 </th>

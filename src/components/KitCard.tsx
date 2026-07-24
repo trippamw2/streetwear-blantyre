@@ -61,11 +61,11 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
               Only {kit.stock} left
             </span>
           )}
-          <div className={`w-full flex items-center justify-center p-4 sm:p-5 ${compact ? "aspect-[4/3] max-h-[240px]" : "aspect-[4/3] max-h-[320px]"}`}>
+          <div className={`w-full aspect-[4/3] overflow-hidden`}>
             <img
               src={kit.image}
               alt={kit.name}
-              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         </div>

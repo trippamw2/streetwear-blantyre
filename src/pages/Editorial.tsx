@@ -114,7 +114,7 @@ const Editorial = () => {
             >
               <div className="relative h-72 sm:h-96 bg-gray-900">
                 {story.hero_image ? (
-                  <img src={story.hero_image} alt={story.title} className="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition-opacity group-hover:scale-105 transition-transform duration-700" />
+                  <img src={story.hero_image} alt={story.title} className="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105" />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-700" />
                 )}

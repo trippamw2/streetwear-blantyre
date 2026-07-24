@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Minus, Plus, ShoppingBag, Check, Truck, ShieldCheck, Star, Heart, Share2, ChevronDown, ChevronUp, Loader2, MessageCircle, Facebook, Instagram, Link2, Zap, GitCompare, Eye, ArrowRight, Package } from "lucide-react";
+import { ArrowLeft, Minus, Plus, ShoppingBag, Check, Truck, ShieldCheck, Star, Heart, Share2, ChevronDown, ChevronUp, Loader2, MessageCircle, Facebook, Link2, Zap, GitCompare, ArrowRight, Package } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { toast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -69,7 +69,7 @@ const ProductDetail = () => {
       }
       setReviews(data || []);
     } catch (err) {
-      console.log("No reviews", err);
+      // No reviews available
     } finally {
       setReviewsLoading(false);
     }
@@ -142,7 +142,7 @@ const ProductDetail = () => {
         return;
       }
       
-      console.log("Review submitted:", data);
+      // Review submitted successfully
       toast({ title: "Review submitted!", description: "Thank you for your feedback" });
       setUserRating(0);
       setUserName("");

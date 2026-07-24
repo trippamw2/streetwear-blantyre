@@ -51,7 +51,7 @@ const Checkout = () => {
         data?.forEach(i => map.set(i.product_id, i.quantity));
         setStockMap(map);
       })
-      .catch(() => {});
+      .catch((err) => console.warn("Failed to fetch stock:", err));
   }, [items]);
 
   // Calculate totals
