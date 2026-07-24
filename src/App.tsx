@@ -57,6 +57,11 @@ import AdminCultureStories from "./pages/admin/CultureStories";
 import AdminLookbooks from "./pages/admin/Lookbooks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GiftTrack from "./pages/GiftTrack";
+import Editorial from "./pages/Editorial";
+import EditorialPost from "./pages/EditorialPost";
+import Culture from "./pages/Culture";
+import Lookbooks from "./pages/Lookbooks";
+import LookbookDetail from "./pages/LookbookDetail";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -115,6 +120,11 @@ const App = () => (
                   <Route path="/gifts" element={<ProtectedRoute><GiftPacks /></ProtectedRoute>} />
                   <Route path="/gift" element={<ProtectedRoute><ScheduledGift /></ProtectedRoute>} />
                   <Route path="/gift-track/:token" element={<GiftTrack />} />
+                  <Route path="/editorial" element={<Editorial />} />
+                  <Route path="/editorial/:slug" element={<EditorialPost />} />
+                  <Route path="/culture/:pillar" element={<Culture />} />
+                  <Route path="/lookbook" element={<Lookbooks />} />
+                  <Route path="/lookbook/:slug" element={<LookbookDetail />} />
                 </Route>
                 {/* Standalone pages (no header/footer) */}
                 <Route path="/verify/:token" element={<Verify />} />

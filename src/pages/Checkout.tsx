@@ -204,10 +204,6 @@ const Checkout = () => {
       }));
       await supabase.from("order_items").insert(orderItems);
 
-      // Use loyalty points - deduct redeemed points
-      if (usePoints && loyalty && program) {
-      }
-
       // Award loyalty points for purchase (1 point per 1000 MWK)
       if (user?.id && subtotal >= 1000) {
         const pointsToEarn = Math.floor(subtotal / 1000);

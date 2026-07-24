@@ -95,6 +95,8 @@ const AdminProducts = () => {
     supplier_id: "",
     stock_quantity: 0,
     culture_pillar: "",
+    culture_story: "",
+    culture_context: "",
   });
 
   useEffect(() => {
@@ -147,6 +149,8 @@ const AdminProducts = () => {
         supplier_id: formData.supplier_id || null,
         stock_quantity: formData.stock_quantity || 0,
         culture_pillar: formData.culture_pillar || null,
+        culture_story: formData.culture_story || null,
+        culture_context: formData.culture_context || null,
       };
 
       if (editingProduct) {
@@ -241,6 +245,8 @@ const AdminProducts = () => {
       supplier_id: product.supplier_id || "",
       stock_quantity: product.stock_quantity || 0,
       culture_pillar: (product as any).culture_pillar || "",
+      culture_story: (product as any).culture_story || "",
+      culture_context: (product as any).culture_context || "",
     });
     setIsDialogOpen(true);
   };
@@ -261,6 +267,8 @@ const AdminProducts = () => {
       supplier_id: "",
       stock_quantity: 0,
       culture_pillar: "",
+      culture_story: "",
+      culture_context: "",
     });
   };
 
@@ -503,6 +511,26 @@ const AdminProducts = () => {
                     <option key={p.id} value={p.id}>{p.label}</option>
                   ))}
                 </select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Culture Story</Label>
+                <Textarea
+                  value={formData.culture_story}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, culture_story: e.target.value }))}
+                  placeholder="Editorial narrative about this piece — the story behind the culture..."
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Culture Context</Label>
+                <Textarea
+                  value={formData.culture_context}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, culture_context: e.target.value }))}
+                  placeholder="Brief context — how this piece connects to the culture pillar..."
+                  rows={2}
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">

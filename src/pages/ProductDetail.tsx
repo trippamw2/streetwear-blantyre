@@ -552,6 +552,32 @@ const ProductDetail = () => {
         </div>
       </div>
 
+      {/* Culture Story Section */}
+      {product.culture_story && (
+        <div className="mt-16 rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-6 sm:p-8">
+          <div className="flex items-center gap-2 mb-4">
+            {product.culture_pillar && (
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                product.culture_pillar === "music" ? "bg-purple-100 text-purple-700" :
+                product.culture_pillar === "sports" ? "bg-green-100 text-green-700" :
+                product.culture_pillar === "faith" ? "bg-amber-100 text-amber-700" :
+                "bg-red-100 text-red-700"
+              }`}>
+                {product.culture_pillar}
+              </span>
+            )}
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest">The Story</span>
+          </div>
+          <h2 className="font-display font-bold text-xl sm:text-2xl mb-3">Behind This Piece</h2>
+          <p className="text-gray-600 leading-relaxed whitespace-pre-line">{product.culture_story}</p>
+          {product.culture_context && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <p className="text-sm text-gray-500 italic">{product.culture_context}</p>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Reviews Section */}
       <div className="mt-16">
         <h2 className="font-display font-bold text-2xl mb-6">Customer Reviews</h2>
