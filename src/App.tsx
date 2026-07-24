@@ -52,6 +52,7 @@ import Loyalty from "./pages/Loyalty";
 import Verify from "./pages/Verify";
 import Passport from "./pages/Passport";
 import AdminAuthentication from "./pages/admin/Authentication";
+import AdminGifts from "./pages/admin/Gifts";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GiftTrack from "./pages/GiftTrack";
 
@@ -135,6 +136,7 @@ const App = () => (
                   <Route path="loyalty" element={<AdminLoyalty />} />
                   <Route path="referrals" element={<AdminReferrals />} />
                   <Route path="authentication" element={<AdminAuthentication />} />
+                  <Route path="gifts" element={<AdminGifts />} />
                 </Route>
               </Routes>
             </BrowserRouter>

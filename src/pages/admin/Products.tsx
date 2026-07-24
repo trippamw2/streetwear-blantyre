@@ -150,7 +150,11 @@ const AdminProducts = () => {
       };
 
       if (editingProduct) {
-        await supabase.from("products").update(productData).eq("id", editingProduct.id);
+        const { error: updateError } = await supabase.from("products").update(productData).eq("id", editingProduct.id);
+        if (updateError) {
+          toast({ title: "Error updating product", description: updateError.message, variant: "destructive" });
+          return;
+        }
         
         // Delete old types
         const { error: deleteError } = await supabase.from("product_types").delete().eq("product_id", editingProduct.id);
@@ -174,19 +178,27 @@ const AdminProducts = () => {
         
         toast({ title: "Product updated!" });
       } else {
-        const { data: newProduct } = await supabase
+        const { data: newProduct, error: insertError } = await supabase
           .from("products")
           .insert(productData)
           .select()
           .single();
         
+        if (insertError) {
+          toast({ title: "Error creating product", description: insertError.message, variant: "destructive" });
+          return;
+        }
+        
         if (newProduct) {
           for (let i = 0; i < formData.types.length; i++) {
-            await supabase.from("product_types").insert({
+            const { error: typeError } = await supabase.from("product_types").insert({
               product_id: newProduct.id,
               name: formData.types[i].name,
               sort_order: i,
             });
+            if (typeError) {
+              toast({ title: "Error saving types", description: typeError.message, variant: "destructive" });
+            }
           }
         }
         
