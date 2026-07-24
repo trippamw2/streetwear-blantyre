@@ -91,7 +91,7 @@ export const Footer = () => {
               Premium African streetwear from Blantyre, Malawi. We celebrate people who create culture
               instead of chasing it. Every piece tells a story.
             </p>
-            <p className="text-sm text-white/80 font-medium">Wear Your Story. Build Your Legacy.</p>
+            <p className="text-sm text-white/80 font-medium">Wear the Culture. Build Your Legacy.</p>
 
             <div className="pt-4">
               <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">We accept</p>
@@ -108,8 +108,10 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold text-sm text-white mb-4">Shop</h4>
             <ul className="space-y-2.5 text-sm text-white/50">
-              <li><Link to="/combos" className="hover:text-white transition-colors">Fashion Bundles</Link></li>
-              <li><Link to="/shop" className="hover:text-white transition-colors">All Products</Link></li>
+              <li><Link to="/gifts" className="hover:text-white transition-colors">Gift Packs</Link></li>
+              <li><Link to="/gift" className="hover:text-white transition-colors">Schedule a Gift</Link></li>
+              <li><Link to="/combos" className="hover:text-white transition-colors">Culture Packs</Link></li>
+              <li><Link to="/shop" className="hover:text-white transition-colors">Culture Pieces</Link></li>
               <li><Link to="/shop?cat=t-shirts" className="hover:text-white transition-colors">T-Shirts</Link></li>
               <li><Link to="/shop?cat=hoodies" className="hover:text-white transition-colors">Hoodies</Link></li>
               <li><Link to="/shop?cat=caps" className="hover:text-white transition-colors">Caps</Link></li>
@@ -139,7 +141,7 @@ export const Footer = () => {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-white/40">
-          <p>&copy; {new Date().getFullYear()} Streetwear Blantyre. Wear Your Story.</p>
+          <p>&copy; {new Date().getFullYear()} Streetwear Blantyre. Wear the Culture.</p>
           <p className="uppercase tracking-wider">Malawi</p>
         </div>
       </div>

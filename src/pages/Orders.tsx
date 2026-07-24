@@ -63,7 +63,7 @@ const Orders = () => {
         <div className="text-center py-20 space-y-4 rounded-3xl bg-gray-50 border border-gray-100">
           <Package className="h-12 w-12 mx-auto text-gray-400" />
           <p className="text-gray-500">No orders yet.</p>
-          <Button asChild variant="hero"><Link to="/shop">Start shopping</Link></Button>
+          <Button asChild variant="hero"><Link to="/shop">Discover Culture</Link></Button>
         </div>
       ) : (
         <div className="space-y-3">

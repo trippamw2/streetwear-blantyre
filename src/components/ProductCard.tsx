@@ -33,7 +33,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     const fullName = `${product.name} (${typeName})`;
     const finalPrice = isOnSale && discountPercent > 0 ? product.price * (1 - discountPercent / 100) : product.price;
     add({ productKey: `${product.id}-${selectedType}`, name: fullName, price: finalPrice, image: product.image });
-    toast({ title: "Added to cart", description: fullName });
+    toast({ title: "Added to your experience", description: fullName });
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -229,7 +229,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           </div>
 
           <Button onClick={handleAdd} variant="hero" size="sm" className="w-full text-xs h-9" disabled={!isInStock}>
-            {isInStock ? "Add to Cart" : "Sold Out"}
+            {isInStock ? "Wear the Culture" : "Sold Out"}
           </Button>
         </div>
       </Link>

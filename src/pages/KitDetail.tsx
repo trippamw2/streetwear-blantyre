@@ -135,7 +135,7 @@ const KitDetail = () => {
                     "Added!"
                   ) : (
                     <>
-                      <ShoppingBag className="h-4 w-4 mr-2" /> Add to Cart
+                      <ShoppingBag className="h-4 w-4 mr-2" /> Wear the Culture
                     </>
                   )}
                 </Button>

@@ -16,7 +16,8 @@ import {
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/combos", label: "Fashion Bundles" },
+  { to: "/combos", label: "Culture Packs" },
+  { to: "/gifts", label: "Gift the Culture" },
   { to: "/shop", label: "Shop" },
   { to: "/rewards", label: "Rewards" },
   { to: "/contact", label: "Contact" },

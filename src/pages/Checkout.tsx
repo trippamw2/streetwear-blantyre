@@ -131,7 +131,7 @@ const Checkout = () => {
       toast({ title: "Please fill all fields", variant: "destructive" });
       return;
     }
-    if (items.length === 0) { toast({ title: "Cart is empty", variant: "destructive" }); return; }
+    if (items.length === 0) { toast({ title: "Experience is empty", variant: "destructive" }); return; }
 
     // Validate phone number
     const cleanPhone = formData.phone.replace(/[^0-9]/g, "");
@@ -274,11 +274,11 @@ const Checkout = () => {
     return (
       <div className="container py-12 text-center">
         <CreditCard className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-        <h2 className="text-xl font-bold mb-2">Your cart is empty</h2>
-        <p className="text-gray-500 mb-6">Grab a kit. Better value, one box, delivered.</p>
+        <h2 className="text-xl font-bold mb-2">Your experience is empty</h2>
+        <p className="text-gray-500 mb-6">Grab a culture pack. Better value, one box, delivered.</p>
         <div className="flex gap-3 justify-center">
-          <Button asChild><Link to="/combos">View Fashion Bundles</Link></Button>
-          <Button asChild variant="outline"><Link to="/shop">Shop Items</Link></Button>
+          <Button asChild><Link to="/combos">View Culture Packs</Link></Button>
+          <Button asChild variant="outline"><Link to="/shop">Browse Culture Pieces</Link></Button>
         </div>
       </div>
     );
@@ -291,7 +291,7 @@ const Checkout = () => {
         <ArrowLeft className="h-4 w-4" /> Back to shop
       </Link>
 
-      <h1 className="font-display font-bold text-2xl sm:text-3xl mb-6">Checkout</h1>
+      <h1 className="font-display font-bold text-2xl sm:text-3xl mb-6">Complete Your Experience</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Contact Info */}
@@ -408,7 +408,7 @@ const Checkout = () => {
               <ul className="text-xs text-gray-500 space-y-1.5">
                 <li>After placing your order, you will be redirected to PayChangu.</li>
                 <li>Pay with Airtel Money, TNM Mpamba, Visa or Mastercard.</li>
-                <li>You will be returned to your order page once payment is complete.</li>
+                <li>You will be returned to your experience page once payment is complete.</li>
               </ul>
             </div>
           )}

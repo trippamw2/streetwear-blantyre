@@ -64,12 +64,12 @@ export const defaultSEO = {
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop — Premium African Streetwear Collection",
-    description: "Browse t-shirts, hoodies, caps, bracelets, earbuds, and stickers. Every piece tells a story. Fast delivery across Malawi.",
+    title: "Culture Pieces — Premium African Streetwear",
+    description: "Discover culture pieces — t-shirts, hoodies, caps, bracelets, earbuds, and stickers. Every piece tells a story. Fast delivery across Malawi.",
   },
   combos: {
-    title: "Culture Kits — Curated Streetwear Bundles",
-    description: "Curated culture kits for every lifestyle. T-shirt + cap + bracelet in one box. Better together. Free delivery over MK 50,000.",
+    title: "Culture Packs — Curated Streetwear Bundles",
+    description: "Curated culture packs for every lifestyle. T-shirt + cap + bracelet in one box. Better together. Free delivery over MK 50,000.",
   },
   about: {
     title: "Our Story — Built in Blantyre, Loved Across Africa",
@@ -84,8 +84,8 @@ export const defaultSEO = {
     description: "Sign in to checkout, track orders, and join our community of creators, builders, and dreamers.",
   },
   checkout: {
-    title: "Checkout — Streetwear Blantyre",
-    description: "Complete your order. Secure checkout with Airtel Money, TNM Mpamba, and bank transfer.",
+    title: "Complete Your Experience — Streetwear Blantyre",
+    description: "Complete your experience. Secure checkout with Airtel Money, TNM Mpamba, and bank transfer.",
   },
   orders: {
     title: "My Orders — Streetwear Blantyre",
@@ -96,8 +96,8 @@ export const defaultSEO = {
     description: "Earn points on every purchase. Redeem for discounts. Refer friends and grow our community together.",
   },
   compare: {
-    title: "Compare Products — Streetwear Blantyre",
-    description: "Compare streetwear side by side. Find the pieces that tell your story.",
+    title: "Compare Culture Pieces — Streetwear Blantyre",
+    description: "Compare culture pieces side by side. Find the pieces that express your story.",
   },
   faq: {
     title: "FAQ — Streetwear Blantyre",
@@ -118,5 +118,13 @@ export const defaultSEO = {
   warranty: {
     title: "Warranty — Streetwear Blantyre",
     description: "30-day quality guarantee on all items. We replace defective products.",
+  },
+  giftPacks: {
+    title: "Gift Packs — Send the Culture",
+    description: "Gift a curated Culture Pack. Premium wrapping, personal message, delivered in Blantyre. The perfect gift for any occasion.",
+  },
+  scheduledGift: {
+    title: "Schedule a Gift — Streetwear Blantyre",
+    description: "Gift a Culture Piece for any occasion. Add a personal message and choose the delivery date. Premium wrapping included.",
   },
 };

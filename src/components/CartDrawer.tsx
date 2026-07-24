@@ -37,11 +37,11 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
               <ShoppingBag className="h-8 w-8 text-gray-300" />
             </div>
             <div>
-              <p className="font-semibold text-lg">Your cart is empty</p>
-              <p className="text-sm text-muted-foreground mt-1">Add items to get started</p>
+              <p className="font-semibold text-lg">Your experience is empty</p>
+              <p className="text-sm text-muted-foreground mt-1">Discover culture pieces to get started</p>
             </div>
             <Button asChild variant="hero" size="lg" onClick={() => setOpen(false)}>
-              <Link to="/shop">Browse Products</Link>
+              <Link to="/shop">Discover Culture Pieces</Link>
             </Button>
           </div>
         ) : (
@@ -121,7 +121,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
                 onClick={() => setOpen(false)}
               >
                 <Link to="/checkout" className="flex items-center justify-center gap-2">
-                  Checkout <ArrowRight className="h-4 w-4" />
+                  Complete Your Experience <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>

@@ -35,9 +35,9 @@ const Home = () => {
             </span>
 
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl text-white leading-[0.95] tracking-tight">
-              Wear Your
+              Wear the
               <br />
-              Story.
+              Culture.
             </h1>
 
             <p className="text-gray-400 text-base sm:text-lg max-w-md leading-relaxed">
@@ -47,7 +47,7 @@ const Home = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3.5 font-semibold text-sm sm:text-base">
-                <Link to="/shop">Shop the Collection</Link>
+                <Link to="/shop">Discover Your Culture</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold text-sm sm:text-base">
                 <Link to="/about">Our Story</Link>
@@ -140,7 +140,7 @@ const Home = () => {
           <div className="flex items-end justify-between mb-8 sm:mb-10">
             <div>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Featured</p>
-              <h2 className="font-display font-bold text-2xl sm:text-3xl text-gray-900">Top Picks</h2>
+              <h2 className="font-display font-bold text-2xl sm:text-3xl text-gray-900">Culture Picks</h2>
             </div>
             <Link to="/shop" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">View All</Link>
           </div>
@@ -170,7 +170,7 @@ const Home = () => {
           <div className="flex items-end justify-between mb-8 sm:mb-10">
             <div>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Bundles</p>
-              <h2 className="font-display font-bold text-2xl sm:text-3xl text-gray-900">Culture Kits</h2>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 mb-10 sm:mb-12">Culture Packs</h2>
             </div>
             <Link to="/combos" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">View All</Link>
           </div>
@@ -200,9 +200,9 @@ const Home = () => {
 
         <div className="grid sm:grid-cols-3 gap-10 max-w-3xl mx-auto">
           {[
-            { step: "01", title: "Pick Your Bundle", desc: "Student, work, travel, or casual. Pick the one that fits your vibe." },
-            { step: "02", title: "Order", desc: "Checkout online or order in 30 seconds on WhatsApp." },
-            { step: "03", title: "Wear It", desc: "Fast delivery across Malawi. Love it or send it back within 30 days." },
+            { step: "01", title: "Pick Your Culture Pack", desc: "Student, work, travel, or casual. Pick the one that fits your vibe." },
+            { step: "02", title: "Wear the Culture", desc: "Complete your experience online or order in 30 seconds on WhatsApp." },
+            { step: "03", title: "Share Your Story", desc: "Fast delivery across Malawi. Love it or send it back within 30 days." },
           ].map((item) => (
             <div key={item.step} className="text-center">
               <span className="text-sm font-semibold text-gray-300 tracking-wider">{item.step}</span>
@@ -224,7 +224,7 @@ const Home = () => {
             {[
               { name: "Tendai M.", text: "Every time I wear SB, I feel like I belong to something bigger. The quality speaks for itself.", stars: 5 },
               { name: "Chimwemwe K.", text: "I built my business wearing these fits. Street culture meets hustle — that's SB.", stars: 5 },
-              { name: "Fatsani P.", text: "Wear Your Story isn't just a slogan. I feel like myself in these clothes. Authentic.", stars: 5 },
+              { name: "Fatsani P.", text: "Wear the Culture isn't just a slogan. I feel like myself in these clothes. Authentic.", stars: 5 },
             ].map((t) => (
               <div key={t.name} className="p-6 bg-white/5">
                 <div className="flex gap-0.5 mb-3">
@@ -244,7 +244,7 @@ const Home = () => {
       <section className="container py-24 sm:py-28">
         <div className="bg-gray-950 p-10 sm:p-14 md:p-20 text-center">
           <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
-            Wear Your Story.<br />Build Your Legacy.
+            Wear the Culture.<br />Build Your Legacy.
           </h2>
           <p className="text-gray-400 text-base sm:text-lg mt-4 max-w-lg mx-auto">
             Join 2,500+ creators who express who they are through what they wear.
@@ -252,7 +252,7 @@ const Home = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
             <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3.5 font-semibold">
-              <Link to="/shop">Shop the Collection</Link>
+              <Link to="/shop">Wear the Culture</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold">
               <Link to="/about">Our Story</Link>

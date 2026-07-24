@@ -75,7 +75,7 @@ const Auth = () => {
           await applyReferralCode(referredBy, data.user.id);
           toast({ title: "Account created!", description: "You got K200 off with referral!" });
         } else {
-          toast({ title: "Account created!", description: "Start shopping to earn points!" });
+          toast({ title: "Account created!", description: "Start your culture journey to earn points!" });
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email: e1.data, password: p1.data });

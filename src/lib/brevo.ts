@@ -7,7 +7,7 @@ const BREVO_PROXY_URL = "/api/send-email";
 // Brand configuration
 const BRAND = {
   name: "Streetwear Blantyre",
-  tagline: "Wear Your Story",
+  tagline: "Wear the Culture",
   email: "orders@wearsb.com",
   website: "https://www.wearsb.com",
   useLogoImage: false,

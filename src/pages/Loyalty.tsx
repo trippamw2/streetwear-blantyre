@@ -37,7 +37,7 @@ const Loyalty = () => {
               <Link to="/auth">Sign In</Link>
             </Button>
             <Button asChild size="lg" className="bg-gray-900">
-              <Link to="/shop">Shop Now</Link>
+              <Link to="/shop">Discover Culture</Link>
             </Button>
           </div>
         </div>
@@ -254,7 +254,7 @@ const Loyalty = () => {
           <div className="p-6 sm:p-8 text-center">
             <Clock className="h-8 sm:h-10 w-8 sm:w-10 mx-auto text-gray-300 mb-3" />
             <p className="text-gray-500">No activity yet</p>
-            <p className="text-sm text-gray-400">Start shopping to earn points!</p>
+            <p className="text-sm text-gray-400">Start your culture journey to earn points!</p>
           </div>
         )}
       </div>

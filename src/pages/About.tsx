@@ -153,7 +153,7 @@ const About = () => (
           Your story deserves clothing that reflects who you are. Wear your truth.
         </p>
         <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-10 py-3.5 font-semibold">
-          <Link to="/shop">Shop the Collection <ArrowRight className="h-5 w-5 ml-2" /></Link>
+          <Link to="/shop">Discover Your Culture <ArrowRight className="h-5 w-5 ml-2" /></Link>
         </Button>
       </div>
     </section>

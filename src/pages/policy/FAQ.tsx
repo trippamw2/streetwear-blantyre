@@ -10,7 +10,7 @@ const FAQ = () => {
     {
       category: "Orders & Shipping",
       items: [
-        { q: "How do I place an order?", a: "Browse our products, add items to cart, and proceed to checkout. You'll receive a confirmation via WhatsApp." },
+        { q: "How do I place an order?", a: "Browse our culture pieces, add items to your experience, and complete your experience. You'll receive a confirmation via WhatsApp." },
         { q: "How long does delivery take?", a: "Standard delivery: 3-5 business days. Express delivery: 1-2 business days. Delivery times may vary by location in Malawi." },
         { q: "Do you deliver everywhere in Malawi?", a: "Yes! We deliver to all districts in Malawi including Lilongwe, Blantyre, Mzuzu, Zomba, and rural areas." },
       ]

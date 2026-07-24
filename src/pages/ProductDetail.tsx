@@ -175,7 +175,7 @@ const ProductDetail = () => {
     const typeName = product.types.find(t => t.id === selectedType)?.name || product.types[0]?.name || "";
     const fullName = `${product.name} (${typeName})`;
     add({ productKey: `${product.id}-${selectedType}`, name: fullName, price: product.price, image: product.image }, qty);
-    toast({ title: "Added to cart", description: `${qty} Ã— ${fullName}` });
+    toast({ title: "Added to your experience", description: `${qty} Ã— ${fullName}` });
   };
 
   const handleWishlist = () => {
@@ -485,7 +485,7 @@ const ProductDetail = () => {
               <button onClick={() => setQty((q) => q + 1)} className="p-3 hover:text-primary" aria-label="Increase"><Plus className="h-4 w-4" /></button>
             </div>
             <Button onClick={handleAdd} variant="hero" size="lg" className="flex-1">
-              <ShoppingBag className="h-5 w-5" /> Add to cart
+              <ShoppingBag className="h-5 w-5" /> Wear the Culture
             </Button>
             <Button 
               onClick={() => {
@@ -497,7 +497,7 @@ const ProductDetail = () => {
               size="lg" 
               className="flex-1 bg-gray-900 hover:bg-gray-800"
             >
-              <Zap className="h-5 w-5" /> Buy Now
+              <Zap className="h-5 w-5" /> Gift the Culture
             </Button>
           </div>
 
@@ -509,7 +509,7 @@ const ProductDetail = () => {
               <button onClick={() => setQty((q) => q + 1)} className="p-1.5 sm:p-2" aria-label="Increase"><Plus className="h-3.5 sm:h-4 w-3.5 sm:w-4" /></button>
             </div>
             <Button onClick={handleAdd} variant="hero" className="flex-1 py-2 text-xs sm:text-sm whitespace-nowrap">
-              <ShoppingBag className="h-3.5 sm:h-4 w-3.5 sm:w-4" /> Add to Cart
+              <ShoppingBag className="h-3.5 sm:h-4 w-3.5 sm:w-4" /> Wear the Culture
             </Button>
           </div>
         </div>

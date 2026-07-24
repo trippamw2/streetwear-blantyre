@@ -110,7 +110,7 @@ const Shop = () => {
       </div>
 
       <div className="max-w-3xl space-y-2 sm:space-y-3 mb-4 sm:mb-8">
-        <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight">Shop Streetwear</h1>
+        <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight">Culture Pieces</h1>
         <p className="text-gray-500 text-sm sm:text-base">Single pieces. Build your style, one item at a time.</p>
       </div>
 

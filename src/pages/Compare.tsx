@@ -24,7 +24,7 @@ const Compare = () => {
         : product.price,
       image: product.image,
     });
-    toast({ title: "Added to cart!", description: product.name });
+    toast({ title: "Added to your experience", description: product.name });
   };
 
   if (compareList.length === 0) {
@@ -142,7 +142,7 @@ const Compare = () => {
               className="w-full mt-4 bg-gray-900 hover:bg-gray-800"
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
-              Add to Cart
+              Wear the Culture
             </Button>
           </div>
         ))}
@@ -260,7 +260,7 @@ const Compare = () => {
                     className="bg-gray-900 hover:bg-gray-800"
                   >
                     <ShoppingBag className="h-4 w-4 mr-2" />
-                    Add to Cart
+                    Wear the Culture
                   </Button>
                 </td>
               ))}

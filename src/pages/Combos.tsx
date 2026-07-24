@@ -38,7 +38,7 @@ const Combos = () => {
                 </Button>
               </a>
               <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 w-full sm:w-auto px-8 py-3.5 font-semibold">
-                <Link to="/shop">Browse Individual Items</Link>
+                <Link to="/shop">Browse Culture Pieces</Link>
               </Button>
             </div>
           </div>

@@ -25,6 +25,8 @@ import Orders from "./pages/Orders";
 import OrderDetail from "./pages/OrderDetail";
 import NotFound from "./pages/NotFound.tsx";
 import DeliveryTracking from "./pages/DeliveryTracking";
+import GiftPacks from "./pages/GiftPacks";
+import ScheduledGift from "./pages/ScheduledGift";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
 import AdminOrders from "./pages/admin/Orders";
@@ -105,6 +107,8 @@ const App = () => (
                   <Route path="/returns" element={<Returns />} />
                   <Route path="/warranty" element={<Warranty />} />
                   <Route path="/rewards" element={<Loyalty />} />
+                  <Route path="/gifts" element={<GiftPacks />} />
+                  <Route path="/gift" element={<ScheduledGift />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
                 {/* Standalone pages (no header/footer) */}
