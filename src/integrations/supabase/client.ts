@@ -33,23 +33,13 @@ if (isConfigured) {
     },
   });
 } else {
-  // Mock supabase client for build/test environments
-  // This prevents the app from crashing during build
-  console.warn('⚠️ Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel env vars.');
+  // Fatal: Supabase not configured — show error instead of silent mock
+  console.error('Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.');
   
-  // Create a mock that returns empty data
-  supabase = {
-    from: () => ({
-      select: () => Promise.resolve({ data: [], error: null }),
-      insert: () => Promise.resolve({ data: null, error: null }),
-      update: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
-      delete: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
-    }),
-    auth: {
-      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-    },
-  } as any;
+  // Throw so the app fails loudly instead of silently showing empty data
+  throw new Error(
+    'Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables.'
+  );
 }
 
 export { supabase };

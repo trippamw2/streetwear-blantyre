@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { useCart, FREE_DELIVERY_THRESHOLD_MWK } from "@/contexts/CartContext";
+import { useCart } from "@/contexts/CartContext";
+import { useDeliverySettings } from "@/hooks/useDeliverySettings";
 import { formatMWK } from "@/data/products";
 import { ShoppingBag, Minus, Plus, Trash2, ArrowRight, X } from "lucide-react";
 import { useState } from "react";
 
 export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
   const { items, subtotal, deliveryFee, total, count, setQuantity, remove } = useCart();
+  const { settings } = useDeliverySettings();
   const [open, setOpen] = useState(false);
 
   return (
@@ -102,7 +104,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
                 </div>
                 {deliveryFee > 0 && (
                   <p className="text-xs text-muted-foreground text-center">
-                    Free delivery on orders over {formatMWK(FREE_DELIVERY_THRESHOLD_MWK)}
+                    Free delivery on orders over {formatMWK(settings.freeDeliveryThreshold)}
                   </p>
                 )}
                 <div className="flex items-center justify-between font-bold text-lg border-t border-border/60 pt-2">
