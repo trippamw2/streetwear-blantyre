@@ -191,7 +191,7 @@ const Checkout = () => {
         await sendOrderConfirmationEmail(emailParams);
         await sendAdminNotificationEmail({ ...emailParams, type: "payment" as const });
       } catch (e) {
-        console.log("Email sending failed (non-critical):", e);
+        console.warn("Email sending failed (non-critical):", e);
       }
 
       // Add order items

@@ -101,7 +101,6 @@ export function useProducts() {
         culture_pillar_color: culturePillars.find(cp => cp.id === p.culture_pillar)?.color || "#8B5CF6",
       }));
 
-      console.log("Products loaded from DB:", mappedProducts.length);
       setProducts(mappedProducts);
     } catch (err) {
       console.error("Products fetch error:", err);

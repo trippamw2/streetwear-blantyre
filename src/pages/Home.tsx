@@ -7,6 +7,7 @@ import { KitCard } from "@/components/KitCard";
 import { KitCardSkeleton } from "@/components/Skeletons";
 import { SEO, defaultSEO } from "@/components/SEO";
 import { Star } from "lucide-react";
+import { motion } from "framer-motion";
 import hero from "@/assets/hero-lifestyle.jpg";
 
 const fadeUp = {
@@ -92,10 +93,10 @@ const Home = () => {
 
       {/* ─── CULTURE PILLARS ─── */}
       <section className="container py-24 sm:py-28">
-        <div {...fadeUp}>
+        <motion.div {...fadeUp}>
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Four Pillars. One Movement.</p>
           <h2 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 mb-10 sm:mb-12">What Moves You?</h2>
-        </div>
+        </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {culturePillars.map((pillar) => (
@@ -114,10 +115,10 @@ const Home = () => {
       {/* ─── WHY BUNDLES ─── */}
       <section className="bg-gray-50 py-24 sm:py-28">
         <div className="container">
-          <div {...fadeUp}>
+          <motion.div {...fadeUp}>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Why Bundles</p>
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 mb-10 sm:mb-12">Better Than Buying Separate</h2>
-          </div>
+          </motion.div>
 
           <div className="grid sm:grid-cols-3 gap-10">
             {[
@@ -193,10 +194,10 @@ const Home = () => {
 
       {/* ─── HOW IT WORKS ─── */}
       <section className="container py-24 sm:py-28">
-        <div {...fadeUp}>
+        <motion.div {...fadeUp}>
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">How It Works</p>
           <h2 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 mb-10 sm:mb-12">Three Steps</h2>
-        </div>
+        </motion.div>
 
         <div className="grid sm:grid-cols-3 gap-10 max-w-3xl mx-auto">
           {[

@@ -16,7 +16,7 @@ interface ProductCardProps {
 export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const { add } = useCart();
   const { addToCompare, isInCompare } = useCompare();
-  const [selectedType, setSelectedType] = useState(product.types[0]?.id || "");
+  const [selectedType, setSelectedType] = useState(product.types?.[0]?.id || "");
   const [isWishlisted, setIsWishlisted] = useState(false);
   
   // Get sale/discount from product data (admin controlled)
@@ -46,8 +46,8 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     });
   };
 
-  const visibleTypes = product.types.slice(0, 3);
-  const hiddenTypes = product.types.length > 3 ? product.types.slice(3) : [];
+  const visibleTypes = (product.types || []).slice(0, 3);
+  const hiddenTypes = (product.types || []).length > 3 ? (product.types || []).slice(3) : [];
   const displayPrice = isOnSale && discountPercent > 0 ? product.price * (1 - discountPercent / 100) : product.price;
   const originalPrice = product.price;
   const stockQty = product.stock ?? 10;
@@ -189,7 +189,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           )}
 
           {/* Type selector */}
-          {product.types.length > 0 && (
+          {(product.types || []).length > 0 && (
             <div className="flex gap-1.5 flex-wrap">
               {visibleTypes.map((type) => (
                 <button

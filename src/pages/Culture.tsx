@@ -61,13 +61,19 @@ interface Product {
   benefit: string;
   price: number;
   image: string;
-  images: string[];
+  gallery_images: string[];
   category: string;
   culture_pillar: string | null;
+  culture_pillar_color?: string;
   brand: string | null;
   is_active: boolean;
   is_featured: boolean;
   is_best_seller: boolean;
+  is_on_sale?: boolean;
+  discount_percent?: number;
+  types: { id: string; name: string }[];
+  stock?: number;
+  rating?: number;
 }
 
 const Culture = () => {
@@ -102,7 +108,16 @@ const Culture = () => {
       ]);
 
       setStories(storiesResult.data || []);
-      setProducts(productsResult.data || []);
+      setProducts((productsResult.data || []).map((p: any) => ({
+        ...p,
+        types: p.types || [],
+        gallery_images: p.gallery_images || [],
+        is_on_sale: p.is_on_sale || false,
+        discount_percent: p.discount_percent || 0,
+        culture_pillar_color: p.culture_pillar_color || "",
+        rating: p.rating || 0,
+        stock: p.stock_quantity ?? 10,
+      })));
       setLoading(false);
     };
 
