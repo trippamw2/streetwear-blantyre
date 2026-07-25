@@ -227,7 +227,7 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="container py-10 sm:py-14">
+    <div className="container py-10 sm:py-14 overflow-hidden">
       <SEO title={product?.name || "Product"} description={product?.benefit || "Phone accessory"} type="product" path={"/product/" + product?.id} image={product?.image} />
       <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-6">
         <ArrowLeft className="h-4 w-4" /> Back to shop

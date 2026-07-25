@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -104,6 +104,8 @@ const App = () => (
                   <Route path="/compare" element={<Compare />} />
                   <Route path="/combos" element={<Combos />} />
                   <Route path="/kits/:id" element={<KitDetail />} />
+                  <Route path="/kits" element={<Navigate to="/combos" replace />} />
+                  <Route path="/culture" element={<Culture />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/auth" element={<Auth />} />
@@ -116,10 +118,12 @@ const App = () => (
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/returns" element={<Returns />} />
                   <Route path="/warranty" element={<Warranty />} />
-                  <Route path="/rewards" element={<Loyalty />} />
                   <Route path="/gifts" element={<ProtectedRoute><GiftPacks /></ProtectedRoute>} />
+                  <Route path="/gift-packs" element={<Navigate to="/gifts" replace />} />
                   <Route path="/gift" element={<ProtectedRoute><ScheduledGift /></ProtectedRoute>} />
                   <Route path="/gift-track/:token" element={<GiftTrack />} />
+                  <Route path="/cart" element={<Navigate to="/checkout" replace />} />
+                  <Route path="/track-order" element={<Navigate to="/orders" replace />} />
                   <Route path="/editorial" element={<Editorial />} />
                   <Route path="/editorial/:slug" element={<EditorialPost />} />
                   <Route path="/culture/:pillar" element={<Culture />} />
@@ -147,6 +151,8 @@ const App = () => (
                   <Route path="loyalty" element={<AdminLoyalty />} />
                   <Route path="referrals" element={<AdminReferrals />} />
                   <Route path="authentication" element={<AdminAuthentication />} />
+                  <Route path="customers" element={<Navigate to="/admin/orders" replace />} />
+                  <Route path="analytics" element={<Navigate to="/admin" replace />} />
                   <Route path="gifts" element={<AdminGifts />} />
                   <Route path="culture-stories" element={<AdminCultureStories />} />
                   <Route path="lookbooks" element={<AdminLookbooks />} />

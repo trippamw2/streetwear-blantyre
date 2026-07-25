@@ -145,9 +145,12 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
           {/* Quick add overlay */}
           <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 translate-y-2 group-hover:translate-y-0">
-            <Link to={`/product/${product.id}`} className="flex items-center justify-center w-full py-2 px-4 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors text-xs">
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              className="flex items-center justify-center w-full py-2 px-4 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors text-xs"
+            >
               Quick View
-            </Link>
+            </button>
           </div>
         </div>
 
