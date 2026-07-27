@@ -54,10 +54,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     switch (action) {
       case "send-email":
-        result = await sendEmail(payload);
+        result = await sendEmail(payload as Parameters<typeof sendEmail>[0]);
         break;
       case "subscribe":
-        result = await subscribeToList(payload);
+        result = await subscribeToList(payload as Parameters<typeof subscribeToList>[0]);
         break;
       default:
         return res.status(400).json({ error: `Unknown action: ${action}` });
