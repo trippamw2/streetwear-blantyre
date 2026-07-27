@@ -32,7 +32,7 @@ const Loyalty = () => {
           <div className="max-w-2xl mx-auto text-center space-y-4">
             <Gift className="h-12 w-12 mx-auto text-gray-500" />
             <h1 className="font-display font-bold text-2xl sm:text-3xl text-white">Join Streetwear Blantyre Rewards</h1>
-            <p className="text-gray-400">Sign in to earn points on every purchase!</p>
+            <p className="text-gray-400">Your loyalty deserves more than empty points. Sign in and start earning toward culture that represents you.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild variant="hero" size="lg">
                 <Link to="/auth">Sign In</Link>
@@ -71,7 +71,10 @@ const Loyalty = () => {
 
         <div className="max-w-2xl space-y-2 sm:space-y-3 mb-6 sm:mb-8">
           <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-white">Streetwear Blantyre Rewards</h1>
-          <p className="text-gray-400 text-sm sm:text-base">Earn points on every purchase. Redeem for discounts.</p>
+          <p className="text-gray-400 text-sm sm:text-base">
+            Most rewards programs forget why you shop. Points without purpose go nowhere.
+            Every purchase here earns points toward what actually matters — culture that represents you.
+          </p>
         </div>
 
       {/* Points Card */}
@@ -267,6 +270,10 @@ const Loyalty = () => {
           Shop & Earn Points <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
       </Button>
+
+      <p className="text-center text-gray-500 text-sm mt-4 italic">
+        Don't let your loyalty go unrecognized. Earn points toward culture that speaks for you.
+      </p>
     </div>
     </div>
   );

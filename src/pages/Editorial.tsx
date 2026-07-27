@@ -70,7 +70,10 @@ const Editorial = () => {
           <div className="text-center mb-12">
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.3em] mb-3">Editorial</p>
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-4 text-white">The Culture Edit</h1>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">Stories from the streets. Music, sports, faith, and hustle — told through the culture.</p>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Generic blogs talk about trends. Culture stories talk about identity.
+              Without stories, culture dies. These are ours.
+            </p>
           </div>
 
           {/* Pillar Filters */}
@@ -100,8 +103,8 @@ const Editorial = () => {
           {/* Empty State */}
           {!loading && filtered.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-gray-500 text-lg">No stories yet{filter !== "all" ? ` in ${filter} culture` : ""}.</p>
-              <p className="text-gray-600 text-sm mt-2">Check back soon — the culture is always growing.</p>
+              <p className="text-gray-400 text-lg">No stories yet{filter !== "all" ? ` in ${filter} culture` : ""}.</p>
+              <p className="text-gray-500 text-sm mt-2 italic">Without stories, culture dies. Check back soon — the culture is always growing.</p>
             </div>
           )}
 
