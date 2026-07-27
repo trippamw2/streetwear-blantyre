@@ -75,8 +75,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        display: ["Sora", "sans-serif"],
-        sans: ["Sora", "Inter", "sans-serif"],
+        display: ["Cormorant Garamond", "serif"],
+        sans: ["DM Sans", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
       },
       backgroundImage: {
         "gradient-brand": "var(--gradient-brand)",

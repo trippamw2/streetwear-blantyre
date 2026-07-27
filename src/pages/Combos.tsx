@@ -9,7 +9,7 @@ const Combos = () => {
   const combos = useCombos();
 
   return (
-    <div>
+    <div className="bg-gray-950 min-h-screen">
       <SEO {...defaultSEO.combos} />
 
       {/* ─── HERO ─── */}
@@ -25,8 +25,9 @@ const Combos = () => {
               ONE BOX.
             </h1>
             <p className="text-gray-400 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
-              Outfit looking stale? Nothing goes together? We picked the tee, hoodie, cap, and kicks you need.
-              Styled. Reliable. Cheaper together.
+              Outfit looking stale? Nothing goes together? You're not alone.
+              Most people waste hours guessing what works. We solved that —
+              curated Culture Packs styled by people who actually understand style.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <a
@@ -46,7 +47,7 @@ const Combos = () => {
       </section>
 
       {/* ─── WHY BUNDLES ─── */}
-      <section className="border-b border-gray-100">
+      <section className="border-b border-white/10 bg-gray-900">
         <div className="container py-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
@@ -54,22 +55,26 @@ const Combos = () => {
               { title: "No Research Needed", desc: "We matched the right pieces for your vibe." },
               { title: "30-Day Guarantee", desc: "Not happy? Send it back. Simple." },
             ].map((item) => (
-              <div key={item.title} className="p-4 bg-gray-50">
-                <p className="font-semibold text-sm text-gray-900">{item.title}</p>
-                <p className="text-xs text-gray-500 mt-1">{item.desc}</p>
+              <div key={item.title} className="p-4 bg-white/5">
+                <p className="font-semibold text-sm text-white">{item.title}</p>
+                <p className="text-xs text-gray-400 mt-1">{item.desc}</p>
               </div>
             ))}
           </div>
+          <p className="text-xs text-gray-500 italic mt-4 text-center">
+            Mismatched outfits cost you confidence. Culture Packs fix that.
+          </p>
         </div>
       </section>
 
       {/* ─── KITS GRID ─── */}
-      <section className="container py-16 sm:py-20 lg:py-24">
+      <section className="bg-gray-950 container py-16 sm:py-20 lg:py-24">
         <div className="text-center mb-10 sm:mb-12">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Pick Your Kit</p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Culture Kits</h2>
-          <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">Culture Kits</h2>
+          <p className="text-gray-400 text-sm mt-2 max-w-md mx-auto">
             Each bundle solves a style problem. No filler. Just what your wardrobe needs.
+            Pick your vibe. We handle the rest.
           </p>
         </div>
 
@@ -81,11 +86,11 @@ const Combos = () => {
       </section>
 
       {/* ─── BROWSE BY CATEGORY ─── */}
-      <section className="bg-gray-50 py-16 sm:py-20">
+      <section className="bg-gray-900 py-16 sm:py-20">
         <div className="container text-center">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Need Just One Thing?</p>
-          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900">Shop by Category</h2>
-          <p className="text-gray-500 text-sm mt-2">Every item available individually too</p>
+          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white">Shop by Category</h2>
+          <p className="text-gray-400 text-sm mt-2">Every item available individually too. Your culture, your way.</p>
 
           <div className="flex flex-wrap justify-center gap-3 mt-8">
             {[
@@ -101,7 +106,7 @@ const Combos = () => {
               <Link
                 key={item.cat}
                 to={`/shop?cat=${item.cat}`}
-                className="px-6 py-3 bg-white border border-gray-200 text-sm font-medium text-gray-700 hover:border-gray-900 hover:text-gray-900 transition-all duration-200"
+                className="px-6 py-3 bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:border-white/30 hover:text-white transition-all duration-200"
               >
                 {item.label}
               </Link>
