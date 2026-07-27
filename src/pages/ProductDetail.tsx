@@ -235,13 +235,13 @@ const ProductDetail = () => {
             <div className="absolute top-4 right-4 flex gap-2">
               <button
                 onClick={handleWishlist}
-                className="p-3 rounded-full bg-gray-900/80 backdrop-blur-sm shadow-lg hover:bg-gray-900 hover:scale-110 transition-all"
+                className="p-3 rounded-full bg-gray-900/80 backdrop-blur-sm shadow-lg hover:bg-gray-900 transition-all"
               >
                 <Heart className={`h-5 w-5 ${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-400"}`} />
               </button>
               <button 
                 onClick={() => setShowShareModal(true)}
-                className="p-3 rounded-full bg-gray-900/80 backdrop-blur-sm shadow-lg hover:bg-gray-900 hover:scale-110 transition-all"
+                className="p-3 rounded-full bg-gray-900/80 backdrop-blur-sm shadow-lg hover:bg-gray-900 transition-all"
               >
                 <Share2 className="h-5 w-5 text-gray-400" />
               </button>

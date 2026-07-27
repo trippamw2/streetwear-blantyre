@@ -42,18 +42,30 @@ const About = () => (
       </div>
     </section>
 
-    {/* ─── LIFESTYLE IMAGE ─── */}
-    <section className="container -mt-6 relative z-10">
-      <div className="relative overflow-hidden border border-white/10">
+    {/* ─── LIFESTYLE IMAGE HERO ─── */}
+    <section className="relative bg-gray-950">
+      <div className="absolute inset-0">
         <img
           src={lifestyleMusic}
           alt="Streetwear Blantyre — creators from Blantyre, Malawi"
           loading="lazy"
           width={1280}
-          height={960}
+          height={600}
           className="w-full h-[320px] sm:h-[420px] lg:h-[500px] object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent" />
+      </div>
+      <div className="relative container py-20 sm:py-24">
+        <div className="max-w-3xl space-y-6">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Our Story</p>
+          <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-[0.95] text-white">
+            Three friends. One laundromat. A movement.
+          </h1>
+          <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
+            This is not a story about fabric. It is a story about identity.
+            About a group of young Malawians who refused to wear someone else's story.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -62,7 +74,7 @@ const About = () => (
       <div className="max-w-3xl mx-auto space-y-6">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">How It Started</p>
         <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white mb-6">
-          Three friends. One laundromat. A question that changed everything.
+          A question that changed everything.
         </h2>
         <p className="text-gray-400 text-base sm:text-lg leading-relaxed">
           It started in a Blantyre laundromat. Three young creators waiting for their laundry,

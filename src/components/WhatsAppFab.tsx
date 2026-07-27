@@ -43,7 +43,7 @@ export const WhatsAppFab = () => {
       <button
         onClick={() => setExpanded(!expanded)}
         aria-label={expanded ? "Close chat" : "Chat with us"}
-        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-button hover:scale-110 transition-transform"
+        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-button hover:opacity-80 transition-transform"
       >
         {expanded ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
       </button>

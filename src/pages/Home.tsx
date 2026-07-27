@@ -34,10 +34,19 @@ const Home = () => {
     <div className="bg-gray-950">
       <SEO {...defaultSEO.home} />
 
-      {/* ─── HERO ─── */}
-      <section className="bg-gray-950">
-        <div className="container grid lg:grid-cols-2 gap-8 sm:gap-12 items-center py-16 sm:py-20 lg:py-28">
-          <div className="space-y-6 sm:space-y-8">
+      {/* ─── HERO — Image-Dominant ─── */}
+      <section className="relative bg-gray-950">
+        <div className="absolute inset-0">
+          <img
+            src={hero}
+            alt="African streetwear creators in Blantyre, Malawi"
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-950 via-gray-950/80 to-transparent" />
+        </div>
+        <div className="container relative py-20 sm:py-28 lg:py-36">
+          <div className="max-w-2xl space-y-6 sm:space-y-8">
             <span className="inline-flex px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-gray-400">
               Identity Expression. Streetwear Is Our Medium.
             </span>
@@ -48,7 +57,7 @@ const Home = () => {
               Culture.
             </h1>
 
-            <p className="text-gray-400 text-base sm:text-lg max-w-md leading-relaxed">
+            <p className="text-gray-300 text-base sm:text-lg max-w-md leading-relaxed">
               You are not looking for clothes. You are looking for identity.
               Something that says "this is who I am" before you speak a word.
             </p>
@@ -73,17 +82,6 @@ const Home = () => {
             <p className="text-xs text-gray-600 italic max-w-md">
               Fashion fades. Identity lasts. Don't chase trends. Wear purpose.
             </p>
-          </div>
-
-          <div className="relative hidden lg:block">
-            <div className="relative overflow-hidden">
-              <img
-                src={hero}
-                alt="Streetwear Blantyre — African streetwear from Blantyre, Malawi"
-                className="w-full aspect-[4/5] object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-950/40 via-transparent to-transparent" />
-            </div>
           </div>
         </div>
       </section>

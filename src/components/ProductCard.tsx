@@ -73,17 +73,17 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       viewport={{ once: true, margin: "-20px" }}
       transition={{ duration: 0.3, delay: index * 0.03 }}
     >
-      <Link
-        to={`/product/${product.id}`}
-        className="group block rounded-xl sm:rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden hover:border-gray-700 hover:shadow-lg hover:shadow-black/20 hover:-translate-y-0.5 transition-all duration-200 max-w-full"
+       <Link
+         to={`/product/${product.id}`}
+         className="group block rounded-xl bg-gray-900 border border-gray-800 overflow-hidden hover:border-gray-700 hover:shadow-lg hover:shadow-black/20 hover:opacity-90 transition-all duration-200 max-w-full"
       >
         <div className="relative aspect-[3/4] overflow-hidden bg-gray-800">
-          <img
-            src={product.image}
-            alt={product.name}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+           <img
+             src={product.image}
+             alt={product.name}
+             loading="lazy"
+             className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+           />
           
           {/* Badges */}
           {displayBadges.length > 0 && (
@@ -106,7 +106,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           {/* Wishlist */}
           <button
             onClick={handleWishlist}
-            className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow hover:bg-white hover:scale-105 transition-all duration-150"
+            className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow hover:bg-white hover:opacity-80 transition-all duration-150"
           >
             <Heart
               className={`h-3.5 w-3.5 transition-colors ${
@@ -118,16 +118,12 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           {/* Compare */}
           <button
             onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (isInCompare(product.id)) {
-                toast({ title: "Removed from compare" });
-              } else {
-                toast({ title: "Added to compare" });
-              }
+              e.preventDefault(); e.stopPropagation();
+              if (isInCompare(product.id)) { toast({ title: "Removed from compare" }); }
+              else { toast({ title: "Added to compare" }); }
               addToCompare(product);
             }}
-            className="absolute top-8 right-2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow hover:bg-white hover:scale-105 transition-all duration-150"
+            className="absolute top-8 right-2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow hover:bg-white hover:opacity-80 transition-all duration-150"
           >
             <GitCompare
               className={`h-3.5 w-3.5 transition-colors ${
