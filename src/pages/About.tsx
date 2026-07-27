@@ -15,7 +15,7 @@ const About = () => (
           <span className="inline-block px-4 py-1.5 border border-gray-700 text-gray-400 text-xs font-semibold tracking-[0.15em] uppercase">
             Our Story
           </span>
-          <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-7xl tracking-tight leading-[0.95]">
+          <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-7xl tracking-tight leading-[0.95] text-white">
             Built in Blantyre. Loved across Africa.
           </h1>
           <p className="text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl">

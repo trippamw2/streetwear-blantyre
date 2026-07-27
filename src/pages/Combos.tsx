@@ -19,7 +19,7 @@ const Combos = () => {
             <span className="inline-block px-4 py-1.5 border border-gray-700 text-gray-400 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
               Save 15% vs buying separate
             </span>
-            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight">
+            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight text-white">
               YOUR OUTFIT.
               <br />
               ONE BOX.

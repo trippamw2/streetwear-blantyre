@@ -124,6 +124,8 @@ const App = () => (
                   <Route path="/gift-track/:token" element={<GiftTrack />} />
                   <Route path="/cart" element={<Navigate to="/checkout" replace />} />
                   <Route path="/track-order" element={<Navigate to="/orders" replace />} />
+                  <Route path="/loyalty" element={<ProtectedRoute><Loyalty /></ProtectedRoute>} />
+                  <Route path="/rewards" element={<Navigate to="/loyalty" replace />} />
                   <Route path="/editorial" element={<Editorial />} />
                   <Route path="/editorial/:slug" element={<EditorialPost />} />
                   <Route path="/culture/:pillar" element={<Culture />} />
