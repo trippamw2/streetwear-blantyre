@@ -68,7 +68,7 @@ const Warranty = () => {
             <li>Contact us via WhatsApp with your order number</li>
             <li>Describe the issue you're experiencing</li>
             <li>We'll arrange inspection or replacement</li>
-            <li>Repairs typically take 7-14 business days</li>
+            <li>Repairs typically take 7 to 14 business days</li>
           </ol>
         </section>
 

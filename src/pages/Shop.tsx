@@ -123,7 +123,7 @@ const Shop = () => {
         <div className="bg-gray-900 rounded-lg p-5 sm:p-7 mb-6 sm:mb-10 text-white">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <p className="font-display font-bold text-base sm:text-lg">Get a Bundle. Save 15-25%.</p>
+            <p className="font-display font-bold text-base sm:text-lg">Get a Bundle. Save 15% to 25%.</p>
             <p className="text-white/70 text-xs sm:text-sm">Curated outfits. One order. Better value.</p>
           </div>
           <Link to="/combos">

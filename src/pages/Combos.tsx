@@ -53,7 +53,7 @@ const Combos = () => {
             {[
               { title: "Save 15–25%", desc: "Less than buying separate. Always." },
               { title: "No Research Needed", desc: "We matched the right pieces for your vibe." },
-              { title: "30-Day Guarantee", desc: "Not happy? Send it back. Simple." },
+              { title: "30 Day Guarantee", desc: "Not happy? Send it back. Simple." },
             ].map((item) => (
               <div key={item.title} className="p-4 bg-white/5">
                 <p className="font-semibold text-sm text-white">{item.title}</p>
@@ -94,7 +94,7 @@ const Combos = () => {
 
           <div className="flex flex-wrap justify-center gap-3 mt-8">
             {[
-              { label: "T-Shirts", cat: "t-shirts" },
+              { label: "T Shirts", cat: "t-shirts" },
               { label: "Hoodies", cat: "hoodies" },
               { label: "Caps", cat: "caps" },
               { label: "Hut Caps", cat: "hut-caps" },

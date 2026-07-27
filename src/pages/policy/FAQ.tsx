@@ -11,7 +11,7 @@ const FAQ = () => {
       category: "Orders & Shipping",
       items: [
         { q: "How do I place an order?", a: "Browse our culture pieces, add items to your experience, and complete your experience. You'll receive a confirmation via WhatsApp." },
-        { q: "How long does delivery take?", a: "Standard delivery: 3-5 business days. Express delivery: 1-2 business days. Delivery times may vary by location in Malawi." },
+        { q: "How long does delivery take?", a: "Standard delivery: 3 to 5 business days. Express delivery: 1 to 2 business days. Delivery times may vary by location in Malawi." },
         { q: "Do you deliver everywhere in Malawi?", a: "Yes! We deliver to all districts in Malawi including Lilongwe, Blantyre, Mzuzu, Zomba, and rural areas." },
       ]
     },
@@ -25,8 +25,8 @@ const FAQ = () => {
     {
       category: "Returns & Warranty",
       items: [
-        { q: "What is your return policy?", a: "We offer a 7-day return policy for defective products. Products must be in original packaging with all accessories." },
-        { q: "Do products have warranty?", a: "Yes! All items come with a 30-day quality guarantee. We replace defective products." },
+        { q: "What is your return policy?", a: "We offer a 7 day return policy for defective products. Products must be in original packaging with all accessories." },
+        { q: "Do products have warranty?", a: "Yes! All items come with a 30 day quality guarantee. We replace defective products." },
         { q: "How do I claim warranty?", a: "Contact us via WhatsApp with your order number and product details. We'll guide you through the process." },
       ]
     },

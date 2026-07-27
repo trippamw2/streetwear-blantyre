@@ -209,8 +209,8 @@ const ProductDetail = () => {
 
   const faqs = [
     { q: "Is this genuine?", a: "Yes. 100% authentic products from trusted creators." },
-    { q: "What if it breaks?", a: "6-month warranty. We replace it if it stops representing you." },
-    { q: "How long does delivery take?", a: "Blantyre: 1-3 days. Other areas: 3-5 days." },
+    { q: "What if it breaks?", a: "6 month warranty. We replace it if it stops representing you." },
+    { q: "How long does delivery take?", a: "Blantyre: 1 to 3 days. Other areas: 3 to 5 days." },
   ];
 
   return (
@@ -456,7 +456,7 @@ const ProductDetail = () => {
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-300">
               <ShieldCheck className="h-5 w-5 text-green-500" />
-              <span>6-month warranty</span>
+              <span>6 month warranty</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-300">
               <Check className="h-5 w-5 text-green-500" />

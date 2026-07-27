@@ -94,7 +94,7 @@ const Home = () => {
           {[
             "Free Delivery over MK 50,000",
             "WhatsApp Orders — Quick & Easy",
-            "30-Day Guarantee on Everything",
+            "30 Day Guarantee on Everything",
             "2,500+ Happy Creators",
           ].map((item) => (
             <p key={item} className="text-xs font-medium text-gray-400 uppercase tracking-wider">{item}</p>
@@ -327,7 +327,7 @@ const Home = () => {
             Your Identity Deserves<br />to Be Seen.
           </h2>
           <p className="text-gray-400 text-base sm:text-lg mt-4 max-w-lg mx-auto">
-            You are not buying a T-shirt. You are wearing a statement.
+            You are not buying a T shirt. You are wearing a statement.
             You are telling the world what you stand for.
             Join 2,500+ creators who refused to blend in.
           </p>

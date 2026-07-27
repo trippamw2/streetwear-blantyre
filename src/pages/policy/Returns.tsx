@@ -23,7 +23,7 @@ const Returns = () => {
           <ul className="space-y-3 text-gray-600">
             <li className="flex items-start gap-2">
               <Check className="h-5 w-5 text-green-500 mt-0.5" />
-              <span>7-day return window from delivery date</span>
+              <span>7 day return window from delivery date</span>
             </li>
             <li className="flex items-start gap-2">
               <Check className="h-5 w-5 text-green-500 mt-0.5" />
@@ -58,7 +58,7 @@ const Returns = () => {
             <li>Contact us via WhatsApp with your order number</li>
             <li>Describe the issue with your product</li>
             <li>We'll arrange pickup or provide return instructions</li>
-            <li>Refund processed within 5-7 business days</li>
+            <li>Refund processed within 5 to 7 business days</li>
           </ol>
         </section>
 
@@ -66,7 +66,7 @@ const Returns = () => {
           <h2 className="font-semibold text-xl flex items-center gap-2">
             <Package className="h-5 w-5 text-teal-600" /> Refund Process
           </h2>
-          <p className="text-gray-600">Once we receive and inspect your return, we'll process your refund within 5-7 business days. Refunds will be credited to your original payment method or mobile money account.</p>
+          <p className="text-gray-600">Once we receive and inspect your return, we'll process your refund within 5 to 7 business days. Refunds will be credited to your original payment method or mobile money account.</p>
         </section>
       </div>
 

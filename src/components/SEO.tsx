@@ -113,11 +113,11 @@ export const defaultSEO = {
   },
   returns: {
     title: "Returns & Refunds — Streetwear Blantyre",
-    description: "30-day return policy. Not happy? Send it back. No questions asked.",
+    description: "30 day return policy. Not happy? Send it back. No questions asked.",
   },
   warranty: {
     title: "Warranty — Streetwear Blantyre",
-    description: "30-day quality guarantee on all items. We replace defective products.",
+    description: "30 day quality guarantee on all items. We replace defective products.",
   },
   giftPacks: {
     title: "Gift Packs — Send the Culture",

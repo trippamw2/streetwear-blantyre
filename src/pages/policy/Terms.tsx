@@ -23,7 +23,7 @@ const Terms = () => {
 
         <section className="space-y-4">
           <h2 className="font-semibold text-xl">2. Product Information</h2>
-          <p className="text-gray-600">We strive to ensure all product information is accurate and up-to-date. However, we cannot guarantee that all information is completely accurate at all times. Product images are for illustration purposes only.</p>
+          <p className="text-gray-600">We strive to ensure all product information is accurate and up to date. However, we cannot guarantee that all information is completely accurate at all times. Product images are for illustration purposes only.</p>
         </section>
 
         <section className="space-y-4">
@@ -33,7 +33,7 @@ const Terms = () => {
 
         <section className="space-y-4">
           <h2 className="font-semibold text-xl">4. Delivery</h2>
-          <p className="text-gray-600">We deliver across Malawi. Standard delivery takes 3-5 business days. Express delivery takes 1-2 business days. Delivery times may vary based on location.</p>
+          <p className="text-gray-600">We deliver across Malawi. Standard delivery takes 3 to 5 business days. Express delivery takes 1 to 2 business days. Delivery times may vary based on location.</p>
         </section>
 
         <section className="space-y-4">
@@ -43,7 +43,7 @@ const Terms = () => {
 
         <section className="space-y-4">
           <h2 className="font-semibold text-xl">6. Returns & Refunds</h2>
-          <p className="text-gray-600">We offer a 7-day return policy for defective products. Products must be in original packaging with all accessories. Refunds are processed within 5-7 business days.</p>
+          <p className="text-gray-600">We offer a 7 day return policy for defective products. Products must be in original packaging with all accessories. Refunds are processed within 5 to 7 business days.</p>
         </section>
 
         <section className="space-y-4">

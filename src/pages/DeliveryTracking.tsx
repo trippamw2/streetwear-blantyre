@@ -38,7 +38,7 @@ interface DeliveryStatus {
 
 const TRACKING_STEPS = [
   { key: "new", label: "Order Placed", icon: Check, desc: "We've received your order" },
-  { key: "confirmed", label: "Confirmed", icon: Star, desc: "Order confirmed - payment received" },
+  { key: "confirmed", label: "Confirmed", icon: Star, desc: "Order confirmed: payment received" },
   { key: "processing", label: "Processing", icon: Package, desc: "Preparing your items" },
   { key: "dispatched", label: "Dispatched", icon: Truck, desc: "On the way to you" },
   { key: "delivered", label: "Delivered", icon: Home, desc: "Delivered to you" },

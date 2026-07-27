@@ -162,7 +162,7 @@ const KitDetail = () => {
                   <Truck className="h-4 w-4 text-gray-400 shrink-0" /> Free delivery over MK 50,000
                 </div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-gray-400 shrink-0" /> 30-day guarantee
+                  <ShieldCheck className="h-4 w-4 text-gray-400 shrink-0" /> 30 day guarantee
                 </div>
               </div>
             </div>
@@ -248,7 +248,7 @@ const KitDetail = () => {
                   You save {formatMWK(realSaving)} ({discountPercent}% off) with this kit
                 </p>
                 <p className="text-xs text-green-600 mt-0.5">
-                  Free delivery over MK 50,000 &middot; 30-day guarantee
+                  Free delivery over MK 50,000 &middot; 30 day guarantee
                 </p>
               </div>
             </div>
