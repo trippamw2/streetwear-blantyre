@@ -237,7 +237,7 @@ const ProductDetail = () => {
         {/* Image Gallery */}
         <div className="space-y-4">
           <motion.div 
-            className="relative rounded-2xl overflow-hidden bg-gray-800 border border-gray-800 w-full aspect-square"
+            className="relative rounded-2xl overflow-hidden bg-gray-800 border border-gray-800 w-full aspect-[3/4] sm:aspect-square"
           >
             <img 
               src={selectedImageSrc} 

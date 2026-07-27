@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, Loader2, BookOpen, Eye, EyeOff, Star } from "lucide-react";
+import { AIWritingButton } from "@/components/admin/AIWritingButton";
+import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
 import { format } from "date-fns";
 
 interface CultureStory {
@@ -176,15 +178,36 @@ const AdminCultureStories = () => {
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label>Title *</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Title *</Label>
+                  <AIWritingButton
+                    contentTypes={["article_title"]}
+                    variables={{ topic: formData.title || formData.excerpt || "African street culture", pillar: formData.culture_pillar }}
+                    onGenerated={(type, content) => setFormData(p => ({ ...p, title: content }))}
+                  />
+                </div>
                 <Input value={formData.title} onChange={(e) => setFormData(p => ({ ...p, title: e.target.value }))} placeholder="e.g., Why Hip-Hop Still Shapes Streetwear" />
               </div>
               <div className="space-y-2">
-                <Label>Excerpt</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Excerpt</Label>
+                  <AIWritingButton
+                    contentTypes={["article_excerpt"]}
+                    variables={{ title: formData.title, pillar: formData.culture_pillar }}
+                    onGenerated={(type, content) => setFormData(p => ({ ...p, excerpt: content }))}
+                  />
+                </div>
                 <Input value={formData.excerpt} onChange={(e) => setFormData(p => ({ ...p, excerpt: e.target.value }))} placeholder="Short summary for cards and previews" />
               </div>
               <div className="space-y-2">
-                <Label>Content * (Markdown supported)</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Content * (Markdown supported)</Label>
+                  <AIWritingButton
+                    contentTypes={["article_content"]}
+                    variables={{ title: formData.title, pillar: formData.culture_pillar }}
+                    onGenerated={(type, content) => setFormData(p => ({ ...p, content: content }))}
+                  />
+                </div>
                 <Textarea value={formData.content} onChange={(e) => setFormData(p => ({ ...p, content: e.target.value }))} rows={16} placeholder="Write your story..." className="font-mono text-sm" />
               </div>
               <div className="grid grid-cols-2 gap-4">

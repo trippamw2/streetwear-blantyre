@@ -12,6 +12,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, Edit, Trash2, Image as ImageIcon, Loader2 } from "lucide-react";
+import { AIWritingButton } from "@/components/admin/AIWritingButton";
+import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
 import { toast } from "@/hooks/use-toast";
 
 const BRANDS = [
@@ -454,7 +456,14 @@ const AdminProducts = () => {
               </div>
               
               <div className="space-y-2">
-                <Label>Benefit/Description</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Benefit/Description</Label>
+                  <AIWritingButton
+                    contentTypes={["product_benefit"]}
+                    variables={{ name: formData.name, category: formData.category, pillar: formData.culture_pillar }}
+                    onGenerated={(type, content) => setFormData(prev => ({ ...prev, benefit: content }))}
+                  />
+                </div>
                 <Textarea
                   value={formData.benefit}
                   onChange={(e) => setFormData((prev) => ({ ...prev, benefit: e.target.value }))}
@@ -514,7 +523,17 @@ const AdminProducts = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Culture Story</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Culture Story</Label>
+                  <AIWritingButton
+                    contentTypes={["culture_story", "culture_context"]}
+                    variables={{ name: formData.name, category: formData.category, pillar: formData.culture_pillar }}
+                    onGenerated={(type, content) => {
+                      if (type === "culture_story") setFormData(prev => ({ ...prev, culture_story: content }));
+                      else setFormData(prev => ({ ...prev, culture_context: content }));
+                    }}
+                  />
+                </div>
                 <Textarea
                   value={formData.culture_story}
                   onChange={(e) => setFormData((prev) => ({ ...prev, culture_story: e.target.value }))}

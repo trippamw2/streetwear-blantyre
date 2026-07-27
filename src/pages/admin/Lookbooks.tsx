@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, Loader2, Camera, Eye, EyeOff, GripVertical, X, Search } from "lucide-react";
+import { AIWritingButton } from "@/components/admin/AIWritingButton";
+import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
 import { format } from "date-fns";
 
 interface Lookbook {
@@ -218,7 +220,14 @@ const AdminLookbooks = () => {
             <div className="space-y-4 mt-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Title *</Label>
+                  <div className="flex items-center justify-between">
+                    <Label>Title *</Label>
+                    <AIWritingButton
+                      contentTypes={["lookbook_title"]}
+                      variables={{ theme: formData.title || formData.description || "curated collection", season: formData.season, pillar: formData.culture_pillar }}
+                      onGenerated={(type, content) => setFormData(p => ({ ...p, title: content }))}
+                    />
+                  </div>
                   <Input value={formData.title} onChange={(e) => setFormData(p => ({ ...p, title: e.target.value }))} placeholder="e.g., The Faith Collection" />
                 </div>
                 <div className="space-y-2">
@@ -227,7 +236,14 @@ const AdminLookbooks = () => {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Description</Label>
+                  <AIWritingButton
+                    contentTypes={["lookbook_description"]}
+                    variables={{ title: formData.title, season: formData.season, pillar: formData.culture_pillar }}
+                    onGenerated={(type, content) => setFormData(p => ({ ...p, description: content }))}
+                  />
+                </div>
                 <Textarea value={formData.description} onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))} rows={3} placeholder="What's the story behind this collection?" />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -272,7 +288,23 @@ const AdminLookbooks = () => {
 
               {formData.selectedProducts.length > 0 && (
                 <div className="space-y-2">
-                  <Label>Editorial Notes</Label>
+                  <div className="flex items-center justify-between">
+                    <Label>Editorial Notes</Label>
+                    {formData.selectedProducts.length > 0 && (
+                      <AIWritingButton
+                        contentTypes={["editorial_note"]}
+                        variables={{
+                          name: products.find(p => p.id === formData.selectedProducts[0]?.product_id)?.name || "",
+                          theme: formData.title,
+                        }}
+                        onGenerated={(type, content) => {
+                          if (formData.selectedProducts.length > 0) {
+                            updateProductNote(formData.selectedProducts[0].product_id, content);
+                          }
+                        }}
+                      />
+                    )}
+                  </div>
                   {formData.selectedProducts.map(sp => {
                     const product = products.find(p => p.id === sp.product_id);
                     return (
