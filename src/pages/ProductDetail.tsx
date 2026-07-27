@@ -90,18 +90,18 @@ const ProductDetail = () => {
   // ====== EARLY RETURNS AFTER ALL HOOKS ======
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-10 w-10 border-4 border-gray-900 border-t-transparent rounded-full" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+        <div className="animate-spin h-10 w-10 border-4 border-gray-600 border-t-transparent rounded-full" />
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-500">Product not found</p>
-          <Link to="/shop" className="text-gray-900 font-medium hover:underline">Back to shop</Link>
+      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+        <div className="text-center space-y-3">
+          <p className="text-gray-400 text-lg">Product not found</p>
+          <Link to="/shop" className="text-white font-medium hover:underline">Back to shop</Link>
         </div>
       </div>
     );
@@ -155,19 +155,6 @@ const ProductDetail = () => {
       setSubmitting(false);
     }
   };
-
-  if (loading) {
-    return <ProductDetailSkeleton />;
-  }
-
-  if (!product) {
-    return (
-      <div className="container py-20 text-center space-y-4">
-        <h1 className="font-display font-bold text-3xl">Not found</h1>
-        <Button asChild variant="hero"><Link to="/shop">Back to shop</Link></Button>
-      </div>
-    );
-  }
 
   const recommended = products.filter(p => p.category?.toLowerCase() === product.category?.toLowerCase() && p.id !== product.id).slice(0, 4);
   
@@ -227,7 +214,7 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="container py-10 sm:py-14 overflow-hidden">
+    <div className="container px-4 sm:px-6 py-8 sm:py-14">
       <SEO title={product?.name || "Product"} description={product?.culture_story || product?.benefit || "Every piece represents a belief. Find the one that speaks for who you are."} type="product" path={"/product/" + product?.id} image={product?.image} />
       <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-6">
         <ArrowLeft className="h-4 w-4" /> Back to Collection
@@ -237,7 +224,7 @@ const ProductDetail = () => {
         {/* Image Gallery */}
         <div className="space-y-4">
           <motion.div 
-            className="relative rounded-2xl overflow-hidden bg-gray-800 border border-gray-800 w-full aspect-[3/4] sm:aspect-square"
+            className="relative rounded-2xl overflow-hidden bg-gray-800 border border-gray-800 w-full aspect-[4/5] sm:aspect-[3/4] lg:aspect-square"
           >
             <img 
               src={selectedImageSrc} 
@@ -304,7 +291,7 @@ const ProductDetail = () => {
           </AnimatePresence>
 
           {/* Thumbnails - Use gallery_images if available, else fallback to main image */}
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {(product.gallery_images && product.gallery_images.length > 0 
               ? [product.image, ...product.gallery_images]
               : [product.image, product.image, product.image]
@@ -477,27 +464,29 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <div className="flex items-center rounded-full border border-gray-700 bg-gray-800">
               <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 text-gray-300 hover:text-white" aria-label="Decrease"><Minus className="h-4 w-4" /></button>
               <span className="w-10 text-center font-semibold text-white">{qty}</span>
               <button onClick={() => setQty((q) => q + 1)} className="p-3 text-gray-300 hover:text-white" aria-label="Increase"><Plus className="h-4 w-4" /></button>
             </div>
-            <Button onClick={handleAdd} variant="hero" size="lg" className="flex-1">
-              <ShoppingBag className="h-5 w-5" /> Wear the Culture
-            </Button>
-            <Button 
-              onClick={() => {
-                const typeName = product.types.find(t => t.id === selectedType)?.name || product.types[0]?.name || "";
-                const fullName = `${product.name} (${typeName})`;
-                add({ productKey: `${product.id}-${selectedType}`, name: fullName, price: product.price, image: product.image }, qty);
-                navigate("/checkout");
-              }} 
-              size="lg" 
-              className="flex-1 bg-white text-gray-900 hover:bg-gray-100"
-            >
-              <Zap className="h-5 w-5" /> Gift the Culture
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3 flex-1">
+              <Button onClick={handleAdd} variant="hero" size="lg" className="w-full">
+                <ShoppingBag className="h-5 w-5" /> Wear the Culture
+              </Button>
+              <Button 
+                onClick={() => {
+                  const typeName = product.types.find(t => t.id === selectedType)?.name || product.types[0]?.name || "";
+                  const fullName = `${product.name} (${typeName})`;
+                  add({ productKey: `${product.id}-${selectedType}`, name: fullName, price: product.price, image: product.image }, qty);
+                  navigate("/checkout");
+                }} 
+                size="lg" 
+                className="w-full bg-white text-gray-900 hover:bg-gray-100"
+              >
+                <Zap className="h-5 w-5" /> Gift the Culture
+              </Button>
+            </div>
           </div>
 
         </div>
@@ -532,7 +521,7 @@ const ProductDetail = () => {
       {/* Specifications */}
       <div className="mt-16">
         <h2 className="font-display font-bold text-2xl mb-6 text-white">Specifications</h2>
-        <div className="rounded-2xl border border-gray-800 overflow-hidden">
+        <div className="rounded-2xl border border-gray-800">
           {/* Mobile: Card layout */}
           <div className="md:hidden divide-y divide-gray-800">
             {specs.map((spec) => (

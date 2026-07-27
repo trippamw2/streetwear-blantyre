@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { useDeliverySettings } from "@/hooks/useDeliverySettings";
 import { formatMWK } from "@/data/products";
-import { ShoppingBag, Minus, Plus, Trash2, ArrowRight, X } from "lucide-react";
+import { ShoppingBag, Minus, Plus, Trash2, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
 export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
@@ -22,13 +22,6 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
             <ShoppingBag className="h-5 w-5" />
             Cart ({count})
           </SheetTitle>
-          <button
-            onClick={() => setOpen(false)}
-            className="p-2 -mr-2 hover:bg-gray-100 rounded-lg transition-colors"
-            aria-label="Close cart"
-          >
-            <X className="h-5 w-5" />
-          </button>
         </div>
 
         {items.length === 0 ? (
