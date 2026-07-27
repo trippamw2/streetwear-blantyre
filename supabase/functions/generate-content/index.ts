@@ -5,6 +5,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const SYSTEM_INSTRUCTION = `You are a world-class brand copywriter for Streetwear Blantyre, an identity expression brand from Malawi. Follow the brand guidelines exactly. Return only the requested content — no quotes, no labels, no explanations, no markdown formatting around the output.`;
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -20,40 +22,40 @@ Deno.serve(async (req) => {
       );
     }
 
-    const apiKey = Deno.env.get("OPENAI_API_KEY");
+    const apiKey = Deno.env.get("GEMINI_API_KEY");
     if (!apiKey) {
       return new Response(
-        JSON.stringify({ error: "OPENAI_API_KEY not configured. Add it in Supabase Dashboard → Settings → Edge Functions → Secrets." }),
+        JSON.stringify({ error: "GEMINI_API_KEY not configured. Add it in Supabase Dashboard → Settings → Edge Functions → Secrets, or run: supabase secrets set GEMINI_API_KEY=your-key" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const model = "gemini-2.0-flash";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: "You are a world-class brand copywriter. Follow the brand guidelines exactly. Return only the requested content — no quotes, no labels, no explanations."
-          },
+        systemInstruction: {
+          parts: [{ text: SYSTEM_INSTRUCTION }],
+        },
+        contents: [
           {
             role: "user",
-            content: prompt,
+            parts: [{ text: prompt }],
           },
         ],
-        temperature: 0.8,
-        max_tokens: 2000,
+        generationConfig: {
+          temperature: 0.8,
+          maxOutputTokens: 2048,
+        },
       }),
     });
 
     if (!response.ok) {
       const errorBody = await response.text();
-      console.error("OpenAI API error:", response.status, errorBody);
+      console.error("Gemini API error:", response.status, errorBody);
       return new Response(
         JSON.stringify({ error: `AI service error: ${response.status}` }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -61,7 +63,15 @@ Deno.serve(async (req) => {
     }
 
     const data = await response.json();
-    const content = data.choices?.[0]?.message?.content?.trim() || "";
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+
+    if (!content) {
+      console.error("Empty Gemini response:", JSON.stringify(data));
+      return new Response(
+        JSON.stringify({ error: "AI returned empty content" }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     return new Response(
       JSON.stringify({ content }),
