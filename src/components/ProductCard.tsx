@@ -56,7 +56,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const badgeConfig = {
     new: { label: "NEW", bg: "bg-green-500", text: "text-white" },
     sale: { label: `-${discountPercent}%`, bg: "bg-red-500", text: "text-white" },
-    best: { label: "BEST", bg: "bg-gray-900", text: "text-white" },
+    best: { label: "MOST WORN", bg: "bg-gray-900", text: "text-white" },
     hot: { label: "HOT", bg: "bg-yellow-500", text: "text-gray-900" },
   };
   
@@ -75,9 +75,9 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     >
       <Link
         to={`/product/${product.id}`}
-        className="group block rounded-xl sm:rounded-2xl bg-white border border-gray-100 overflow-hidden hover:border-gray-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 max-w-full"
+        className="group block rounded-xl sm:rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden hover:border-gray-700 hover:shadow-lg hover:shadow-black/20 hover:-translate-y-0.5 transition-all duration-200 max-w-full"
       >
-        <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
+        <div className="relative aspect-[4/3] overflow-hidden bg-gray-800">
           <img
             src={product.image}
             alt={product.name}
@@ -147,7 +147,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 translate-y-2 group-hover:translate-y-0">
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-              className="flex items-center justify-center w-full py-2 px-4 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors text-xs"
+              className="flex items-center justify-center w-full py-2 px-4 bg-white/90 text-gray-900 rounded-full font-medium hover:bg-white transition-colors text-xs backdrop-blur-sm"
             >
               Quick View
             </button>
@@ -168,7 +168,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           </div>
 
           {/* Name */}
-          <h3 className="font-semibold text-gray-900 text-sm sm:text-base line-clamp-2 leading-tight">
+          <h3 className="font-semibold text-white text-sm sm:text-base line-clamp-2 leading-tight">
             {product.name}
           </h3>
 
@@ -202,7 +202,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                     selectedType === type.id
                       ? "bg-gray-900 text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
                   }`}
                 >
                   {type.name}
@@ -211,7 +211,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               {hiddenTypes.length > 0 && (
                 <button
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                  className="px-3 py-1.5 rounded-full text-xs font-medium bg-gray-50 text-gray-500"
+                  className="px-3 py-1.5 rounded-full text-xs font-medium bg-gray-800 text-gray-400"
                 >
                   <Plus className="h-3 w-3 inline" /> {hiddenTypes.length}
                 </button>
@@ -221,7 +221,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
           {/* Price */}
           <div className="flex items-center gap-2 pt-1">
-            <span className="font-bold text-lg sm:text-xl text-gray-900">
+            <span className="font-bold text-lg sm:text-xl text-white">
               {formatMWK(displayPrice)}
             </span>
             {isOnSale && discountPercent > 0 && originalPrice > displayPrice && (

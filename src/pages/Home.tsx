@@ -6,7 +6,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { KitCard } from "@/components/KitCard";
 import { KitCardSkeleton } from "@/components/Skeletons";
 import { SEO, defaultSEO } from "@/components/SEO";
-import { Star } from "lucide-react";
+import { Star, Music, Dumbbell, Cross, Briefcase, ArrowRight, Quote } from "lucide-react";
 import { motion } from "framer-motion";
 import hero from "@/assets/hero-lifestyle.jpg";
 
@@ -15,6 +15,13 @@ const fadeUp = {
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true } as const,
   transition: { duration: 0.5, ease: "easeOut" },
+};
+
+const pillarIcons: Record<string, React.ElementType> = {
+  music: Music,
+  sports: Dumbbell,
+  faith: Cross,
+  hustle: Briefcase,
 };
 
 const Home = () => {
@@ -32,7 +39,7 @@ const Home = () => {
         <div className="container grid lg:grid-cols-2 gap-8 sm:gap-12 items-center py-16 sm:py-20 lg:py-28">
           <div className="space-y-6 sm:space-y-8">
             <span className="inline-flex px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-gray-400">
-              Premium African Streetwear
+              Identity Expression. Streetwear Is Our Medium.
             </span>
 
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl text-white leading-[0.95] tracking-tight">
@@ -42,16 +49,16 @@ const Home = () => {
             </h1>
 
             <p className="text-gray-400 text-base sm:text-lg max-w-md leading-relaxed">
-              Generic brands don't know your story. You've been wearing someone else's identity.
-              It's time to wear what actually represents you.
+              You are not looking for clothes. You are looking for identity.
+              Something that says "this is who I am" before you speak a word.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3.5 font-semibold text-sm sm:text-base">
-                <Link to="/shop">Discover Your Culture</Link>
+              <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3.5 font-semibold text-sm sm:text-base rounded-full">
+                <Link to="/shop">Shop Collection</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold text-sm sm:text-base">
-                <Link to="/about">Our Story</Link>
+              <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold text-sm sm:text-base rounded-full">
+                <Link to="/community">Join the Community</Link>
               </Button>
             </div>
 
@@ -64,7 +71,7 @@ const Home = () => {
             </div>
 
             <p className="text-xs text-gray-600 italic max-w-md">
-              Without representation, culture stays silent. Don't settle for clothes that say nothing.
+              Fashion fades. Identity lasts. Don't chase trends. Wear purpose.
             </p>
           </div>
 
@@ -72,7 +79,7 @@ const Home = () => {
             <div className="relative overflow-hidden">
               <img
                 src={hero}
-                alt="Streetwear Blantyre — premium African streetwear from Blantyre, Malawi"
+                alt="Streetwear Blantyre — African streetwear from Blantyre, Malawi"
                 className="w-full aspect-[4/5] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-gray-950/40 via-transparent to-transparent" />
@@ -95,51 +102,92 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── CULTURE PILLARS ─── */}
+      {/* ─── MANIFESTO ─── */}
+      <section className="bg-gray-950 border-y border-white/10">
+        <div className="container py-28 sm:py-36">
+          <div className="max-w-4xl mx-auto text-center space-y-10">
+            <motion.div {...fadeUp}>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.3em]">Manifesto</p>
+            </motion.div>
+            <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }}>
+              <p className="font-display font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.05] tracking-tight">
+                We believe what you wear says something before you speak.
+              </p>
+            </motion.div>
+            <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.2 }}>
+              <p className="font-display font-bold text-xl sm:text-2xl md:text-3xl text-gray-400 leading-relaxed max-w-3xl mx-auto">
+                Clothing is more than fabric. It is identity. It is culture. It is belief. It is ambition.
+              </p>
+            </motion.div>
+            <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.3 }}>
+              <div className="grid sm:grid-cols-3 gap-8 max-w-2xl mx-auto mt-6">
+                {[
+                  { text: "We don't follow culture. We create it.", icon: null },
+                  { text: "We don't wear clothes. We wear our story.", icon: null },
+                  { text: "Every piece is a symbol. Every collection is a belief.", icon: null },
+                ].map((item) => (
+                  <p key={item.text} className="text-sm sm:text-base text-gray-400 leading-relaxed italic">
+                    {item.text}
+                  </p>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CULTURE PILLARS / COLLECTIONS AS BELIEFS ─── */}
       <section className="bg-gray-950 container py-24 sm:py-28">
         <motion.div {...fadeUp}>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Four Pillars. One Movement.</p>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-10 sm:mb-12">What Moves You?</h2>
-          <p className="text-gray-400 text-sm sm:text-base max-w-xl -mt-8 mb-10 sm:mb-12">
-            Most brands import generic designs. None of them know your culture. We built SB for the creators —
-            the musicians, athletes, entrepreneurs, and believers who refuse to blend in.
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Collections as Beliefs</p>
+          <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">What Do You Stand For?</h2>
+          <p className="text-gray-400 text-sm sm:text-base max-w-xl mb-10 sm:mb-12">
+            Every collection represents a belief. Pick the one that speaks to who you are and who you're becoming.
           </p>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {culturePillars.map((pillar) => (
-            <Link
-              key={pillar.id}
-              to={`/shop?culture=${pillar.id}`}
-              className="group block p-6 bg-white/5 hover:bg-white/10 transition-colors duration-300"
-            >
-              <h3 className="font-display font-bold text-lg text-white mb-2">{pillar.label}</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">{pillar.description}</p>
-            </Link>
-          ))}
+          {culturePillars.map((pillar) => {
+            const Icon = pillarIcons[pillar.id as keyof typeof pillarIcons] || Briefcase;
+            return (
+              <Link
+                key={pillar.id}
+                to={`/shop?culture=${pillar.id}`}
+                className="group block p-8 bg-white/5 hover:bg-white/10 transition-all duration-300"
+              >
+                <Icon className="h-8 w-8 text-gray-400 mb-4 group-hover:text-white transition-colors" />
+                <h3 className="font-display font-bold text-lg text-white mb-2">{pillar.label}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed mb-4">{pillar.description}</p>
+                <span className="text-xs font-semibold text-gray-500 group-hover:text-white transition-colors uppercase tracking-wider">
+                  Explore Collection →
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
-      {/* ─── WHY BUNDLES ─── */}
+      {/* ─── THE PLAN ─── */}
       <section className="bg-gray-900 py-24 sm:py-28">
         <div className="container">
           <motion.div {...fadeUp}>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Why Bundles</p>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">Stop Wearing Mismatched Everything</h2>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">The Plan</p>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">Four Steps. One Story.</h2>
             <p className="text-gray-400 text-sm sm:text-base max-w-xl mb-10 sm:mb-12">
-              Buying separate pieces means guessing what works together. Settling for "good enough."
-              Culture Packs eliminate the guesswork — curated outfits that actually go together.
+              We made it simple. You bring the ambition. We bring the culture.
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-3 gap-10">
+          <div className="grid sm:grid-cols-4 gap-8 max-w-4xl mx-auto">
             {[
-              { title: "No Guesswork", desc: "We matched the right pieces for your vibe. No research needed." },
-              { title: "Save 15–25%", desc: "Bundles cost less than buying separate. Better deal. Always." },
-              { title: "30-Day Guarantee", desc: "Not happy? Send it back. No questions asked." },
+              { step: "01", title: "Discover the Culture", desc: "Explore collections built around beliefs that matter to you." },
+              { step: "02", title: "Choose Your Story", desc: "Every piece represents something. Find the one that speaks for you." },
+              { step: "03", title: "Wear the Culture", desc: "Order online or on WhatsApp. Delivered across Malawi." },
+              { step: "04", title: "Live the Movement", desc: "You're not a customer. You're part of a community building something bigger." },
             ].map((item) => (
-              <div key={item.title} className="text-center">
-                <h3 className="font-display font-bold text-xl text-white mb-2">{item.title}</h3>
+              <div key={item.step} className="text-center">
+                <span className="text-sm font-semibold text-gray-500 tracking-wider">{item.step}</span>
+                <h3 className="font-display font-bold text-lg text-white mt-3 mb-2">{item.title}</h3>
                 <p className="text-sm text-gray-400 leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -147,13 +195,13 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── FEATURED PRODUCTS ─── */}
+      {/* ─── FEATURED PRODUCTS — CULTURE PICKS ─── */}
       {featuredProducts.length > 0 && (
         <section className="bg-gray-950 container py-24 sm:py-28">
           <div className="flex items-end justify-between mb-8 sm:mb-10">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Featured</p>
-              <h2 className="font-display font-bold text-2xl sm:text-3xl text-white">Culture Picks</h2>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Culture Picks</p>
+              <h2 className="font-display font-bold text-2xl sm:text-3xl text-white">Pieces That Speak</h2>
               <p className="text-gray-400 text-sm mt-1">Every piece tells a story. Yours starts here.</p>
             </div>
             <Link to="/shop" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">View All</Link>
@@ -164,7 +212,7 @@ const Home = () => {
                 <div className="relative aspect-square overflow-hidden bg-white/5">
                   <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   {p.is_best_seller && (
-                    <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold bg-white text-gray-900 uppercase tracking-wider">Best Seller</span>
+                    <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold bg-white text-gray-900 uppercase tracking-wider">Most Worn</span>
                   )}
                 </div>
                 <div className="p-4">
@@ -183,8 +231,8 @@ const Home = () => {
         <div className="container">
           <div className="flex items-end justify-between mb-8 sm:mb-10">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Bundles</p>
-              <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-10 sm:mb-12">Culture Packs</h2>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Culture Packs</p>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-10 sm:mb-12">Your Outfit. One Box.</h2>
             </div>
             <Link to="/combos" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">View All</Link>
           </div>
@@ -205,55 +253,67 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── HOW IT WORKS ─── */}
-      <section className="bg-gray-900 container py-24 sm:py-28">
+      {/* ─── CULTURE JOURNAL PREVIEW ─── */}
+      <section className="bg-gray-950 container py-24 sm:py-28">
         <motion.div {...fadeUp}>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">How It Works</p>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">Three Steps. Zero Guesswork.</h2>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.3em] mb-3">The Culture Journal</p>
+          <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">Stories Worth Reading</h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-xl mb-10 sm:mb-12">
-            We made it simple. No research needed. No second-guessing. Just pick, wear, and own your story.
+            Not a blog. A publication. Stories about music, sport, faith, hustle, and the people building African culture.
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-3 gap-10 max-w-3xl mx-auto">
+        <div className="grid sm:grid-cols-3 gap-6">
           {[
-            { step: "01", title: "Pick Your Culture Pack", desc: "Student, work, travel, or casual. Pick the one that fits your vibe." },
-            { step: "02", title: "Wear the Culture", desc: "Complete your experience online or order in 30 seconds on WhatsApp." },
-            { step: "03", title: "Share Your Story", desc: "Fast delivery across Malawi. Love it or send it back within 30 days." },
-          ].map((item) => (
-            <div key={item.step} className="text-center">
-              <span className="text-sm font-semibold text-gray-300 tracking-wider">{item.step}</span>
-              <h3 className="font-display font-bold text-lg text-white mt-2 mb-2">{item.title}</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">{item.desc}</p>
-            </div>
+            { title: "Music That Moves Malawi", desc: "From Blantyre beats to global sound — the artists shaping a generation.", pillar: "Music", color: "text-purple-300" },
+            { title: "Built From Nothing", desc: "How young entrepreneurs are rewriting the African hustle story, one business at a time.", pillar: "Hustle", color: "text-red-300" },
+            { title: "Faith in Every Stitch", desc: "The spiritual thread that runs through African creativity and craftsmanship.", pillar: "Faith", color: "text-amber-300" },
+          ].map((article) => (
+            <Link
+              key={article.title}
+              to="/editorial"
+              className="group p-8 bg-white/5 hover:bg-white/10 transition-all duration-300"
+            >
+              <span className={`text-xs font-semibold uppercase tracking-wider ${article.color}`}>{article.pillar}</span>
+              <h3 className="font-display font-bold text-xl text-white mt-3 mb-2 group-hover:text-gray-200 transition-colors">{article.title}</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">{article.desc}</p>
+              <span className="inline-block mt-4 text-xs font-semibold text-gray-500 group-hover:text-white transition-colors uppercase tracking-wider">
+                Read Story →
+              </span>
+            </Link>
           ))}
+        </div>
+
+        <div className="text-center mt-10">
+          <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 rounded-full">
+            <Link to="/editorial">Explore the Culture Journal</Link>
+          </Button>
         </div>
       </section>
 
-      {/* ─── TESTIMONIALS ─── */}
-      <section className="bg-gray-950 py-24 sm:py-28">
+      {/* ─── COMMUNITY STORIES ─── */}
+      <section className="bg-gray-900 py-24 sm:py-28">
         <div className="container">
           <div className="text-center mb-10 sm:mb-12">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">From Our Community</p>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white">Stories Worth Wearing</h2>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">From Our Community</p>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white">Real People. Real Stories.</h2>
             <p className="text-gray-400 text-sm mt-2 max-w-md mx-auto">
-              2,500+ creators chose to wear their truth. Here's what they say.
+              We don't sell to demographics. We build for a tribe of creators, builders, and believers.
             </p>
           </div>
           <div className="grid sm:grid-cols-3 gap-6">
             {[
-              { name: "Tendai M.", text: "Every time I wear SB, I feel like I belong to something bigger. The quality speaks for itself.", stars: 5 },
-              { name: "Chimwemwe K.", text: "I built my business wearing these fits. Street culture meets hustle — that's SB.", stars: 5 },
-              { name: "Fatsani P.", text: "Wear the Culture isn't just a slogan. I feel like myself in these clothes. Authentic.", stars: 5 },
+              { name: "Tendai M.", role: "Musician, Lilongwe", text: "Every time I wear SB, I feel like I belong to something bigger. These clothes speak my language.", icon: Music },
+              { name: "Chimwemwe K.", role: "Entrepreneur, Blantyre", text: "I built my business in these fits. SB represents the hustle — building something from nothing.", icon: Briefcase },
+              { name: "Fatsani P.", role: "Athlete, Mzuzu", text: "Representing my roots wherever I go. SB reminds me where I come from and where I'm going.", icon: Dumbbell },
             ].map((t) => (
-              <div key={t.name} className="p-6 bg-white/5">
-                <div className="flex gap-0.5 mb-3">
-                  {Array.from({ length: t.stars }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                  ))}
+              <div key={t.name} className="p-8 bg-white/5 space-y-4">
+                <t.icon className="h-6 w-6 text-gray-500" />
+                <p className="text-gray-300 text-sm leading-relaxed">"{t.text}"</p>
+                <div>
+                  <p className="text-white font-medium text-sm">{t.name}</p>
+                  <p className="text-gray-500 text-xs">{t.role}</p>
                 </div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">"{t.text}"</p>
-                <p className="text-white font-medium text-sm">{t.name}</p>
               </div>
             ))}
           </div>
@@ -264,21 +324,22 @@ const Home = () => {
       <section className="container py-24 sm:py-28">
         <div className="bg-gray-950 p-10 sm:p-14 md:p-20 text-center">
           <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
-            Wear the Culture.<br />Build Your Legacy.
+            Your Identity Deserves<br />to Be Seen.
           </h2>
           <p className="text-gray-400 text-base sm:text-lg mt-4 max-w-lg mx-auto">
-            Your story deserves clothing that reflects who you are. Every piece you wear is a statement.
-            Make it count. Join 2,500+ creators who refused to blend in.
+            You are not buying a T-shirt. You are wearing a statement.
+            You are telling the world what you stand for.
+            Join 2,500+ creators who refused to blend in.
           </p>
           <p className="text-gray-500 text-xs mt-3 italic">
-            Generic brands don't know your name. We do.
+            Don't chase trends. Wear purpose.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3.5 font-semibold">
-              <Link to="/shop">Wear the Culture</Link>
+            <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3.5 font-semibold rounded-full">
+              <Link to="/shop">Shop Collection</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold">
-              <Link to="/about">Our Story</Link>
+            <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold rounded-full">
+              <Link to="/about">Read Our Story</Link>
             </Button>
           </div>
         </div>

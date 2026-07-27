@@ -10,7 +10,7 @@ interface SEOProps {
 
 const SITE_NAME = "Streetwear Blantyre";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "Premium African streetwear from Blantyre, Malawi. Celebrating creators, builders, dreamers, and cultural keepers. Every piece tells a story. Free delivery over MK 50,000.";
+const DEFAULT_DESC = "We help ambitious young Africans express who they are and who they are becoming. Streetwear is our medium. Identity is our purpose. Wear the Culture.";
 const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Streetwear+Blantyre";
 
 export const SEO = ({

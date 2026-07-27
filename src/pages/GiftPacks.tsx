@@ -172,7 +172,7 @@ const GiftPacks = () => {
       </section>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section className="border-b border-gray-100">
+      <section className="border-b border-gray-800">
         <div className="container py-6">
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
             {[
@@ -181,12 +181,12 @@ const GiftPacks = () => {
               { icon: Heart, title: "We Wrap It", desc: "Premium gift presentation" },
               { icon: Sparkles, title: "We Deliver", desc: "Recipient gets a tracking link" },
             ].map((item) => (
-              <div key={item.title} className="flex items-start gap-3 p-4 bg-gray-50">
+              <div key={item.title} className="flex items-start gap-3 p-4 bg-gray-900">
                 <div className="h-8 w-8 rounded-lg bg-gray-900 flex items-center justify-center shrink-0">
                   <item.icon className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm text-gray-900">{item.title}</p>
+                  <p className="font-semibold text-sm text-white">{item.title}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
                 </div>
               </div>

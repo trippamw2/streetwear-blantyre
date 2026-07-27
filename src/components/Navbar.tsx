@@ -16,11 +16,11 @@ import {
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/combos", label: "Culture Packs" },
-  { to: "/gifts", label: "Gift the Culture" },
   { to: "/shop", label: "Shop" },
-  { to: "/rewards", label: "Rewards" },
-  { to: "/contact", label: "Contact" },
+  { to: "/combos", label: "Culture Packs" },
+  { to: "/editorial", label: "Culture Journal" },
+  { to: "/about", label: "Our Story" },
+  { to: "/contact", label: "Connect" },
 ];
 
 export const Navbar = () => {

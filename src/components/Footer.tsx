@@ -42,7 +42,7 @@ export const Footer = () => {
 
     if (saved) {
       setSubscribed(true);
-      toast({ title: "Subscribed!", description: "Get 10% off your first order" });
+      toast({ title: "You're in.", description: "Welcome to the movement. Check your inbox." });
     } else {
       toast({ variant: "destructive", title: "Something went wrong", description: "Could not subscribe. Try again later." });
     }
@@ -58,11 +58,11 @@ export const Footer = () => {
       <div className="border-b border-white/10">
         <div className="container py-12">
           {subscribed ? (
-            <p className="text-sm text-white/60">Thanks for subscribing. Check your inbox for 10% off.</p>
+            <p className="text-sm text-white/60">Thanks for joining. You're part of the movement now.</p>
           ) : (
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-lg">
               <div className="flex-1 w-full">
-                <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2 block">Join Our Community</p>
+                <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2 block">Become Part of the Culture</p>
                 <input
                   id="footer-email"
                   type="email"
@@ -75,7 +75,7 @@ export const Footer = () => {
                 />
               </div>
               <button type="submit" disabled={loading || !email} className="px-6 py-2.5 bg-white text-navy text-sm font-medium hover:bg-white/90 transition-colors disabled:opacity-50">
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Subscribe"}
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Join"}
               </button>
             </form>
           )}
@@ -88,10 +88,10 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-24 sm:h-28 md:h-32 lg:h-40 xl:h-48" />
             <p className="text-white/50 max-w-sm text-sm leading-relaxed">
-              Premium African streetwear from Blantyre, Malawi. We celebrate people who create culture
-              instead of chasing it. Every piece tells a story.
+              We help ambitious young Africans express who they are and who they are becoming.
+              Streetwear is our medium. Identity is our purpose.
             </p>
-            <p className="text-sm text-white/80 font-medium">Wear the Culture. Build Your Legacy.</p>
+            <p className="text-sm text-white/80 font-medium">Wear the Culture. Wear Your Story.</p>
 
             <div className="pt-4">
               <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">We accept</p>
@@ -106,43 +106,42 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold text-sm text-white mb-4">Shop</h4>
+            <h4 className="font-semibold text-sm text-white mb-4">Experience</h4>
             <ul className="space-y-2.5 text-sm text-white/50">
-              <li><Link to="/gifts" className="hover:text-white transition-colors">Gift Packs</Link></li>
-              <li><Link to="/gift" className="hover:text-white transition-colors">Schedule a Gift</Link></li>
+              <li><Link to="/shop" className="hover:text-white transition-colors">Shop Collection</Link></li>
               <li><Link to="/combos" className="hover:text-white transition-colors">Culture Packs</Link></li>
-              <li><Link to="/shop" className="hover:text-white transition-colors">Culture Pieces</Link></li>
-              <li><Link to="/shop?cat=t-shirts" className="hover:text-white transition-colors">T-Shirts</Link></li>
-              <li><Link to="/shop?cat=hoodies" className="hover:text-white transition-colors">Hoodies</Link></li>
-              <li><Link to="/shop?cat=caps" className="hover:text-white transition-colors">Caps</Link></li>
+              <li><Link to="/gifts" className="hover:text-white transition-colors">Gift the Culture</Link></li>
+              <li><Link to="/editorial" className="hover:text-white transition-colors">Culture Journal</Link></li>
+              <li><Link to="/loyalty" className="hover:text-white transition-colors">Rewards</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-sm text-white mb-4">Support</h4>
+            <h4 className="font-semibold text-sm text-white mb-4">Connect</h4>
             <ul className="space-y-2.5 text-sm text-white/50">
-              <li><Link to="/orders" className="hover:text-white transition-colors">Track Order</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Our Story</Link></li>
               <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/orders" className="hover:text-white transition-colors">Track Order</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-sm text-white mb-4">Legal</h4>
+            <h4 className="font-semibold text-sm text-white mb-4">Info</h4>
             <ul className="space-y-2.5 text-sm text-white/50">
               <li><Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
               <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/returns" className="hover:text-white transition-colors">Returns & Refunds</Link></li>
-              <li><Link to="/warranty" className="hover:text-white transition-colors">Warranty Info</Link></li>
+              <li><Link to="/returns" className="hover:text-white transition-colors">Returns</Link></li>
               <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-white/40">
-          <p>&copy; {new Date().getFullYear()} Streetwear Blantyre. Wear the Culture.</p>
-          <p className="uppercase tracking-wider">Malawi</p>
+        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+          <p className="text-xs text-white/40 text-center md:text-left">
+            &copy; {new Date().getFullYear()} Streetwear Blantyre. Wear the Culture. Wear Your Story. Represent Your Roots. Build Your Future.
+          </p>
+          <p className="text-xs text-white/40 uppercase tracking-wider">Blantyre, Malawi</p>
         </div>
       </div>
     </footer>

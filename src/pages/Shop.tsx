@@ -113,8 +113,9 @@ const Shop = () => {
         <div className="max-w-3xl space-y-2 sm:space-y-3 mb-4 sm:mb-8">
           <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-white">Culture Pieces</h1>
           <p className="text-gray-400 text-sm sm:text-base">
-            Most brands sell you someone else's identity. These pieces tell your story.
-            Browse. Pick. Wear what actually represents you.
+            Every piece represents a belief. A story. An identity.
+            Browse by what moves you — music, sport, faith, or hustle.
+            Find the one that speaks for who you are and who you're becoming.
           </p>
         </div>
 
@@ -335,7 +336,7 @@ const Shop = () => {
 
       {/* Results count */}
       <p className="text-sm text-gray-400 mb-4">
-        {visibleProducts.length} of {sorted.length} pieces — find the one that tells your story.
+        {visibleProducts.length} of {sorted.length} pieces — find the one that represents you.
       </p>
 
       {/* Products Grid */}
@@ -367,7 +368,7 @@ const Shop = () => {
       ) : (
         <div className="text-center py-12 sm:py-20 space-y-3 sm:space-y-4">
           <p className="text-gray-400 text-base sm:text-lg">No pieces match your search.</p>
-          <p className="text-gray-500 text-sm">Your culture piece is here — let's find it.</p>
+          <p className="text-gray-500 text-sm">Try a different filter — your story is here somewhere.</p>
           <button onClick={clearFilters} className="px-4 sm:px-6 py-2 sm:py-2.5 bg-white text-gray-900 rounded-none text-sm font-medium">
             Clear filters
           </button>

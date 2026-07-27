@@ -62,17 +62,17 @@ const Editorial = () => {
 
   return (
     <>
-      <SEO title="The Culture Edit | Streetwear Blantyre" description="Stories, editorial, and culture from the streets. The voice of streetwear culture." />
+      <SEO title="The Culture Journal | Streetwear Blantyre" description="Stories, editorial, and culture from the streets of Africa. Music, sport, faith, hustle — told through the people building the culture." />
 
       <div className="min-h-screen bg-gray-950">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
           {/* Header */}
           <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.3em] mb-3">Editorial</p>
-            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-4 text-white">The Culture Edit</h1>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.3em] mb-3">Publication</p>
+            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-4 text-white">The Culture Journal</h1>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Generic blogs talk about trends. Culture stories talk about identity.
-              Without stories, culture dies. These are ours.
+              Not a blog. A publication. Stories about music, sport, faith, hustle, and the people
+              building African culture. Read. Learn. Wear your story.
             </p>
           </div>
 

@@ -13,10 +13,10 @@ import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
 
 const tierConfig = {
-  bronze: { icon: Gem, color: "bg-amber-700", text: "text-amber-700", bg: "bg-amber-50" },
-  silver: { icon: Award, color: "bg-gray-400", text: "text-gray-400", bg: "bg-gray-50" },
-  gold: { icon: Crown, color: "bg-yellow-500", text: "text-yellow-600", bg: "bg-yellow-50" },
-  platinum: { icon: Star, color: "bg-purple-500", text: "text-purple-600", bg: "bg-purple-50" },
+  bronze: { icon: Gem, color: "bg-amber-700", text: "text-amber-400", bg: "bg-amber-950/50" },
+  silver: { icon: Award, color: "bg-gray-400", text: "text-gray-300", bg: "bg-gray-900" },
+  gold: { icon: Crown, color: "bg-yellow-500", text: "text-yellow-400", bg: "bg-yellow-950/50" },
+  platinum: { icon: Star, color: "bg-purple-500", text: "text-purple-400", bg: "bg-purple-950/50" },
 };
 
 const Loyalty = () => {
