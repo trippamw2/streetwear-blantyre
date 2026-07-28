@@ -62,6 +62,7 @@ import EditorialPost from "./pages/EditorialPost";
 import Culture from "./pages/Culture";
 import Lookbooks from "./pages/Lookbooks";
 import LookbookDetail from "./pages/LookbookDetail";
+import Scan from "./pages/Scan";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -135,6 +136,7 @@ const App = () => (
                 {/* Standalone pages (no header/footer) */}
                 <Route path="/verify/:token" element={<Verify />} />
                 <Route path="/passport/:token" element={<Passport />} />
+                <Route path="/scan/:barcode" element={<Scan />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />
                   <Route path="products" element={<AdminProducts />} />

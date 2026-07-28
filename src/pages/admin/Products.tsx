@@ -11,10 +11,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Edit, Trash2, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Plus, Edit, Trash2, Image as ImageIcon, Loader2, Download, Printer, QrCode } from "lucide-react";
 import { AIWritingButton } from "@/components/admin/AIWritingButton";
 import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
 import { toast } from "@/hooks/use-toast";
+import { generateProductBarcode, downloadBarcodeLabel, printBarcodeLabel } from "@/lib/barcode";
 
 const BRANDS = [
   { id: "sb-original", name: "SB Original", color: "#2563eb" },
@@ -71,6 +72,7 @@ interface Product {
   types: ProductType[];
   supplier_id?: string;
   stock_quantity?: number;
+  barcode?: string;
 }
 
 const AdminProducts = () => {
@@ -153,6 +155,7 @@ const AdminProducts = () => {
         culture_pillar: formData.culture_pillar || null,
         culture_story: formData.culture_story || null,
         culture_context: formData.culture_context || null,
+        barcode: editingProduct?.barcode || generateProductBarcode(`sb-${Date.now().toString(36)}`),
       };
 
       if (editingProduct) {
@@ -666,6 +669,7 @@ const AdminProducts = () => {
           <thead className="bg-gray-50">
             <tr>
               <th className="text-left p-4 font-medium">Product</th>
+              <th className="text-left p-4 font-medium">Barcode</th>
               <th className="text-left p-4 font-medium">Brand</th>
               <th className="text-left p-4 font-medium">Category</th>
               <th className="text-left p-4 font-medium">Price</th>
@@ -693,6 +697,45 @@ const AdminProducts = () => {
                       <p className="text-sm text-gray-500 line-clamp-1">{product.benefit}</p>
                     </div>
                   </div>
+                </td>
+                <td className="p-4">
+                  {product.barcode ? (
+                    <div className="flex items-center gap-1">
+                      <span className="font-mono text-xs text-gray-600">{product.barcode}</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        title="Download barcode label"
+                        onClick={() => downloadBarcodeLabel({
+                          productName: product.name,
+                          barcode: product.barcode!,
+                          price: product.price,
+                          category: CATEGORIES.find(c => c.id === product.category)?.label,
+                          brand: getBrandName(product.brand || "generic"),
+                        })}
+                      >
+                        <Download className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        title="Print barcode label"
+                        onClick={() => printBarcodeLabel({
+                          productName: product.name,
+                          barcode: product.barcode!,
+                          price: product.price,
+                          category: CATEGORIES.find(c => c.id === product.category)?.label,
+                          brand: getBrandName(product.brand || "generic"),
+                        })}
+                      >
+                        <Printer className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <span className="text-xs text-gray-400">No barcode</span>
+                  )}
                 </td>
                 <td className="p-4">
                   <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
