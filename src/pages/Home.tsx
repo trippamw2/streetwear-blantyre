@@ -69,7 +69,7 @@ const Home = () => {
               { label: "Football Jerseys", desc: "Sport meets style.", to: "/shop?category=jerseys", img: "https://placehold.co/600x400/102C54/ffffff?text=Jerseys" },
               { label: "Short Sleeve Shirts", desc: "Relaxed everyday looks.", to: "/shop?category=short-sleeve-shirts", img: "https://placehold.co/600x400/102C54/ffffff?text=Short+Sleeve+Shirts" },
             ].map((c) => (
-              <Link key={c.label} to={c.to} className="group relative block overflow-hidden bg-gray-800">
+              <Link key={c.label} to={c.to} className="group relative block overflow-hidden rounded-2xl bg-gray-800">
                 <img src={c.img} alt={c.label} className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 to-transparent" />
                 <div className="absolute bottom-4 left-4">

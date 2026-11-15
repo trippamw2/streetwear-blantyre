@@ -75,7 +75,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     >
        <Link
          to={`/product/${product.id}`}
-         className="group block rounded-xl bg-gray-100 border border-gray-800 overflow-hidden hover:border-gray-700 hover:shadow-lg hover:shadow-black/20 hover:opacity-90 transition-all duration-200 max-w-full"
+         className="group block rounded-2xl bg-gray-100 border border-gray-800 overflow-hidden hover:border-gray-700 hover:shadow-lg hover:shadow-black/20 hover:opacity-90 transition-all duration-200 max-w-full"
       >
         <div className="relative aspect-[3/4] overflow-hidden bg-gray-800">
            <img
