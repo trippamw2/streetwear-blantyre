@@ -114,7 +114,7 @@ const Shop = () => {
   }
 
   return (
-    <div className="bg-gray-950 min-h-screen">
+    <div className="bg-white min-h-screen">
       <div className="container py-4 sm:py-8 md:py-12">
         <SEO {...defaultSEO.shop} />
         <div className="mb-4 sm:mb-6">
@@ -122,8 +122,8 @@ const Shop = () => {
         </div>
 
         <div className="max-w-3xl space-y-2 sm:space-y-3 mb-4 sm:mb-8">
-          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-white">Shop All</h1>
-          <p className="text-gray-400 text-sm sm:text-base">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-gray-900">Shop All</h1>
+          <p className="text-gray-500 text-sm sm:text-base">
             Every piece represents a belief. A story. An identity.
             Browse T shirts, football jerseys and short sleeve shirts.
             Find the style that fits your everyday life.
@@ -131,11 +131,11 @@ const Shop = () => {
         </div>
 
         {/* Outfit bundles upsell banner */}
-        <div className="bg-gray-900 rounded-lg p-5 sm:p-7 mb-6 sm:mb-10 text-white">
+        <div className="bg-gray-100 rounded-lg p-5 sm:p-7 mb-6 sm:mb-10 text-gray-900">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
             <p className="font-display font-bold text-base sm:text-lg">Get a Bundle. Save 15% to 25%.</p>
-            <p className="text-white/70 text-xs sm:text-sm">Curated outfits. One order. Better value.</p>
+            <p className="text-gray-900/70 text-xs sm:text-sm">Curated outfits. One order. Better value.</p>
           </div>
           <Link to="/combos">
             <Button className="bg-white text-gray-900 hover:bg-gray-100 px-5 py-2 h-auto rounded-none font-semibold text-xs sm:text-sm gap-1.5">
@@ -148,7 +148,7 @@ const Shop = () => {
       {/* Search & Sort Bar */}
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-6">
         <div className="relative flex-1 max-w-sm sm:max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 sm:h-5 w-4 sm:w-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 sm:h-5 w-4 sm:w-5 text-gray-500" />
           <Input
             placeholder="Search..."
             value={searchQuery}
@@ -156,11 +156,11 @@ const Shop = () => {
                   setSearchQuery(e.target.value);
                   setVisibleCount(PRODUCTS_PER_PAGE);
                 }}
-            className="pl-9 sm:pl-10 h-9 sm:h-10 text-sm bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+            className="pl-9 sm:pl-10 h-9 sm:h-10 text-sm bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
           />
           {searchQuery && (
             <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2">
-              <X className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-gray-400 hover:text-white" />
+              <X className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-gray-500 hover:text-gray-900" />
             </button>
           )}
         </div>
@@ -184,29 +184,29 @@ const Shop = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="appearance-none pl-3 sm:px-4 pr-8 sm:pr-10 py-1.5 sm:py-2 rounded-none border border-white/10 bg-white/5 text-sm font-medium text-white focus:outline-none focus:border-white/30"
+              className="appearance-none pl-3 sm:px-4 pr-8 sm:pr-10 py-1.5 sm:py-2 rounded-none border border-gray-200 bg-gray-100 text-sm font-medium text-gray-900 focus:outline-none focus:border-white/30"
             >
               <option value="newest">Newest</option>
               <option value="price-low">Price: Low</option>
               <option value="price-high">Price: High</option>
               <option value="name">Name</option>
             </select>
-            <ArrowUpDown className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 h-3.5 sm:h-4 w-3.5 sm:w-4 text-gray-400 pointer-events-none" />
+            <ArrowUpDown className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 h-3.5 sm:h-4 w-3.5 sm:w-4 text-gray-500 pointer-events-none" />
           </div>
 
           {/* View Toggle */}
-          <div className="hidden md:flex border border-white/10 rounded-none overflow-hidden">
+          <div className="hidden md:flex border border-gray-200 rounded-none overflow-hidden">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 ${viewMode === "grid" ? "bg-white/10" : "bg-transparent"}`}
+              className={`p-2 ${viewMode === "grid" ? "bg-gray-200" : "bg-transparent"}`}
             >
-              <Grid3X3 className="h-4 w-4 text-white" />
+              <Grid3X3 className="h-4 w-4 text-gray-900" />
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 ${viewMode === "list" ? "bg-white/10" : "bg-transparent"}`}
+              className={`p-2 ${viewMode === "list" ? "bg-gray-200" : "bg-transparent"}`}
             >
-              <List className="h-4 w-4 text-white" />
+              <List className="h-4 w-4 text-gray-900" />
             </button>
           </div>
         </div>
@@ -214,7 +214,7 @@ const Shop = () => {
 
       {/* Filter Panel */}
       {showFilters && (
-            <div className="bg-white/5 p-3 sm:p-6 mb-4 sm:mb-6 space-y-3 sm:space-y-4">
+            <div className="bg-gray-100 p-3 sm:p-6 mb-4 sm:mb-6 space-y-3 sm:space-y-4">
               <div>
                 <h3 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Brand</h3>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -225,7 +225,7 @@ const Shop = () => {
                       className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none text-xs sm:text-sm font-medium transition-colors ${
                         selectedBrands.includes(brand.id)
                           ? "bg-white text-gray-900"
-                          : "bg-transparent border border-white/10 text-gray-400 hover:border-white/30"
+                          : "bg-transparent border border-gray-200 text-gray-500 hover:border-white/30"
                       }`}
                     >
                       {brand.name}
@@ -239,7 +239,7 @@ const Shop = () => {
                 <select
                   value={selectedSize}
                   onChange={(e) => { setSelectedSize(e.target.value); setVisibleCount(PRODUCTS_PER_PAGE); }}
-                  className="w-full px-3 py-2 border border-white/10 bg-white/5 rounded-lg text-sm text-white"
+                  className="w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded-lg text-sm text-gray-900"
                 >
                   <option value="all">All Sizes</option>
                   {allSizes.map((s) => (
@@ -256,27 +256,27 @@ const Shop = () => {
                     value={priceMin}
                     onChange={(e) => setPriceMin(Number(e.target.value))}
                     placeholder="Min"
-                    className="w-16 sm:w-24 px-2 sm:px-3 py-1.5 sm:py-2 border border-white/10 bg-white/5 rounded-lg text-xs sm:text-sm text-white placeholder:text-gray-500"
+                    className="w-16 sm:w-24 px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-200 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-900 placeholder:text-gray-500"
                   />
-                  <span className="text-gray-400 text-xs sm:text-sm">-</span>
+                  <span className="text-gray-500 text-xs sm:text-sm">-</span>
                   <input
                     type="number"
                     value={priceMax}
                     onChange={(e) => setPriceMax(Number(e.target.value))}
                     placeholder="Max"
-                    className="w-16 sm:w-24 px-2 sm:px-3 py-1.5 sm:py-2 border border-white/10 bg-white/5 rounded-lg text-xs sm:text-sm text-white placeholder:text-gray-500"
+                    className="w-16 sm:w-24 px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-200 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-900 placeholder:text-gray-500"
                   />
                 </div>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-2">
-                  <button onClick={() => { setPriceMin(0); setPriceMax(10000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-white/5 text-gray-400 rounded hover:bg-white/10">10K</button>
-                  <button onClick={() => { setPriceMin(10000); setPriceMax(25000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-white/5 text-gray-400 rounded hover:bg-white/10">25K</button>
-                  <button onClick={() => { setPriceMin(25000); setPriceMax(50000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-white/5 text-gray-400 rounded hover:bg-white/10">50K</button>
-                  <button onClick={() => { setPriceMin(50000); setPriceMax(1000000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-white/5 text-gray-400 rounded hover:bg-white/10">50K+</button>
+                  <button onClick={() => { setPriceMin(0); setPriceMax(10000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-gray-100 text-gray-500 rounded hover:bg-gray-200">10K</button>
+                  <button onClick={() => { setPriceMin(10000); setPriceMax(25000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-gray-100 text-gray-500 rounded hover:bg-gray-200">25K</button>
+                  <button onClick={() => { setPriceMin(25000); setPriceMax(50000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-gray-100 text-gray-500 rounded hover:bg-gray-200">50K</button>
+                  <button onClick={() => { setPriceMin(50000); setPriceMax(1000000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-gray-100 text-gray-500 rounded hover:bg-gray-200">50K+</button>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <input type="checkbox" id="inStockOnly" checked={inStockOnly} onChange={(e) => setInStockOnly(e.target.checked)} className="rounded" />
-                <label htmlFor="inStockOnly" className="text-sm text-gray-400">In stock only</label>
+                <label htmlFor="inStockOnly" className="text-sm text-gray-500">In stock only</label>
               </div>
             </div>
       )}
@@ -288,7 +288,7 @@ const Shop = () => {
           className={`px-4 py-2 rounded-none text-sm font-medium transition-all ${
             selectedCategory === "all"
               ? "bg-white text-gray-900"
-              : "bg-white/5 border border-white/10 text-gray-400 hover:border-white/30"
+              : "bg-gray-100 border border-gray-200 text-gray-500 hover:border-white/30"
           }`}
         >
           All
@@ -300,7 +300,7 @@ const Shop = () => {
             className={`px-4 py-2 rounded-none text-sm font-medium transition-all ${
               selectedCategory === c.slug
                 ? "bg-white text-gray-900"
-                : "bg-white/5 border border-white/10 text-gray-400 hover:border-white/30"
+                : "bg-gray-100 border border-gray-200 text-gray-500 hover:border-white/30"
             }`}
           >
             {c.name}
@@ -310,13 +310,13 @@ const Shop = () => {
 
       {/* Culture Pillars */}
       <div className="flex flex-wrap gap-2 mb-4">
-        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider self-center mr-1">Vibe:</span>
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider self-center mr-1">Vibe:</span>
         <button
           onClick={() => setSelectedCulture("")}
           className={`px-3 py-1.5 rounded-none text-xs font-medium transition-all ${
             selectedCulture === ""
               ? "bg-white text-gray-900"
-              : "bg-white/5 border border-white/10 text-gray-400 hover:border-white/30"
+              : "bg-gray-100 border border-gray-200 text-gray-500 hover:border-white/30"
           }`}
         >
           All Vibes
@@ -328,7 +328,7 @@ const Shop = () => {
             className={`px-3 py-1.5 rounded-none text-xs font-medium transition-all ${
               selectedCulture === cp.id
                 ? "bg-white text-gray-900"
-                : "bg-white/5 border border-white/10 text-gray-400 hover:border-white/30"
+                : "bg-gray-100 border border-gray-200 text-gray-500 hover:border-white/30"
             }`}
           >
             {cp.label}
@@ -340,31 +340,31 @@ const Shop = () => {
       {hasFilters && (
         <div className="flex flex-wrap gap-2 mb-4">
           {selectedCategory !== "all" && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/10 text-white rounded-none text-sm">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-200 text-gray-900 rounded-none text-sm">
               {categories.find(c => c.slug === selectedCategory)?.name}
-              <button onClick={() => setSelectedCategory("all")}><X className="h-3 w-3 text-white" /></button>
+              <button onClick={() => setSelectedCategory("all")}><X className="h-3 w-3 text-gray-900" /></button>
             </span>
           )}
           {selectedCulture && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/10 text-white rounded-none text-sm">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-200 text-gray-900 rounded-none text-sm">
               {culturePillars.find(cp => cp.id === selectedCulture)?.label}
-              <button onClick={() => setSelectedCulture("")}><X className="h-3 w-3 text-white" /></button>
+              <button onClick={() => setSelectedCulture("")}><X className="h-3 w-3 text-gray-900" /></button>
             </span>
           )}
           {searchQuery && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/10 text-white rounded-none text-sm">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-200 text-gray-900 rounded-none text-sm">
               "{searchQuery}"
-              <button onClick={() => setSearchQuery("")}><X className="h-3 w-3 text-white" /></button>
+              <button onClick={() => setSearchQuery("")}><X className="h-3 w-3 text-gray-900" /></button>
             </span>
           )}
-          <button onClick={clearFilters} className="text-sm text-gray-400 hover:text-white flex items-center gap-1">
+          <button onClick={clearFilters} className="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-1">
             <X className="h-4 w-4" /> Clear all
           </button>
         </div>
       )}
 
       {/* Results count */}
-      <p className="text-sm text-gray-400 mb-4">
+      <p className="text-sm text-gray-500 mb-4">
         {visibleProducts.length} of {sorted.length} pieces — find the one that represents you.
       </p>
 
@@ -386,7 +386,7 @@ const Shop = () => {
                 onClick={loadMore} 
                 variant="outline" 
                 size="sm"
-                className="px-6 sm:px-8 border-white/20 text-white hover:bg-white/10 text-sm"
+                className="px-6 sm:px-8 border-white/20 text-gray-900 hover:bg-gray-200 text-sm"
               >
                 Load More ({sorted.length - visibleCount} left)
                 <ChevronRight className="ml-1.5 sm:ml-2 h-3.5 sm:h-4 w-3.5 sm:w-4" />
@@ -396,7 +396,7 @@ const Shop = () => {
         </>
       ) : (
         <div className="text-center py-12 sm:py-20 space-y-3 sm:space-y-4">
-          <p className="text-gray-400 text-base sm:text-lg">No pieces match your search.</p>
+          <p className="text-gray-500 text-base sm:text-lg">No pieces match your search.</p>
           <p className="text-gray-500 text-sm">Try a different filter — your story is here somewhere.</p>
           <button onClick={clearFilters} className="px-4 sm:px-6 py-2 sm:py-2.5 bg-white text-gray-900 rounded-none text-sm font-medium">
             Clear filters
