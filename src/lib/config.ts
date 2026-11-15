@@ -1,3 +1,7 @@
+import { BRANDS, type BrandSlug } from "@/lib/brands";
+
+export type { BrandSlug };
+
 interface StoreConfig {
   whatsappNumber: string;
   whatsappMessage: string;
@@ -8,6 +12,7 @@ interface StoreConfig {
   supportEmail: string;
   storeName: string;
   storeTagline: string;
+  brand?: BrandSlug;
 }
 
 export const DEFAULT_CONFIG: StoreConfig = {
@@ -22,36 +27,32 @@ export const DEFAULT_CONFIG: StoreConfig = {
   storeTagline: "Wear Your Identity",
 };
 
-export const getStoreConfig = (): StoreConfig => {
-  return {
-    whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || DEFAULT_CONFIG.whatsappNumber,
-    whatsappMessage: import.meta.env.VITE_WHATSAPP_MESSAGE || DEFAULT_CONFIG.whatsappMessage,
-    paymentPhone: import.meta.env.VITE_PAYMENT_PHONE || DEFAULT_CONFIG.paymentPhone,
-    freeDeliveryThreshold: Number(import.meta.env.VITE_FREE_DELIVERY_THRESHOLD) || DEFAULT_CONFIG.freeDeliveryThreshold,
-    deliveryFee: Number(import.meta.env.VITE_DELIVERY_FEE) || DEFAULT_CONFIG.deliveryFee,
-    expressDeliveryFee: Number(import.meta.env.VITE_EXPRESS_DELIVERY_FEE) || DEFAULT_CONFIG.expressDeliveryFee,
-    supportEmail: import.meta.env.VITE_SUPPORT_EMAIL || DEFAULT_CONFIG.supportEmail,
-    storeName: import.meta.env.VITE_STORE_NAME || DEFAULT_CONFIG.storeName,
-    storeTagline: import.meta.env.VITE_STORE_TAGLINE || DEFAULT_CONFIG.storeTagline,
+export const getStoreConfig = (brand: BrandSlug = "sb"): StoreConfig => {
+  const base: StoreConfig = {
+    ...DEFAULT_CONFIG,
+    brand,
   };
-};
+  const prefix = BRANDS[brand].envPrefix;
+  const read = (key: string, fallback: string) => {
+    const value = (import.meta.env as Record<string, string | undefined>)[`VITE_${prefix}_${key}`];
+    return value || fallback;
+  };
+  const readNumber = (key: string, fallback: number) => {
+    const raw = (import.meta.env as Record<string, string | undefined>)[`VITE_${prefix}_${key}`];
+    const parsed = raw ? Number(raw) : NaN;
+    return Number.isFinite(parsed) ? parsed : fallback;
+  };
 
-export const formatMWK = (n: number) => `MK ${n.toLocaleString("en-US")}`;
-
-export const formatDate = (date: string | Date) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
-
-export const formatDateTime = (date: string | Date) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  return {
+    whatsappNumber: read("WHATSAPP_NUMBER", base.whatsappNumber),
+    whatsappMessage: read("WHATSAPP_MESSAGE", base.whatsappMessage),
+    paymentPhone: read("PAYMENT_PHONE", base.paymentPhone),
+    freeDeliveryThreshold: readNumber("FREE_DELIVERY_THRESHOLD", base.freeDeliveryThreshold),
+    deliveryFee: readNumber("DELIVERY_FEE", base.deliveryFee),
+    expressDeliveryFee: readNumber("EXPRESS_DELIVERY_FEE", base.expressDeliveryFee),
+    supportEmail: read("SUPPORT_EMAIL", base.supportEmail),
+    storeName: read("STORE_NAME", base.storeName),
+    storeTagline: read("STORE_TAGLINE", base.storeTagline),
+    brand,
+  };
 };
