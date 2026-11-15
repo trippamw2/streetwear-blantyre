@@ -254,7 +254,7 @@ const RecentOrders = () => {
               </div>
               <div className="text-right">
                 <p className="font-semibold">{formatMWK(order.total_mwk)}</p>
-                <span className={`px-2 py-0.5 rounded-full text-xs text-white ${statusColors[order.status] || "bg-gray-500"}`}>
+                <span className={`px-2 py-0.5 rounded-full text-xs text-gray-900 ${statusColors[order.status] || "bg-gray-500"}`}>
                   {order.status}
                 </span>
               </div>

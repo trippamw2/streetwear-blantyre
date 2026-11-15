@@ -108,7 +108,7 @@ const DeliveryTracking = () => {
               Placed on {format(new Date(order.created_at), "PPPp")}
             </p>
           </div>
-          <span className={`px-4 py-2 rounded-full font-bold uppercase ${statusColor[order.status]} text-white`}>
+          <span className={`px-4 py-2 rounded-full font-bold uppercase ${statusColor[order.status]} text-gray-900`}>
             {order.status}
           </span>
         </div>
@@ -127,7 +127,7 @@ const DeliveryTracking = () => {
                   <div key={step.key} className="flex flex-col items-center text-center min-w-0 flex-1">
                     <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center border-2 transition-colors shrink-0 ${
                       reached 
-                        ? "bg-gradient-brand border-transparent text-white" 
+                        ? "bg-gradient-brand border-transparent text-gray-900" 
                         : "border-border text-muted-foreground bg-background"
                     }`}>
                       <step.icon className="h-4 w-4 sm:h-5 sm:w-5" />

@@ -6,7 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Promotion } from "@/data/promotions";
-import { Plus, Edit, Trash2, Image as ImageIcon, Loader2 } from "lucide-react";
+import { AIWritingButton } from "@/components/admin/AIWritingButton";
+import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
+import { Plus, Edit, Trash2, Image as ImageIcon, Loader2, Sparkles } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const PAGES_OPTIONS = [
@@ -38,7 +40,7 @@ const AdminPromotions = () => {
     link: "/shop",
     link_text: "Shop Now",
     background_color: "from-gray-900 to-gray-800",
-    text_color: "text-white",
+    text_color: "text-gray-900",
     is_active: true,
     is_featured: true,
     sort_order: 0,
@@ -147,7 +149,7 @@ const AdminPromotions = () => {
       link: "/shop",
       link_text: "Shop Now",
       background_color: "from-gray-900 to-gray-800",
-      text_color: "text-white",
+      text_color: "text-gray-900",
       is_active: true,
       is_featured: true,
       sort_order: 0,
@@ -217,7 +219,7 @@ const AdminPromotions = () => {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => { resetForm(); setEditingPromotion(null); }} className="bg-gray-900 hover:bg-gray-800">
+            <Button onClick={() => { resetForm(); setEditingPromotion(null); }} className="bg-gray-100 hover:bg-gray-800">
               <Plus className="h-4 w-4" /> Add Promotion
             </Button>
           </DialogTrigger>
@@ -228,17 +230,50 @@ const AdminPromotions = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Title *</Label>
+                  <div className="flex items-center justify-between">
+                    <Label>Title *</Label>
+                    <AIWritingButton
+                      contentTypes={["promotion_title"]}
+                      variables={{
+                        campaign_type: "promotion",
+                        promotion_focus: formData.title || "brand awareness",
+                        tone_hint: formData.subtitle || "bold",
+                      }}
+                      onGenerated={(type, content) => setFormData(p => ({ ...p, title: content }))}
+                    />
+                  </div>
                   <Input value={formData.title} onChange={e => setFormData(p => ({ ...p, title: e.target.value }))} required />
                 </div>
                 <div className="space-y-2">
-                  <Label>Subtitle</Label>
+                  <div className="flex items-center justify-between">
+                    <Label>Subtitle</Label>
+                    <AIWritingButton
+                      contentTypes={["promotion_subtitle"]}
+                      variables={{
+                        title: formData.title || "promotion",
+                        campaign_type: "promotion",
+                        promotion_focus: formData.subtitle || "announcement",
+                      }}
+                      onGenerated={(type, content) => setFormData(p => ({ ...p, subtitle: content }))}
+                    />
+                  </div>
                   <Input value={formData.subtitle} onChange={e => setFormData(p => ({ ...p, subtitle: e.target.value }))} />
                 </div>
               </div>
               
               <div className="space-y-2">
-                <Label>Description</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Description</Label>
+                  <AIWritingButton
+                    contentTypes={["promotion_description"]}
+                    variables={{
+                      title: formData.title || "promotion",
+                      campaign_type: "promotion",
+                      promotion_focus: formData.description || "announcement",
+                    }}
+                    onGenerated={(type, content) => setFormData(p => ({ ...p, description: content }))}
+                  />
+                </div>
                 <Textarea value={formData.description} onChange={e => setFormData(p => ({ ...p, description: e.target.value }))} rows={2} />
               </div>
 
@@ -336,7 +371,7 @@ const AdminPromotions = () => {
                       onClick={() => togglePage(page.value)}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         formData.pages.includes(page.value)
-                          ? "bg-gray-900 text-white"
+                          ? "bg-gray-100 text-gray-900"
                           : "bg-gray-100 text-gray-600"
                       }`}
                     >
@@ -376,7 +411,7 @@ const AdminPromotions = () => {
                 />
               </div>
 
-              <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800">
+              <Button type="submit" className="w-full bg-gray-100 hover:bg-gray-800">
                 {editingPromotion ? "Update Promotion" : "Create Promotion"}
               </Button>
             </form>
@@ -387,9 +422,9 @@ const AdminPromotions = () => {
       {/* Promotions Grid */}
       {promotions.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-          <ImageIcon className="h-12 w-12 mx-auto text-gray-300" />
+          <ImageIcon className="h-12 w-12 mx-auto text-gray-600" />
           <p className="mt-4 text-gray-500">No promotions yet</p>
-          <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-gray-900 hover:bg-gray-800">Create First Promotion</Button>
+          <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-gray-100 hover:bg-gray-800">Create First Promotion</Button>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -409,17 +444,17 @@ const AdminPromotions = () => {
                 <div className="absolute inset-0 bg-gradient-to-r ${promo.background_color}" />
                 <div className="absolute inset-0 flex items-center p-4">
                   <div>
-                    <p className="text-white/80 text-sm">{promo.subtitle}</p>
-                    <h3 className="text-white font-bold text-xl">{promo.title}</h3>
+                    <p className="text-gray-900/80 text-sm">{promo.subtitle}</p>
+                    <h3 className="text-gray-900 font-bold text-xl">{promo.title}</h3>
                   </div>
                 </div>
                 {!promo.is_active && (
-                  <div className="absolute top-2 right-2 px-2 py-1 bg-gray-900/80 text-white text-xs rounded">Inactive</div>
+                  <div className="absolute top-2 right-2 px-2 py-1 bg-gray-100/80 text-gray-900 text-xs rounded">Inactive</div>
                 )}
               </div>
               <div className="p-4">
                 <p className="text-sm text-gray-500">Pages: {promo.pages.join(", ")}</p>
-                <p className="text-xs text-gray-400 mt-1">Order: {promo.sort_order}</p>
+                <p className="text-xs text-gray-500 mt-1">Order: {promo.sort_order}</p>
               </div>
               <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button

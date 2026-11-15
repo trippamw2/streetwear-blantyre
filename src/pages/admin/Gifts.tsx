@@ -214,7 +214,7 @@ const AdminGifts = () => {
         <button
           onClick={() => setFilter("all")}
           className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-            filter === "all" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            filter === "all" ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
         >
           All ({gifts.length})
@@ -226,7 +226,7 @@ const AdminGifts = () => {
               key={status}
               onClick={() => setFilter(status)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                filter === status ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                filter === status ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
               {STATUS_LABELS[status]} ({count})
@@ -255,24 +255,24 @@ const AdminGifts = () => {
               {gifts.map((gift) => (
                 <tr key={gift.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                   <td className="px-4 py-3">
-                    <p className="font-mono text-xs text-gray-400">#{gift.id.slice(0, 8).toUpperCase()}</p>
+                    <p className="font-mono text-xs text-gray-500">#{gift.id.slice(0, 8).toUpperCase()}</p>
                     <p className="text-xs text-gray-500 mt-0.5">
                       {gift.gift_items?.length || 0} item{(gift.gift_items?.length || 0) !== 1 ? "s" : ""}
                     </p>
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-900">{gift.sender_name}</p>
-                    {gift.sender_email && <p className="text-xs text-gray-400">{gift.sender_email}</p>}
+                    {gift.sender_email && <p className="text-xs text-gray-500">{gift.sender_email}</p>}
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-900">{gift.recipient_name}</p>
-                    <p className="text-xs text-gray-400">{gift.recipient_phone}</p>
+                    <p className="text-xs text-gray-500">{gift.recipient_phone}</p>
                   </td>
                   <td className="px-4 py-3">
                     {gift.occasion ? (
                       <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{gift.occasion}</span>
                     ) : (
-                      <span className="text-xs text-gray-300">-</span>
+                      <span className="text-xs text-gray-600">-</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -318,8 +318,8 @@ const AdminGifts = () => {
               ))}
               {gifts.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="text-center py-12 text-gray-400">
-                    <Gift className="h-10 w-10 mx-auto mb-3 text-gray-300" />
+                  <td colSpan={8} className="text-center py-12 text-gray-500">
+                    <Gift className="h-10 w-10 mx-auto mb-3 text-gray-600" />
                     No gifts found{filter !== "all" ? ` with status "${filter}"` : ""}.
                   </td>
                 </tr>
@@ -347,18 +347,18 @@ const AdminGifts = () => {
                 {/* Sender & Recipient */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-gray-50 rounded-xl">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Sender</p>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Sender</p>
                     <div className="space-y-1 text-sm">
-                      <p className="flex items-center gap-2"><User className="h-3.5 w-3.5 text-gray-400" /> {selectedGift.sender_name}</p>
+                      <p className="flex items-center gap-2"><User className="h-3.5 w-3.5 text-gray-500" /> {selectedGift.sender_name}</p>
                       {selectedGift.sender_email && (
                         <p className="flex items-center gap-2 text-gray-500"><Mail className="h-3.5 w-3.5" /> {selectedGift.sender_email}</p>
                       )}
                     </div>
                   </div>
                   <div className="p-4 bg-gray-50 rounded-xl">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recipient</p>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Recipient</p>
                     <div className="space-y-1 text-sm">
-                      <p className="flex items-center gap-2"><User className="h-3.5 w-3.5 text-gray-400" /> {selectedGift.recipient_name}</p>
+                      <p className="flex items-center gap-2"><User className="h-3.5 w-3.5 text-gray-500" /> {selectedGift.recipient_name}</p>
                       <p className="flex items-center gap-2 text-gray-500"><Phone className="h-3.5 w-3.5" /> {selectedGift.recipient_phone}</p>
                       {selectedGift.recipient_email && (
                         <p className="flex items-center gap-2 text-gray-500"><Mail className="h-3.5 w-3.5" /> {selectedGift.recipient_email}</p>
@@ -413,7 +413,7 @@ const AdminGifts = () => {
 
                 {/* Items */}
                 <div>
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Items</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Items</p>
                   <div className="space-y-2">
                     {selectedGift.gift_items?.map((item) => (
                       <div key={item.id} className="flex items-center gap-3 p-3 bg-white border border-gray-100 rounded-xl">
@@ -422,7 +422,7 @@ const AdminGifts = () => {
                         )}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-900 truncate">{item.product_name}</p>
-                          <p className="text-xs text-gray-400">Qty: {item.quantity}{item.size ? ` · Size: ${item.size}` : ""}</p>
+                          <p className="text-xs text-gray-500">Qty: {item.quantity}{item.size ? ` · Size: ${item.size}` : ""}</p>
                         </div>
                         <p className="text-sm font-semibold text-gray-900">MK {item.unit_price_mwk.toLocaleString()}</p>
                       </div>
@@ -432,19 +432,19 @@ const AdminGifts = () => {
 
                 {/* Tracking Timeline */}
                 <div>
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Tracking Timeline</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Tracking Timeline</p>
                   <div className="relative ml-4">
                     <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-200" />
                     <div className="space-y-4">
                       {selectedGift.gift_tracking?.map((event) => (
                         <div key={event.id} className="relative flex items-start gap-3">
-                          <div className="relative z-10 h-6 w-6 rounded-full bg-gray-900 flex items-center justify-center shrink-0">
-                            <Check className="h-3 w-3 text-white" />
+                          <div className="relative z-10 h-6 w-6 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                            <Check className="h-3 w-3 text-gray-900" />
                           </div>
                           <div className="flex-1 pb-1">
                             <p className="text-sm font-medium text-gray-900">{STATUS_LABELS[event.status] || event.status}</p>
                             {event.note && <p className="text-xs text-gray-500 mt-0.5">{event.note}</p>}
-                            <p className="text-xs text-gray-400 mt-0.5">
+                            <p className="text-xs text-gray-500 mt-0.5">
                               {format(new Date(event.created_at), "MMM d, yyyy 'at' h:mm a")}
                             </p>
                           </div>
@@ -457,7 +457,7 @@ const AdminGifts = () => {
                 {/* Status Update Actions */}
                 {selectedGift.status !== "delivered" && selectedGift.status !== "cancelled" && (
                   <div className="border-t border-gray-100 pt-4">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Update Status</p>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Update Status</p>
                     <div className="flex flex-wrap gap-2">
                       {GIFT_STATUSES
                         .filter((s) => s !== selectedGift.status && s !== "created")
@@ -482,7 +482,7 @@ const AdminGifts = () => {
 
                 {/* Tracking Link */}
                 <div className="p-3 bg-gray-50 rounded-xl">
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Tracking Link</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Tracking Link</p>
                   <p className="text-xs font-mono text-gray-600 break-all">
                     https://wearsb.com/gift-track/{selectedGift.tracking_token}
                   </p>

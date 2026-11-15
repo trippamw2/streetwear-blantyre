@@ -54,9 +54,9 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const isInStock = stockQty > 0;
 
   const badgeConfig = {
-    new: { label: "NEW", bg: "bg-green-500", text: "text-white" },
-    sale: { label: `-${discountPercent}%`, bg: "bg-red-500", text: "text-white" },
-    best: { label: "MOST WORN", bg: "bg-gray-900", text: "text-white" },
+    new: { label: "NEW", bg: "bg-green-500", text: "text-gray-900" },
+    sale: { label: `-${discountPercent}%`, bg: "bg-red-500", text: "text-gray-900" },
+    best: { label: "MOST WORN", bg: "bg-gray-100", text: "text-gray-900" },
     hot: { label: "HOT", bg: "bg-yellow-500", text: "text-gray-900" },
   };
   
@@ -75,7 +75,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     >
        <Link
          to={`/product/${product.id}`}
-         className="group block rounded-xl bg-gray-900 border border-gray-800 overflow-hidden hover:border-gray-700 hover:shadow-lg hover:shadow-black/20 hover:opacity-90 transition-all duration-200 max-w-full"
+         className="group block rounded-xl bg-gray-100 border border-gray-800 overflow-hidden hover:border-gray-700 hover:shadow-lg hover:shadow-black/20 hover:opacity-90 transition-all duration-200 max-w-full"
       >
         <div className="relative aspect-[3/4] overflow-hidden bg-gray-800">
            <img
@@ -98,7 +98,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
           {/* Culture Pillar Badge */}
           {product.culture_pillar && (
-            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[10px] font-bold text-white rounded" style={{ backgroundColor: product.culture_pillar_color || '#8B5CF6' }}>
+            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[10px] font-bold text-gray-900 rounded" style={{ backgroundColor: product.culture_pillar_color || '#8B5CF6' }}>
               {product.culture_pillar.toUpperCase()}
             </span>
           )}
@@ -110,7 +110,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           >
             <Heart
               className={`h-3.5 w-3.5 transition-colors ${
-                isWishlisted ? "fill-red-500 text-red-500" : "text-gray-400"
+                isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"
               }`}
             />
           </button>
@@ -127,14 +127,14 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           >
             <GitCompare
               className={`h-3.5 w-3.5 transition-colors ${
-                isInCompare(product.id) ? "fill-gray-900 text-gray-900" : "text-gray-400"
+                isInCompare(product.id) ? "fill-gray-900 text-gray-900" : "text-gray-500"
               }`}
             />
           </button>
 
           {/* Low stock warning - prominent */}
           {isInStock && stockQty <= 5 && (
-            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[11px] font-bold bg-red-500 text-white rounded">
+            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[11px] font-bold bg-red-500 text-gray-900 rounded">
               Only {stockQty} left
             </span>
           )}
@@ -164,7 +164,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           </div>
 
           {/* Name */}
-          <h3 className="font-semibold text-white text-sm sm:text-base line-clamp-2 leading-tight">
+          <h3 className="font-semibold text-gray-900 text-sm sm:text-base line-clamp-2 leading-tight">
             {product.name}
           </h3>
 
@@ -197,8 +197,8 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                   }}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                     selectedType === type.id
-                      ? "bg-gray-900 text-white"
-                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                      ? "bg-gray-100 text-gray-900"
+                      : "bg-gray-800 text-gray-500 hover:bg-gray-700"
                   }`}
                 >
                   {type.name}
@@ -207,7 +207,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               {hiddenTypes.length > 0 && (
                 <button
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                  className="px-3 py-1.5 rounded-full text-xs font-medium bg-gray-800 text-gray-400"
+                  className="px-3 py-1.5 rounded-full text-xs font-medium bg-gray-800 text-gray-500"
                 >
                   <Plus className="h-3 w-3 inline" /> {hiddenTypes.length}
                 </button>
@@ -217,11 +217,11 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
           {/* Price */}
           <div className="flex items-center gap-2 pt-1">
-            <span className="font-bold text-lg sm:text-xl text-white">
+            <span className="font-bold text-lg sm:text-xl text-gray-900">
               {formatMWK(displayPrice)}
             </span>
             {isOnSale && discountPercent > 0 && originalPrice > displayPrice && (
-              <span className="text-xs text-gray-400 line-through">
+              <span className="text-xs text-gray-500 line-through">
                 {formatMWK(originalPrice)}
               </span>
             )}

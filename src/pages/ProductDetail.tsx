@@ -90,7 +90,7 @@ const ProductDetail = () => {
   // ====== EARLY RETURNS AFTER ALL HOOKS ======
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="animate-spin h-10 w-10 border-4 border-gray-600 border-t-transparent rounded-full" />
       </div>
     );
@@ -98,10 +98,10 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center space-y-3">
-          <p className="text-gray-400 text-lg">Product not found</p>
-          <Link to="/shop" className="text-white font-medium hover:underline">Back to shop</Link>
+          <p className="text-gray-500 text-lg">Product not found</p>
+          <Link to="/shop" className="text-gray-900 font-medium hover:underline">Back to shop</Link>
         </div>
       </div>
     );
@@ -216,7 +216,7 @@ const ProductDetail = () => {
   return (
     <div className="container px-4 sm:px-6 py-8 sm:py-14">
       <SEO title={product?.name || "Product"} description={product?.culture_story || product?.benefit || "Every piece represents a belief. Find the one that speaks for who you are."} type="product" path={"/product/" + product?.id} image={product?.image} />
-      <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-6">
+      <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-6">
         <ArrowLeft className="h-4 w-4" /> Back to Collection
       </Link>
 
@@ -235,15 +235,15 @@ const ProductDetail = () => {
             <div className="absolute top-4 right-4 flex gap-2">
               <button
                 onClick={handleWishlist}
-                className="p-3 rounded-full bg-gray-900/80 backdrop-blur-sm shadow-lg hover:bg-gray-900 transition-all"
+                className="p-3 rounded-full bg-gray-100/80 backdrop-blur-sm shadow-lg hover:bg-gray-100 transition-all"
               >
-                <Heart className={`h-5 w-5 ${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-400"}`} />
+                <Heart className={`h-5 w-5 ${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"}`} />
               </button>
               <button 
                 onClick={() => setShowShareModal(true)}
-                className="p-3 rounded-full bg-gray-900/80 backdrop-blur-sm shadow-lg hover:bg-gray-900 transition-all"
+                className="p-3 rounded-full bg-gray-100/80 backdrop-blur-sm shadow-lg hover:bg-gray-100 transition-all"
               >
-                <Share2 className="h-5 w-5 text-gray-400" />
+                <Share2 className="h-5 w-5 text-gray-500" />
               </button>
             </div>
           </motion.div>
@@ -262,29 +262,29 @@ const ProductDetail = () => {
                   initial={{ y: 100 }}
                   animate={{ y: 0 }}
                   exit={{ y: 100 }}
-                  className="bg-gray-900 rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-md border border-gray-800"
+                  className="bg-gray-100 rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-md border border-gray-800"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <h3 className="font-bold text-xl mb-4 text-white">Share the Culture</h3>
+                  <h3 className="font-bold text-xl mb-4 text-gray-900">Share the Culture</h3>
                   <div className="grid grid-cols-4 gap-4">
                     <button onClick={() => handleShare("whatsapp")} className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-gray-800 hover:bg-gray-700 transition-colors">
                       <MessageCircle className="h-8 w-8 text-green-400" />
-                      <span className="text-xs font-medium text-gray-300">WhatsApp</span>
+                      <span className="text-xs font-medium text-gray-600">WhatsApp</span>
                     </button>
                     <button onClick={() => handleShare("facebook")} className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-gray-800 hover:bg-gray-700 transition-colors">
-                      <Facebook className="h-8 w-8 text-gray-300" />
-                      <span className="text-xs font-medium text-gray-300">Facebook</span>
+                      <Facebook className="h-8 w-8 text-gray-600" />
+                      <span className="text-xs font-medium text-gray-600">Facebook</span>
                     </button>
                     <button onClick={() => handleShare("twitter")} className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-gray-800 hover:bg-gray-700 transition-colors">
-                      <svg className="h-8 w-8 text-gray-300" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                      <span className="text-xs font-medium text-gray-300">X</span>
+                      <svg className="h-8 w-8 text-gray-600" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      <span className="text-xs font-medium text-gray-600">X</span>
                     </button>
                     <button onClick={() => handleShare("copy")} className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-gray-800 hover:bg-gray-700 transition-colors">
-                      <Link2 className="h-8 w-8 text-gray-400" />
-                      <span className="text-xs font-medium text-gray-300">Copy</span>
+                      <Link2 className="h-8 w-8 text-gray-500" />
+                      <span className="text-xs font-medium text-gray-600">Copy</span>
                     </button>
                   </div>
-                  <button onClick={() => setShowShareModal(false)} className="w-full mt-4 py-3 text-gray-400 font-medium hover:text-white">Cancel</button>
+                  <button onClick={() => setShowShareModal(false)} className="w-full mt-4 py-3 text-gray-500 font-medium hover:text-gray-900">Cancel</button>
                 </motion.div>
               </motion.div>
             )}
@@ -313,13 +313,13 @@ const ProductDetail = () => {
         <div className="space-y-6">
           <div className="space-y-3">
             {product.brand && (
-              <span className="text-sm font-semibold text-gray-300 bg-gray-800 px-3 py-1 rounded-full inline-block">
+              <span className="text-sm font-semibold text-gray-600 bg-gray-800 px-3 py-1 rounded-full inline-block">
                 {product.brand}
               </span>
             )}
             <p className="text-sm font-semibold text-gradient uppercase tracking-widest">{product.category}</p>
-            <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-white">{product.name}</h1>
-<p className="text-gray-400 text-lg">{product.benefit}</p>
+            <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-gray-900">{product.name}</h1>
+<p className="text-gray-500 text-lg">{product.benefit}</p>
 
             {/* Rating & Stock */}
             <div className="flex items-center gap-4">
@@ -327,7 +327,7 @@ const ProductDetail = () => {
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star key={star} className={`h-5 w-5 ${star <= Math.round(avgRating) ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"}`} />
                 ))}
-                <span className="ml-1 text-sm text-gray-400">
+                <span className="ml-1 text-sm text-gray-500">
                   {reviewCount > 0 ? `(${reviewCount} reviews)` : "(No reviews yet)"}
                 </span>
               </div>
@@ -358,7 +358,7 @@ const ProductDetail = () => {
             return (
               <div className="bg-gradient-to-r from-gray-900 to-gray-950 rounded-xl border border-gray-800 p-4 sm:p-5 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Package className="h-5 w-5 text-white" />
+                  <Package className="h-5 w-5 text-gray-900" />
                   <p className="font-semibold text-gray-200 text-sm">Also in these Kits</p>
                 </div>
                 <div className="grid gap-2">
@@ -369,16 +369,16 @@ const ProductDetail = () => {
                         className="flex items-center justify-between bg-gray-800 rounded-lg p-3 border border-gray-700 hover:border-gray-600 transition-all group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center text-gray-300 font-bold text-xs">
+                          <div className="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center text-gray-600 font-bold text-xs">
                             {kit.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
                           </div>
                           <div>
-                            <p className="font-medium text-sm text-gray-200 group-hover:text-white transition-colors">{kit.name}</p>
-                            <p className="text-xs text-gray-400">Save {formatMWK(getKitRealSaving(kit, products))} • {kit.productIds.length} items</p>
+                            <p className="font-medium text-sm text-gray-200 group-hover:text-gray-900 transition-colors">{kit.name}</p>
+                            <p className="text-xs text-gray-500">Save {formatMWK(getKitRealSaving(kit, products))} • {kit.productIds.length} items</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-white">{formatMWK(getKitPrice(kit, products))}</span>
+                          <span className="font-bold text-sm text-gray-900">{formatMWK(getKitPrice(kit, products))}</span>
                           <ArrowRight className="h-4 w-4 text-gray-500 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </Link>
@@ -403,8 +403,8 @@ const ProductDetail = () => {
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${
                 isInCompare(product.id)
-                  ? "bg-gray-800 border-gray-600 text-white"
-                  : "border-gray-700 text-gray-400 hover:border-gray-500"
+                  ? "bg-gray-800 border-gray-600 text-gray-900"
+                  : "border-gray-700 text-gray-500 hover:border-gray-500"
               }`}
             >
               <GitCompare className="h-4 w-4" />
@@ -415,7 +415,7 @@ const ProductDetail = () => {
               className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${
                 isWishlisted
                   ? "bg-red-950/50 border-red-800 text-red-400"
-                  : "border-gray-700 text-gray-400 hover:border-gray-500"
+                  : "border-gray-700 text-gray-500 hover:border-gray-500"
               }`}
             >
               <Heart className={`h-4 w-4 ${isWishlisted ? "fill-current" : ""}`} />
@@ -425,7 +425,7 @@ const ProductDetail = () => {
 
           {product.types.length > 0 && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-300">Select Type:</p>
+              <p className="text-sm font-medium text-gray-600">Select Type:</p>
               <div className="flex gap-2 flex-wrap">
                 {product.types.map((type) => (
                   <button
@@ -434,7 +434,7 @@ const ProductDetail = () => {
                     className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
                       selectedType === type.id
                         ? "bg-white text-gray-900 border-white"
-                        : "bg-gray-800 text-gray-400 border-gray-700 hover:text-white hover:border-gray-500"
+                        : "bg-gray-800 text-gray-500 border-gray-700 hover:text-gray-900 hover:border-gray-500"
                     }`}
                   >
                     {type.name}
@@ -446,19 +446,19 @@ const ProductDetail = () => {
 
           {/* Trust Badges */}
           <div className="grid grid-cols-2 gap-3 py-4 border-y border-gray-800">
-            <div className="flex items-center gap-2 text-sm text-gray-300">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <Check className="h-5 w-5 text-green-500" />
               <span>Fast checkout</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-300">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <Truck className="h-5 w-5 text-green-500" />
               <span>Delivery across Malawi</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-300">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <ShieldCheck className="h-5 w-5 text-green-500" />
               <span>6 month warranty</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-300">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <Check className="h-5 w-5 text-green-500" />
               <span>100% genuine</span>
             </div>
@@ -466,9 +466,9 @@ const ProductDetail = () => {
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <div className="flex items-center rounded-full border border-gray-700 bg-gray-800">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 text-gray-300 hover:text-white" aria-label="Decrease"><Minus className="h-4 w-4" /></button>
-              <span className="w-10 text-center font-semibold text-white">{qty}</span>
-              <button onClick={() => setQty((q) => q + 1)} className="p-3 text-gray-300 hover:text-white" aria-label="Increase"><Plus className="h-4 w-4" /></button>
+              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 text-gray-600 hover:text-gray-900" aria-label="Decrease"><Minus className="h-4 w-4" /></button>
+              <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
+              <button onClick={() => setQty((q) => q + 1)} className="p-3 text-gray-600 hover:text-gray-900" aria-label="Increase"><Plus className="h-4 w-4" /></button>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 flex-1">
               <Button onClick={handleAdd} variant="hero" size="lg" className="w-full">
@@ -508,8 +508,8 @@ const ProductDetail = () => {
             )}
             <span className="text-xs font-semibold text-gray-500 uppercase tracking-widest">The Belief</span>
           </div>
-          <h2 className="font-display font-bold text-xl sm:text-2xl mb-3 text-white">What belief inspired this?</h2>
-          <p className="text-gray-300 leading-relaxed whitespace-pre-line">
+          <h2 className="font-display font-bold text-xl sm:text-2xl mb-3 text-gray-900">What belief inspired this?</h2>
+          <p className="text-gray-600 leading-relaxed whitespace-pre-line">
             {product.culture_pillar === "music" && "Music is more than sound. It's the rhythm of our streets, the voice of our generation, the story of where we come from and where we're going. This piece was born from that rhythm."}
             {product.culture_pillar === "sports" && "Sport is not just competition. It's discipline. It's showing up when no one's watching. It's the belief that you can push further, run faster, rise higher. This piece carries that spirit."}
             {product.culture_pillar === "faith" && "Faith is the foundation. The quiet confidence that you are part of something bigger. This piece represents the belief that grounds us when everything else shifts."}
@@ -520,13 +520,13 @@ const ProductDetail = () => {
 
       {/* Specifications */}
       <div className="mt-16">
-        <h2 className="font-display font-bold text-2xl mb-6 text-white">Specifications</h2>
+        <h2 className="font-display font-bold text-2xl mb-6 text-gray-900">Specifications</h2>
         <div className="rounded-2xl border border-gray-800">
           {/* Mobile: Card layout */}
           <div className="md:hidden divide-y divide-gray-800">
             {specs.map((spec) => (
               <div key={spec.label} className="flex justify-between items-center px-4 py-3">
-                <span className="text-sm font-medium text-gray-400">{spec.label}</span>
+                <span className="text-sm font-medium text-gray-500">{spec.label}</span>
                 <span className="text-sm font-medium text-gray-200 text-right">{spec.value}</span>
               </div>
             ))}
@@ -535,8 +535,8 @@ const ProductDetail = () => {
           <table className="w-full hidden md:table">
             <tbody>
               {specs.map((spec, i) => (
-                <tr key={spec.label} className={i % 2 === 0 ? "bg-gray-900" : "bg-gray-950"}>
-                  <td className="px-6 py-4 font-medium text-gray-400">{spec.label}</td>
+                <tr key={spec.label} className={i % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                  <td className="px-6 py-4 font-medium text-gray-500">{spec.label}</td>
                   <td className="px-6 py-4 text-gray-200">{spec.value}</td>
                 </tr>
               ))}
@@ -547,7 +547,7 @@ const ProductDetail = () => {
 
       {/* FAQ */}
       <div className="mt-16">
-        <h2 className="font-display font-bold text-2xl mb-6 text-white">Frequently Asked Questions</h2>
+        <h2 className="font-display font-bold text-2xl mb-6 text-gray-900">Frequently Asked Questions</h2>
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <FAQItem key={i} question={faq.q} answer={faq.a} />
@@ -571,11 +571,11 @@ const ProductDetail = () => {
             )}
             <span className="text-xs font-semibold text-gray-500 uppercase tracking-widest">The Story</span>
           </div>
-          <h2 className="font-display font-bold text-xl sm:text-2xl mb-3 text-white">Behind This Piece</h2>
-          <p className="text-gray-300 leading-relaxed whitespace-pre-line">{product.culture_story}</p>
+          <h2 className="font-display font-bold text-xl sm:text-2xl mb-3 text-gray-900">Behind This Piece</h2>
+          <p className="text-gray-600 leading-relaxed whitespace-pre-line">{product.culture_story}</p>
           {product.culture_context && (
             <div className="mt-4 pt-4 border-t border-gray-800">
-              <p className="text-sm text-gray-400 italic">{product.culture_context}</p>
+              <p className="text-sm text-gray-500 italic">{product.culture_context}</p>
             </div>
           )}
         </div>
@@ -583,28 +583,28 @@ const ProductDetail = () => {
 
       {/* Reviews Section */}
       <div className="mt-16">
-        <h2 className="font-display font-bold text-2xl mb-6 text-white">Customer Reviews</h2>
+        <h2 className="font-display font-bold text-2xl mb-6 text-gray-900">Customer Reviews</h2>
         
         {reviewsLoading ? (
           <div className="text-center py-8"><Loader2 className="h-6 w-6 animate-spin mx-auto text-gray-500" /></div>
         ) : reviews.length === 0 ? (
           <div className="rounded-2xl border border-gray-800 p-8 text-center">
             <Star className="h-12 w-12 text-gray-700 mx-auto mb-4" />
-            <p className="text-gray-400">No reviews yet</p>
+            <p className="text-gray-500">No reviews yet</p>
             <p className="text-sm text-gray-500 mt-1">Be the first to share your story!</p>
           </div>
         ) : (
           <>
-            <div className="rounded-2xl border border-gray-800 bg-gray-900 p-4 sm:p-6 mb-6">
+            <div className="rounded-2xl border border-gray-800 bg-gray-100 p-4 sm:p-6 mb-6">
               <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                 <div className="text-center">
-                  <div className="text-4xl sm:text-5xl font-bold text-white">{avgRating.toFixed(1)}</div>
+                  <div className="text-4xl sm:text-5xl font-bold text-gray-900">{avgRating.toFixed(1)}</div>
                   <div className="flex mt-1 sm:mt-2 justify-center">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star key={star} className={`h-3 w-3 sm:h-4 sm:w-4 ${star <= Math.round(avgRating) ? "fill-yellow-400 text-yellow-400" : "fill-gray-700 text-gray-700"}`} />
                     ))}
                   </div>
-                  <p className="text-xs sm:text-sm text-gray-400 mt-1">{reviewCount} review{reviewCount !== 1 ? "s" : ""}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1">{reviewCount} review{reviewCount !== 1 ? "s" : ""}</p>
                 </div>
                 <div className="flex-1 space-y-2">
                   {[5, 4, 3, 2, 1].map((stars) => {
@@ -612,7 +612,7 @@ const ProductDetail = () => {
                     const pct = reviewCount > 0 ? Math.round((count / reviewCount) * 100) : 0;
                     return (
                       <div key={stars} className="flex items-center gap-2">
-                        <span className="text-sm text-gray-400 w-8">{stars}★</span>
+                        <span className="text-sm text-gray-500 w-8">{stars}★</span>
                         <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
                           <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${pct}%` }} />
                         </div>
@@ -627,14 +627,14 @@ const ProductDetail = () => {
             {/* Reviews List */}
             <div className="space-y-4">
               {reviews.map((review, idx) => (
-                <div key={idx} className="rounded-2xl border border-gray-800 bg-gray-900 p-5">
+                <div key={idx} className="rounded-2xl border border-gray-800 bg-gray-100 p-5">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center font-bold text-gray-300">
+                      <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center font-bold text-gray-600">
                         {review.customer_name?.[0]?.toUpperCase() || "?"}
                       </div>
                       <div>
-                        <p className="font-medium text-white">{review.customer_name || "Customer"}</p>
+                        <p className="font-medium text-gray-900">{review.customer_name || "Customer"}</p>
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <Star key={star} className={`h-3 w-3 ${star <= review.rating ? "fill-yellow-400 text-yellow-400" : "fill-gray-700 text-gray-700"}`} />
@@ -646,7 +646,7 @@ const ProductDetail = () => {
                       {review.created_at ? new Date(review.created_at).toLocaleDateString() : ""}
                     </span>
                   </div>
-                  {review.review_text && <p className="mt-3 text-gray-300">{review.review_text}</p>}
+                  {review.review_text && <p className="mt-3 text-gray-600">{review.review_text}</p>}
                 </div>
               ))}
             </div>
@@ -656,11 +656,11 @@ const ProductDetail = () => {
 
       {/* Write a Review */}
       <div className="mt-16">
-        <h2 className="font-display font-bold text-2xl mb-6 text-white">Write a Review</h2>
-        <div className="rounded-2xl border border-gray-800 bg-gray-900 p-6">
+        <h2 className="font-display font-bold text-2xl mb-6 text-gray-900">Write a Review</h2>
+        <div className="rounded-2xl border border-gray-800 bg-gray-100 p-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Rating</label>
+              <label className="block text-sm font-medium text-gray-600 mb-2">Rating</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -678,22 +678,22 @@ const ProductDetail = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
+              <label className="block text-sm font-medium text-gray-600 mb-2">Name</label>
               <Input
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 placeholder="Your name"
-                className="max-w-md bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
+                className="max-w-md bg-gray-800 border-gray-700 text-gray-900 placeholder:text-gray-500"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Review (optional)</label>
+              <label className="block text-sm font-medium text-gray-600 mb-2">Review (optional)</label>
               <Textarea
                 value={userReview}
                 onChange={(e) => setUserReview(e.target.value)}
                 placeholder="How does this piece represent you?"
-                className="max-w-lg min-h-[100px] bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
+                className="max-w-lg min-h-[100px] bg-gray-800 border-gray-700 text-gray-900 placeholder:text-gray-500"
               />
             </div>
             
@@ -712,7 +712,7 @@ const ProductDetail = () => {
       {/* Recommended Products */}
       {recommended.length > 0 && (
         <div className="mt-16">
-          <h2 className="font-display font-bold text-2xl mb-6 text-white">You Might Also Wear</h2>
+          <h2 className="font-display font-bold text-2xl mb-6 text-gray-900">You Might Also Wear</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {recommended.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} />
@@ -744,7 +744,7 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <p className="px-6 pb-4 text-gray-400">{answer}</p>
+            <p className="px-6 pb-4 text-gray-500">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>

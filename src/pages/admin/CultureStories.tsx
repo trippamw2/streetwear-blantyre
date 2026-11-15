@@ -170,7 +170,7 @@ const AdminCultureStories = () => {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) { setEditingStory(null); resetForm(); } }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-900 hover:bg-gray-800"><Plus className="h-4 w-4" /> New Story</Button>
+            <Button className="bg-gray-100 hover:bg-gray-800"><Plus className="h-4 w-4" /> New Story</Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
@@ -247,7 +247,7 @@ const AdminCultureStories = () => {
                   Featured on Homepage
                 </label>
               </div>
-              <Button onClick={handleSave} className="w-full bg-gray-900 hover:bg-gray-800" disabled={saving || !formData.title || !formData.content}>
+              <Button onClick={handleSave} className="w-full bg-gray-100 hover:bg-gray-800" disabled={saving || !formData.title || !formData.content}>
                 {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 {editingStory ? "Update Story" : "Publish Story"}
               </Button>
@@ -257,11 +257,11 @@ const AdminCultureStories = () => {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <button onClick={() => setFilter("all")} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${filter === "all" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+        <button onClick={() => setFilter("all")} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${filter === "all" ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
           All ({stories.length})
         </button>
         {PILLARS.map(p => (
-          <button key={p.value} onClick={() => setFilter(p.value)} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${filter === p.value ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+          <button key={p.value} onClick={() => setFilter(p.value)} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${filter === p.value ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
             {p.label} ({stories.filter(s => s.culture_pillar === p.value).length})
           </button>
         ))}
@@ -284,15 +284,15 @@ const AdminCultureStories = () => {
               <h3 className="font-bold text-sm line-clamp-2">{story.title}</h3>
               {story.excerpt && <p className="text-xs text-gray-500 mt-1 line-clamp-2">{story.excerpt}</p>}
               <div className="flex items-center justify-between mt-3">
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-gray-500">
                   {story.read_time_minutes} min read · {format(new Date(story.created_at), "MMM d")}
                 </span>
                 <div className="flex items-center gap-1">
                   <button onClick={() => togglePublish(story)} className="p-1 rounded hover:bg-gray-100" title={story.is_published ? "Unpublish" : "Publish"}>
-                    {story.is_published ? <Eye className="h-3.5 w-3.5 text-green-600" /> : <EyeOff className="h-3.5 w-3.5 text-gray-400" />}
+                    {story.is_published ? <Eye className="h-3.5 w-3.5 text-green-600" /> : <EyeOff className="h-3.5 w-3.5 text-gray-500" />}
                   </button>
                   <button onClick={() => toggleFeatured(story)} className="p-1 rounded hover:bg-gray-100" title="Toggle featured">
-                    <Star className={`h-3.5 w-3.5 ${story.is_featured ? "text-amber-500 fill-amber-500" : "text-gray-300"}`} />
+                    <Star className={`h-3.5 w-3.5 ${story.is_featured ? "text-amber-500 fill-amber-500" : "text-gray-600"}`} />
                   </button>
                   <button onClick={() => handleEdit(story)} className="p-1 rounded hover:bg-gray-100"><Edit className="h-3.5 w-3.5" /></button>
                   <button onClick={() => handleDelete(story.id)} className="p-1 rounded hover:bg-gray-100"><Trash2 className="h-3.5 w-3.5 text-red-500" /></button>
@@ -302,8 +302,8 @@ const AdminCultureStories = () => {
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="col-span-full text-center py-16 text-gray-400">
-            <BookOpen className="h-10 w-10 mx-auto mb-3 text-gray-300" />
+          <div className="col-span-full text-center py-16 text-gray-500">
+            <BookOpen className="h-10 w-10 mx-auto mb-3 text-gray-600" />
             No stories yet. Create your first culture story.
           </div>
         )}

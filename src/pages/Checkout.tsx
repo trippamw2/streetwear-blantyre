@@ -252,7 +252,7 @@ const Checkout = () => {
   if (items.length === 0) {
     return (
       <div className="container py-12 text-center">
-        <CreditCard className="h-12 w-12 mx-auto text-gray-300 mb-4" />
+        <CreditCard className="h-12 w-12 mx-auto text-gray-600 mb-4" />
         <h2 className="text-xl font-bold mb-2">Your experience is empty</h2>
         <p className="text-gray-500 mb-6">Grab a culture pack. Better value, one box, delivered.</p>
         <div className="flex gap-3 justify-center">
@@ -324,7 +324,7 @@ const Checkout = () => {
               />
             )}
             {formData.location.trim().length < 3 && (
-              <p className="text-xs text-gray-400 text-center py-3">
+              <p className="text-xs text-gray-500 text-center py-3">
                 Enter your location to see delivery options
               </p>
             )}
@@ -338,8 +338,8 @@ const Checkout = () => {
           </h2>
           <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-12 w-12 rounded-xl bg-gray-900 flex items-center justify-center shadow-sm">
-                <CreditCard className="h-6 w-6 text-white" />
+              <div className="h-12 w-12 rounded-xl bg-gray-100 flex items-center justify-center shadow-sm">
+                <CreditCard className="h-6 w-6 text-gray-900" />
               </div>
               <div>
                 <p className="font-semibold">Pay Online via PayChangu</p>
@@ -371,8 +371,8 @@ const Checkout = () => {
                 disabled={redeeming || usePoints}
                 className={`py-1.5 px-3 rounded-lg text-sm font-medium ${
                   usePoints 
-                    ? "bg-green-500 text-white"
-                    : "bg-amber-500 text-white hover:bg-amber-600"
+                    ? "bg-green-500 text-gray-900"
+                    : "bg-amber-500 text-gray-900 hover:bg-amber-600"
                 }`}
               >
                 {redeeming ? "Applying..." : usePoints ? "Applied!" : "Use Points"}
@@ -399,7 +399,7 @@ const Checkout = () => {
         </div>
 
         {/* Order Summary */}
-        <div className="bg-gray-900 text-white rounded-xl p-4 sm:p-5 space-y-3">
+        <div className="bg-gray-100 text-gray-900 rounded-xl p-4 sm:p-5 space-y-3">
           <h2 className="font-semibold">Order Summary</h2>
           <div className="space-y-1.5 text-xs divide-y divide-white/10">
             {items.map((item, idx) => {
@@ -411,7 +411,7 @@ const Checkout = () => {
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="truncate">{item.quantity} x {item.name}</span>
                     {lowStock && (
-                      <span className="shrink-0 text-[10px] text-gray-400 font-medium">Only {stock} left</span>
+                      <span className="shrink-0 text-[10px] text-gray-500 font-medium">Only {stock} left</span>
                     )}
                   </div>
                   <span className="shrink-0 ml-2">{formatMWK(item.price * item.quantity)}</span>
@@ -420,7 +420,7 @@ const Checkout = () => {
             })}
           </div>
           <div className="space-y-1.5 text-sm pt-2 border-t border-white/20">
-            <div className="flex justify-between text-gray-300">
+            <div className="flex justify-between text-gray-600">
               <span>Subtotal</span>
               <span>{formatMWK(subtotal)}</span>
             </div>
@@ -440,7 +440,7 @@ const Checkout = () => {
               <span>
                 Delivery
                 {selectedDelivery && (
-                  <span className="text-xs text-gray-400 ml-1">
+                  <span className="text-xs text-gray-500 ml-1">
                     ({selectedDelivery.label}
                     {selectedDelivery.id === "same_day"
                     ? " - same day"
@@ -465,7 +465,7 @@ const Checkout = () => {
         <Button 
           type="submit" 
           disabled={submitting}
-          className="w-full py-3 text-lg bg-gray-900 hover:bg-gray-800"
+          className="w-full py-3 text-lg bg-gray-100 hover:bg-gray-800"
         >
           {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : (
             <> Pay Now <Zap className="h-5 w-5 ml-2" /></>

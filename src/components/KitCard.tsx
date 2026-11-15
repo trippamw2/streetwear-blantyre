@@ -52,7 +52,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
         {/* â”€â”€â”€ Image â”€â”€â”€ */}
         <div className="relative bg-gray-50 border-b border-gray-100">
           {kit.badge && (
-            <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-gray-900 text-white text-[10px] sm:text-xs font-semibold">
+            <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-gray-100 text-gray-900 text-[10px] sm:text-xs font-semibold">
               {kit.badge}
             </span>
           )}
@@ -75,9 +75,9 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
           {/* lifestyle tag */}
           <div className="flex items-center gap-2 mb-2.5">
             <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${cfg.color} flex items-center justify-center`}>
-              <Icon className="h-3 w-3 text-white" />
+              <Icon className="h-3 w-3 text-gray-900" />
             </div>
-            <span className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">
+            <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
               {cfg.label}
             </span>
           </div>
@@ -91,7 +91,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
 
           {/* What's Inside */}
           <div className="mt-3 space-y-1.5">
-            <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">Includes</p>
+            <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Includes</p>
             <div className="space-y-1">
               {products.slice(0, compact ? 2 : 4).map((p) => (
                 <div key={p.id} className="flex items-center gap-2 text-[11px]">
@@ -102,14 +102,14 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
                   />
                   <span className="text-gray-500 truncate">{p.name}</span>
                   {!compact && (
-                    <span className="text-gray-400 line-through ml-auto shrink-0 text-[10px]">
+                    <span className="text-gray-500 line-through ml-auto shrink-0 text-[10px]">
                       {formatMWK(p.price)}
                     </span>
                   )}
                 </div>
               ))}
               {products.length > (compact ? 2 : 4) && (
-                <span className="text-[10px] text-gray-400 font-medium">+{products.length - (compact ? 2 : 4)} more</span>
+                <span className="text-[10px] text-gray-500 font-medium">+{products.length - (compact ? 2 : 4)} more</span>
               )}
             </div>
           </div>
@@ -119,7 +119,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
             <div>
               <p className="font-bold text-lg sm:text-xl text-gray-900">{formatMWK(kitPrice)}</p>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-[11px] text-gray-400 line-through">{formatMWK(separateTotal)}</span>
+                <span className="text-[11px] text-gray-500 line-through">{formatMWK(separateTotal)}</span>
                 <span className="text-[11px] font-medium text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
                   Save {formatMWK(realSaving)}
                 </span>

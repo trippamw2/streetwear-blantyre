@@ -81,7 +81,7 @@ const KitDetail = () => {
             {/* Badges */}
             <div className="flex flex-wrap gap-2">
               {kit.badge && (
-                <span className="inline-flex px-3 py-1 rounded-full bg-gray-900 text-white text-xs font-semibold">
+                <span className="inline-flex px-3 py-1 rounded-full bg-gray-100 text-gray-900 text-xs font-semibold">
                   {kit.badge}
                 </span>
               )}
@@ -108,7 +108,7 @@ const KitDetail = () => {
                   <span className="font-bold text-3xl sm:text-4xl text-gray-900">
                     {formatMWK(kitPrice)}
                   </span>
-                  <span className="text-sm line-through text-gray-400">
+                  <span className="text-sm line-through text-gray-500">
                     {formatMWK(separateTotal)}
                   </span>
                 </div>
@@ -159,10 +159,10 @@ const KitDetail = () => {
               {/* Guarantees */}
               <div className="grid grid-cols-2 gap-3 text-xs text-gray-500 pt-1">
                 <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4 text-gray-400 shrink-0" /> Free delivery over MK 50,000
+                  <Truck className="h-4 w-4 text-gray-500 shrink-0" /> Free delivery over MK 50,000
                 </div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-gray-400 shrink-0" /> 30 day guarantee
+                  <ShieldCheck className="h-4 w-4 text-gray-500 shrink-0" /> 30 day guarantee
                 </div>
               </div>
             </div>

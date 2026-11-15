@@ -79,22 +79,22 @@ export const DeliveryOptions = ({ selectedOption, onSelect, location, subtotal }
               )}
             >
               {isSelected && (
-                <div className="absolute top-4 right-4 h-6 w-6 rounded-full bg-gray-900 flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
+                <div className="absolute top-4 right-4 h-6 w-6 rounded-full bg-gray-100 flex items-center justify-center">
+                  <Check className="h-4 w-4 text-gray-900" />
                 </div>
               )}
 
               <div className="flex items-start gap-4">
                 <div className={cn(
                   "h-12 w-12 rounded-xl flex items-center justify-center shrink-0",
-                  isSelected ? "bg-gray-900" : "bg-gray-100"
+                  isSelected ? "bg-gray-100" : "bg-gray-100"
                 )}>
                   {option.id === "same_day" ? (
-                    <Zap className={cn("h-5 w-5", isSelected ? "text-white" : "text-amber-500")} />
+                    <Zap className={cn("h-5 w-5", isSelected ? "text-gray-900" : "text-amber-500")} />
                   ) : option.id === "express" ? (
-                    <Zap className={cn("h-5 w-5", isSelected ? "text-white" : "text-amber-500")} />
+                    <Zap className={cn("h-5 w-5", isSelected ? "text-gray-900" : "text-amber-500")} />
                   ) : (
-                    <Truck className={cn("h-5 w-5", isSelected ? "text-white" : "text-gray-500")} />
+                    <Truck className={cn("h-5 w-5", isSelected ? "text-gray-900" : "text-gray-500")} />
                   )}
                 </div>
 
@@ -109,7 +109,7 @@ export const DeliveryOptions = ({ selectedOption, onSelect, location, subtotal }
                     </span>
                   </div>
                   <p className="text-sm text-gray-500 mt-1">{option.description}</p>
-                  <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-400">
+                  <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500">
                     <Clock className="h-3.5 w-3.5" />
                     <span>{option.estimatedDays}</span>
                   </div>

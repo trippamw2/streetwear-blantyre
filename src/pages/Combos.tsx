@@ -9,22 +9,22 @@ const Combos = () => {
   const combos = useCombos();
 
   return (
-    <div className="bg-gray-950 min-h-screen">
+    <div className="bg-white min-h-screen">
       <SEO {...defaultSEO.combos} />
 
       {/* ─── HERO ─── */}
-      <section className="bg-gray-950 text-white overflow-hidden">
+      <section className="bg-white text-gray-900 overflow-hidden">
         <div className="container relative py-20 sm:py-28 lg:py-36">
           <div className="relative max-w-2xl mx-auto text-center">
-            <span className="inline-block px-4 py-1.5 border border-gray-700 text-gray-400 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
+            <span className="inline-block px-4 py-1.5 border border-gray-700 text-gray-500 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
               Save 15% vs buying separate
             </span>
-            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight text-white">
+            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight text-gray-900">
               YOUR OUTFIT.
               <br />
               ONE BOX.
             </h1>
-            <p className="text-gray-400 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
+            <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
               Outfit looking stale? Nothing goes together? You're not alone.
               Most people waste hours guessing what works. We solved that —
               curated Culture Packs styled by people who actually understand style.
@@ -38,7 +38,7 @@ const Combos = () => {
                   Need Help? Chat
                 </Button>
               </a>
-              <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 w-full sm:w-auto px-8 py-3.5 font-semibold">
+              <Button asChild size="lg" variant="outline" className="border-white/20 text-gray-900 hover:bg-gray-200 w-full sm:w-auto px-8 py-3.5 font-semibold">
                 <Link to="/shop">Browse Shop All</Link>
               </Button>
             </div>
@@ -47,7 +47,7 @@ const Combos = () => {
       </section>
 
       {/* ─── WHY BUNDLES ─── */}
-      <section className="border-b border-white/10 bg-gray-900">
+      <section className="border-b border-gray-200 bg-gray-100">
         <div className="container py-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
@@ -55,9 +55,9 @@ const Combos = () => {
               { title: "No Research Needed", desc: "We matched the right pieces for your vibe." },
               { title: "30 Day Guarantee", desc: "Not happy? Send it back. Simple." },
             ].map((item) => (
-              <div key={item.title} className="p-4 bg-white/5">
-                <p className="font-semibold text-sm text-white">{item.title}</p>
-                <p className="text-xs text-gray-400 mt-1">{item.desc}</p>
+              <div key={item.title} className="p-4 bg-gray-100">
+                <p className="font-semibold text-sm text-gray-900">{item.title}</p>
+                <p className="text-xs text-gray-500 mt-1">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -68,11 +68,11 @@ const Combos = () => {
       </section>
 
       {/* ─── KITS GRID ─── */}
-      <section className="bg-gray-950 container py-16 sm:py-20 lg:py-24">
+      <section className="bg-white container py-16 sm:py-20 lg:py-24">
         <div className="text-center mb-10 sm:mb-12">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Pick Your Kit</p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">Culture Kits</h2>
-          <p className="text-gray-400 text-sm mt-2 max-w-md mx-auto">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Pick Your Kit</p>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Culture Kits</h2>
+          <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
             Each bundle solves a style problem. No filler. Just what your wardrobe needs.
             Pick your vibe. We handle the rest.
           </p>
@@ -86,11 +86,11 @@ const Combos = () => {
       </section>
 
       {/* ─── BROWSE BY CATEGORY ─── */}
-      <section className="bg-gray-900 py-16 sm:py-20">
+      <section className="bg-gray-100 py-16 sm:py-20">
         <div className="container text-center">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Need Just One Thing?</p>
-          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white">Shop by Category</h2>
-          <p className="text-gray-400 text-sm mt-2">Every item available individually too. Your culture, your way.</p>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-2">Need Just One Thing?</p>
+          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900">Shop by Category</h2>
+          <p className="text-gray-500 text-sm mt-2">Every item available individually too. Your culture, your way.</p>
 
           <div className="flex flex-wrap justify-center gap-3 mt-8">
             {[
@@ -106,7 +106,7 @@ const Combos = () => {
               <Link
                 key={item.cat}
                 to={`/shop?cat=${item.cat}`}
-                className="px-6 py-3 bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:border-white/30 hover:text-white transition-all duration-200"
+                className="px-6 py-3 bg-gray-100 border border-gray-200 text-sm font-medium text-gray-600 hover:border-white/30 hover:text-gray-900 transition-all duration-200"
               >
                 {item.label}
               </Link>

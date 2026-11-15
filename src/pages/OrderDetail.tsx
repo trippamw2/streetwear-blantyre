@@ -80,7 +80,7 @@ const OrderDetailPage = () => {
             <h1 className="font-display font-bold text-2xl">#{order.id.slice(0, 8).toUpperCase()}</h1>
             <p className="text-xs text-muted-foreground mt-1">{format(new Date(order.created_at), "PPPp")}</p>
           </div>
-          <span className="px-3 py-1.5 rounded-full bg-gradient-brand text-white text-xs font-bold uppercase">{order.status}</span>
+          <span className="px-3 py-1.5 rounded-full bg-gradient-brand text-gray-900 text-xs font-bold uppercase">{order.status}</span>
         </div>
 
         {/* Tracker */}
@@ -91,7 +91,7 @@ const OrderDetailPage = () => {
                 const reached = i <= idx;
                 return (
                   <div key={s.key} className="flex flex-col items-center text-center gap-2">
-                    <div className={`h-10 w-10 rounded-full flex items-center justify-center border-2 ${reached ? "bg-gradient-brand border-transparent text-white" : "border-border text-muted-foreground"}`}>
+                    <div className={`h-10 w-10 rounded-full flex items-center justify-center border-2 ${reached ? "bg-gradient-brand border-transparent text-gray-900" : "border-border text-muted-foreground"}`}>
                       <s.icon className="h-4 w-4" />
                     </div>
                     <p className={`text-xs ${reached ? "font-semibold" : "text-muted-foreground"}`}>{s.label}</p>
@@ -149,7 +149,7 @@ const OrderDetailPage = () => {
                   description: "Streetwear Blantyre order payment",
                 })
               }
-              className="w-full bg-gray-900 text-white hover:bg-gray-800 rounded-full py-3 font-semibold"
+              className="w-full bg-gray-100 text-gray-900 hover:bg-gray-800 rounded-full py-3 font-semibold"
             >
               <CreditCard className="h-4 w-4 mr-2" />
               Pay {formatMWK(order.total_mwk)} via PayChangu

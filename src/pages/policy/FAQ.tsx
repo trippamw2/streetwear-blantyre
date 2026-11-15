@@ -85,7 +85,7 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
         className="w-full px-5 py-4 flex items-center justify-between text-left"
       >
         <span className="font-medium pr-4">{question}</span>
-        {isOpen ? <ChevronUp className="h-5 w-5 text-gray-400 shrink-0" /> : <ChevronDown className="h-5 w-5 text-gray-400 shrink-0" />}
+        {isOpen ? <ChevronUp className="h-5 w-5 text-gray-500 shrink-0" /> : <ChevronDown className="h-5 w-5 text-gray-500 shrink-0" />}
       </button>
       <AnimatePresence>
         {isOpen && (

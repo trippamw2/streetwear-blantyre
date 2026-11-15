@@ -14,7 +14,7 @@ import { toast } from "@/hooks/use-toast";
 
 const tierConfig = {
   bronze: { icon: Gem, color: "bg-amber-700", text: "text-amber-400", bg: "bg-amber-950/50" },
-  silver: { icon: Award, color: "bg-gray-400", text: "text-gray-300", bg: "bg-gray-900" },
+  silver: { icon: Award, color: "bg-gray-400", text: "text-gray-600", bg: "bg-gray-100" },
   gold: { icon: Crown, color: "bg-yellow-500", text: "text-yellow-400", bg: "bg-yellow-950/50" },
   platinum: { icon: Star, color: "bg-purple-500", text: "text-purple-400", bg: "bg-purple-950/50" },
 };
@@ -27,12 +27,12 @@ const Loyalty = () => {
 
   if (!user) {
     return (
-      <div className="bg-gray-950 min-h-screen">
+      <div className="bg-white min-h-screen">
         <div className="container py-6 sm:py-12">
           <div className="max-w-2xl mx-auto text-center space-y-4">
             <Gift className="h-12 w-12 mx-auto text-gray-500" />
-            <h1 className="font-display font-bold text-2xl sm:text-3xl text-white">Join Streetwear Blantyre Rewards</h1>
-            <p className="text-gray-400">Your loyalty deserves more than empty points. Sign in and start earning toward culture that represents you.</p>
+            <h1 className="font-display font-bold text-2xl sm:text-3xl text-gray-900">Join Streetwear Blantyre Rewards</h1>
+            <p className="text-gray-500">Your loyalty deserves more than empty points. Sign in and start earning toward culture that represents you.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild variant="hero" size="lg">
                 <Link to="/auth">Sign In</Link>
@@ -62,7 +62,7 @@ const Loyalty = () => {
   const pointsToNext = nextTier ? nextTier.min_lifetime_points - (loyalty?.total_points || 0) : 0;
 
   return (
-    <div className="bg-gray-950 min-h-screen">
+    <div className="bg-white min-h-screen">
       <div className="container py-4 sm:py-8 md:py-12">
         <SEO {...defaultSEO.rewards} />
         <div className="mb-4 sm:mb-6">
@@ -70,8 +70,8 @@ const Loyalty = () => {
         </div>
 
         <div className="max-w-2xl space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-white">Streetwear Blantyre Rewards</h1>
-          <p className="text-gray-400 text-sm sm:text-base">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-gray-900">Streetwear Blantyre Rewards</h1>
+          <p className="text-gray-500 text-sm sm:text-base">
             Most rewards programs forget why you shop. Points without purpose go nowhere.
             Every purchase here earns points toward what actually matters — culture that represents you.
           </p>
@@ -81,33 +81,33 @@ const Loyalty = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`rounded-xl sm:rounded-2xl p-4 sm:p-6 ${tierInfo.bg} border border-white/10 mb-6`}
+        className={`rounded-xl sm:rounded-2xl p-4 sm:p-6 ${tierInfo.bg} border border-gray-200 mb-6`}
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className={`h-12 sm:h-16 w-12 sm:w-16 rounded-full ${tierInfo.color} flex items-center justify-center`}>
-              <tierInfo.icon className="h-6 sm:h-8 w-6 sm:w-8 text-white" />
+              <tierInfo.icon className="h-6 sm:h-8 w-6 sm:w-8 text-gray-900" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm text-gray-400 uppercase">Current Tier</p>
+              <p className="text-xs sm:text-sm text-gray-500 uppercase">Current Tier</p>
               <p className={`font-display font-bold text-xl sm:text-2xl ${tierInfo.text} capitalize`}>{currentTier}</p>
             </div>
           </div>
           <div className="text-center sm:text-right">
-            <p className="text-xs sm:text-sm text-gray-400">Available Points</p>
-            <p className="font-display font-bold text-3xl sm:text-4xl text-white">{redeemablePoints.toLocaleString()}</p>
-            <p className="text-xs sm:text-sm text-gray-400">Worth {formatMWK(rewardValue)}</p>
+            <p className="text-xs sm:text-sm text-gray-500">Available Points</p>
+            <p className="font-display font-bold text-3xl sm:text-4xl text-gray-900">{redeemablePoints.toLocaleString()}</p>
+            <p className="text-xs sm:text-sm text-gray-500">Worth {formatMWK(rewardValue)}</p>
           </div>
         </div>
 
         {/* Progress bar */}
         {nextTier && (
-          <div className="mt-4 pt-4 border-t border-white/10">
+          <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="flex justify-between text-xs sm:text-sm mb-2">
-              <span className="text-gray-400">Progress to {nextTier.name}</span>
-              <span className="font-medium text-white">{pointsToNext.toLocaleString()} pts to go</span>
+              <span className="text-gray-500">Progress to {nextTier.name}</span>
+              <span className="font-medium text-gray-900">{pointsToNext.toLocaleString()} pts to go</span>
             </div>
-            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <div className={`h-full ${tierInfo.color} rounded-full`} style={{ width: `${Math.min(100, ((loyalty?.total_points || 0) / nextTier.min_lifetime_points) * 100)}%` }} />
             </div>
           </div>
@@ -145,7 +145,7 @@ const Loyalty = () => {
       )}
 
       {/* How It Works */}
-      <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-white">How It Works</h2>
+      <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-900">How It Works</h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-6">
         {[
           { icon: ShoppingBag, title: "Shop", desc: "Earn points" },
@@ -153,28 +153,28 @@ const Loyalty = () => {
           { icon: Zap, title: "Save", desc: "On every order" },
           { icon: Crown, title: "Upgrade", desc: "Unlock perks" },
         ].map((step) => (
-          <div key={step.title} className="text-center p-3 sm:p-4 bg-white/5 rounded-xl">
-            <step.icon className="h-5 sm:h-6 w-5 sm:w-6 mx-auto mb-1 text-white" />
-            <p className="font-semibold text-xs sm:text-sm text-white">{step.title}</p>
-            <p className="text-xs text-gray-400">{step.desc}</p>
+          <div key={step.title} className="text-center p-3 sm:p-4 bg-gray-100 rounded-xl">
+            <step.icon className="h-5 sm:h-6 w-5 sm:w-6 mx-auto mb-1 text-gray-900" />
+            <p className="font-semibold text-xs sm:text-sm text-gray-900">{step.title}</p>
+            <p className="text-xs text-gray-500">{step.desc}</p>
           </div>
         ))}
       </div>
 
       {/* Tiers */}
-      <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-white">Tier Benefits</h2>
+      <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-900">Tier Benefits</h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-6">
         {tiers.map((tier) => {
           const config = tierConfig[tier.name as keyof typeof tierConfig] || tierConfig.bronze;
           return (
             <div key={tier.name} className={`p-3 sm:p-4 rounded-xl border ${
-              tier.name === currentTier ? `${config.bg} border-2` : "border-white/10 bg-white/5"
+              tier.name === currentTier ? `${config.bg} border-2` : "border-gray-200 bg-gray-100"
             }`}>
               <div className={`h-8 w-8 rounded-full ${config.color} flex items-center justify-center mb-2`}>
-                <config.icon className="h-4 w-4 text-white" />
+                <config.icon className="h-4 w-4 text-gray-900" />
               </div>
-              <p className="font-semibold text-sm capitalize text-white">{tier.name}</p>
-              <p className="text-xs text-gray-400">{tier.min_lifetime_points.toLocaleString()}+ pts</p>
+              <p className="font-semibold text-sm capitalize text-gray-900">{tier.name}</p>
+              <p className="text-xs text-gray-500">{tier.min_lifetime_points.toLocaleString()}+ pts</p>
               {tier.discount_percent > 0 && (
                 <p className="text-xs font-medium text-green-400">{tier.discount_percent}% off</p>
               )}
@@ -187,21 +187,21 @@ const Loyalty = () => {
       </div>
 
       {/* Referral Program */}
-      <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2 text-white">
-        <Users className="h-5 w-5 text-white" /> Refer & Earn
+      <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2 text-gray-900">
+        <Users className="h-5 w-5 text-gray-900" /> Refer & Earn
       </h2>
-      <div className="rounded-2xl border-2 border-white/10 bg-gradient-to-br from-white/5 to-transparent p-4 sm:p-6 mb-6">
+      <div className="rounded-2xl border-2 border-gray-200 bg-gradient-to-br from-white/5 to-transparent p-4 sm:p-6 mb-6">
         <div className="flex flex-col sm:flex-row gap-4 sm:items-start">
           <div className="flex-1">
-            <p className="text-sm text-gray-400 mb-3">Share your code. Earn 500 points per friend who signs up.</p>
+            <p className="text-sm text-gray-500 mb-3">Share your code. Earn 500 points per friend who signs up.</p>
             {referralCode ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <code className="flex-1 bg-white/5 border-2 border-white/10 rounded-xl px-4 py-4 font-mono text-xl font-bold text-white text-center">
+                  <code className="flex-1 bg-gray-100 border-2 border-gray-200 rounded-xl px-4 py-4 font-mono text-xl font-bold text-gray-900 text-center">
                     {referralCode.code}
                   </code>
-                  <Button size="icon" variant="outline" onClick={copyCode} className="h-14 w-14 border-white/10 hover:bg-white/10">
-                    {copied ? <Check className="h-5 w-5 text-green-400" /> : <Copy className="h-5 w-5 text-white" />}
+                  <Button size="icon" variant="outline" onClick={copyCode} className="h-14 w-14 border-gray-200 hover:bg-gray-200">
+                    {copied ? <Check className="h-5 w-5 text-green-400" /> : <Copy className="h-5 w-5 text-gray-900" />}
                   </Button>
                 </div>
                 <div className="flex gap-2">
@@ -214,44 +214,44 @@ const Loyalty = () => {
                 </p>
               </div>
             ) : (
-              <div className="animate-pulse bg-white/10 rounded-xl h-20" />
+              <div className="animate-pulse bg-gray-200 rounded-xl h-20" />
             )}
           </div>
           <div className="flex sm:flex-col gap-3">
-            <div className="bg-white/5 rounded-xl p-4 text-center min-w-[80px]">
-              <p className="text-3xl font-bold text-white">{stats.totalReferrals}</p>
-              <p className="text-xs font-medium text-gray-400">Friends</p>
+            <div className="bg-gray-100 rounded-xl p-4 text-center min-w-[80px]">
+              <p className="text-3xl font-bold text-gray-900">{stats.totalReferrals}</p>
+              <p className="text-xs font-medium text-gray-500">Friends</p>
             </div>
-            <div className="bg-white/5 rounded-xl p-4 text-center min-w-[80px]">
+            <div className="bg-gray-100 rounded-xl p-4 text-center min-w-[80px]">
               <p className="text-3xl font-bold text-green-400">{stats.totalEarned}</p>
-              <p className="text-xs font-medium text-gray-400">Points</p>
+              <p className="text-xs font-medium text-gray-500">Points</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Recent Activity */}
-      <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-white">Recent Activity</h2>
-      <div className="rounded-xl border border-white/10 overflow-hidden mb-6">
+      <h2 className="font-display font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-900">Recent Activity</h2>
+      <div className="rounded-xl border border-gray-200 overflow-hidden mb-6">
         {transactions.length > 0 ? (
           transactions.map((tx, i) => (
-            <div key={tx.id} className={`flex items-center justify-between p-3 sm:p-4 ${i % 2 === 0 ? "bg-white/5" : "bg-transparent"}`}>
+            <div key={tx.id} className={`flex items-center justify-between p-3 sm:p-4 ${i % 2 === 0 ? "bg-gray-100" : "bg-transparent"}`}>
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                  tx.points > 0 ? "bg-green-500/10" : "bg-white/10"
+                  tx.points > 0 ? "bg-green-500/10" : "bg-gray-200"
                 }`}>
                   {tx.points > 0 ? (
                     <TrendingUp className="h-4 w-4 text-green-400" />
                   ) : (
-                    <Gift className="h-4 w-4 text-gray-400" />
+                    <Gift className="h-4 w-4 text-gray-500" />
                   )}
                 </div>
                 <div>
-                  <p className="font-medium text-sm capitalize text-white">{tx.type}</p>
-                  <p className="text-xs text-gray-400">{tx.description}</p>
+                  <p className="font-medium text-sm capitalize text-gray-900">{tx.type}</p>
+                  <p className="text-xs text-gray-500">{tx.description}</p>
                 </div>
               </div>
-              <p className={`font-semibold text-sm ${tx.points > 0 ? "text-green-400" : "text-gray-400"}`}>
+              <p className={`font-semibold text-sm ${tx.points > 0 ? "text-green-400" : "text-gray-500"}`}>
                 {tx.points > 0 ? "+" : ""}{tx.points} pts
               </p>
             </div>
@@ -259,7 +259,7 @@ const Loyalty = () => {
         ) : (
           <div className="p-6 sm:p-8 text-center">
             <Clock className="h-8 sm:h-10 w-8 sm:w-10 mx-auto text-gray-600 mb-3" />
-            <p className="text-gray-400">No activity yet</p>
+            <p className="text-gray-500">No activity yet</p>
             <p className="text-sm text-gray-500">Start your culture journey to earn points!</p>
           </div>
         )}

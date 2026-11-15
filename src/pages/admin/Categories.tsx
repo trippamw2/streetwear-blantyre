@@ -169,7 +169,7 @@ const AdminCategories = () => {
           </div>
           <Dialog open={catDialog} onOpenChange={(open) => { setCatDialog(open); if (!open) { setEditingCat(null); setCatForm(emptyCategory); } }}>
             <DialogTrigger asChild>
-              <Button className="bg-gray-900 hover:bg-gray-800"><Plus className="h-4 w-4" /> Add Category</Button>
+              <Button className="bg-gray-100 hover:bg-gray-800"><Plus className="h-4 w-4" /> Add Category</Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -202,7 +202,7 @@ const AdminCategories = () => {
                   <input type="checkbox" checked={catForm.is_active} onChange={(e) => setCatForm(p => ({ ...p, is_active: e.target.checked }))} className="rounded" />
                   <Label>Active</Label>
                 </div>
-                <Button onClick={saveCategory} disabled={catSaving || !catForm.name} className="w-full bg-gray-900 hover:bg-gray-800">
+                <Button onClick={saveCategory} disabled={catSaving || !catForm.name} className="w-full bg-gray-100 hover:bg-gray-800">
                   {catSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                   {editingCat ? "Update" : "Create"}
                 </Button>
@@ -250,7 +250,7 @@ const AdminCategories = () => {
                 </tr>
               ))}
               {categories.length === 0 && (
-                <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-400">No categories yet. Add one above.</td></tr>
+                <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-500">No categories yet. Add one above.</td></tr>
               )}
             </tbody>
           </table>
@@ -268,7 +268,7 @@ const AdminCategories = () => {
           </div>
           <Dialog open={pillarDialog} onOpenChange={(open) => { setPillarDialog(open); if (!open) { setEditingPillar(null); setPillarForm(emptyPillar); } }}>
             <DialogTrigger asChild>
-              <Button className="bg-gray-900 hover:bg-gray-800"><Plus className="h-4 w-4" /> Add Pillar</Button>
+              <Button className="bg-gray-100 hover:bg-gray-800"><Plus className="h-4 w-4" /> Add Pillar</Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -310,7 +310,7 @@ const AdminCategories = () => {
                     <Label>Active</Label>
                   </div>
                 </div>
-                <Button onClick={savePillar} disabled={pillarSaving || !pillarForm.name} className="w-full bg-gray-900 hover:bg-gray-800">
+                <Button onClick={savePillar} disabled={pillarSaving || !pillarForm.name} className="w-full bg-gray-100 hover:bg-gray-800">
                   {pillarSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                   {editingPillar ? "Update" : "Create"}
                 </Button>
@@ -365,7 +365,7 @@ const AdminCategories = () => {
                 </tr>
               ))}
               {pillars.length === 0 && (
-                <tr><td colSpan={8} className="px-4 py-8 text-center text-gray-400">No culture pillars yet. Add one above.</td></tr>
+                <tr><td colSpan={8} className="px-4 py-8 text-center text-gray-500">No culture pillars yet. Add one above.</td></tr>
               )}
             </tbody>
           </table>

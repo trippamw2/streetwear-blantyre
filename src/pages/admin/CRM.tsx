@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { formatMWK } from "@/data/products";
+import { AIWritingButton } from "@/components/admin/AIWritingButton";
 import { Users, MessageCircle, Send, Search, Filter, Download, Phone, Mail, ShoppingCart, Calendar, Loader2, Check, Package, DollarSign, TrendingUp } from "lucide-react";
 import { format } from "date-fns";
 
@@ -311,10 +312,10 @@ Thanks for being a valued customer!
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6">
-        <button onClick={() => setActiveTab("customers")} className={`px-4 py-2 rounded-lg font-medium ${activeTab === "customers" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
+        <button onClick={() => setActiveTab("customers")} className={`px-4 py-2 rounded-lg font-medium ${activeTab === "customers" ? "bg-gray-100 text-gray-900" : "bg-card border border-border"}`}>
           <Users className="h-4 w-4 inline mr-2" /> Customers ({customers.length})
         </button>
-        <button onClick={() => setActiveTab("subscribers")} className={`px-4 py-2 rounded-lg font-medium ${activeTab === "subscribers" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
+        <button onClick={() => setActiveTab("subscribers")} className={`px-4 py-2 rounded-lg font-medium ${activeTab === "subscribers" ? "bg-gray-100 text-gray-900" : "bg-card border border-border"}`}>
           <Mail className="h-4 w-4 inline mr-2" /> Subscribers ({subscribers.length})
         </button>
       </div>
@@ -323,7 +324,7 @@ Thanks for being a valued customer!
       {activeTab === "customers" && (
       <div className="flex flex-wrap gap-3">
         <div className="flex-1 min-w-[200px] relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -332,16 +333,16 @@ Thanks for being a valued customer!
           />
         </div>
         <div className="flex gap-2">
-          <button onClick={() => setFilter("all")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "all" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
+          <button onClick={() => setFilter("all")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "all" ? "bg-gray-100 text-gray-900" : "bg-card border border-border"}`}>
             All
           </button>
-          <button onClick={() => setFilter("vip")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "vip" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
+          <button onClick={() => setFilter("vip")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "vip" ? "bg-gray-100 text-gray-900" : "bg-card border border-border"}`}>
             VIP (50K+)
           </button>
-          <button onClick={() => setFilter("new")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "new" ? "bg-gray-900 text-white" : "bg-card border border-border"}`}>
+          <button onClick={() => setFilter("new")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "new" ? "bg-gray-100 text-gray-900" : "bg-card border border-border"}`}>
             New (30 days)
           </button>
-          <button onClick={() => setFilter("inactive")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "inactive" ? "bg-red-500 text-white" : "bg-card border border-border"}`}>
+          <button onClick={() => setFilter("inactive")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "inactive" ? "bg-red-500 text-gray-900" : "bg-card border border-border"}`}>
             Inactive
           </button>
         </div>
@@ -378,7 +379,7 @@ Thanks for being a valued customer!
                       {customer.phone}
                     </a>
                   ) : (
-                    <span className="text-gray-400">-</span>
+                    <span className="text-gray-500">-</span>
                   )}
                 </td>
                 <td className="p-4">{customer.total_orders}</td>
@@ -438,7 +439,7 @@ Thanks for being a valued customer!
                       }}>
                         <MessageCircle className="h-3 w-3" />
                       </Button>
-                    ) : <span className="text-gray-300">-</span>}
+                    ) : <span className="text-gray-600">-</span>}
                   </td>
                   <td className="p-4 text-sm text-gray-500">{format(new Date(sub.subscribed_at), "PP")}</td>
                   <td className="p-4">
@@ -473,10 +474,10 @@ Thanks for being a valued customer!
             
             {/* Channel Selection */}
             <div className="flex gap-2">
-              <button onClick={() => setCampaignType("whatsapp")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "whatsapp" ? "bg-green-600 text-white" : "bg-gray-100"}`}>
+              <button onClick={() => setCampaignType("whatsapp")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "whatsapp" ? "bg-green-600 text-gray-900" : "bg-gray-100"}`}>
                 <MessageCircle className="h-4 w-4" /> WhatsApp
               </button>
-              <button onClick={() => setCampaignType("email")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "email" ? "bg-gray-900 text-white" : "bg-gray-100"}`}>
+              <button onClick={() => setCampaignType("email")} className={`flex-1 py-2 rounded-lg font-medium flex items-center justify-center gap-2 ${campaignType === "email" ? "bg-gray-100 text-gray-900" : "bg-gray-100"}`}>
                 <Mail className="h-4 w-4" /> Email
               </button>
             </div>
@@ -498,7 +499,17 @@ Thanks for being a valued customer!
             </div>
             
             <div className="space-y-2">
-              <Label>Message *</Label>
+              <div className="flex items-center justify-between">
+                <Label>Message *</Label>
+                <AIWritingButton
+                  contentTypes={["campaign_message"]}
+                  variables={{
+                    campaign_type: campaignType === "email" ? "email" : "whatsapp",
+                    content_direction: campaignForm.name || "customer update",
+                  }}
+                  onGenerated={(type, content) => setCampaignForm(p => ({ ...p, message: content }))}
+                />
+              </div>
               <textarea
                 value={campaignForm.message}
                 onChange={(e) => setCampaignForm(p => ({ ...p, message: e.target.value }))}

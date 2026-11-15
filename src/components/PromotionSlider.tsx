@@ -61,7 +61,7 @@ export const PromotionSlider = ({ page, className }: PromotionSliderProps) => {
 
   const promo = promotions[current];
   const bgColor = promo.background_color || "from-gray-900 to-gray-900";
-  const textColor = promo.text_color || "text-white";
+  const textColor = promo.text_color || "text-gray-900";
 
   return (
     <div className={cn("relative rounded-xl overflow-hidden w-full h-24 sm:h-32 md:h-40 lg:h-48", className)}>

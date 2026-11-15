@@ -549,12 +549,12 @@ const AdminAuthentication = () => {
           <Button variant="outline" size="sm" onClick={() => setBulkOpen(true)} disabled={unauthenticatedSbOriginal.length === 0}>
             <Layers className="h-4 w-4 mr-1" /> Bulk Generate QR
             {unauthenticatedSbOriginal.length > 0 && (
-              <span className="ml-1.5 bg-gray-900 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+              <span className="ml-1.5 bg-gray-100 text-gray-900 text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
                 {unauthenticatedSbOriginal.length}
               </span>
             )}
           </Button>
-          <Button size="sm" className="bg-gray-900 hover:bg-gray-800" onClick={() => setCreateOpen(true)}>
+          <Button size="sm" className="bg-gray-100 hover:bg-gray-800" onClick={() => setCreateOpen(true)}>
             <Plus className="h-4 w-4 mr-1" /> Authenticate Product
           </Button>
         </div>
@@ -731,7 +731,7 @@ const AdminAuthentication = () => {
             <div><Label>Manufacturing Date</Label><Input type="date" value={form.manufacturing_date} onChange={(e) => setForm({ ...form, manufacturing_date: e.target.value })} className="mt-1" /></div>
             <div><Label>Product Story</Label><Textarea value={form.product_story} onChange={(e) => setForm({ ...form, product_story: e.target.value })} placeholder="Tell the story of this product..." rows={3} className="mt-1" /></div>
             <div><Label>Care Instructions</Label><Textarea value={form.care_instructions} onChange={(e) => setForm({ ...form, care_instructions: e.target.value })} placeholder="Machine wash cold. Do not bleach..." rows={2} className="mt-1" /></div>
-            <Button className="w-full bg-gray-900 hover:bg-gray-800" onClick={handleCreate} disabled={saving || !form.product_id}>
+            <Button className="w-full bg-gray-100 hover:bg-gray-800" onClick={handleCreate} disabled={saving || !form.product_id}>
               {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Shield className="h-4 w-4 mr-2" />}
               Authenticate Product
             </Button>
@@ -781,9 +781,9 @@ const AdminAuthentication = () => {
                       }`}
                     >
                       <div className={`h-5 w-5 rounded border-2 flex items-center justify-center shrink-0 ${
-                        selectedBulk.has(product.id) ? "bg-gray-900 border-gray-900" : "border-gray-300"
+                        selectedBulk.has(product.id) ? "bg-gray-100 border-gray-900" : "border-gray-300"
                       }`}>
-                        {selectedBulk.has(product.id) && <Check className="h-3 w-3 text-white" />}
+                        {selectedBulk.has(product.id) && <Check className="h-3 w-3 text-gray-900" />}
                       </div>
                       {product.image && (
                         <img src={product.image} alt="" className="h-8 w-8 rounded-lg object-cover shrink-0" />
@@ -797,7 +797,7 @@ const AdminAuthentication = () => {
                 </div>
 
                 <Button
-                  className="w-full bg-gray-900 hover:bg-gray-800"
+                  className="w-full bg-gray-100 hover:bg-gray-800"
                   onClick={handleBulkGenerate}
                   disabled={bulkGenerating || selectedBulk.size === 0}
                 >
@@ -854,7 +854,7 @@ const AdminAuthentication = () => {
                   Copy URL
                 </Button>
                 <Button
-                  className="w-full bg-gray-900 hover:bg-gray-800"
+                  className="w-full bg-gray-100 hover:bg-gray-800"
                   onClick={() => handleDownloadQR(qrRecord)}
                   disabled={downloadingId === qrRecord.id}
                 >

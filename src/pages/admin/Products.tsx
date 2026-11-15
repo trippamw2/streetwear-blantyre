@@ -383,7 +383,7 @@ const AdminProducts = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-900 hover:bg-gray-800">
+            <Button className="bg-gray-100 hover:bg-gray-800">
               <Plus className="h-4 w-4" /> Add Product
             </Button>
           </DialogTrigger>
@@ -653,14 +653,14 @@ const AdminProducts = () => {
                     </div>
                   ))}
                   {formData.types.length === 0 && (
-                    <p className="text-sm text-gray-400">No variants. Click "Add" to add options like color/size.</p>
+                    <p className="text-sm text-gray-500">No variants. Click "Add" to add options like color/size.</p>
                   )}
                 </div>
               </div>
               
               <Button 
                 onClick={handleSave} 
-                className="w-full bg-gray-900 hover:bg-gray-800"
+                className="w-full bg-gray-100 hover:bg-gray-800"
                 disabled={saving || !formData.name}
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
@@ -695,7 +695,7 @@ const AdminProducts = () => {
                         <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
                       ) : (
                         <div className="h-full w-full flex items-center justify-center">
-                          <ImageIcon className="h-5 w-5 text-gray-300" />
+                          <ImageIcon className="h-5 w-5 text-gray-600" />
                         </div>
                       )}
                     </div>
@@ -741,7 +741,7 @@ const AdminProducts = () => {
                       </Button>
                     </div>
                   ) : (
-                    <span className="text-xs text-gray-400">No barcode</span>
+                    <span className="text-xs text-gray-500">No barcode</span>
                   )}
                 </td>
                 <td className="p-4">

@@ -101,7 +101,7 @@ const AdminSettings = () => {
           <h1 className="text-2xl font-bold">Site Settings</h1>
           <p className="text-sm text-muted-foreground">Configure your store settings</p>
         </div>
-        <Button onClick={saveSettings} disabled={saving} className="bg-gray-900 hover:bg-gray-800">
+        <Button onClick={saveSettings} disabled={saving} className="bg-gray-100 hover:bg-gray-800">
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Save Changes
         </Button>
@@ -128,7 +128,7 @@ const AdminSettings = () => {
               </p>
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-sm font-medium mb-2">Preview:</p>
-                <div className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm">
+                <div className="bg-gray-100 text-gray-900 px-4 py-2 rounded-lg text-sm">
                   {settings.promo_banner_text || "Enter your promotional text above..."}
                 </div>
               </div>

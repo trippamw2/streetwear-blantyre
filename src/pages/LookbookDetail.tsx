@@ -104,7 +104,7 @@ const LookbookDetail = () => {
 
       <div className="min-h-screen bg-white">
         {/* Hero */}
-        <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] bg-gray-900">
+        <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] bg-gray-100">
           {lookbook.hero_image ? (
             <img src={lookbook.hero_image} alt={lookbook.title} className="w-full h-full object-cover" />
           ) : (
@@ -113,7 +113,7 @@ const LookbookDetail = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
           <div className="absolute top-6 left-6">
-            <Link to="/lookbook" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm font-medium">
+            <Link to="/lookbook" className="flex items-center gap-2 text-gray-900/80 hover:text-gray-900 transition-colors text-sm font-medium">
               <ArrowLeft className="h-4 w-4" />
               Lookbooks
             </Link>
@@ -122,15 +122,15 @@ const LookbookDetail = () => {
           <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-12">
             <div className="max-w-6xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                {lookbook.season && <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">{lookbook.season}</span>}
+                {lookbook.season && <span className="text-gray-900/50 text-xs font-semibold uppercase tracking-wider">{lookbook.season}</span>}
                 {lookbook.culture_pillar && (
                   <Link to={`/culture/${lookbook.culture_pillar}`} className={`px-3 py-1 rounded-full text-xs font-semibold ${PILLAR_COLORS[lookbook.culture_pillar] || "bg-gray-200 text-gray-700"} hover:opacity-80 transition-opacity`}>
                     {lookbook.culture_pillar}
                   </Link>
                 )}
               </div>
-              <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight">{lookbook.title}</h1>
-              {lookbook.description && <p className="text-white/60 text-lg mt-3 max-w-xl">{lookbook.description}</p>}
+              <h1 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-gray-900 tracking-tight">{lookbook.title}</h1>
+              {lookbook.description && <p className="text-gray-900/60 text-lg mt-3 max-w-xl">{lookbook.description}</p>}
             </div>
           </div>
         </div>
@@ -139,8 +139,8 @@ const LookbookDetail = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           {items.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-400 text-lg">This collection is being curated.</p>
-              <p className="text-gray-300 text-sm mt-2">Pieces coming soon.</p>
+              <p className="text-gray-500 text-lg">This collection is being curated.</p>
+              <p className="text-gray-600 text-sm mt-2">Pieces coming soon.</p>
             </div>
           ) : (
             <div className="space-y-8">
@@ -152,7 +152,7 @@ const LookbookDetail = () => {
                       <img src={item.products.image} alt={item.products.name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-gray-300 font-display text-2xl font-bold">{index + 1}</span>
+                        <span className="text-gray-600 font-display text-2xl font-bold">{index + 1}</span>
                       </div>
                     )}
                   </div>
@@ -161,7 +161,7 @@ const LookbookDetail = () => {
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Piece {index + 1}</span>
+                        <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Piece {index + 1}</span>
                         {item.products?.category && (
                           <span className="px-2 py-0.5 bg-gray-100 text-gray-500 rounded text-xs">{item.products.category}</span>
                         )}

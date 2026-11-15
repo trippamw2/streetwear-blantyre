@@ -97,12 +97,12 @@ const STATUS_MESSAGES: Record<string, string> = {
 };
 
 const statusColors: Record<string, string> = {
-  new: "bg-accent text-white",
-  confirmed: "bg-primary text-white",
-  processing: "bg-amber-500 text-white",
-  dispatched: "bg-purple-500 text-white",
-  delivered: "bg-green-500 text-white",
-  cancelled: "bg-destructive text-white",
+  new: "bg-accent text-gray-900",
+  confirmed: "bg-primary text-gray-900",
+  processing: "bg-amber-500 text-gray-900",
+  dispatched: "bg-purple-500 text-gray-900",
+  delivered: "bg-green-500 text-gray-900",
+  cancelled: "bg-destructive text-gray-900",
 };
 
 const AdminOrders = () => {
@@ -320,11 +320,11 @@ Track: https://www.wearsb.com/track/${order.id}`;
       </div>
 
       <div className="flex gap-2 flex-wrap">
-        <button onClick={() => setFilter("all")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "all" ? "bg-gradient-brand text-white" : "bg-card border border-border"}`}>
+        <button onClick={() => setFilter("all")} className={`px-3 py-1.5 rounded-full text-sm font-medium ${filter === "all" ? "bg-gradient-brand text-gray-900" : "bg-card border border-border"}`}>
           All
         </button>
         {STATUSES.map((status) => (
-          <button key={status} onClick={() => setFilter(status)} className={`px-3 py-1.5 rounded-full text-sm font-medium capitalize ${filter === status ? "bg-gradient-brand text-white" : "bg-card border border-border"}`}>
+          <button key={status} onClick={() => setFilter(status)} className={`px-3 py-1.5 rounded-full text-sm font-medium capitalize ${filter === status ? "bg-gradient-brand text-gray-900" : "bg-card border border-border"}`}>
             {status}
           </button>
         ))}
@@ -351,7 +351,7 @@ Track: https://www.wearsb.com/track/${order.id}`;
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">{format(new Date(order.created_at), "PPp")}</span>
                     {order.payment_method === "paychangu" && <span className="text-xs bg-gray-100 text-gray-700 px-1.5 rounded">PayChangu</span>}
-                    {order.is_paid && <span className="text-xs bg-green-500 text-white px-1.5 rounded">PAID</span>}
+                    {order.is_paid && <span className="text-xs bg-green-500 text-gray-900 px-1.5 rounded">PAID</span>}
                   </div>
                 </div>
                 <div className="text-right">

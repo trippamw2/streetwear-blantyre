@@ -159,7 +159,7 @@ const AdminDelivery = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-900 hover:bg-gray-800">
+            <Button className="bg-gray-100 hover:bg-gray-800">
               <Plus className="h-4 w-4" /> Add Delivery Company
             </Button>
           </DialogTrigger>
@@ -232,7 +232,7 @@ const AdminDelivery = () => {
               
               <Button 
                 onClick={handleSave} 
-                className="w-full bg-gray-900 hover:bg-gray-800"
+                className="w-full bg-gray-100 hover:bg-gray-800"
                 disabled={saving || !formData.name}
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
@@ -246,9 +246,9 @@ const AdminDelivery = () => {
       {/* Delivery Companies Grid */}
       {companies.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-          <Truck className="h-12 w-12 mx-auto text-gray-300" />
+          <Truck className="h-12 w-12 mx-auto text-gray-600" />
           <p className="mt-4 text-gray-500">No delivery companies yet</p>
-          <Button onClick={() => setIsDialogOpen(true)} className="mt-4 bg-gray-900">Add First Company</Button>
+          <Button onClick={() => setIsDialogOpen(true)} className="mt-4 bg-gray-100">Add First Company</Button>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -149,7 +149,7 @@ const Scan = () => {
           <p className="text-gray-500 mb-6 leading-relaxed">
             This barcode does not match any Streetwear Blantyre product in our database.
           </p>
-          <p className="text-sm text-gray-400 mb-8">
+          <p className="text-sm text-gray-500 mb-8">
             This item may be counterfeit or unauthorized.
           </p>
           <a
@@ -176,10 +176,10 @@ const Scan = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Minimal header */}
-      <div className="bg-gray-900 text-white py-4">
+      <div className="bg-gray-100 text-gray-900 py-4">
         <div className="max-w-lg mx-auto px-4 flex items-center justify-between">
           <span className="font-display font-bold text-lg tracking-wide">SB</span>
-          <span className="text-xs text-white/50 uppercase tracking-widest">Product Scan</span>
+          <span className="text-xs text-gray-900/50 uppercase tracking-widest">Product Scan</span>
         </div>
       </div>
 
@@ -224,7 +224,7 @@ const Scan = () => {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Package className="h-16 w-16 text-gray-300" />
+                <Package className="h-16 w-16 text-gray-600" />
               </div>
             )}
           </div>
@@ -234,7 +234,7 @@ const Scan = () => {
               {product.name}
             </h2>
             {product.brand && (
-              <span className="inline-block px-3 py-1 bg-gray-900 text-white text-xs font-medium rounded-full mb-4">
+              <span className="inline-block px-3 py-1 bg-gray-100 text-gray-900 text-xs font-medium rounded-full mb-4">
                 {product.brand}
               </span>
             )}
@@ -248,13 +248,13 @@ const Scan = () => {
             <div className="grid grid-cols-2 gap-3 mt-4">
               {product.category && (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Package className="h-4 w-4 text-gray-400" />
+                  <Package className="h-4 w-4 text-gray-500" />
                   <span>{product.category}</span>
                 </div>
               )}
               {product.brand && (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="text-xs font-medium text-gray-400">BRAND</span>
+                  <span className="text-xs font-medium text-gray-500">BRAND</span>
                   <span>{product.brand}</span>
                 </div>
               )}
@@ -263,13 +263,13 @@ const Scan = () => {
             {/* Barcode Info */}
             <div className="mt-6 pt-4 border-t border-gray-100 space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-400 flex items-center gap-1.5">
+                <span className="text-gray-500 flex items-center gap-1.5">
                   <Hash className="h-3.5 w-3.5" /> Barcode
                 </span>
                 <span className="font-mono text-gray-700">{product.barcode}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-400 flex items-center gap-1.5">
+                <span className="text-gray-500 flex items-center gap-1.5">
                   <Hash className="h-3.5 w-3.5" /> Product ID
                 </span>
                 <span className="font-mono text-gray-700">{product.id}</span>
@@ -277,17 +277,17 @@ const Scan = () => {
               {authRecord && (
                 <>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400 flex items-center gap-1.5">
+                    <span className="text-gray-500 flex items-center gap-1.5">
                       <Shield className="h-3.5 w-3.5" /> Serial Number
                     </span>
                     <span className="font-mono text-gray-700">{authRecord.serial_number}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">Authentication Status</span>
+                    <span className="text-gray-500">Authentication Status</span>
                     <span className="text-green-600 font-medium">{authRecord.authentication_status}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">Total Verifications</span>
+                    <span className="text-gray-500">Total Verifications</span>
                     <span className="text-gray-700">{authRecord.total_scans}</span>
                   </div>
                 </>
@@ -321,27 +321,27 @@ const Scan = () => {
             className="flex items-center justify-between w-full p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
           >
             <span className="text-sm font-medium text-gray-900">View Full Product Details</span>
-            <ExternalLink className="h-4 w-4 text-gray-400" />
+            <ExternalLink className="h-4 w-4 text-gray-500" />
           </Link>
           <button
             onClick={handleShare}
             className="flex items-center justify-between w-full p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
           >
             <span className="text-sm font-medium text-gray-900">Share This Scan</span>
-            <Share2 className="h-4 w-4 text-gray-400" />
+            <Share2 className="h-4 w-4 text-gray-500" />
           </button>
           <a
             href="mailto:support@wearsb.com?subject=Counterfeit%20Report"
             className="flex items-center justify-between w-full p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
           >
             <span className="text-sm font-medium text-gray-600">Report Suspected Counterfeit</span>
-            <AlertTriangle className="h-4 w-4 text-gray-400" />
+            <AlertTriangle className="h-4 w-4 text-gray-500" />
           </a>
         </motion.div>
 
         {/* Footer */}
         <div className="text-center pb-8">
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-500">
             Powered by Streetwear Blantyre Authentication
           </p>
         </div>

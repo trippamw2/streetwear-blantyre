@@ -476,7 +476,7 @@ const AdminCombos = () => {
                 </div>
 
                 <div className="relative mb-2">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                   <Input
                     value={productSearch}
                     onChange={(e) => setProductSearch(e.target.value)}
@@ -488,7 +488,7 @@ const AdminCombos = () => {
                 <div className="border border-gray-200 rounded-xl max-h-64 overflow-y-auto p-2 space-y-2">
                   {Object.entries(productsByCategory).map(([category, catProducts]) => (
                     <div key={category}>
-                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-1">
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 py-1">
                         {CATEGORIES.find((c) => c.id === category)?.label || category}
                       </p>
                       <div className="grid grid-cols-1 gap-1">
@@ -508,7 +508,7 @@ const AdminCombos = () => {
                               <div
                                 className={`h-5 w-5 rounded border-2 flex items-center justify-center shrink-0 ${
                                   selected
-                                    ? "bg-gray-900 border-gray-900 text-white"
+                                    ? "bg-gray-100 border-gray-900 text-gray-900"
                                     : "border-gray-300"
                                 }`}
                               >
@@ -523,7 +523,7 @@ const AdminCombos = () => {
                               )}
                               <div className="min-w-0 flex-1">
                                 <p className="text-xs font-medium truncate">{product.name}</p>
-                                <p className="text-[10px] text-gray-400">
+                                <p className="text-[10px] text-gray-500">
                                   {formatMWK(product.price)}
                                 </p>
                               </div>
@@ -534,7 +534,7 @@ const AdminCombos = () => {
                     </div>
                   ))}
                   {filteredProducts.length === 0 && (
-                    <p className="text-sm text-gray-400 text-center py-4">
+                    <p className="text-sm text-gray-500 text-center py-4">
                       No products found
                     </p>
                   )}
@@ -617,7 +617,7 @@ const AdminCombos = () => {
                     </p>
                   )}
                 </div>
-                <span className="px-3 py-1 bg-gray-900 text-white text-xs font-semibold rounded-full">
+                <span className="px-3 py-1 bg-gray-100 text-gray-900 text-xs font-semibold rounded-full">
                   {combo.vibe || combo.lifestyle}
                 </span>
               </div>
@@ -628,7 +628,7 @@ const AdminCombos = () => {
 
       {combos.length === 0 && (
         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-          <Package className="h-12 w-12 mx-auto text-gray-300" />
+          <Package className="h-12 w-12 mx-auto text-gray-600" />
           <p className="mt-4 text-gray-500">
             No combos yet. Run the database migration to seed starter combos, or
             create your first one!

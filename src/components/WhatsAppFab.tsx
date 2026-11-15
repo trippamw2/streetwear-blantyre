@@ -18,7 +18,7 @@ export const WhatsAppFab = () => {
           >
             <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
               <div className="h-8 sm:h-10 w-8 sm:w-10 rounded-full bg-green-500 flex items-center justify-center">
-                <MessageCircle className="h-4 sm:h-5 w-4 sm:w-5 text-white" />
+                <MessageCircle className="h-4 sm:h-5 w-4 sm:w-5 text-gray-900" />
               </div>
               <div>
                 <p className="font-semibold text-gray-900 text-sm sm:text-base">Streetwear Blantyre Support</p>
@@ -32,7 +32,7 @@ export const WhatsAppFab = () => {
               href={buildWhatsAppLink(defaultMessage)}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full py-2.5 bg-green-500 hover:bg-green-600 text-white text-center rounded-xl font-medium text-sm transition-colors"
+              className="block w-full py-2.5 bg-green-500 hover:bg-green-600 text-gray-900 text-center rounded-xl font-medium text-sm transition-colors"
             >
               Start Chat
             </a>
@@ -43,7 +43,7 @@ export const WhatsAppFab = () => {
       <button
         onClick={() => setExpanded(!expanded)}
         aria-label={expanded ? "Close chat" : "Chat with us"}
-        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-button hover:opacity-80 transition-transform"
+        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-gray-900 shadow-button hover:opacity-80 transition-transform"
       >
         {expanded ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
       </button>

@@ -27,7 +27,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 px-6 py-16">
             <div className="h-20 w-20 rounded-full bg-gray-50 flex items-center justify-center">
-              <ShoppingBag className="h-8 w-8 text-gray-300" />
+              <ShoppingBag className="h-8 w-8 text-gray-600" />
             </div>
             <div>
               <p className="font-semibold text-lg">Your experience is empty</p>
@@ -51,7 +51,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
                       <p className="text-sm font-medium leading-tight line-clamp-2">{i.name}</p>
                       <button
                         onClick={() => remove(i.productKey)}
-                        className="p-2 -mt-1 -mr-1 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors shrink-0"
+                        className="p-2 -mt-1 -mr-1 rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-500 transition-colors shrink-0"
                         aria-label="Remove item"
                       >
                         <Trash2 className="h-4 w-4" />

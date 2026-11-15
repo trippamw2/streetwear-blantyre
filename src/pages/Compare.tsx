@@ -39,13 +39,13 @@ const Compare = () => {
           <h3 className="font-display font-bold text-lg mb-2">Compare Kits Instead</h3>
           <p className="text-sm text-gray-500 mb-4">Curated kits. Better value. One delivery.</p>
           <Link to="/combos">
-            <Button className="bg-gray-900 hover:bg-gray-800 rounded-full">
+            <Button className="bg-gray-100 hover:bg-gray-800 rounded-full">
               View Kits <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </Link>
         </div>
 
-        <div className="text-sm text-gray-400 mt-4">
+        <div className="text-sm text-gray-500 mt-4">
           <Link to="/shop" className="text-gray-900 hover:underline">Browse individual items &rarr;</Link>
         </div>
       </div>
@@ -69,11 +69,11 @@ const Compare = () => {
 
       {/* Kit upsell banner */}
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-4 sm:p-5 mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3 text-white">
+        <div className="flex items-center gap-3 text-gray-900">
           <Package className="h-6 w-6" />
           <div>
             <p className="font-semibold text-sm">A Kit Costs Less</p>
-            <p className="text-white/70 text-xs">Kits from {formatMWK(combos[0] ? getKitPrice(combos[0], products) : 0)}. One box, better price.</p>
+            <p className="text-gray-900/70 text-xs">Kits from {formatMWK(combos[0] ? getKitPrice(combos[0], products) : 0)}. One box, better price.</p>
           </div>
         </div>
         <Link to="/combos">
@@ -104,7 +104,7 @@ const Compare = () => {
                 {p.is_on_sale ? (
                   <div className="flex items-center gap-2">
                     <span className="text-red-500 font-bold">{formatMWK(Math.round(p.price * (1 - p.discount_percent / 100)))}</span>
-                    <span className="text-gray-400 line-through text-xs">{formatMWK(p.price)}</span>
+                    <span className="text-gray-500 line-through text-xs">{formatMWK(p.price)}</span>
                   </div>
                 ) : (
                   <p className="font-bold">{formatMWK(p.price)}</p>
@@ -139,7 +139,7 @@ const Compare = () => {
             <Button
               onClick={() => handleAddToCart(p)}
               disabled={!p.stock || p.stock <= 0}
-              className="w-full mt-4 bg-gray-900 hover:bg-gray-800"
+              className="w-full mt-4 bg-gray-100 hover:bg-gray-800"
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
               Wear Your Identity
@@ -189,7 +189,7 @@ const Compare = () => {
                       <span className="text-red-500 font-bold">
                         {formatMWK(Math.round(p.price * (1 - p.discount_percent / 100)))}
                       </span>
-                      <span className="text-gray-400 line-through ml-2 text-sm">
+                      <span className="text-gray-500 line-through ml-2 text-sm">
                         {formatMWK(p.price)}
                       </span>
                     </>
@@ -257,7 +257,7 @@ const Compare = () => {
                     size="sm"
                     onClick={() => handleAddToCart(p)}
                     disabled={!p.stock || p.stock <= 0}
-                    className="bg-gray-900 hover:bg-gray-800"
+                    className="bg-gray-100 hover:bg-gray-800"
                   >
                     <ShoppingBag className="h-4 w-4 mr-2" />
                     Wear Your Identity

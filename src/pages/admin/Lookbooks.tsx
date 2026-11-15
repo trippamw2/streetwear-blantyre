@@ -211,7 +211,7 @@ const AdminLookbooks = () => {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) { setEditingLookbook(null); resetForm(); } }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-900 hover:bg-gray-800"><Plus className="h-4 w-4" /> New Lookbook</Button>
+            <Button className="bg-gray-100 hover:bg-gray-800"><Plus className="h-4 w-4" /> New Lookbook</Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
@@ -264,7 +264,7 @@ const AdminLookbooks = () => {
               <div className="space-y-2">
                 <Label>Products ({formData.selectedProducts.length} selected)</Label>
                 <div className="relative mb-2">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                   <Input value={productSearch} onChange={(e) => setProductSearch(e.target.value)} placeholder="Search products..." className="pl-9" />
                 </div>
                 <div className="border border-gray-200 rounded-xl max-h-48 overflow-y-auto p-2 space-y-1">
@@ -275,9 +275,9 @@ const AdminLookbooks = () => {
                         {product.image && <img src={product.image} alt="" className="h-8 w-8 rounded object-cover shrink-0" />}
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-medium truncate">{product.name}</p>
-                          <p className="text-[10px] text-gray-400">MK {product.price.toLocaleString()}</p>
+                          <p className="text-[10px] text-gray-500">MK {product.price.toLocaleString()}</p>
                         </div>
-                        <div className={`h-4 w-4 rounded border-2 flex items-center justify-center ${selected ? "bg-gray-900 border-gray-900 text-white" : "border-gray-300"}`}>
+                        <div className={`h-4 w-4 rounded border-2 flex items-center justify-center ${selected ? "bg-gray-100 border-gray-900 text-gray-900" : "border-gray-300"}`}>
                           {selected && <span className="text-[8px]">✓</span>}
                         </div>
                       </button>
@@ -327,7 +327,7 @@ const AdminLookbooks = () => {
                   Featured on Homepage
                 </label>
               </div>
-              <Button onClick={handleSave} className="w-full bg-gray-900 hover:bg-gray-800" disabled={saving || !formData.title}>
+              <Button onClick={handleSave} className="w-full bg-gray-100 hover:bg-gray-800" disabled={saving || !formData.title}>
                 {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 {editingLookbook ? "Update Lookbook" : "Create Lookbook"}
               </Button>
@@ -350,7 +350,7 @@ const AdminLookbooks = () => {
               </div>
               <h3 className="font-bold text-lg">{lb.title}</h3>
               {lb.description && <p className="text-sm text-gray-500 mt-1 line-clamp-2">{lb.description}</p>}
-              <div className="flex items-center gap-2 mt-3 text-xs text-gray-400">
+              <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
                 <span>{lb.items?.length || 0} pieces</span>
                 <span>·</span>
                 <span>{format(new Date(lb.created_at), "MMM d")}</span>
@@ -363,8 +363,8 @@ const AdminLookbooks = () => {
           </div>
         ))}
         {lookbooks.length === 0 && (
-          <div className="col-span-full text-center py-16 text-gray-400">
-            <Camera className="h-10 w-10 mx-auto mb-3 text-gray-300" />
+          <div className="col-span-full text-center py-16 text-gray-500">
+            <Camera className="h-10 w-10 mx-auto mb-3 text-gray-600" />
             No lookbooks yet. Create your first curated collection.
           </div>
         )}

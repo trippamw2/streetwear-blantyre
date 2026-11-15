@@ -111,7 +111,7 @@ const EditorialPost = () => {
 
       <article className="min-h-screen bg-white">
         {/* Hero Image */}
-        <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] bg-gray-900">
+        <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] bg-gray-100">
           {story.hero_image ? (
             <img src={story.hero_image} alt={story.title} className="w-full h-full object-cover" />
           ) : (
@@ -119,7 +119,7 @@ const EditorialPost = () => {
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           <div className="absolute top-6 left-6">
-            <Link to="/editorial" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm font-medium">
+            <Link to="/editorial" className="flex items-center gap-2 text-gray-900/80 hover:text-gray-900 transition-colors text-sm font-medium">
               <ArrowLeft className="h-4 w-4" />
               Back to Editorial
             </Link>
@@ -139,7 +139,7 @@ const EditorialPost = () => {
                   {story.culture_pillar}
                 </Link>
               )}
-              <span className="text-gray-400 text-xs">{story.read_time_minutes} min read</span>
+              <span className="text-gray-500 text-xs">{story.read_time_minutes} min read</span>
             </div>
 
             {/* Title */}
@@ -153,7 +153,7 @@ const EditorialPost = () => {
               <div>
                 <p className="font-medium text-sm">{story.author_name}</p>
                 {story.published_at && (
-                  <p className="text-gray-400 text-xs">{format(new Date(story.published_at), "MMMM d, yyyy")}</p>
+                  <p className="text-gray-500 text-xs">{format(new Date(story.published_at), "MMMM d, yyyy")}</p>
                 )}
               </div>
             </div>

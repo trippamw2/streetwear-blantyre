@@ -55,7 +55,7 @@ const Lookbooks = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
           {/* Header */}
           <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.3em] mb-3">Collections</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.3em] mb-3">Collections</p>
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-4">Lookbooks</h1>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto">Curated collections. Editorial vision. The culture, styled.</p>
           </div>
@@ -70,8 +70,8 @@ const Lookbooks = () => {
           {/* Empty State */}
           {!loading && lookbooks.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-gray-400 text-lg">No lookbooks yet.</p>
-              <p className="text-gray-300 text-sm mt-2">Collections are in the works. Stay tuned.</p>
+              <p className="text-gray-500 text-lg">No lookbooks yet.</p>
+              <p className="text-gray-600 text-sm mt-2">Collections are in the works. Stay tuned.</p>
             </div>
           )}
 
@@ -82,7 +82,7 @@ const Lookbooks = () => {
               to={`/lookbook/${lb.slug}`}
               className="block mb-10 rounded-3xl overflow-hidden group"
             >
-              <div className="relative h-72 sm:h-96 bg-gray-900">
+              <div className="relative h-72 sm:h-96 bg-gray-100">
                 {lb.hero_image ? (
                   <img src={lb.hero_image} alt={lb.title} className="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition-opacity duration-500 group-hover:scale-105 transition-transform" />
                 ) : (
@@ -91,16 +91,16 @@ const Lookbooks = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-12">
                   <div className="flex items-center gap-3 mb-4">
-                    {lb.season && <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">{lb.season}</span>}
+                    {lb.season && <span className="text-gray-900/50 text-xs font-semibold uppercase tracking-wider">{lb.season}</span>}
                     {lb.culture_pillar && (
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${PILLAR_COLORS[lb.culture_pillar] || "bg-gray-200 text-gray-700"}`}>
                         {lb.culture_pillar}
                       </span>
                     )}
-                    <span className="text-white/40 text-xs font-semibold uppercase tracking-wider">Featured</span>
+                    <span className="text-gray-900/40 text-xs font-semibold uppercase tracking-wider">Featured</span>
                   </div>
-                  <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-white mb-2 group-hover:text-gray-200 transition-colors">{lb.title}</h2>
-                  {lb.description && <p className="text-white/60 text-base max-w-xl">{lb.description}</p>}
+                  <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-gray-900 mb-2 group-hover:text-gray-200 transition-colors">{lb.title}</h2>
+                  {lb.description && <p className="text-gray-900/60 text-base max-w-xl">{lb.description}</p>}
                 </div>
               </div>
             </Link>
@@ -120,7 +120,7 @@ const Lookbooks = () => {
                       <img src={lb.hero_image} alt={lb.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                        <span className="text-gray-300 font-display text-4xl font-bold">{lb.title[0]}</span>
+                        <span className="text-gray-600 font-display text-4xl font-bold">{lb.title[0]}</span>
                       </div>
                     )}
                     <div className="absolute top-3 right-3 flex gap-2">

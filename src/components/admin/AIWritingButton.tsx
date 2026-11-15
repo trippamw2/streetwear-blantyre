@@ -103,13 +103,13 @@ export function AIWritingButton({
           {isOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-              <div className="absolute right-0 top-full mt-1 z-50 bg-gray-900 border border-gray-700 rounded-xl shadow-xl py-1 min-w-[200px]">
+              <div className="absolute right-0 top-full mt-1 z-50 bg-gray-100 border border-gray-700 rounded-xl shadow-xl py-1 min-w-[200px]">
                 {contentTypes.map((type) => (
                   <button
                     key={type}
                     type="button"
                     onClick={() => handleGenerate(type)}
-                    className="w-full px-4 py-2.5 text-left text-sm text-gray-300 hover:bg-purple-500/10 hover:text-purple-300 flex items-center gap-2 transition-colors"
+                    className="w-full px-4 py-2.5 text-left text-sm text-gray-600 hover:bg-purple-500/10 hover:text-purple-300 flex items-center gap-2 transition-colors"
                   >
                     <Sparkles className="h-3.5 w-3.5 text-purple-400 shrink-0" />
                     {CONTENT_PROMPTS[type].label}

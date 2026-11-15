@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AIWritingButton } from "@/components/admin/AIWritingButton";
 import { Plus, Edit, Trash2, Loader2, Tag, Calendar, Users, Percent, DollarSign, ToggleLeft, ToggleRight } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -153,7 +154,7 @@ const AdminPromos = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-900 hover:bg-gray-800">
+            <Button className="bg-gray-100 hover:bg-gray-800">
               <Plus className="h-4 w-4" /> Add Promo Code
             </Button>
           </DialogTrigger>
@@ -185,7 +186,18 @@ const AdminPromos = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Description</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Description</Label>
+                  <AIWritingButton
+                    contentTypes={["promo_description"]}
+                    variables={{
+                      promo_name: formData.name || formData.code || "promo",
+                      discount_type: formData.type,
+                      discount_value: formData.value.toString(),
+                    }}
+                    onGenerated={(type, content) => setFormData(p => ({ ...p, description: content }))}
+                  />
+                </div>
                 <Input
                   value={formData.description}
                   onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))}
@@ -255,7 +267,7 @@ const AdminPromos = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800">
+              <Button type="submit" className="w-full bg-gray-100 hover:bg-gray-800">
                 {editingPromo ? "Update Promo Code" : "Create Promo Code"}
               </Button>
             </form>
@@ -269,7 +281,7 @@ const AdminPromos = () => {
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${promo.is_active ? "bg-green-100" : "bg-gray-100"}`}>
-                  <Tag className={`h-6 w-6 ${promo.is_active ? "text-green-600" : "text-gray-400"}`} />
+                  <Tag className={`h-6 w-6 ${promo.is_active ? "text-green-600" : "text-gray-500"}`} />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">{promo.code}</h3>
@@ -280,7 +292,7 @@ const AdminPromos = () => {
                 {promo.is_active ? (
                   <ToggleRight className="h-6 w-6 text-green-500" />
                 ) : (
-                  <ToggleLeft className="h-6 w-6 text-gray-300" />
+                  <ToggleLeft className="h-6 w-6 text-gray-600" />
                 )}
               </button>
             </div>
@@ -319,7 +331,7 @@ const AdminPromos = () => {
           <div className="text-center py-16 bg-card rounded-xl border border-border/60">
             <Tag className="h-10 w-10 mx-auto text-muted-foreground" />
             <p className="mt-3 text-muted-foreground">No promo codes yet</p>
-            <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-gray-900">
+            <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-gray-100">
               <Plus className="h-4 w-4" /> Create First Promo Code
             </Button>
           </div>

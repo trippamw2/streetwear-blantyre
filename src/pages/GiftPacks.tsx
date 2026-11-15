@@ -151,18 +151,18 @@ const GiftPacks = () => {
       <SEO {...defaultSEO.giftPacks} />
 
       {/* ─── HERO ─── */}
-      <section className="bg-gray-950 text-white overflow-hidden">
+      <section className="bg-white text-gray-900 overflow-hidden">
         <div className="container relative py-20 sm:py-28 lg:py-36">
           <div className="relative max-w-2xl mx-auto text-center">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-white/20 text-white/70 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-white/20 text-gray-900/70 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
               <Gift className="h-3.5 w-3.5" /> Gift the Culture
             </span>
             <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight">
               SEND SOMEONE
               <br />
-              <span className="text-gray-400">THE CULTURE.</span>
+              <span className="text-gray-500">THE CULTURE.</span>
             </h1>
-            <p className="text-gray-400 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
+            <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
               Generic gifts get forgotten. Cultural gifts get worn.
               Pick a Culture Pack, pay online, and we'll wrap it and deliver it —
               with your personal message inside.
@@ -181,29 +181,29 @@ const GiftPacks = () => {
               { icon: Heart, title: "We Wrap It", desc: "Premium gift presentation" },
               { icon: Sparkles, title: "We Deliver", desc: "Recipient gets a tracking link" },
             ].map((item) => (
-              <div key={item.title} className="flex items-start gap-3 p-4 bg-gray-900">
-                <div className="h-8 w-8 rounded-lg bg-gray-900 flex items-center justify-center shrink-0">
-                  <item.icon className="h-4 w-4 text-white" />
+              <div key={item.title} className="flex items-start gap-3 p-4 bg-gray-100">
+                <div className="h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                  <item.icon className="h-4 w-4 text-gray-900" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm text-white">{item.title}</p>
+                  <p className="font-semibold text-sm text-gray-900">{item.title}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-400 italic mt-4 text-center">
+          <p className="text-xs text-gray-500 italic mt-4 text-center">
             Finding the perfect gift that means something is hard. We made it easy.
           </p>
         </div>
       </section>
 
       {/* ─── GIFT PACKS GRID ─── */}
-      <section className="bg-gray-950 container py-16 sm:py-20 lg:py-24">
+      <section className="bg-white container py-16 sm:py-20 lg:py-24">
         <div className="text-center mb-10 sm:mb-12">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Curated for Them</p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">Culture Packs</h2>
-          <p className="text-gray-400 text-sm mt-2 max-w-md mx-auto">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Curated for Them</p>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Culture Packs</h2>
+          <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
             Each pack is a complete culture experience — styled, coordinated, and ready to gift.
           </p>
         </div>
@@ -226,33 +226,33 @@ const GiftPacks = () => {
                 transition={{ delay: i * 0.08 }}
               >
                 <div
-                  className={`relative block rounded-xl sm:rounded-2xl bg-gray-900 border overflow-hidden transition-all duration-200 h-full ${
-                    isSelected ? "border-white ring-2 ring-white/20" : "border-white/10 hover:border-white/20 hover:shadow-lg"
+                  className={`relative block rounded-xl sm:rounded-2xl bg-gray-100 border overflow-hidden transition-all duration-200 h-full ${
+                    isSelected ? "border-white ring-2 ring-white/20" : "border-gray-200 hover:border-white/20 hover:shadow-lg"
                   }`}
                 >
                   {kit.badge && (
-                    <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-gray-900 text-white text-[10px] sm:text-xs font-semibold">
+                    <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-gray-100 text-gray-900 text-[10px] sm:text-xs font-semibold">
                       {kit.badge}
                     </span>
                   )}
 
-                  <div className="bg-white/5 border-b border-white/10">
+                  <div className="bg-gray-100 border-b border-gray-200">
                     <div className="w-full aspect-[4/3] overflow-hidden">
                       <img src={kit.image} alt={kit.name} className="w-full h-full object-cover" />
                     </div>
                   </div>
 
                   <div className="p-4 sm:p-5">
-                    <h3 className="font-display font-bold text-lg sm:text-xl text-white leading-tight">{kit.name}</h3>
-                    <p className="text-sm font-medium text-gray-300 mt-0.5">{kit.hook}</p>
+                    <h3 className="font-display font-bold text-lg sm:text-xl text-gray-900 leading-tight">{kit.name}</h3>
+                    <p className="text-sm font-medium text-gray-600 mt-0.5">{kit.hook}</p>
 
                     <div className="mt-3 space-y-1.5">
-                      <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">Includes</p>
+                      <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Includes</p>
                       <div className="space-y-1">
                         {kitProducts.slice(0, 3).map((p) => (
                           <div key={p.id} className="flex items-center gap-2 text-[11px]">
-                            <img src={p.image} alt={p.name} className="h-7 w-7 rounded-lg object-cover shrink-0 border border-white/10" />
-                            <span className="text-gray-400 truncate">{p.name}</span>
+                            <img src={p.image} alt={p.name} className="h-7 w-7 rounded-lg object-cover shrink-0 border border-gray-200" />
+                            <span className="text-gray-500 truncate">{p.name}</span>
                           </div>
                         ))}
                         {kitProducts.length > 3 && (
@@ -261,9 +261,9 @@ const GiftPacks = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
                       <div>
-                        <p className="font-bold text-lg sm:text-xl text-white">{formatMWK(kitPrice)}</p>
+                        <p className="font-bold text-lg sm:text-xl text-gray-900">{formatMWK(kitPrice)}</p>
                         <div className="flex items-center gap-2 mt-0.5">
                           <span className="text-[11px] text-gray-500 line-through">{formatMWK(separateTotal)}</span>
                           <span className="text-[11px] font-medium text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded">
@@ -271,7 +271,7 @@ const GiftPacks = () => {
                           </span>
                         </div>
                       </div>
-                      <span className="text-[10px] font-semibold text-white bg-white/10 px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-semibold text-gray-900 bg-gray-200 px-2 py-0.5 rounded">
                         {discount}% off
                       </span>
                     </div>
@@ -305,63 +305,63 @@ const GiftPacks = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-gray-900 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+              className="bg-gray-100 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="font-display font-bold text-xl text-white">Gift Details</h3>
-                    <p className="text-sm text-gray-400 mt-0.5">For: {selectedKit?.name} — {selectedKit && formatMWK(getKitPrice(selectedKit, products))}</p>
+                    <h3 className="font-display font-bold text-xl text-gray-900">Gift Details</h3>
+                    <p className="text-sm text-gray-500 mt-0.5">For: {selectedKit?.name} — {selectedKit && formatMWK(getKitPrice(selectedKit, products))}</p>
                   </div>
-                  <button onClick={resetForm} className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                    <X className="h-4 w-4 text-gray-400" />
+                  <button onClick={resetForm} className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-white/20 transition-colors">
+                    <X className="h-4 w-4 text-gray-500" />
                   </button>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium text-gray-300">Recipient Name *</Label>
+                    <Label className="text-sm font-medium text-gray-600">Recipient Name *</Label>
                     <Input
                       value={formData.recipientName}
                       onChange={(e) => setFormData({ ...formData, recipientName: e.target.value })}
                       placeholder="Who's this for?"
-                      className="mt-1.5 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
                     />
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium text-gray-300">Recipient Phone *</Label>
+                    <Label className="text-sm font-medium text-gray-600">Recipient Phone *</Label>
                     <Input
                       value={formData.recipientPhone}
                       onChange={(e) => setFormData({ ...formData, recipientPhone: e.target.value })}
                       placeholder="For delivery coordination"
-                      className="mt-1.5 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
                     />
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium text-gray-300">Recipient Email (for tracking link)</Label>
+                    <Label className="text-sm font-medium text-gray-600">Recipient Email (for tracking link)</Label>
                     <Input
                       type="email"
                       value={formData.recipientEmail}
                       onChange={(e) => setFormData({ ...formData, recipientEmail: e.target.value })}
                       placeholder="They'll receive a tracking link here"
-                      className="mt-1.5 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
                     />
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium text-gray-300">Delivery Location *</Label>
+                    <Label className="text-sm font-medium text-gray-600">Delivery Location *</Label>
                     <Input
                       value={formData.deliveryLocation}
                       onChange={(e) => setFormData({ ...formData, deliveryLocation: e.target.value })}
                       placeholder="e.g., Area 9, Blantyre"
-                      className="mt-1.5 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
                     />
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium text-gray-300">Occasion</Label>
+                    <Label className="text-sm font-medium text-gray-600">Occasion</Label>
                     <div className="flex flex-wrap gap-2 mt-1.5">
                       {occasions.map((occ) => (
                         <button
@@ -371,7 +371,7 @@ const GiftPacks = () => {
                           className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                             formData.occasion === occ
                               ? "bg-white text-gray-900 border-white"
-                              : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30"
+                              : "bg-gray-100 text-gray-500 border-gray-200 hover:border-white/30"
                           }`}
                         >
                           {occ}
@@ -381,13 +381,13 @@ const GiftPacks = () => {
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium text-gray-300">Gift Message (optional)</Label>
+                    <Label className="text-sm font-medium text-gray-600">Gift Message (optional)</Label>
                     <Textarea
                       value={formData.giftMessage}
                       onChange={(e) => setFormData({ ...formData, giftMessage: e.target.value })}
                       placeholder="Write something personal..."
                       rows={3}
-                      className="mt-1.5 resize-none bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+                      className="mt-1.5 resize-none bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
                     />
                   </div>
                 </div>
@@ -418,18 +418,18 @@ const GiftPacks = () => {
       </AnimatePresence>
 
       {/* ─── CTA ─── */}
-      <section className="bg-gray-900 py-16 sm:py-20">
+      <section className="bg-gray-100 py-16 sm:py-20">
         <div className="container text-center">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Want Something Custom?</p>
-          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white">Schedule a Single Gift</h2>
-          <p className="text-gray-400 text-sm mt-2 max-w-md mx-auto">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-2">Want Something Custom?</p>
+          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900">Schedule a Single Gift</h2>
+          <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
             Gift a specific Culture Piece with a scheduled delivery date.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Button asChild className="bg-white text-gray-900 hover:bg-white/90 rounded-full px-8 py-3 font-semibold">
               <Link to="/gift">Schedule a Gift</Link>
             </Button>
-            <Button asChild variant="outline" className="rounded-full px-8 py-3 font-semibold border-white/20 text-white hover:bg-white/10">
+            <Button asChild variant="outline" className="rounded-full px-8 py-3 font-semibold border-white/20 text-gray-900 hover:bg-gray-200">
               <Link to="/shop">Browse Shop All</Link>
             </Button>
           </div>

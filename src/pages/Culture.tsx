@@ -133,20 +133,20 @@ const Culture = () => {
     <>
       <SEO title={`${info.name} | Streetwear Blantyre`} description={info.description} />
 
-      <div className="min-h-screen bg-gray-950">
+      <div className="min-h-screen bg-white">
         {/* Hero */}
         <div className={`${info.bg} py-16 sm:py-24`}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <Link to="/editorial" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm font-medium mb-8">
+            <Link to="/editorial" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium mb-8">
               <ArrowLeft className="h-4 w-4" />
               The Culture Edit
             </Link>
             <h1 className={`font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight ${info.color}`}>{info.name}</h1>
-            <p className="text-gray-300 text-lg mt-4 max-w-xl">
+            <p className="text-gray-600 text-lg mt-4 max-w-xl">
               Generic brands don't know your culture. They sell what sells, not what represents you.
               Without cultural pieces, your identity stays generic. These are the stories and pieces that speak to you.
             </p>
-            <div className="flex gap-6 mt-8 text-sm text-gray-400">
+            <div className="flex gap-6 mt-8 text-sm text-gray-500">
               <span>{stories.length} stor{stories.length !== 1 ? "ies" : "y"}</span>
               <span>{products.length} piece{products.length !== 1 ? "s" : ""}</span>
             </div>
@@ -157,26 +157,26 @@ const Culture = () => {
           {/* Stories Section */}
           {stories.length > 0 && (
             <section className="mb-16">
-              <h2 className="font-display font-bold text-2xl mb-8 text-white">Stories</h2>
+              <h2 className="font-display font-bold text-2xl mb-8 text-gray-900">Stories</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {stories.map((story) => (
                   <Link
                     key={story.id}
                     to={`/editorial/${story.slug}`}
-                    className="group rounded-2xl border border-white/10 overflow-hidden hover:shadow-lg transition-all duration-300 bg-gray-900"
+                    className="group rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 bg-gray-100"
                   >
-                    <div className="relative h-44 bg-white/5 overflow-hidden">
+                    <div className="relative h-44 bg-gray-100 overflow-hidden">
                       {story.hero_image ? (
                         <img src={story.hero_image} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center">
-                          <span className="text-white/20 font-display text-3xl font-bold">{story.title[0]}</span>
+                          <span className="text-gray-900/20 font-display text-3xl font-bold">{story.title[0]}</span>
                         </div>
                       )}
                     </div>
                     <div className="p-5">
-                      <h3 className="font-display font-bold text-lg mb-2 text-white group-hover:text-gray-200 transition-colors">{story.title}</h3>
-                      {story.excerpt && <p className="text-gray-400 text-sm line-clamp-2 mb-3">{story.excerpt}</p>}
+                      <h3 className="font-display font-bold text-lg mb-2 text-gray-900 group-hover:text-gray-200 transition-colors">{story.title}</h3>
+                      {story.excerpt && <p className="text-gray-500 text-sm line-clamp-2 mb-3">{story.excerpt}</p>}
                       <div className="flex items-center gap-3 text-gray-500 text-xs">
                         <span>{story.author_name}</span>
                         {story.published_at && <span>{format(new Date(story.published_at), "MMM d, yyyy")}</span>}
@@ -192,7 +192,7 @@ const Culture = () => {
           {/* Products Section */}
           {products.length > 0 && (
             <section>
-              <h2 className="font-display font-bold text-2xl mb-8 text-white">Shop All</h2>
+              <h2 className="font-display font-bold text-2xl mb-8 text-gray-900">Shop All</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
@@ -204,7 +204,7 @@ const Culture = () => {
           {/* Empty State */}
           {!loading && stories.length === 0 && products.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-gray-400 text-lg">Nothing here yet.</p>
+              <p className="text-gray-500 text-lg">Nothing here yet.</p>
               <p className="text-gray-500 text-sm mt-2 italic">Without cultural pieces, identity stays generic. The culture is building. Check back soon.</p>
             </div>
           )}

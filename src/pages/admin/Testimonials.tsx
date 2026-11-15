@@ -125,7 +125,7 @@ export const AdminTestimonials = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-900 hover:bg-gray-800">
+            <Button className="bg-gray-100 hover:bg-gray-800">
               <Plus className="h-4 w-4" /> Add Testimonial
             </Button>
           </DialogTrigger>
@@ -179,7 +179,7 @@ export const AdminTestimonials = () => {
                         className={`h-6 w-6 ${
                           star <= formData.rating
                             ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
+                            : "text-gray-600"
                         }`}
                       />
                     </button>
@@ -198,7 +198,7 @@ export const AdminTestimonials = () => {
 
               <Button
                 onClick={handleSave}
-                className="w-full bg-gray-900 hover:bg-gray-800"
+                className="w-full bg-gray-100 hover:bg-gray-800"
                 disabled={saving || !formData.name || !formData.message}
               >
                 {saving && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -218,7 +218,7 @@ export const AdminTestimonials = () => {
                   <Star
                     key={j}
                     className={`h-4 w-4 ${
-                      j < t.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                      j < t.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-600"
                     }`}
                   />
                 ))}
@@ -235,7 +235,7 @@ export const AdminTestimonials = () => {
             <p className="text-sm text-gray-600 mb-4 line-clamp-3">"{t.message}"</p>
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-gradient-brand flex items-center justify-center">
-                <User className="h-5 w-5 text-white" />
+                <User className="h-5 w-5 text-gray-900" />
               </div>
               <div>
                 <p className="font-semibold text-sm">{t.name}</p>
@@ -248,7 +248,7 @@ export const AdminTestimonials = () => {
 
       {testimonials.length === 0 && (
         <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
-          <MessageCircle className="h-12 w-12 mx-auto text-gray-300" />
+          <MessageCircle className="h-12 w-12 mx-auto text-gray-600" />
           <p className="mt-4 text-gray-500">No testimonials yet. Add the first one!</p>
         </div>
       )}

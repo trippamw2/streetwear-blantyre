@@ -122,18 +122,18 @@ const ScheduledGift = () => {
         description="Gift a Culture Piece with a personal message. Schedule delivery for any occasion."
       />
 
-      <section className="bg-gray-950 text-white overflow-hidden">
+      <section className="bg-white text-gray-900 overflow-hidden">
         <div className="container relative py-20 sm:py-28 lg:py-36">
           <div className="relative max-w-2xl mx-auto text-center">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-white/20 text-white/70 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-white/20 text-gray-900/70 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
               <Calendar className="h-3.5 w-3.5" /> Scheduled Gift
             </span>
             <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight">
               SEND THE CULTURE.
               <br />
-              <span className="text-gray-400">ON THEIR DAY.</span>
+              <span className="text-gray-500">ON THEIR DAY.</span>
             </h1>
-            <p className="text-gray-400 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
+            <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
               Pick a Culture Piece. Pay online. We deliver it on the perfect day — with your message inside.
             </p>
           </div>
@@ -151,15 +151,15 @@ const ScheduledGift = () => {
               <div key={s.num} className="flex items-center">
                 <div className="flex items-center gap-2">
                   <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                    step >= s.num ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-400"
+                    step >= s.num ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-500"
                   }`}>
                     {step > s.num ? <Check className="h-4 w-4" /> : s.num}
                   </div>
-                  <span className={`text-xs font-medium hidden sm:block ${step >= s.num ? "text-gray-900" : "text-gray-400"}`}>
+                  <span className={`text-xs font-medium hidden sm:block ${step >= s.num ? "text-gray-900" : "text-gray-500"}`}>
                     {s.label}
                   </span>
                 </div>
-                {i < 2 && <div className={`h-px w-12 sm:w-16 mx-3 ${step > s.num ? "bg-gray-900" : "bg-gray-200"}`} />}
+                {i < 2 && <div className={`h-px w-12 sm:w-16 mx-3 ${step > s.num ? "bg-gray-100" : "bg-gray-200"}`} />}
               </div>
             ))}
           </div>
@@ -170,7 +170,7 @@ const ScheduledGift = () => {
         <section className="container py-16 sm:py-20">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-10">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Step 1</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Step 1</p>
               <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Pick a Culture Piece</h2>
               <p className="text-gray-500 text-sm mt-2">Search by name or category to find the perfect gift.</p>
             </div>
@@ -182,7 +182,7 @@ const ScheduledGift = () => {
                 placeholder="Search Shop All..."
                 className="pl-10 rounded-full"
               />
-              <Package className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Package className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[50vh] overflow-y-auto pr-1">
@@ -203,13 +203,13 @@ const ScheduledGift = () => {
                   <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden mb-2">
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   </div>
-                  <p className="text-[11px] text-gray-400 uppercase tracking-wider">{product.category}</p>
+                  <p className="text-[11px] text-gray-500 uppercase tracking-wider">{product.category}</p>
                   <p className="text-sm font-semibold text-gray-900 leading-tight mt-0.5">{product.name}</p>
                   <p className="text-sm font-bold text-gray-900 mt-1">{formatMWK(product.price)}</p>
                 </button>
               ))}
               {filteredProducts.length === 0 && (
-                <div className="col-span-full text-center py-12 text-gray-400 text-sm">No pieces found. Try a different search.</div>
+                <div className="col-span-full text-center py-12 text-gray-500 text-sm">No pieces found. Try a different search.</div>
               )}
             </div>
           </div>
@@ -220,18 +220,18 @@ const ScheduledGift = () => {
         <section className="container py-16 sm:py-20">
           <div className="max-w-lg mx-auto">
             <div className="text-center mb-10">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Step 2</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Step 2</p>
               <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Gift Details</h2>
             </div>
 
             <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl mb-8">
               <img src={selectedProduct.image} alt={selectedProduct.name} className="h-16 w-16 rounded-lg object-cover border border-gray-100" />
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] text-gray-400 uppercase tracking-wider">{selectedProduct.category}</p>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider">{selectedProduct.category}</p>
                 <p className="text-sm font-semibold text-gray-900 truncate">{selectedProduct.name}</p>
                 <p className="text-sm font-bold text-gray-900">{formatMWK(selectedProduct.price)}</p>
               </div>
-              <button onClick={() => setStep(1)} className="text-xs text-gray-400 hover:text-gray-600 underline">Change</button>
+              <button onClick={() => setStep(1)} className="text-xs text-gray-500 hover:text-gray-600 underline">Change</button>
             </div>
 
             <div className="space-y-5">
@@ -243,7 +243,7 @@ const ScheduledGift = () => {
                       key={occ}
                       onClick={() => setOccasion(occasion === occ ? "" : occ)}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                        occasion === occ ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+                        occasion === occ ? "bg-gray-100 text-gray-900 border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
                       }`}
                     >
                       {occ}
@@ -292,7 +292,7 @@ const ScheduledGift = () => {
               <Button
                 onClick={() => setStep(3)}
                 disabled={!recipientName || !recipientPhone || !deliveryLocation}
-                className="flex-1 bg-gray-900 text-white hover:bg-gray-800 rounded-full py-3 font-semibold disabled:opacity-50"
+                className="flex-1 bg-gray-100 text-gray-900 hover:bg-gray-800 rounded-full py-3 font-semibold disabled:opacity-50"
               >
                 Continue <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -305,7 +305,7 @@ const ScheduledGift = () => {
         <section className="container py-16 sm:py-20">
           <div className="max-w-lg mx-auto">
             <div className="text-center mb-10">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Step 3</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Step 3</p>
               <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Pay & Send</h2>
             </div>
 
@@ -364,7 +364,7 @@ const ScheduledGift = () => {
               <Button
                 onClick={handleSendGift}
                 disabled={submitting}
-                className="flex-1 bg-gray-900 text-white hover:bg-gray-800 rounded-full py-3 font-semibold"
+                className="flex-1 bg-gray-100 text-gray-900 hover:bg-gray-800 rounded-full py-3 font-semibold"
               >
                 {submitting ? (
                   <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Processing...</>
@@ -390,8 +390,8 @@ const ScheduledGift = () => {
               { icon: Calendar, title: "Scheduled Delivery", desc: "Choose the perfect date for delivery in Blantyre" },
             ].map((item) => (
               <div key={item.title} className="flex flex-col items-center">
-                <div className="h-10 w-10 rounded-full bg-gray-900 flex items-center justify-center mb-3">
-                  <item.icon className="h-5 w-5 text-white" />
+                <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center mb-3">
+                  <item.icon className="h-5 w-5 text-gray-900" />
                 </div>
                 <p className="text-sm font-semibold text-gray-900">{item.title}</p>
                 <p className="text-xs text-gray-500 mt-1">{item.desc}</p>

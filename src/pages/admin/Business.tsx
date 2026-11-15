@@ -206,7 +206,7 @@ const AdminBusiness = () => {
                           className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-secondary/50 text-left transition-colors"
                         >
                           <div className="h-10 w-10 rounded-full bg-gradient-brand flex items-center justify-center shrink-0">
-                            <User className="h-5 w-5 text-white" />
+                            <User className="h-5 w-5 text-gray-900" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium truncate">{profile.full_name || "Unknown"}</p>
@@ -221,7 +221,7 @@ const AdminBusiness = () => {
                 <>
                   <div className="flex items-center gap-3 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
                     <div className="h-10 w-10 rounded-full bg-gradient-brand flex items-center justify-center shrink-0">
-                      <User className="h-5 w-5 text-white" />
+                      <User className="h-5 w-5 text-gray-900" />
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">{selectedProfile.full_name || "Unknown"}</p>
