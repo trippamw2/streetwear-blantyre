@@ -1,10 +1,7 @@
 ﻿import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { formatMWK, culturePillars } from "@/data/products";
-import { useCombos } from "@/hooks/useCombos";
+import { formatMWK } from "@/data/products";
 import { useProducts } from "@/hooks/useProducts";
-import { KitCard } from "@/components/KitCard";
-import { KitCardSkeleton } from "@/components/Skeletons";
 import { SEO, defaultSEO } from "@/components/SEO";
 import { Star, Music, Dumbbell, Cross, Briefcase, ArrowRight, Quote } from "lucide-react";
 import { motion } from "framer-motion";
@@ -26,7 +23,6 @@ const pillarIcons: Record<string, React.ElementType> = {
 
 const Home = () => {
   const { products, loading } = useProducts();
-  const combos = useCombos();
 
   const featuredProducts = products.filter(p => p.is_featured || p.is_best_seller).slice(0, 6);
 
@@ -48,17 +44,17 @@ const Home = () => {
         <div className="container relative py-20 sm:py-28 lg:py-36">
           <div className="max-w-2xl space-y-6 sm:space-y-8">
             <span className="inline-flex px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-gray-400">
-              SB Streetwear — Blantyre, Malawi
+              SB Streetwear — Blantyre, Malawi · Ages 15–35
             </span>
 
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl text-white leading-[0.95] tracking-tight">
-              Style That
+              Wear Your
               <br />
-              Moves With You.
+              Identity.
             </h1>
 
             <p className="text-gray-300 text-base sm:text-lg max-w-md leading-relaxed">
-              From everyday essentials to football-inspired fashion, discover clothing that fits your lifestyle.
+              SB is where young people shop clothing that fits their everyday life: hip-hop energy, football culture, and casual decent streetwear for the streets, the pitch, and everywhere in between.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -160,37 +156,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── CULTURE PILLARS / COLLECTIONS AS BELIEFS ─── */}
-      <section className="bg-gray-950 container py-24 sm:py-28">
-        <motion.div {...fadeUp}>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Collections as Beliefs</p>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">What Do You Stand For?</h2>
-          <p className="text-gray-400 text-sm sm:text-base max-w-xl mb-10 sm:mb-12">
-            Every collection represents a belief. Pick the one that speaks to who you are and who you're becoming.
-          </p>
-        </motion.div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {culturePillars.map((pillar) => {
-            const Icon = pillarIcons[pillar.id as keyof typeof pillarIcons] || Briefcase;
-            return (
-              <Link
-                key={pillar.id}
-                to={`/shop?culture=${pillar.id}`}
-                className="group block p-8 bg-white/5 hover:bg-white/10 transition-all duration-300"
-              >
-                <Icon className="h-8 w-8 text-gray-400 mb-4 group-hover:text-white transition-colors" />
-                <h3 className="font-display font-bold text-lg text-white mb-2">{pillar.label}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed mb-4">{pillar.description}</p>
-                <span className="text-xs font-semibold text-gray-500 group-hover:text-white transition-colors uppercase tracking-wider">
-                  Explore Collection →
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
       {/* ─── THE PLAN ─── */}
       <section className="bg-gray-900 py-24 sm:py-28">
         <div className="container">
@@ -249,33 +214,6 @@ const Home = () => {
           </div>
         </section>
       )}
-
-      {/* ─── FEATURED BUNDLES ─── */}
-      <section className="bg-gray-900 py-24 sm:py-28">
-        <div className="container">
-          <div className="flex items-end justify-between mb-8 sm:mb-10">
-            <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Culture Packs</p>
-              <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-10 sm:mb-12">Your Outfit. One Box.</h2>
-            </div>
-            <Link to="/combos" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">View All</Link>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loading ? (
-              <>
-                <KitCardSkeleton />
-                <KitCardSkeleton />
-                <KitCardSkeleton />
-              </>
-            ) : (
-              combos.slice(0, 3).map((kit, i) => (
-                <KitCard key={kit.id} kit={kit} index={i} compact />
-              ))
-            )}
-          </div>
-        </div>
-      </section>
 
       {/* ─── CULTURE JOURNAL PREVIEW ─── */}
       <section className="bg-gray-950 container py-24 sm:py-28">
