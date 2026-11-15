@@ -63,6 +63,9 @@ import Culture from "./pages/Culture";
 import Lookbooks from "./pages/Lookbooks";
 import LookbookDetail from "./pages/LookbookDetail";
 import Scan from "./pages/Scan";
+import LakeFreshHome from "./pages/lf/LakeFreshHome";
+import LakeFreshCatalog from "./pages/lf/LakeFreshCatalog";
+import LakeFreshProduct from "./pages/lf/LakeFreshProduct";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -132,6 +135,10 @@ const App = () => (
                   <Route path="/culture/:pillar" element={<Culture />} />
                   <Route path="/lookbook" element={<Lookbooks />} />
                   <Route path="/lookbook/:slug" element={<LookbookDetail />} />
+                  {/* Lake Fresh storefront (brand-scoped) */}
+                  <Route path="/lf" element={<Navigate to="/lf/fish" replace />} />
+                  <Route path="/lf/fish" element={<LakeFreshCatalog />} />
+                  <Route path="/lf/fish/:id" element={<LakeFreshProduct />} />
                 </Route>
                 {/* Standalone pages (no header/footer) */}
                 <Route path="/verify/:token" element={<Verify />} />
