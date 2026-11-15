@@ -344,6 +344,62 @@ const Home = () => {
         </div>
       </section>
 
+      {/* ─── LIFESTYLE BRAND STORY ─── */}
+      <section className="bg-gray-900 py-20 sm:py-24">
+        <div className="container">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">A Way of Life</p>
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">
+              More Than Clothing. It's a Way of Life.
+            </h2>
+            <p className="text-gray-400 text-base sm:text-lg leading-relaxed">
+              Life happens outdoors, in the city, on the pitch and everywhere in between. SB brings together fashion for the moments that make life yours.
+            </p>
+            <p className="text-gray-400 text-base sm:text-lg leading-relaxed">
+              Find your fit. Express your style. Live your way.
+            </p>
+            <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 rounded-full">
+              <Link to="/about">Discover Our Story</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── WHY SHOP SB ─── */}
+      <section className="bg-gray-950 container py-20 sm:py-24">
+        <div className="text-center mb-10 sm:mb-12">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Why Shop SB?</p>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">Built for Everyday Style</h2>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          {[
+            { title: "Curated Fashion", desc: "Different styles and brands brought together in one place." },
+            { title: "Everyday Versatility", desc: "Clothing for casual wear and outdoor lifestyles." },
+            { title: "Convenient Shopping", desc: "Shop online or visit our physical store." },
+            { title: "Accessible Fashion", desc: "Discover styles at approachable prices." },
+          ].map((b) => (
+            <div key={b.title} className="p-6 bg-white/5 space-y-2">
+              <h3 className="font-display font-bold text-lg text-white">{b.title}</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">{b.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── SOCIAL / FACEBOOK ─── */}
+      <section className="bg-gray-900 py-20 sm:py-24">
+        <div className="container text-center space-y-6">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">Stay Connected</p>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">Stay Connected with SB</h2>
+          <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto">
+            Discover new arrivals, fresh styles and what's happening at SB.
+          </p>
+          <Button asChild size="lg" className="bg-white text-navy hover:bg-white/90 px-8 py-3.5 font-semibold rounded-full">
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Follow Us on Facebook</a>
+          </Button>
+        </div>
+      </section>
+
       {/* ─── FINAL CTA ─── */}
       <section className="container py-24 sm:py-28">
         <div className="bg-gray-950 p-10 sm:p-14 md:p-20 text-center">
