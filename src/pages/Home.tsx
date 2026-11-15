@@ -24,6 +24,7 @@ const pillarIcons: Record<string, React.ElementType> = {
 const Home = () => {
   const { products, loading } = useProducts();
 
+  const newArrivals = products.filter(p => p.is_new_arrival).slice(0, 6);
   const featuredProducts = products.filter(p => p.is_featured || p.is_best_seller).slice(0, 6);
 
   return (
@@ -183,6 +184,35 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* ─── NEW ARRIVALS ─── */}
+      {newArrivals.length > 0 && (
+        <section className="bg-gray-950 container py-24 sm:py-28">
+          <div className="flex items-end justify-between mb-8 sm:mb-10">
+            <div>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">New Arrivals</p>
+              <h2 className="font-display font-bold text-2xl sm:text-3xl text-white">Fresh Drops</h2>
+              <p className="text-gray-400 text-sm mt-1">The latest styles added to SB.</p>
+            </div>
+            <Link to="/shop" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">View All</Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+            {newArrivals.map((p) => (
+              <Link key={p.id} to={`/product/${p.id}`} className="group block bg-gray-900 overflow-hidden hover:opacity-95 transition-opacity duration-300">
+                <div className="relative aspect-square overflow-hidden bg-white/5">
+                  <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold bg-white text-gray-900 uppercase tracking-wider">New</span>
+                </div>
+                <div className="p-4">
+                  <p className="text-[11px] text-gray-400 uppercase tracking-wider mb-1">{p.brand || "Streetwear Blantyre"}</p>
+                  <h3 className="font-medium text-sm text-white mb-2 line-clamp-1">{p.name}</h3>
+                  <p className="font-bold text-base text-white">{formatMWK(p.price)}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ─── FEATURED PRODUCTS — CULTURE PICKS ─── */}
       {featuredProducts.length > 0 && (
