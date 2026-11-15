@@ -29,6 +29,7 @@ const Shop = () => {
   const [sortBy, setSortBy] = useState<"newest" | "price-low" | "price-high" | "name">("newest");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [inStockOnly, setInStockOnly] = useState(false);
   const [priceMin, setPriceMin] = useState(0);
   const [priceMax, setPriceMax] = useState(200000);
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
@@ -50,7 +51,8 @@ const Shop = () => {
     const matchesSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.benefit.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes((p as any).brand?.toLowerCase() || "");
     const matchesPrice = p.price >= priceMin && p.price <= priceMax;
-    return matchesCategory && matchesCulture && matchesSearch && matchesBrand && matchesPrice;
+    const matchesStock = !inStockOnly || (p.stock ?? 0) > 0;
+    return matchesCategory && matchesCulture && matchesSearch && matchesBrand && matchesPrice && matchesStock;
   });
 
   const sorted = [...filtered].sort((a, b) => {
@@ -254,6 +256,10 @@ const Shop = () => {
                   <button onClick={() => { setPriceMin(25000); setPriceMax(50000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-white/5 text-gray-400 rounded hover:bg-white/10">50K</button>
                   <button onClick={() => { setPriceMin(50000); setPriceMax(1000000); }} className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-white/5 text-gray-400 rounded hover:bg-white/10">50K+</button>
                 </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="inStockOnly" checked={inStockOnly} onChange={(e) => setInStockOnly(e.target.checked)} className="rounded" />
+                <label htmlFor="inStockOnly" className="text-sm text-gray-400">In stock only</label>
               </div>
             </div>
       )}
