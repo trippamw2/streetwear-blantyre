@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Menu, X, Building2, Warehouse, ChevronLeft, Zap, MessageCircle, Truck, Users, Tag, LayoutGrid, Shield, Gift, BookOpen, Camera } from "lucide-react";
@@ -33,23 +33,36 @@ export const AdminLayout = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [checkingRole, setCheckingRole] = useState(true);
+  const [staffBrands, setStaffBrands] = useState<{ brand_id: string; role: string }[]>([]);
+  const brandParam = searchParams.get("brand") || "sb";
 
-  // Check if user has admin role in user_roles table
+  // Check if user has admin access for any brand (user_roles admin OR staff_permissions)
   useEffect(() => {
     if (authLoading) return;
-    
+
     if (user) {
-      supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "admin")
-        .maybeSingle()
-        .then(({ data }) => {
-          setIsAdmin(!!data);
+      Promise.all([
+        supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", user.id)
+          .eq("role", "admin")
+          .maybeSingle(),
+        supabase
+          .from("staff_permissions")
+          .select("brand_id, role")
+          .eq("user_id", user.id)
+          .limit(10),
+      ])
+        .then(async ([adminRes, staffRes]) => {
+          const isAdminUser = !!adminRes.data;
+          const rows = (staffRes.data || []) as { brand_id: string; role: string }[];
+          setStaffBrands(rows);
+          setIsAdmin(isAdminUser || rows.length > 0);
           setCheckingRole(false);
         })
         .catch(() => {
@@ -60,6 +73,13 @@ export const AdminLayout = () => {
       setCheckingRole(false);
     }
   }, [user, authLoading]);
+
+  // Keep admin panel on its brand base when the brand query param changes
+  useEffect(() => {
+    if (location.pathname === "/admin") {
+      navigate(`/admin?brand=${brandParam}`, { replace: true });
+    }
+  }, [brandParam, location.pathname, navigate]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -104,6 +124,16 @@ export const AdminLayout = () => {
           <div className="p-4 border-b border-gray-100 bg-navy">
             <Logo className="h-8" />
             <p className="text-xs text-white/60 mt-1">Admin Panel</p>
+            <select
+              value={brandParam}
+              onChange={(e) => navigate(`/admin?brand=${e.target.value}`, { replace: true })}
+              className="mt-3 w-full h-9 rounded-lg bg-white/10 border border-white/20 text-white text-sm px-3"
+              aria-label="Admin brand"
+            >
+              <option value="sb">SB Streetwear</option>
+              <option value="lake-fresh">Lake Fresh Fish Mart</option>
+              <option value="all">All Businesses</option>
+            </select>
           </div>
 
           <nav className="flex-1 p-4 space-y-1">

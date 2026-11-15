@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Package, DollarSign, TrendingUp, Users, ArrowUpRight, ArrowDownRight, Wallet, Banknote, Receipt } from "lucide-react";
 
 interface Stats {
@@ -27,6 +27,8 @@ const TRANSPORT_COST = 4000;
 const PAYCHANGU_FEE_PERCENT = 4;
 
 const AdminDashboard = () => {
+  const [searchParams] = useSearchParams();
+  const brand = searchParams.get("brand") || "sb";
   const [stats, setStats] = useState<Stats>({
     totalOrders: 0,
     grossOrders: 0,
@@ -43,8 +45,16 @@ const AdminDashboard = () => {
   }, []);
 
   const fetchStats = async () => {
-    // Get all orders
-    const { data: allOrders } = await supabase.from("orders").select("id, total_mwk, delivery_fee_mwk, is_paid, payment_method, status");
+    const brandFilter = brand === "all" ? undefined : brand;
+    let ordersQuery = supabase
+      .from("orders")
+      .select("id, total_mwk, delivery_fee_mwk, is_paid, payment_method, status");
+
+    if (brandFilter && brandFilter !== "all") {
+      ordersQuery = ordersQuery.eq("brand_id", brandFilter);
+    }
+
+    const { data: allOrders } = await ordersQuery;
     
     if (allOrders) {
       // Gross orders - all orders total
