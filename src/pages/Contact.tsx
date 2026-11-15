@@ -9,7 +9,7 @@ const Contact = () => (
       <div className="max-w-2xl space-y-3 mb-12 sm:mb-16">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.15em]">Connect</p>
         <h1 className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl tracking-tight text-white">
-          Let's talk.
+          Contact Us
         </h1>
         <p className="text-gray-400 text-sm sm:text-base sm:text-lg">
           Most brands don't listen. We do. Whether you're an African creator looking to express

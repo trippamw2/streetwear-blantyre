@@ -228,7 +228,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           </div>
 
           <Button onClick={handleAdd} variant="hero" size="sm" className="w-full text-xs h-9" disabled={!isInStock}>
-            {isInStock ? "Wear the Culture" : "Sold Out"}
+            {isInStock ? "Wear Your Identity" : "Sold Out"}
           </Button>
         </div>
       </Link>

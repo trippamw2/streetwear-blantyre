@@ -472,7 +472,7 @@ const ProductDetail = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-3 flex-1">
               <Button onClick={handleAdd} variant="hero" size="lg" className="w-full">
-                <ShoppingBag className="h-5 w-5" /> Wear the Culture
+                <ShoppingBag className="h-5 w-5" /> Wear Your Identity
               </Button>
               <Button 
                 onClick={() => {

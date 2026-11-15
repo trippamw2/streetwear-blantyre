@@ -142,7 +142,7 @@ const Compare = () => {
               className="w-full mt-4 bg-gray-900 hover:bg-gray-800"
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
-              Wear the Culture
+              Wear Your Identity
             </Button>
           </div>
         ))}
@@ -260,7 +260,7 @@ const Compare = () => {
                     className="bg-gray-900 hover:bg-gray-800"
                   >
                     <ShoppingBag className="h-4 w-4 mr-2" />
-                    Wear the Culture
+                    Wear Your Identity
                   </Button>
                 </td>
               ))}
