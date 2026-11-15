@@ -13,8 +13,8 @@ const Contact = () => (
         </h1>
         <p className="text-gray-400 text-sm sm:text-base sm:text-lg">
           SB Streetwear. T-shirts, football jerseys and short sleeve shirts for everyday life.
-          yourself, a community member wanting to connect, or someone interested in our mission —
-          we're here. Fastest way to reach us is WhatsApp — we reply in minutes.
+          Reach us on WhatsApp for orders, sizes and availability.
+          Reach us on WhatsApp for orders, sizes and availability.
         </p>
         <p className="text-gray-500 text-xs italic">
           Wear Your Identity.
