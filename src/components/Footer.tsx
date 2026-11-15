@@ -90,7 +90,7 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-24 sm:h-28 md:h-32 lg:h-40 xl:h-48" />
             <p className="text-white/50 max-w-sm text-sm leading-relaxed">
-              Born in Blantyre, Malawi. SB brings together T shirts, football jerseys and short sleeve shirts for everyday life, sport and outdoor experiences.
+              Born in Blantyre, Malawi. SB brings together T shirts, football jerseys, short sleeve shirts and vests for everyday life, sport and outdoor experiences.
             </p>
             <p className="text-sm text-white/80 font-medium">SB Streetwear — Wear Your Identity.</p>
 

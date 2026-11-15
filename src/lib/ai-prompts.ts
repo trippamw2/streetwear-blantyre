@@ -44,6 +44,7 @@ Identity, Culture, Faith, Creativity, Courage, Community, Quality, Purpose, Auth
 - **T Shirts**: The everyday canvas. Simple, bold, wearable identity statements.
 - **Football Jerseys**: Match day energy. Sport inspired pieces for the pitch and the street.
 - **Short Sleeve Shirts**: Relaxed, breathable shirts for warm days and easy plans.
+- **Vests**: Sleeveless essentials for layering or wearing solo on warm days.
 - Additional wearable categories may be added by the store over time.
 
 ### Culture Pillars

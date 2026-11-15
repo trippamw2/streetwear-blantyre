@@ -40,6 +40,11 @@ const categoryLookup: Record<
     copy: "Easy, breathable shirts for warm days and late plans.",
     icon: Sun,
   },
+  vests: {
+    line: "Sleeveless essentials.",
+    copy: "Clean, breathable vests for layering or wearing solo.",
+    icon: Shirt,
+  },
 };
 
 const categoryStyles = [

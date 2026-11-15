@@ -17,7 +17,7 @@ interface AIResponse {
 // ============================================
 const KNOWLEDGE_BASE = `
 Streetwear Blantyre Store Information:
-- We sell clothing: T shirts, football jerseys, short sleeve shirts
+- We sell clothing: T shirts, football jerseys, short sleeve shirts, vests
 - Brands: SB Original, SB Street
 - Delivery: Blantyre (same day or 1-3 days), other areas in Malawi (3-5 working days)
 - Payment: PayChangu (online payment gateway)
@@ -61,7 +61,7 @@ export class AIAgent {
       return {
         response: `Our prices vary by product! What are you interested in?
 
-T Shirts, Football Jerseys, Short Sleeve Shirts
+T Shirts, Football Jerseys, Short Sleeve Shirts, Vests
 
 Reply with the product type and I'll check current prices!`,
         action: 'reply'
@@ -104,7 +104,7 @@ Open: Mon-Sat 8am-6pm, Sun 9am-4pm`,
       return {
         response: `Welcome to Streetwear Blantyre!
 
-We sell T shirts, football jerseys and short sleeve shirts.
+We sell T shirts, football jerseys, short sleeve shirts and vests.
 
 How can I help you today?`,
         action: 'reply'

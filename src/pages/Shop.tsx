@@ -166,7 +166,7 @@ const Shop = () => {
               </h1>
               <p className="text-sm leading-relaxed text-gray-500 sm:text-base">
                 {selectedCategory === "all"
-                  ? "T shirts, football jerseys and short sleeve shirts. Everyday pieces for the street, the pitch and everything in between."
+                  ? "T shirts, football jerseys, short sleeve shirts and vests. Everyday pieces for the street, the pitch and everything in between."
                   : "Explore the category and find the fit that feels like you."}
               </p>
             </div>

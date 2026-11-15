@@ -10,7 +10,7 @@ interface SEOProps {
 
 const SITE_NAME = "Streetwear Blantyre";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "SB Streetwear - T shirts, football jerseys and short sleeve shirts for everyday life, sport and outdoor experiences. Blantyre, Malawi. Wear Your Identity.";
+const DEFAULT_DESC = "SB Streetwear - T shirts, football jerseys, short sleeve shirts and vests for everyday life, sport and outdoor experiences. Blantyre, Malawi. Wear Your Identity.";
 const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Streetwear+Blantyre";
 
 export const SEO = ({
@@ -64,9 +64,9 @@ export const defaultSEO = {
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop All — T Shirts, Jerseys & Short Sleeve Shirts",
+    title: "Shop All — T Shirts, Jerseys, Short Sleeve Shirts & Vests",
     description:
-      "Shop T shirts, football jerseys and short sleeve shirts from SB Streetwear. Everyday pieces for the street, the pitch and everything in between. Delivery across Malawi.",
+      "Shop T shirts, football jerseys, short sleeve shirts and vests from SB Streetwear. Everyday pieces for the street, the pitch and everything in between. Delivery across Malawi.",
   },
   combos: {
     title: "Kits & Bundles — Streetwear Blantyre",
@@ -76,7 +76,7 @@ export const defaultSEO = {
   about: {
     title: "Our Story — Inspired by Blantyre",
     description:
-      "SB Streetwear brings together T shirts, football jerseys and short sleeve shirts for everyday life in Blantyre, Malawi. Wear Your Identity.",
+      "SB Streetwear brings together T shirts, football jerseys, short sleeve shirts and vests for everyday life in Blantyre, Malawi. Wear Your Identity.",
   },
   contact: {
     title: "Contact — SB Streetwear",

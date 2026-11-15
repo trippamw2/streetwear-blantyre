@@ -76,6 +76,7 @@ export const categories: { id: Category; label: string }[] = [
   { id: "t-shirts", label: "T Shirts" },
   { id: "jerseys", label: "Jerseys" },
   { id: "short-sleeve-shirts", label: "Short Sleeve Shirts" },
+  { id: "vests", label: "Vests" },
 ];
 
 // ─── Products ───────────────────────────────────────────────────────
