@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { categories, Category, BRANDS, culturePillars } from "@/data/products";
+import { BRANDS, culturePillars } from "@/data/products";
 import { useProducts } from "@/hooks/useProducts";
+import { useWearableCategories } from "@/hooks/useWearableCategories";
 import { ProductCard } from "@/components/ProductCard";
 import { PromotionSlider } from "@/components/PromotionSlider";
 import { SEO, defaultSEO } from "@/components/SEO";
@@ -13,8 +14,10 @@ import { Button } from "@/components/ui/button";
 const PRODUCTS_PER_PAGE = 12;
 
 const Shop = () => {
-  const { products, loading, getProductsByCategory, getProductsByCulture } = useProducts();
-  const [selectedCategory, setSelectedCategory] = useState<Category | "all">("all");
+  const { products, loading: productsLoading, getProductsByCategory, getProductsByCulture } = useProducts();
+  const { categories, loading: categoriesLoading } = useWearableCategories();
+  const loading = productsLoading || categoriesLoading;
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedCulture, setSelectedCulture] = useState<string>(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get("culture") || "";
@@ -82,7 +85,7 @@ const Shop = () => {
     setVisibleCount(PRODUCTS_PER_PAGE);
   };
 
-  const handleCategoryChange = (cat: Category | "all") => {
+  const handleCategoryChange = (cat: string) => {
     setSelectedCategory(cat);
     setVisibleCount(PRODUCTS_PER_PAGE);
   };
@@ -264,17 +267,17 @@ const Shop = () => {
         >
           All
         </button>
-        {categories.filter(c => c.id !== "all").map((c) => (
+        {categories.map((c) => (
           <button
             key={c.id}
-            onClick={() => setSelectedCategory(c.id)}
+            onClick={() => setSelectedCategory(c.slug)}
             className={`px-4 py-2 rounded-none text-sm font-medium transition-all ${
-              selectedCategory === c.id
+              selectedCategory === c.slug
                 ? "bg-white text-gray-900"
                 : "bg-white/5 border border-white/10 text-gray-400 hover:border-white/30"
             }`}
           >
-            {c.label}
+            {c.name}
           </button>
         ))}
       </div>
@@ -312,7 +315,7 @@ const Shop = () => {
         <div className="flex flex-wrap gap-2 mb-4">
           {selectedCategory !== "all" && (
             <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/10 text-white rounded-none text-sm">
-              {categories.find(c => c.id === selectedCategory)?.label}
+              {categories.find(c => c.slug === selectedCategory)?.name}
               <button onClick={() => setSelectedCategory("all")}><X className="h-3 w-3 text-white" /></button>
             </span>
           )}

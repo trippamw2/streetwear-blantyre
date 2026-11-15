@@ -15,6 +15,7 @@ import { Plus, Edit, Trash2, Image as ImageIcon, Loader2, Download, Printer, QrC
 import { AIWritingButton } from "@/components/admin/AIWritingButton";
 import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
 import { toast } from "@/hooks/use-toast";
+import { useWearableCategories } from "@/hooks/useWearableCategories";
 import { generateProductBarcode, downloadBarcodeLabel, printBarcodeLabel } from "@/lib/barcode";
 
 const BRANDS = [
@@ -29,16 +30,7 @@ const BRANDS = [
   { id: "generic", name: "Generic", color: "#888888" },
 ];
 
-const CATEGORIES = [
-  { id: "t-shirts", label: "T-Shirts" },
-  { id: "hoodies", label: "Hoodies" },
-  { id: "caps", label: "Caps" },
-  { id: "hut-caps", label: "Hut Caps" },
-  { id: "bracelets", label: "Bracelets" },
-  { id: "socks", label: "Socks" },
-  { id: "stickers", label: "Stickers" },
-  { id: "earbuds", label: "Earbuds" },
-];
+// Categories are now loaded dynamically from the database (wearable_categories)
 
 const CULTURE_PILLARS = [
   { id: "", label: "None" },
@@ -78,6 +70,8 @@ interface Product {
 const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const { categories: wearableCats } = useWearableCategories();
+  const CATEGORIES = wearableCats.map((c) => ({ id: c.slug, label: c.name }));
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
