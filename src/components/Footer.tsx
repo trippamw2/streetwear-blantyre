@@ -88,7 +88,7 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-24 sm:h-28 md:h-32 lg:h-40 xl:h-48" />
             <p className="text-white/50 max-w-sm text-sm leading-relaxed">
-              Born in Blantyre, Malawi. SB brings together T-shirts, football jerseys and short-sleeve shirts for everyday life, sport and outdoor experiences.
+              Born in Blantyre, Malawi. SB brings together T shirts, football jerseys and short sleeve shirts for everyday life, sport and outdoor experiences.
             </p>
             <p className="text-sm text-white/80 font-medium">SB Streetwear — Wear Your Identity.</p>
 
@@ -108,9 +108,9 @@ export const Footer = () => {
             <h4 className="font-semibold text-sm text-white mb-4">Experience</h4>
             <ul className="space-y-2.5 text-sm text-white/50">
               <li><Link to="/shop" className="hover:text-white transition-colors">Shop All</Link></li>
-              <li><Link to="/shop?category=t-shirts" className="hover:text-white transition-colors">T-Shirts</Link></li>
+              <li><Link to="/shop?category=t-shirts" className="hover:text-white transition-colors">T Shirts</Link></li>
               <li><Link to="/shop?category=jerseys" className="hover:text-white transition-colors">Football Jerseys</Link></li>
-              <li><Link to="/shop?category=short-sleeve-shirts" className="hover:text-white transition-colors">Short-Sleeve Shirts</Link></li>
+              <li><Link to="/shop?category=short-sleeve-shirts" className="hover:text-white transition-colors">Short Sleeve Shirts</Link></li>
               <li><Link to="/about" className="hover:text-white transition-colors">Our Story</Link></li>
               <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
             </ul>

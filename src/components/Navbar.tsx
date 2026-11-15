@@ -17,9 +17,9 @@ import {
 const links = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop All" },
-  { to: "/shop?category=t-shirts", label: "T-Shirts" },
+  { to: "/shop?category=t-shirts", label: "T Shirts" },
   { to: "/shop?category=jerseys", label: "Jerseys" },
-  { to: "/shop?category=short-sleeve-shirts", label: "Short-Sleeve Shirts" },
+  { to: "/shop?category=short-sleeve-shirts", label: "Short Sleeve Shirts" },
   { to: "/about", label: "Our Story" },
   { to: "/contact", label: "Contact" },
 ];

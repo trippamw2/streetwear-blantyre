@@ -10,7 +10,7 @@ interface SEOProps {
 
 const SITE_NAME = "Streetwear Blantyre";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "SB Streetwear - T-shirts, football jerseys and short-sleeve shirts for everyday life, sport and outdoor experiences. Blantyre, Malawi. Wear Your Identity.";
+const DEFAULT_DESC = "SB Streetwear - T shirts, football jerseys and short sleeve shirts for everyday life, sport and outdoor experiences. Blantyre, Malawi. Wear Your Identity.";
 const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Streetwear+Blantyre";
 
 export const SEO = ({

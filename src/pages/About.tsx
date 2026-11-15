@@ -37,7 +37,7 @@ const About = () => (
           We believe clothing should move with you. From relaxed days outdoors and spontaneous adventures to football moments, city hangouts and everyday experiences, what you wear should reflect who you are.
         </p>
         <p className="text-gray-400 text-base sm:text-lg leading-relaxed">
-          That's why we bring together a curated selection of T-shirts, football jerseys and short-sleeve shirts designed for everyday comfort, casual expression and outdoor living.
+          That's why we bring together a curated selection of T shirts, football jerseys and short sleeve shirts designed for everyday comfort, casual expression and outdoor living.
         </p>
         <p className="text-gray-400 text-base sm:text-lg leading-relaxed">
           We bring different styles, brands and influences together in one place, making it easier to find clothing that fits your personality and lifestyle.

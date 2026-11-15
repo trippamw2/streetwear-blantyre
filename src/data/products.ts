@@ -54,7 +54,7 @@ export const culturePillars: CulturePillar[] = [
 
 export const categories: { id: Category; label: string }[] = [
   { id: "all", label: "All Products" },
-  { id: "t-shirts", label: "T-Shirts" },
+  { id: "t-shirts", label: "T Shirts" },
   { id: "jerseys", label: "Jerseys" },
   { id: "short-sleeve-shirts", label: "Short Sleeve Shirts" },
 ];

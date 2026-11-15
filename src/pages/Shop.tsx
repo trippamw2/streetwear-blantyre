@@ -122,7 +122,7 @@ const Shop = () => {
           <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-white">Shop All</h1>
           <p className="text-gray-400 text-sm sm:text-base">
             Every piece represents a belief. A story. An identity.
-            Browse T-shirts, football jerseys and short-sleeve shirts.
+            Browse T shirts, football jerseys and short sleeve shirts.
             Find the style that fits your everyday life.
           </p>
         </div>

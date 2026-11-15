@@ -40,7 +40,7 @@ const Home = () => {
             </h1>
 
             <p className="text-gray-300 text-base sm:text-lg max-w-md leading-relaxed">
-              SB is where young people shop clothing that fits their everyday life: T-shirts, football jerseys and short-sleeve shirts for the streets, the pitch and everywhere in between.
+              SB is where young people shop clothing that fits their everyday life: T shirts, football jerseys and short sleeve shirts for the streets, the pitch and everywhere in between.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -65,9 +65,9 @@ const Home = () => {
           </div>
           <div className="grid sm:grid-cols-3 gap-4 sm:gap-6">
             {[
-              { label: "T-Shirts", desc: "Everyday essentials.", to: "/shop?category=t-shirts", img: "https://placehold.co/600x400/102C54/ffffff?text=T-Shirts" },
+              { label: "T Shirts", desc: "Everyday essentials.", to: "/shop?category=t-shirts", img: "https://placehold.co/600x400/102C54/ffffff?text=T Shirts" },
               { label: "Football Jerseys", desc: "Sport meets style.", to: "/shop?category=jerseys", img: "https://placehold.co/600x400/102C54/ffffff?text=Jerseys" },
-              { label: "Short-Sleeve Shirts", desc: "Relaxed everyday looks.", to: "/shop?category=short-sleeve-shirts", img: "https://placehold.co/600x400/102C54/ffffff?text=Short+Sleeve+Shirts" },
+              { label: "Short Sleeve Shirts", desc: "Relaxed everyday looks.", to: "/shop?category=short-sleeve-shirts", img: "https://placehold.co/600x400/102C54/ffffff?text=Short+Sleeve+Shirts" },
             ].map((c) => (
               <Link key={c.label} to={c.to} className="group relative block overflow-hidden bg-gray-800">
                 <img src={c.img} alt={c.label} className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-500" />
