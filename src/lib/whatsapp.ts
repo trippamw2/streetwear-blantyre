@@ -2,9 +2,10 @@
 export const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"; // Set in Vercel env
 export const STORE_URL = "https://www.wearsb.com";
 
-export const buildWhatsAppLink = (message: string) => {
+export const buildWhatsAppLink = (message: string, phone?: string) => {
+  const number = (phone || WHATSAPP_NUMBER).replace(/[^0-9]/g, "");
   const encoded = encodeURIComponent(message);
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+  return `https://wa.me/${number}?text=${encoded}`;
 };
 
 export const defaultMessage = "Hi Streetwear Blantyre, I want to order.";

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -149,7 +149,7 @@ const OrderDetailPage = () => {
                   description: "Streetwear Blantyre order payment",
                 })
               }
-              className="w-full bg-gray-100 text-gray-900 hover:bg-gray-800 rounded-full py-3 font-semibold"
+              className="w-full  rounded-full py-3 font-semibold"
             >
               <CreditCard className="h-4 w-4 mr-2" />
               Pay {formatMWK(order.total_mwk)} via PayChangu
@@ -180,7 +180,7 @@ const OrderDetailPage = () => {
           </p>
           <div className="flex gap-2">
             <Button asChild variant="outline" size="sm" className="text-xs">
-              <Link to="/combos">View Culture Packs</Link>
+              <Link to="/combos">View Kits</Link>
             </Button>
             <Button asChild variant="outline" size="sm" className="text-xs">
               <Link to="/shop">Browse Shop All</Link>

@@ -130,7 +130,7 @@ const GiftTrack = () => {
           </div>
           <h1 className="font-display font-extrabold text-2xl text-gray-900 mb-2">Gift Not Found</h1>
           <p className="text-gray-500 text-sm">{error || "This tracking link is invalid or has expired."}</p>
-          <Button asChild className="mt-6 bg-gray-100 text-gray-900 hover:bg-gray-800 rounded-full px-6">
+          <Button asChild className="mt-6  rounded-full px-6">
             <a href="/">Back to Home</a>
           </Button>
         </div>
@@ -161,7 +161,7 @@ const GiftTrack = () => {
               YOU'VE RECEIVED A GIFT.
             </h1>
             <p className="text-gray-500 text-base sm:text-lg">
-              {gift.sender_name} sent you a Culture Piece{gift.occasion ? ` for ${gift.occasion.toLowerCase()}` : ""}.
+              {gift.sender_name} sent you a Streetwear Piece{gift.occasion ? ` for ${gift.occasion.toLowerCase()}` : ""}.
             </p>
           </div>
         </div>
@@ -297,7 +297,7 @@ const GiftTrack = () => {
                 <Button
                   onClick={handleSubmitReview}
                   disabled={!reviewComment.trim() || submittingReview}
-                  className="bg-gray-100 text-gray-900 hover:bg-gray-800 rounded-full px-6 py-2 font-semibold"
+                  className=" rounded-full px-6 py-2 font-semibold"
                 >
                   {submittingReview ? (
                     <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Submitting...</>

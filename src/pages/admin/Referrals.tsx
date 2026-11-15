@@ -1,6 +1,5 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -115,8 +114,7 @@ export default function AdminReferrals() {
   };
 
   return (
-    <AdminLayout>
-      <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Referral Management</h1>
@@ -263,6 +261,5 @@ export default function AdminReferrals() {
           </table>
         </div>
       </div>
-    </AdminLayout>
   );
 }

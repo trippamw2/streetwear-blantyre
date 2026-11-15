@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SEO } from "@/components/SEO";
 import { ProductCard } from "@/components/ProductCard";
-import { formatMWK } from "@/data/products";
+import { formatMWK, type Product as StoreProduct } from "@/data/products";
 import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 
@@ -24,21 +24,6 @@ interface CultureStory {
   created_at: string;
 }
 
-interface Product {
-  id: string;
-  name: string;
-  benefit: string;
-  price: number;
-  image: string;
-  images: string[];
-  category: string;
-  culture_pillar: string | null;
-  brand: string | null;
-  is_active: boolean;
-  is_featured: boolean;
-  is_best_seller: boolean;
-}
-
 const PILLAR_COLORS: Record<string, string> = {
   music: "bg-purple-100 text-purple-700",
   sports: "bg-green-100 text-green-700",
@@ -49,7 +34,7 @@ const PILLAR_COLORS: Record<string, string> = {
 const EditorialPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const [story, setStory] = useState<CultureStory | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [relatedProducts, setRelatedProducts] = useState<StoreProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -78,7 +63,25 @@ const EditorialPost = () => {
           .eq("culture_pillar", data.culture_pillar)
           .eq("is_active", true)
           .limit(6);
-        setRelatedProducts(products || []);
+        const mapped: StoreProduct[] = (products || []).map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          benefit: p.description || p.benefit || "",
+          price: p.price,
+          category: p.category || "all",
+          image: p.image || "",
+          brand: p.brand || "SB Streetwear",
+          types: [],
+          stock: p.stock_quantity || 0,
+          is_featured: p.is_featured || false,
+          is_best_seller: p.is_best_seller || false,
+          is_new_arrival: p.is_new_arrival || false,
+          is_on_sale: p.is_on_sale || false,
+          discount_percent: p.discount_percent || 0,
+          culture_pillar: p.culture_pillar || "",
+          culture_pillar_color: "#102C54",
+        }));
+        setRelatedProducts(mapped);
       }
 
       setLoading(false);

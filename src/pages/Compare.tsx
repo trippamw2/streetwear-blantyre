@@ -1,6 +1,6 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCompare } from "@/contexts/CompareContext";
-import { formatMWK, getKitPrice } from "@/data/products";
+import { formatMWK, getBrandName, getKitPrice } from "@/data/products";
 import { SEO, defaultSEO } from "@/components/SEO";
 import { useCombos } from "@/hooks/useCombos";
 import { useProducts } from "@/hooks/useProducts";
@@ -18,13 +18,14 @@ const Compare = () => {
   const handleAddToCart = (product: typeof compareList[0]) => {
     add({
       productKey: `${product.id}-${product.types[0]?.id || "default"}`,
+      productId: product.id,
       name: product.name,
       price: product.is_on_sale
         ? Math.round(product.price * (1 - product.discount_percent / 100))
         : product.price,
       image: product.image,
     });
-    toast({ title: "Added to your experience", description: product.name });
+    toast({ title: "Added to compare", description: product.name });
   };
 
   if (compareList.length === 0) {
@@ -39,7 +40,7 @@ const Compare = () => {
           <h3 className="font-display font-bold text-lg mb-2">Compare Kits Instead</h3>
           <p className="text-sm text-gray-500 mb-4">Curated kits. Better value. One delivery.</p>
           <Link to="/combos">
-            <Button className="bg-gray-100 hover:bg-gray-800 rounded-full">
+            <Button className=" rounded-full">
               View Kits <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </Link>
@@ -115,7 +116,7 @@ const Compare = () => {
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div className="bg-gray-50 rounded-lg p-2.5">
                 <p className="text-gray-500 text-xs mb-0.5">Brand</p>
-                <p className="font-medium">{p.brand || "Generic"}</p>
+                <p className="font-medium">{getBrandName(p.brand)}</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-2.5">
                 <p className="text-gray-500 text-xs mb-0.5">Rating</p>
@@ -139,7 +140,7 @@ const Compare = () => {
             <Button
               onClick={() => handleAddToCart(p)}
               disabled={!p.stock || p.stock <= 0}
-              className="w-full mt-4 bg-gray-100 hover:bg-gray-800"
+              className="w-full mt-4 "
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
               Wear Your Identity
@@ -205,7 +206,7 @@ const Compare = () => {
             <tr className="border-t">
               <td className="p-3 font-medium text-gray-500">Brand</td>
               {compareList.map((p) => (
-                <td key={p.id} className="p-3 text-center">{p.brand || "Generic"}</td>
+                <td key={p.id} className="p-3 text-center">{getBrandName(p.brand)}</td>
               ))}
               {[...Array(4 - compareList.length)].map((_, i) => (
                 <td key={`empty-${i}`} className="p-3"></td>
@@ -257,7 +258,7 @@ const Compare = () => {
                     size="sm"
                     onClick={() => handleAddToCart(p)}
                     disabled={!p.stock || p.stock <= 0}
-                    className="bg-gray-100 hover:bg-gray-800"
+                    className=""
                   >
                     <ShoppingBag className="h-4 w-4 mr-2" />
                     Wear Your Identity

@@ -1,105 +1,158 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { SEO, defaultSEO } from "@/components/SEO";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ChevronDown, ChevronUp, MessageCircle, Truck, Shield, RotateCcw, Package } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { PolicyLayout } from "./PolicyLayout";
+
+const faqGroups = [
+  {
+    category: "Orders",
+    items: [
+      {
+        q: "How do I place an order?",
+        a: "Browse the shop, choose your size and add the piece to your cart. Then head to checkout, enter your delivery details and pay with the options shown. You will get a confirmation once your order is placed.",
+      },
+      {
+        q: "Can I order without an account?",
+        a: "Yes. You can check out as a guest. Creating an account lets you track orders and save your favourite pieces for later.",
+      },
+      {
+        q: "Can I change or cancel my order?",
+        a: "Message us on WhatsApp as soon as possible. If the order has not been dispatched, we can usually change or cancel it. Once it is on the way, you may need to use our returns process.",
+      },
+      {
+        q: "Do you restock sold out sizes?",
+        a: "Sometimes. It depends on the supplier. Message us with the item and size you want and we will let you know when it is likely to return.",
+      },
+    ],
+  },
+  {
+    category: "Sizing & Fit",
+    items: [
+      {
+        q: "How do I know which size to choose?",
+        a: "Each product page lists the available sizes. If you are between sizes, message us on WhatsApp and we will help you choose based on how you like your fit.",
+      },
+      {
+        q: "What if the size is wrong?",
+        a: "We offer size exchanges within 14 days of delivery, provided the item is unworn with tags attached and the size you need is in stock. See our Returns page for details.",
+      },
+      {
+        q: "Are the jerseys true to size?",
+        a: "Football jerseys often run slightly fitted. If you prefer a relaxed fit, consider going one size up. Ask us if you are unsure.",
+      },
+    ],
+  },
+  {
+    category: "Delivery",
+    items: [
+      {
+        q: "Where do you deliver?",
+        a: "We deliver across Malawi. Blantyre orders can often be delivered same day or within 1 to 3 days. Other areas usually take 3 to 5 working days.",
+      },
+      {
+        q: "How much is delivery?",
+        a: "Delivery is calculated at checkout based on your location and order value. Orders over MK 50,000 qualify for free delivery.",
+      },
+      {
+        q: "Can I collect from the store?",
+        a: "Yes. Store pickup in Blantyre is available. Choose the pickup option at checkout and we will message you when your order is ready.",
+      },
+    ],
+  },
+  {
+    category: "Payments",
+    items: [
+      {
+        q: "What payment methods do you accept?",
+        a: "We accept mobile money and bank transfer through our secure payment partner. The available options are shown at checkout.",
+      },
+      {
+        q: "Is it safe to pay online?",
+        a: "Payments are handled by our payment provider. We do not store your full card or mobile money details on our site.",
+      },
+      {
+        q: "Do you offer cash on delivery?",
+        a: "Cash on delivery is not currently offered. Payment is completed before dispatch.",
+      },
+    ],
+  },
+  {
+    category: "Returns & Quality",
+    items: [
+      {
+        q: "What is your return policy?",
+        a: "Unworn items with tags attached can be returned or exchanged within 14 days of delivery. Faulty items are covered separately by our 30 day quality cover.",
+      },
+      {
+        q: "What if my item arrives faulty?",
+        a: "Message us with your order number and a photo of the fault. If it is a manufacturing fault, we will repair, replace or refund it under our quality cover.",
+      },
+      {
+        q: "Are your items genuine?",
+        a: "Yes. We source from trusted brands and suppliers. SB Streetwear is a retailer and does not manufacture the branded items it sells.",
+      },
+    ],
+  },
+];
 
 const FAQ = () => {
-  const faqs = [
-    {
-      category: "Orders & Shipping",
-      items: [
-        { q: "How do I place an order?", a: "Browse our culture pieces, add items to your experience, and complete your experience. You'll receive a confirmation via WhatsApp." },
-        { q: "How long does delivery take?", a: "Standard delivery: 3 to 5 business days. Express delivery: 1 to 2 business days. Delivery times may vary by location in Malawi." },
-        { q: "Do you deliver everywhere in Malawi?", a: "Yes! We deliver to all districts in Malawi including Lilongwe, Blantyre, Mzuzu, Zomba, and rural areas." },
-      ]
-    },
-    {
-      category: "Payments",
-      items: [
-        { q: "What payment methods do you accept?", a: "We accept Airtel Money, TNM Mpamba, and bank transfers via PayChangu." },
-        { q: "Is my payment secure?", a: "Yes! All payments are processed through PayChangu, a secure payment platform licensed in Malawi." },
-      ]
-    },
-    {
-      category: "Returns & Warranty",
-      items: [
-        { q: "What is your return policy?", a: "We offer a 7 day return policy for defective products. Products must be in original packaging with all accessories." },
-        { q: "Do products have warranty?", a: "Yes! All items come with a 30 day quality guarantee. We replace defective products." },
-        { q: "How do I claim warranty?", a: "Contact us via WhatsApp with your order number and product details. We'll guide you through the process." },
-      ]
-    },
-    {
-      category: "Products",
-      items: [
-        { q: "Are your products genuine?", a: "Yes! All Streetwear Blantyre items are designed and curated by our team. Premium quality fabrics and construction." },
-        { q: "Do you sell wholesale?", a: "Yes! Contact us via WhatsApp for wholesale inquiries." },
-      ]
-    },
-  ];
+  const [open, setOpen] = useState<string | null>("0-0");
 
   return (
-    <div className="container py-10 sm:py-14 max-w-3xl">
-      <SEO {...defaultSEO.faq} />
-      <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
-        <ArrowLeft className="h-4 w-4" /> Back to home
-      </Link>
-
-      <div className="text-center mb-10">
-        <h1 className="font-display font-bold text-3xl sm:text-4xl mb-3">Frequently Asked Questions</h1>
-        <p className="text-muted-foreground">Find answers to common questions about Streetwear Blantyre</p>
-      </div>
-
+    <PolicyLayout
+      seo="faq"
+      eyebrow="Good to Know"
+      title="Frequently Asked Questions"
+      intro="Quick answers about ordering, sizing, delivery, payments and returns at SB Streetwear."
+    >
       <div className="space-y-8">
-        {faqs.map((category) => (
-          <div key={category.category}>
-            <h2 className="font-semibold text-xl mb-4">{category.category}</h2>
-            <div className="space-y-3">
-              {category.items.map((faq, i) => (
-                <FAQItem key={i} question={faq.q} answer={faq.a} />
-              ))}
+        {faqGroups.map((group, groupIndex) => (
+          <section key={group.category} className="space-y-3">
+            <h2 className="font-display text-lg font-bold text-gray-900 sm:text-xl">
+              {group.category}
+            </h2>
+            <div className="divide-y divide-gray-200 overflow-hidden rounded-2xl border border-gray-200 bg-white">
+              {group.items.map((item, itemIndex) => {
+                const key = `${groupIndex}-${itemIndex}`;
+                const isOpen = open === key;
+                return (
+                  <div key={item.q}>
+                    <button
+                      onClick={() => setOpen(isOpen ? null : key)}
+                      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                      aria-expanded={isOpen}
+                    >
+                      <span className="text-sm font-semibold text-gray-900 sm:text-base">
+                        {item.q}
+                      </span>
+                      <ChevronDown
+                        className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="px-5 pb-4 text-sm leading-relaxed text-gray-500">
+                            {item.a}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
             </div>
-          </div>
+          </section>
         ))}
       </div>
-
-      <div className="mt-10 p-6 bg-gray-50 rounded-2xl text-center">
-        <p className="font-medium mb-2">Still have questions?</p>
-        <p className="text-muted-foreground text-sm mb-4">We're here to help!</p>
-        <Button asChild>
-          <Link to="/contact">Contact Us</Link>
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="rounded-xl border border-gray-200 overflow-hidden">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-5 py-4 flex items-center justify-between text-left"
-      >
-        <span className="font-medium pr-4">{question}</span>
-        {isOpen ? <ChevronUp className="h-5 w-5 text-gray-500 shrink-0" /> : <ChevronDown className="h-5 w-5 text-gray-500 shrink-0" />}
-      </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden"
-          >
-            <p className="px-5 pb-4 text-gray-600">{answer}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    </PolicyLayout>
   );
 };
 

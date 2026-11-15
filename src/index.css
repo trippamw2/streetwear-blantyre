@@ -1,5 +1,5 @@
-﻿/* Streetwear Blantyre — Premium Streetwear E-commerce */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap');
+﻿/* SB Streetwear — Wear Your Identity */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -20,8 +20,8 @@ body {
   padding: 0;
   min-height: 100vh;
   background-color: #ffffff;
-  color: #0a0a0a;
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #171717;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -38,67 +38,72 @@ body {
   height: 0;
 }
 
-/* Scrollbar hide - only when explicitly needed */
 @layer utilities {
   .overflow-x-hidden {
     overflow-x: hidden !important;
   }
-  
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  .eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
 }
 
-/* Allow normal scrolling - hide only ugly custom scrollbars */
 html {
   scrollbar-width: normal;
 }
 
 @layer base {
   :root {
-    /* Light Theme - White Background */
+    /* SB light theme */
     --background: 0 0% 100%;
-    --foreground: 0 0% 6%;
+    --foreground: 0 0% 9%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 6%;
+    --card-foreground: 0 0% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 6%;
-    --primary: 0 0% 6%;
+    --popover-foreground: 0 0% 9%;
+
+    /* Primary: SB navy #102C54 */
+    --primary: 215 68% 20%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 6%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 0 0% 6%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 215 68% 20%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 62% 50%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 221 83% 53%;
-    --radius: 0.75rem;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 215 68% 20%;
+    --radius: 1rem;
 
-    /* Streetwear Blantyre Brand Colors */
-    --color-blue: #2563eb;
-    --color-blue-light: #60a5fa;
-    --color-teal: #0d9488;
-    --color-black: #0a0a0a;
+    /* Brand colors */
+    --color-navy: #102c54;
+    --color-navy-dark: #0b1f3d;
+    --color-navy-light: #1e4a8a;
+    --color-charcoal: #171717;
+    --color-grey: #f3f4f6;
 
-    /* Premium Text */
-    --text-prominent: #0a0a0a;
-    --gradient-dark: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-    --gradient-card: linear-gradient(145deg, #ffffff 0%, #f9f9f9 100%);
-    
-    /* Premium Shadows */
-    --shadow-subtle: 0 2px 8px -2px rgba(0, 0, 0, 0.06);
-    --shadow-floating: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
-    --shadow-elevated: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 30px 60px -15px rgba(0, 0, 0, 0.12);
+    --text-prominent: #171717;
+
+    --shadow-subtle: 0 2px 8px -2px rgba(17, 24, 39, 0.06);
+    --shadow-floating: 0 12px 32px -12px rgba(17, 24, 39, 0.14);
+    --shadow-elevated: 0 24px 48px -20px rgba(17, 24, 39, 0.2);
+    --shadow-hover: 0 32px 64px -24px rgba(17, 24, 39, 0.22);
   }
 }
 
@@ -113,18 +118,29 @@ html {
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cormorant Garamond', serif;
-    letter-spacing: -0.02em;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.025em;
     color: var(--text-prominent);
   }
 
   .font-display {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  ::selection {
+    background-color: #102c54;
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid #102c54;
+    outline-offset: 2px;
   }
 
   /* Mobile-first touch optimizations */
@@ -132,17 +148,13 @@ html {
     @apply touch-manipulation;
   }
 
-  /* Smooth transitions for buttons */
   button, .btn {
     @apply transition-all duration-200 ease-out;
   }
 
-  /* No more gradient text - just solid colors */
   .text-gradient {
     color: var(--text-prominent);
   }
-
-  /* Remove pulse animations */
 }
 
 @layer utilities {
@@ -155,12 +167,9 @@ html {
     font-weight: 700;
   }
 
-  .bg-gradient-brand,
-  .bg-gradient-brand-soft,
-  .shadow-glow,
-  .shadow-card,
-  .shadow-button {
-    /* Replaced with new subtle, premium shadows */
+  .banner-navy {
+    background-color: #102c54;
+    color: #ffffff;
   }
 
   .shadow-subtle {
@@ -180,7 +189,7 @@ html {
   }
 
   .animate-marquee {
-    animation: marquee 20s linear infinite;
+    animation: marquee 24s linear infinite;
   }
 
   @keyframes marquee {
@@ -188,17 +197,6 @@ html {
     100% { transform: translateX(-50%); }
   }
 
-  /* Bounce for CTA buttons */
-  @keyframes bounce-subtle {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
-  }
-
-  .animate-bounce-subtle {
-    animation: bounce-subtle 2s ease-in-out infinite;
-  }
-
-  /* Slide up animation */
   @keyframes slide-up {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -209,25 +207,17 @@ html {
   }
 }
 
-/* Premium Glass Effect Classes */
+/* Glass surfaces */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(17, 24, 39, 0.08);
 }
 
 .glass-card {
-  background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
-  border: 1px solid rgba(37, 99, 235, 0.15);
-  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.1);
-}
-
-.glow-blue {
-  box-shadow: 0 0 40px rgba(37, 99, 235, 0.15);
-}
-
-.glow-blue-sm {
-  box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
+  background: #ffffff;
+  border: 1px solid rgba(16, 44, 84, 0.12);
+  box-shadow: 0 4px 20px -8px rgba(17, 24, 39, 0.12);
 }
 
 .card-hover {
@@ -235,14 +225,7 @@ html {
 }
 
 .card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-  border-color: rgba(37, 99, 235, 0.3);
-}
-
-.text-gradient-blue {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  transform: translateY(-3px);
+  box-shadow: 0 24px 48px -20px rgba(17, 24, 39, 0.18);
+  border-color: rgba(16, 44, 84, 0.25);
 }

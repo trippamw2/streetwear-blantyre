@@ -155,16 +155,16 @@ const GiftPacks = () => {
         <div className="container relative py-20 sm:py-28 lg:py-36">
           <div className="relative max-w-2xl mx-auto text-center">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-white/20 text-gray-900/70 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
-              <Gift className="h-3.5 w-3.5" /> Gift the Culture
+              <Gift className="h-3.5 w-3.5" /> Gift a Kit
             </span>
             <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight">
               SEND SOMEONE
               <br />
-              <span className="text-gray-500">THE CULTURE.</span>
+              <span className="text-primary">A FRESH FIT.</span>
             </h1>
             <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
-              Generic gifts get forgotten. Cultural gifts get worn.
-              Pick a Culture Pack, pay online, and we'll wrap it and deliver it —
+              Generic gifts get forgotten. Real gifts get worn.
+              Pick a Kit, pay online, and we'll wrap it and deliver it —
               with your personal message inside.
             </p>
           </div>
@@ -176,9 +176,9 @@ const GiftPacks = () => {
         <div className="container py-6">
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
             {[
-              { icon: Package, title: "Pick a Pack", desc: "Choose from our curated Culture Packs" },
+              { icon: Package, title: "Pick a Pack", desc: "Choose from our curated Kits" },
               { icon: CreditCard, title: "Pay Online", desc: "Secure payment via PayChangu" },
-              { icon: Heart, title: "We Wrap It", desc: "Premium gift presentation" },
+              { icon: Heart, title: "We Wrap It", desc: "Gift ready presentation" },
               { icon: Sparkles, title: "We Deliver", desc: "Recipient gets a tracking link" },
             ].map((item) => (
               <div key={item.title} className="flex items-start gap-3 p-4 bg-gray-100">
@@ -202,9 +202,9 @@ const GiftPacks = () => {
       <section className="bg-white container py-16 sm:py-20 lg:py-24">
         <div className="text-center mb-10 sm:mb-12">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Curated for Them</p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Culture Packs</h2>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Kits</h2>
           <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
-            Each pack is a complete culture experience — styled, coordinated, and ready to gift.
+            Each pack is a complete look — styled, coordinated, and ready to gift.
           </p>
         </div>
 
@@ -423,7 +423,7 @@ const GiftPacks = () => {
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-2">Want Something Custom?</p>
           <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900">Schedule a Single Gift</h2>
           <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
-            Gift a specific Culture Piece with a scheduled delivery date.
+            Gift a specific Streetwear Piece with a scheduled delivery date.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
             <Button asChild className="bg-white text-gray-900 hover:bg-white/90 rounded-full px-8 py-3 font-semibold">

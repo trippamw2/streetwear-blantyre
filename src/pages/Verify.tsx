@@ -360,7 +360,7 @@ const Verify = () => {
               <button
                 onClick={handleRegister}
                 disabled={!ownerName.trim() || registering}
-                className="w-full py-3 bg-gray-100 text-gray-900 rounded-xl font-medium text-sm hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-primary text-white rounded-xl font-medium text-sm hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
               >
                 {registering ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

@@ -50,7 +50,7 @@ const KitDetail = () => {
   const handleAdd = () => {
     setAdding(true);
     add(
-      { productKey: kit.id, name: kit.name, price: kitPrice, image: kit.image },
+      { productKey: kit.id, productId: kit.id, name: kit.name, price: kitPrice, image: kit.image },
       1,
     );
     setTimeout(() => setAdding(false), 1200);
@@ -162,7 +162,7 @@ const KitDetail = () => {
                   <Truck className="h-4 w-4 text-gray-500 shrink-0" /> Free delivery over MK 50,000
                 </div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-gray-500 shrink-0" /> 30 day guarantee
+                  <ShieldCheck className="h-4 w-4 text-gray-500 shrink-0" /> 30 day quality cover
                 </div>
               </div>
             </div>
@@ -177,11 +177,11 @@ const KitDetail = () => {
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
-                  <span>Every component tested and matched for your phone</span>
+                  <span>Every piece chosen to work together</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Star className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
-                  <span>2,500+ happy customers across Malawi</span>
+                  <span>Quality checked before dispatch</span>
                 </li>
               </ul>
             </div>

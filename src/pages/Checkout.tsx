@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
@@ -44,7 +44,7 @@ const Checkout = () => {
   // Fetch inventory for cart items
   useEffect(() => {
     if (items.length === 0) return;
-    const productIds = [...new Set(items.map(i => i.productKey.split("-")[0]))];
+    const productIds = [...new Set(items.map(i => i.productId || i.productKey.split("-")[0]))];
     supabase.from("inventory").select("product_id, quantity").in("product_id", productIds)
       .then(({ data }) => {
         const map = new Map<string, number>();
@@ -131,7 +131,7 @@ const Checkout = () => {
       toast({ title: "Please fill all fields", variant: "destructive" });
       return;
     }
-    if (items.length === 0) { toast({ title: "Experience is empty", variant: "destructive" }); return; }
+    if (items.length === 0) { toast({ title: "Your cart is empty", variant: "destructive" }); return; }
 
     // Validate phone number
     const cleanPhone = formData.phone.replace(/[^0-9]/g, "");
@@ -143,14 +143,16 @@ const Checkout = () => {
     setSubmitting(true);
     try {
       // Verify stock availability
-      const productIds = items.map(i => i.productKey.split("-")[0]);
+      const productIds = items.map(i => i.productId || i.productKey.split("-")[0]);
       const { data: inventory } = await supabase.from("inventory").select("product_id, quantity").in("product_id", productIds);
-      const inventoryMap = new Map(inventory?.map(i => [i.product_id, i.quantity]) || []);
+      const inventoryMap = new Map<string, number>(
+        (inventory || []).map((i) => [i.product_id, Number(i.quantity) || 0]),
+      );
       
       for (const item of items) {
-        const pid = item.productKey.split("-")[0];
-        const available = inventoryMap.get(pid) ?? 10;
-        if (item.quantity > available) {
+        const pid = item.productId || item.productKey.split("-")[0];
+        const available = inventoryMap.get(pid);
+        if (available !== undefined && item.quantity > available) {
           toast({ title: "Stock issue", description: `${item.name} only has ${available} in stock`, variant: "destructive" });
           setSubmitting(false);
           return;
@@ -185,7 +187,7 @@ const Checkout = () => {
           total,
           location: formData.location,
           deliveryMethod: selectedDelivery?.label || "Standard",
-          eta: selectedDelivery?.eta,
+          eta: selectedDelivery?.estimatedDays,
           type: "confirmation" as const,
         };
         await sendOrderConfirmationEmail(emailParams);
@@ -252,12 +254,12 @@ const Checkout = () => {
   if (items.length === 0) {
     return (
       <div className="container py-12 text-center">
-        <CreditCard className="h-12 w-12 mx-auto text-gray-600 mb-4" />
-        <h2 className="text-xl font-bold mb-2">Your experience is empty</h2>
-        <p className="text-gray-500 mb-6">Grab a culture pack. Better value, one box, delivered.</p>
+        <CreditCard className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+        <h2 className="font-display text-xl font-bold mb-2 text-gray-900">Your cart is empty</h2>
+        <p className="text-gray-500 mb-6">Add a piece to your cart before checking out.</p>
         <div className="flex gap-3 justify-center">
-          <Button asChild><Link to="/combos">View Culture Packs</Link></Button>
-          <Button asChild variant="outline"><Link to="/shop">Browse Shop All</Link></Button>
+          <Button asChild><Link to="/shop">Shop the Collection</Link></Button>
+          <Button asChild variant="outline"><Link to="/combos">View Kits</Link></Button>
         </div>
       </div>
     );
@@ -270,7 +272,7 @@ const Checkout = () => {
         <ArrowLeft className="h-4 w-4" /> Back to shop
       </Link>
 
-      <h1 className="font-display font-bold text-2xl sm:text-3xl mb-6">Complete Your Experience</h1>
+      <h1 className="font-display font-bold text-2xl sm:text-3xl mb-6 text-gray-900">Checkout</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Contact Info */}
@@ -349,7 +351,7 @@ const Checkout = () => {
             <ul className="text-xs text-gray-500 space-y-1.5">
               <li>After placing your order, you will be redirected to PayChangu.</li>
               <li>Pay with Airtel Money, TNM Mpamba, Visa or Mastercard.</li>
-              <li>You will be returned to your experience page once payment is complete.</li>
+              <li>You will return to your order page once payment is complete.</li>
             </ul>
           </div>
         </div>
@@ -379,7 +381,7 @@ const Checkout = () => {
               </button>
             </div>
             {loyaltyDiscount > 0 && (
-              <p className="text-xs text-green-600 mt-2">âœ“ -{formatMWK(loyaltyDiscount)} discount applied!</p>
+              <p className="text-xs text-green-600 mt-2">-{formatMWK(loyaltyDiscount)} discount applied</p>
             )}
           </div>
         )}
@@ -399,11 +401,11 @@ const Checkout = () => {
         </div>
 
         {/* Order Summary */}
-        <div className="bg-gray-100 text-gray-900 rounded-xl p-4 sm:p-5 space-y-3">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 space-y-3">
           <h2 className="font-semibold">Order Summary</h2>
-          <div className="space-y-1.5 text-xs divide-y divide-white/10">
+          <div className="space-y-1.5 text-xs divide-y divide-gray-200">
             {items.map((item, idx) => {
-              const pid = item.productKey.split("-")[0];
+              const pid = item.productId || item.productKey.split("-")[0];
               const stock = stockMap.get(pid);
               const lowStock = stock !== undefined && stock <= 5;
               return (
@@ -419,19 +421,19 @@ const Checkout = () => {
               );
             })}
           </div>
-          <div className="space-y-1.5 text-sm pt-2 border-t border-white/20">
+          <div className="space-y-1.5 text-sm pt-2 border-t border-gray-200">
             <div className="flex justify-between text-gray-600">
               <span>Subtotal</span>
               <span>{formatMWK(subtotal)}</span>
             </div>
             {promoDiscount > 0 && (
-              <div className="flex justify-between text-green-400">
+              <div className="flex justify-between text-green-600">
                 <span>Promo ({promoApplied?.code})</span>
                 <span>-{formatMWK(promoDiscount)}</span>
               </div>
             )}
             {loyaltyDiscount > 0 && (
-              <div className="flex justify-between text-green-400">
+              <div className="flex justify-between text-green-600">
                 <span>Rewards Points</span>
                 <span>-{formatMWK(loyaltyDiscount)}</span>
               </div>
@@ -451,21 +453,26 @@ const Checkout = () => {
               </span>
               <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
             </div>
-            <div className="border-t border-white/20 pt-2 flex justify-between font-bold text-lg">
+            <div className="border-t border-gray-200 pt-2 flex justify-between font-bold text-lg">
               <span>Total</span>
               <span>{formatMWK(total)}</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center text-xs sm:text-sm text-green-700">
-          30 day guarantee. Not happy? Send it back, no questions asked.
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-center text-xs sm:text-sm text-gray-600">
+          30 day quality cover on faults. See our{" "}
+          <Link to="/warranty" className="font-semibold text-primary hover:underline">
+            Quality Cover
+          </Link>{" "}
+          page.
         </div>
 
         <Button 
           type="submit" 
           disabled={submitting}
-          className="w-full py-3 text-lg bg-gray-100 hover:bg-gray-800"
+          variant="hero"
+          className="w-full py-3 text-base"
         >
           {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : (
             <> Pay Now <Zap className="h-5 w-5 ml-2" /></>

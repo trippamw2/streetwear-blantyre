@@ -1,57 +1,91 @@
-import { Link } from "react-router-dom";
-import { SEO, defaultSEO } from "@/components/SEO";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Shield, Lock, Eye, Mail } from "lucide-react";
+import { PolicyLayout, PolicySection, PolicyList } from "./PolicyLayout";
 
-const Privacy = () => {
-  return (
-    <div className="container py-10 sm:py-14 max-w-3xl">
-      <SEO {...defaultSEO.privacy} />
-      <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
-        <ArrowLeft className="h-4 w-4" /> Back to home
-      </Link>
+const Privacy = () => (
+  <PolicyLayout
+    seo="privacy"
+    eyebrow="Your Data"
+    title="Privacy Policy"
+    intro="This policy explains what information SB Streetwear collects, why we collect it and how we look after it."
+  >
+    <PolicySection title="Information we collect">
+      <PolicyList
+        items={[
+          "Contact details you give us, such as your name, phone number and email address.",
+          "Delivery details, including your delivery area and any delivery notes.",
+          "Order details, including the items you buy, sizes and order history.",
+          "Messages you send us on WhatsApp or through the contact form.",
+          "Basic technical information, such as browser type and pages visited, used to keep the site working.",
+        ]}
+      />
+      <p>
+        We do not collect or store full card numbers. Payments are handled by our payment partners.
+      </p>
+    </PolicySection>
 
-      <h1 className="font-display font-bold text-3xl sm:text-4xl mb-6">Privacy Policy</h1>
-      
-      <div className="prose prose-gray max-w-none space-y-6">
-        <p className="text-muted-foreground">Last updated: April 2026</p>
+    <PolicySection title="How we use your information">
+      <PolicyList
+        items={[
+          "To process and deliver your order.",
+          "To contact you about your order, delivery or a return.",
+          "To answer questions about sizing, stock and availability.",
+          "To send offers and new arrival updates, only if you have opted in.",
+          "To keep records for accounting and to prevent fraud.",
+        ]}
+      />
+    </PolicySection>
 
-        <section className="space-y-4">
-          <h2 className="font-semibold text-xl flex items-center gap-2">
-            <Shield className="h-5 w-5 text-teal-600" /> Information We Collect
-          </h2>
-          <p className="text-gray-600">We collect information you provide directly to us, including name, phone number, location, and payment information when placing orders.</p>
-        </section>
+    <PolicySection title="Sharing your information">
+      <p>
+        We share only what is needed to complete your order. This can include delivery partners,
+        payment providers and the service providers that run our website and messaging.
+      </p>
+      <p>
+        We do not sell your personal information. We do not share it with advertisers for their own
+        marketing.
+      </p>
+    </PolicySection>
 
-        <section className="space-y-4">
-          <h2 className="font-semibold text-xl flex items-center gap-2">
-            <Eye className="h-5 w-5 text-teal-600" /> How We Use Your Information
-          </h2>
-          <p className="text-gray-600">We use your information to process orders, deliver products, communicate with you about orders, and improve our services.</p>
-        </section>
+    <PolicySection title="Keeping your information safe">
+      <p>
+        We use reputable service providers with controlled access to store order and customer data.
+        Access is limited to people who need it to run the store.
+      </p>
+      <p>
+        No online system is completely risk free. If you believe your information has been
+        compromised, contact us immediately so we can investigate.
+      </p>
+    </PolicySection>
 
-        <section className="space-y-4">
-          <h2 className="font-semibold text-xl flex items-center gap-2">
-            <Lock className="h-5 w-5 text-teal-600" /> Data Security
-          </h2>
-          <p className="text-gray-600">We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, or disclosure.</p>
-        </section>
+    <PolicySection title="How long we keep information">
+      <p>
+        Order records are kept for as long as needed for accounting, warranty and legal purposes.
+        Marketing contact details are kept until you unsubscribe or ask us to remove them.
+      </p>
+    </PolicySection>
 
-        <section className="space-y-4">
-          <h2 className="font-semibold text-xl flex items-center gap-2">
-            <Mail className="h-5 w-5 text-teal-600" /> Contact Us
-          </h2>
-          <p className="text-gray-600">For questions about this privacy policy, please contact us via WhatsApp or email.</p>
-        </section>
-      </div>
+    <PolicySection title="Your choices">
+      <PolicyList
+        items={[
+          "You can ask to see the personal information we hold about you.",
+          "You can ask us to correct information that is wrong.",
+          "You can ask us to delete information we no longer need to keep.",
+          "You can unsubscribe from marketing messages at any time.",
+        ]}
+      />
+      <p>
+        Send requests through our contact page or WhatsApp. We may need to confirm your identity
+        before acting on a request.
+      </p>
+    </PolicySection>
 
-      <div className="mt-10 pt-6 border-t">
-        <Button asChild variant="outline">
-          <Link to="/contact">Contact Us</Link>
-        </Button>
-      </div>
-    </div>
-  );
-};
+    <PolicySection title="Cookies">
+      <p>
+        We use essential cookies and local storage to keep your cart, wishlist and session working.
+        Analytics, where used, help us understand which pages are useful so we can improve the store.
+        You can clear cookies in your browser settings, though some features may stop working.
+      </p>
+    </PolicySection>
+  </PolicyLayout>
+);
 
 export default Privacy;

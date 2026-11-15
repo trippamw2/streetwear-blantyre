@@ -60,71 +60,82 @@ export const SEO = ({
 
 export const defaultSEO = {
   home: {
-    title: "Streetwear Blantyre — Premium African Streetwear",
+    title: "Streetwear Blantyre — Wear Your Identity",
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop All — Premium African Streetwear",
-    description: "Discover culture pieces — t-shirts, hoodies, caps, bracelets, earbuds, and stickers. Every piece tells a story. Fast delivery across Malawi.",
+    title: "Shop All — T Shirts, Jerseys & Short Sleeve Shirts",
+    description:
+      "Shop T shirts, football jerseys and short sleeve shirts from SB Streetwear. Everyday pieces for the street, the pitch and everything in between. Delivery across Malawi.",
   },
   combos: {
-    title: "Culture Packs — Curated Streetwear Bundles",
-    description: "Curated culture packs for every lifestyle. T-shirt + cap + bracelet in one box. Better together. Free delivery over MK 50,000.",
+    title: "Kits & Bundles — Streetwear Blantyre",
+    description:
+      "Curated streetwear kits that put a full look together. Better value, one delivery. Free delivery over MK 50,000.",
   },
   about: {
-    title: "Our Story — Built in Blantyre, Loved Across Africa",
-    description: "Streetwear Blantyre celebrates people who create culture instead of chasing it. Premium African streetwear from Malawi.",
+    title: "Our Story — Inspired by Blantyre",
+    description:
+      "SB Streetwear brings together T shirts, football jerseys and short sleeve shirts for everyday life in Blantyre, Malawi. Wear Your Identity.",
   },
   contact: {
-    title: "Connect — Streetwear Blantyre Community",
-    description: "Reach us on WhatsApp, phone, or email. We're here to listen to your story. Fast replies, fast delivery across Malawi.",
+    title: "Contact — SB Streetwear",
+    description:
+      "Reach SB Streetwear on WhatsApp for orders, sizing and availability. Delivery across Malawi and store pickup in Blantyre.",
   },
   auth: {
-    title: "Sign In — Join the Streetwear Blantyre Community",
-    description: "Sign in to checkout, track orders, and join our community of creators, builders, and dreamers.",
+    title: "Sign In — SB Streetwear",
+    description: "Sign in to check out faster, track your orders and save your favourite pieces.",
   },
   checkout: {
-    title: "Complete Your Experience — Streetwear Blantyre",
-    description: "Complete your experience. Secure checkout with Airtel Money, TNM Mpamba, and bank transfer.",
+    title: "Checkout — SB Streetwear",
+    description:
+      "Complete your order securely with Airtel Money, TNM Mpamba, and bank transfer. Delivery across Malawi.",
   },
   orders: {
-    title: "My Orders — Streetwear Blantyre",
-    description: "Track your Streetwear Blantyre orders and deliveries.",
+    title: "My Orders — SB Streetwear",
+    description: "Track your SB Streetwear orders and deliveries.",
   },
   rewards: {
-    title: "Rewards — Earn Points & Join Our Community",
-    description: "Earn points on every purchase. Redeem for discounts. Refer friends and grow our community together.",
+    title: "Rewards — Earn Points with SB Streetwear",
+    description:
+      "Earn points on every purchase, redeem them for discounts and refer friends to SB Streetwear.",
   },
   compare: {
-    title: "Compare Shop All — Streetwear Blantyre",
-    description: "Compare culture pieces side by side. Find the pieces that express your story.",
+    title: "Compare Pieces — SB Streetwear",
+    description: "Compare SB Streetwear pieces side by side and find the fit that feels like you.",
   },
   faq: {
-    title: "FAQ — Streetwear Blantyre",
-    description: "Frequently asked questions about ordering, delivery, warranty, and returns.",
+    title: "FAQ — SB Streetwear",
+    description:
+      "Answers about ordering, delivery, sizing, payments, returns and quality cover at SB Streetwear.",
   },
   terms: {
-    title: "Terms & Conditions — Streetwear Blantyre",
-    description: "Terms and conditions for Streetwear Blantyre.",
+    title: "Terms & Conditions — SB Streetwear",
+    description: "The terms and conditions that apply when you shop with SB Streetwear.",
   },
   privacy: {
-    title: "Privacy Policy — Streetwear Blantyre",
-    description: "How Streetwear Blantyre collects, uses, and protects your personal information.",
+    title: "Privacy Policy — SB Streetwear",
+    description: "How SB Streetwear collects, uses and protects your personal information.",
   },
   returns: {
-    title: "Returns & Refunds — Streetwear Blantyre",
-    description: "30 day return policy. Not happy? Send it back. No questions asked.",
+    title: "Returns & Exchanges — SB Streetwear",
+    description:
+      "Our clothing returns and size exchange policy. Unworn items with tags can be returned within 14 days.",
   },
   warranty: {
-    title: "Warranty — Streetwear Blantyre",
-    description: "30 day quality guarantee on all items. We replace defective products.",
+    title: "Quality Cover — SB Streetwear",
+    description:
+      "Our 30 day quality cover on clothing faults. We repair, replace or refund faulty items.",
   },
   giftPacks: {
-    title: "Gift Packs — Send the Culture",
-    description: "Gift a curated Culture Pack. Premium wrapping, personal message, delivered in Blantyre. The perfect gift for any occasion.",
+    title: "Gift Packs — SB Streetwear",
+    description:
+      "Gift a curated SB Streetwear pack with a personal message and delivery in Blantyre.",
   },
   scheduledGift: {
-    title: "Schedule a Gift — Streetwear Blantyre",
-    description: "Gift a Culture Piece for any occasion. Add a personal message and choose the delivery date. Premium wrapping included.",
+    title: "Schedule a Gift — SB Streetwear",
+    description:
+      "Send an SB Streetwear piece for any occasion. Add a personal message and choose the delivery date.",
   },
 };

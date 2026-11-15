@@ -1,6 +1,6 @@
 // Streetwear Blantyre AI WhatsApp Message Templates
 
-interface OrderDetails {
+export interface OrderDetails {
   orderId: string;
   customerName: string;
   items: Array<{ name: string; quantity: number; price: number }>;
@@ -11,7 +11,7 @@ interface OrderDetails {
   eta?: string;
 }
 
-interface StatusUpdate {
+export interface StatusUpdate {
   orderId: string;
   customerName: string;
   customerPhone?: string;

@@ -1,4 +1,4 @@
-﻿export type Category = string;
+export type Category = string;
 
 export interface ProductType {
   id: string;
@@ -26,12 +26,30 @@ export interface Product {
   rating?: number;
   culture_pillar?: string;
   culture_pillar_color?: string;
+  culture_story?: string;
+  culture_context?: string;
 }
 
 export const BRANDS = [
-  { id: "sb-original", name: "SB Original", color: "#2563eb" },
+  { id: "sb-original", name: "SB Original", color: "#102C54" },
   { id: "sb-street", name: "SB Street", color: "#1a1a1a" },
 ] as const;
+
+const titleCase = (value: string) =>
+  value
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+    .trim();
+
+export const getBrandName = (id?: string | null): string => {
+  if (!id) return "SB Streetwear";
+  return BRANDS.find((brand) => brand.id === id)?.name || titleCase(id);
+};
+
+export const getCategoryLabel = (id?: string | null): string => {
+  if (!id) return "";
+  return categories.find((category) => category.id === id)?.label || titleCase(id);
+};
 
 // ─── Culture Pillars ────────────────────────────────────────────────
 
@@ -44,10 +62,11 @@ export interface CulturePillar {
 }
 
 export const culturePillars: CulturePillar[] = [
-  { id: "street", label: "Street Culture", description: "Proud of where you come from. Your neighborhood, your city, your story.", icon: "MapPin", color: "#6366f1" },
-  { id: "music", label: "Music Culture", description: "Feel the rhythm of Malawi in every stitch. Beats, lyrics, style.", icon: "Music", color: "#8B5CF6" },
-  { id: "hustle", label: "Hustle Culture", description: "Build what matters. Wear what you earned. Discipline, vision, legacy.", icon: "Zap", color: "#F59E0B" },
-  { id: "faith", label: "Faith Culture", description: "Faithfully crafted. Walk by purpose, not by sight.", icon: "Heart", color: "#10B981" },
+  { id: "street", label: "Street Culture", description: "Proud of where you come from. Your neighbourhood, your city, your story.", icon: "MapPin", color: "#102C54" },
+  { id: "music", label: "Music & Entertainment", description: "Feel the rhythm of the city in every stitch. Beats, lyrics, style.", icon: "Music", color: "#7C3AED" },
+  { id: "sports", label: "Football & Sport", description: "Match day energy, discipline and the love of the game.", icon: "Trophy", color: "#0F766E" },
+  { id: "hustle", label: "Everyday Hustle", description: "Build what matters. Wear what you earned. Discipline, vision, legacy.", icon: "Zap", color: "#B45309" },
+  { id: "faith", label: "Faith Culture", description: "Walk by purpose, not by sight. Quiet confidence in every step.", icon: "Heart", color: "#059669" },
 ];
 
 // ─── Wearable Categories ────────────────────────────────────────────
@@ -63,22 +82,7 @@ export const categories: { id: Category; label: string }[] = [
 
 const PLACEHOLDER = "https://placehold.co/600x600/1a1a1a/ffffff?text=Streetwear+Blantyre";
 
-export const products: Product[] = [
-  // ── T-SHIRTS ──
-  { id: "sb-tee-001", name: "SB Classic Logo Tee", benefit: "100% cotton. Oversized fit. Iconic SB branding across the chest.", price: 12000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "black", name: "Black" }, { id: "white", name: "White" }], stock: 20, is_featured: true, is_best_seller: true, culture_pillar: "hustle" },
-  { id: "sb-tee-002", name: "SB Street Graphic Tee", benefit: "Premium cotton blend. Street art print. Relaxed fit.", price: 15000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "olive", name: "Olive" }], stock: 15, is_featured: true, culture_pillar: "music" },
-  { id: "sb-tee-003", name: "SB Minimalist Tee", benefit: "Clean design. Soft-touch cotton. Embroidered logo.", price: 14000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "navy", name: "Navy" }, { id: "grey", name: "Grey" }], stock: 12, culture_pillar: "faith" },
-  { id: "sb-tee-004", name: "SB Malawi Pride Tee", benefit: "Celebrate the culture. Cotton. Regular fit.", price: 13000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "green", name: "Green" }, { id: "red", name: "Red" }], stock: 18, is_featured: true, culture_pillar: "sports" },
-  { id: "sb-tee-005", name: "SB Tie-Dye Tee", benefit: "Hand-dyed. One-of-a-kind pattern. 100% cotton.", price: 16000, category: "t-shirts", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "multi", name: "Multi" }], stock: 8, culture_pillar: "music" },
-
-  // ── JERSEYS ──
-  { id: "sb-jersey-001", name: "SB Classic Jersey", benefit: "Breathable mesh. Athletic cut. Embroidered SB crest.", price: 25000, category: "jerseys", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "home", name: "Home" }, { id: "away", name: "Away" }], stock: 15, is_featured: true, is_best_seller: true, culture_pillar: "sports" },
-  { id: "sb-jersey-002", name: "SB Street Jersey", benefit: "Lightweight fabric. Relaxed fit. Bold graphic print.", price: 28000, category: "jerseys", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "black", name: "Black" }, { id: "white", name: "White" }], stock: 12, is_featured: true, culture_pillar: "music" },
-
-  // ── SHORT SLEEVE SHIRTS ──
-  { id: "sb-ss-001", name: "SB Short Sleeve Shirt", benefit: "Button-up. Breathable cotton. Relaxed collar.", price: 22000, category: "short-sleeve-shirts", image: PLACEHOLDER, brand: "sb-original", types: [{ id: "white", name: "White" }, { id: "blue", name: "Blue" }], stock: 18, is_featured: true, culture_pillar: "hustle" },
-  { id: "sb-ss-002", name: "SB Patterned Short Sleeve", benefit: "All-over print. Soft touch. Chest pocket.", price: 24000, category: "short-sleeve-shirts", image: PLACEHOLDER, brand: "sb-street", types: [{ id: "pattern", name: "Pattern" }], stock: 10, culture_pillar: "music" },
-];
+export const products: Product[] = [];
 
 // ─── Kits / Combos ──────────────────────────────────────────────────
 
@@ -97,64 +101,7 @@ export interface Kit {
   stock?: number;
 }
 
-export const kits: Kit[] = [
-  {
-    id: "k1",
-    name: "Campus Starter Kit",
-    hook: "Tee, cap, stickers. Ready for class.",
-    lifestyle: "student",
-    tagline: "The everyday essentials. Clean and fresh.",
-    description: "Classic logo tee, snapback cap, and logo stickers. Everything you need to look right on campus. Affordable, versatile, and always in style.",
-    discountPercent: 15,
-    productIds: ["sb-tee-001", "sb-cap-001", "sb-stk-001"],
-    image: PLACEHOLDER,
-    vibe: "Look fresh. Spend less.",
-    badge: "Best for Students",
-    stock: 15,
-  },
-  {
-    id: "k2",
-    name: "Studio Sessions Kit",
-    hook: "Hoodie, earbuds, bracelet. Create in comfort.",
-    lifestyle: "work",
-    tagline: "Music meets style. Studio ready.",
-    description: "Oversized hoodie, wireless earbuds, and woven band. Built for creators who live for the beat. Comfort and sound in one bundle.",
-    discountPercent: 15,
-    productIds: ["sb-hood-003", "sb-ear-001", "sb-brac-001"],
-    image: PLACEHOLDER,
-    vibe: "Create. Repeat. Drip.",
-    badge: "Most Popular",
-    stock: 10,
-  },
-  {
-    id: "k3",
-    name: "Match Day Kit",
-    hook: "Cap, socks, bracelet. Rep the team.",
-    lifestyle: "travel",
-    tagline: "Game day ready. Head to toe.",
-    description: "Dad hat, athletic socks, and sports band. Show up for your team looking fresh. Light, comfortable, and ready for anything.",
-    discountPercent: 15,
-    productIds: ["sb-cap-002", "sb-sock-002", "sb-brac-004"],
-    image: PLACEHOLDER,
-    vibe: "Rep your team. Rep your city.",
-    badge: "Best Value",
-    stock: 8,
-  },
-  {
-    id: "k4",
-    name: "Full Culture Kit",
-    hook: "Hoodie, hut cap, earbuds, socks. The whole look.",
-    lifestyle: "premium",
-    tagline: "The full culture upgrade. No compromises.",
-    description: "Street oversized hoodie, knit beanie, bass pro earbuds, and crew socks. The complete Streetwear Blantyre experience. Premium pieces, bundle price.",
-    discountPercent: 15,
-    productIds: ["sb-hood-003", "sb-hut-001", "sb-ear-003", "sb-sock-001"],
-    image: PLACEHOLDER,
-    vibe: "The full culture upgrade.",
-    badge: "Premium",
-    stock: 5,
-  },
-];
+export const kits: Kit[] = [];
 
 export const combos: Kit[] = kits;
 

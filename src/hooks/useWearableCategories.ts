@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { categories as coreCategories } from "@/data/products";
 
 export interface WearableCategory {
   id: string;
@@ -11,8 +12,20 @@ export interface WearableCategory {
   is_active: boolean;
 }
 
+const FALLBACK_CATEGORIES: WearableCategory[] = coreCategories
+  .filter((c) => c.id !== "all")
+  .map((c, index) => ({
+    id: c.id,
+    name: c.label,
+    slug: c.id,
+    description: null,
+    icon: null,
+    sort_order: index,
+    is_active: true,
+  }));
+
 export function useWearableCategories() {
-  const [categories, setCategories] = useState<WearableCategory[]>([]);
+  const [categories, setCategories] = useState<WearableCategory[]>(FALLBACK_CATEGORIES);
   const [loading, setLoading] = useState(true);
 
   const fetchCategories = useCallback(async () => {
@@ -26,13 +39,13 @@ export function useWearableCategories() {
 
       if (error) {
         console.error("Wearable categories fetch error:", error);
-        setCategories([]);
         return;
       }
-      setCategories((data || []) as WearableCategory[]);
+      if (data && data.length > 0) {
+        setCategories(data as WearableCategory[]);
+      }
     } catch (err) {
       console.error("Wearable categories fetch error:", err);
-      setCategories([]);
     } finally {
       setLoading(false);
     }

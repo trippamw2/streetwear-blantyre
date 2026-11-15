@@ -16,7 +16,7 @@ describe("SEO", () => {
 
   it("accepts canonical URL", () => {
     const { container } = renderWithHelmet(
-      <SEO title="Test" description="Test" canonical="https://example.com/page" />
+      <SEO title="Test" description="Test" path="/test" />
     );
     expect(container).toBeTruthy();
   });

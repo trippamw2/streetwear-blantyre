@@ -5,25 +5,29 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full text-xs sm:text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 sm:[&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-[0.08em] ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 sm:[&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-border bg-transparent hover:bg-secondary hover:text-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-secondary hover:text-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-gradient-to-br from-gray-900 to-gray-800 text-gray-900 shadow-button hover:shadow-glow font-bold",
-        whatsapp: "bg-[hsl(142_70%_45%)] text-gray-900 hover:bg-[hsl(142_70%_40%)] shadow-button font-bold",
-        outlineGlow: "border border-border bg-card/40 backdrop-blur hover:border-primary hover:bg-card text-foreground",
+        outline:
+          "border border-gray-300 bg-transparent text-foreground hover:border-primary hover:bg-gray-50 hover:text-primary",
+        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
+        ghost: "text-foreground hover:bg-gray-100",
+        link: "text-primary normal-case tracking-normal underline-offset-4 hover:underline",
+        hero:
+          "bg-primary text-primary-foreground shadow-md shadow-primary/15 hover:bg-[#0b1f3d] hover:shadow-lg",
+        whatsapp:
+          "bg-[#1faa53] text-white shadow-md shadow-[#1faa53]/20 hover:bg-[#178f45]",
+        outlineGlow:
+          "border border-gray-200 bg-white text-foreground hover:border-primary hover:text-primary",
       },
       size: {
-        default: "h-10 sm:h-11 px-4 sm:px-6 py-2 text-sm",
-        sm: "h-8 sm:h-9 px-3 sm:px-4 text-xs",
-        lg: "h-12 sm:h-14 px-6 sm:px-9 text-base",
-        xl: "h-14 sm:h-16 px-8 sm:px-10 text-lg",
+        default: "h-10 sm:h-11 px-4 sm:px-6 py-2 text-xs",
+        sm: "h-9 px-4 text-[11px]",
+        lg: "h-12 sm:h-14 px-6 sm:px-9 text-xs sm:text-sm",
+        xl: "h-14 sm:h-16 px-8 sm:px-10 text-sm sm:text-base",
         icon: "h-10 w-10 sm:h-11 sm:w-11",
       },
     },

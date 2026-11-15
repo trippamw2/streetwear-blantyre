@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -263,6 +263,7 @@ const AdminProducts = () => {
       images: [""],
       is_featured: false,
       is_best_seller: false,
+      is_new_arrival: false,
       is_on_sale: false,
       discount_percent: 0,
       brand: "generic",
@@ -383,7 +384,7 @@ const AdminProducts = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-100 hover:bg-gray-800">
+            <Button className="">
               <Plus className="h-4 w-4" /> Add Product
             </Button>
           </DialogTrigger>
@@ -660,7 +661,7 @@ const AdminProducts = () => {
               
               <Button 
                 onClick={handleSave} 
-                className="w-full bg-gray-100 hover:bg-gray-800"
+                className="w-full "
                 disabled={saving || !formData.name}
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}

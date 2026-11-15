@@ -13,11 +13,11 @@ const lifestyleConfig: Record<
   Kit["lifestyle"],
   { icon: typeof BookOpen; label: string; color: string }
 > = {
-  student: { icon: BookOpen, label: "Student", color: "from-gray-800 to-gray-900" },
-  work:    { icon: Briefcase, label: "Work",    color: "from-purple-500 to-indigo-500" },
-  travel:  { icon: Luggage,  label: "Travel",   color: "from-green-500 to-teal-500" },
+  student: { icon: BookOpen, label: "Student", color: "from-primary to-primary/80" },
+  work:    { icon: Briefcase, label: "Work",    color: "from-primary to-primary/70" },
+  travel:  { icon: Luggage,  label: "Travel",   color: "from-gray-800 to-gray-900" },
   casual:   { icon: Headphones, label: "Casual",  color: "from-gray-700 to-gray-900" },
-  premium: { icon: Zap,      label: "Premium",  color: "from-gray-900 to-black" },
+  premium: { icon: Zap,      label: "Signature",  color: "from-gray-900 to-black" },
 };
 
 interface KitCardProps {
@@ -75,7 +75,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
           {/* lifestyle tag */}
           <div className="flex items-center gap-2 mb-2.5">
             <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${cfg.color} flex items-center justify-center`}>
-              <Icon className="h-3 w-3 text-gray-900" />
+              <Icon className="h-3 w-3 text-white" />
             </div>
             <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
               {cfg.label}
@@ -93,7 +93,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
           <div className="mt-3 space-y-1.5">
             <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Includes</p>
             <div className="space-y-1">
-              {products.slice(0, compact ? 2 : 4).map((p) => (
+              {kitProducts.slice(0, compact ? 2 : 4).map((p) => (
                 <div key={p.id} className="flex items-center gap-2 text-[11px]">
                   <img
                     src={p.image}
@@ -108,8 +108,8 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
                   )}
                 </div>
               ))}
-              {products.length > (compact ? 2 : 4) && (
-                <span className="text-[10px] text-gray-500 font-medium">+{products.length - (compact ? 2 : 4)} more</span>
+              {kitProducts.length > (compact ? 2 : 4) && (
+                <span className="text-[10px] text-gray-500 font-medium">+{kitProducts.length - (compact ? 2 : 4)} more</span>
               )}
             </div>
           </div>

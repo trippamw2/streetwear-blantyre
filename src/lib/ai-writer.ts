@@ -8,7 +8,7 @@ import { CONTENT_PROMPTS, type ContentKeyType } from "./ai-prompts";
 function fillPrompt(template: string, vars: Record<string, string>): string {
   let result = template;
   for (const [key, value] of Object.entries(vars)) {
-    result = result.replaceAll(`{${key}}`, value || "Not specified");
+    result = result.split(`{${key}}`).join(value || "Not specified");
   }
   return result;
 }

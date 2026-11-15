@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -219,7 +219,7 @@ const AdminPromotions = () => {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => { resetForm(); setEditingPromotion(null); }} className="bg-gray-100 hover:bg-gray-800">
+            <Button onClick={() => { resetForm(); setEditingPromotion(null); }} className="">
               <Plus className="h-4 w-4" /> Add Promotion
             </Button>
           </DialogTrigger>
@@ -411,7 +411,7 @@ const AdminPromotions = () => {
                 />
               </div>
 
-              <Button type="submit" className="w-full bg-gray-100 hover:bg-gray-800">
+              <Button type="submit" className="w-full ">
                 {editingPromotion ? "Update Promotion" : "Create Promotion"}
               </Button>
             </form>
@@ -424,7 +424,7 @@ const AdminPromotions = () => {
         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
           <ImageIcon className="h-12 w-12 mx-auto text-gray-600" />
           <p className="mt-4 text-gray-500">No promotions yet</p>
-          <Button onClick={() => setDialogOpen(true)} className="mt-4 bg-gray-100 hover:bg-gray-800">Create First Promotion</Button>
+          <Button onClick={() => setDialogOpen(true)} className="mt-4 ">Create First Promotion</Button>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

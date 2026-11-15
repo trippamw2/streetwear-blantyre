@@ -554,7 +554,7 @@ const AdminAuthentication = () => {
               </span>
             )}
           </Button>
-          <Button size="sm" className="bg-gray-100 hover:bg-gray-800" onClick={() => setCreateOpen(true)}>
+          <Button size="sm" className="" onClick={() => setCreateOpen(true)}>
             <Plus className="h-4 w-4 mr-1" /> Authenticate Product
           </Button>
         </div>
@@ -731,7 +731,7 @@ const AdminAuthentication = () => {
             <div><Label>Manufacturing Date</Label><Input type="date" value={form.manufacturing_date} onChange={(e) => setForm({ ...form, manufacturing_date: e.target.value })} className="mt-1" /></div>
             <div><Label>Product Story</Label><Textarea value={form.product_story} onChange={(e) => setForm({ ...form, product_story: e.target.value })} placeholder="Tell the story of this product..." rows={3} className="mt-1" /></div>
             <div><Label>Care Instructions</Label><Textarea value={form.care_instructions} onChange={(e) => setForm({ ...form, care_instructions: e.target.value })} placeholder="Machine wash cold. Do not bleach..." rows={2} className="mt-1" /></div>
-            <Button className="w-full bg-gray-100 hover:bg-gray-800" onClick={handleCreate} disabled={saving || !form.product_id}>
+            <Button className="w-full " onClick={handleCreate} disabled={saving || !form.product_id}>
               {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Shield className="h-4 w-4 mr-2" />}
               Authenticate Product
             </Button>
@@ -797,7 +797,7 @@ const AdminAuthentication = () => {
                 </div>
 
                 <Button
-                  className="w-full bg-gray-100 hover:bg-gray-800"
+                  className="w-full "
                   onClick={handleBulkGenerate}
                   disabled={bulkGenerating || selectedBulk.size === 0}
                 >
@@ -854,7 +854,7 @@ const AdminAuthentication = () => {
                   Copy URL
                 </Button>
                 <Button
-                  className="w-full bg-gray-100 hover:bg-gray-800"
+                  className="w-full "
                   onClick={() => handleDownloadQR(qrRecord)}
                   disabled={downloadingId === qrRecord.id}
                 >

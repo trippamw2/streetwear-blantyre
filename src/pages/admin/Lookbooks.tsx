@@ -211,7 +211,7 @@ const AdminLookbooks = () => {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) { setEditingLookbook(null); resetForm(); } }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-100 hover:bg-gray-800"><Plus className="h-4 w-4" /> New Lookbook</Button>
+            <Button className=""><Plus className="h-4 w-4" /> New Lookbook</Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
@@ -327,7 +327,7 @@ const AdminLookbooks = () => {
                   Featured on Homepage
                 </label>
               </div>
-              <Button onClick={handleSave} className="w-full bg-gray-100 hover:bg-gray-800" disabled={saving || !formData.title}>
+              <Button onClick={handleSave} className="w-full " disabled={saving || !formData.title}>
                 {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 {editingLookbook ? "Update Lookbook" : "Create Lookbook"}
               </Button>

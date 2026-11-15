@@ -24,7 +24,7 @@ export const PartnerBrands = ({ className }: { className?: string }) => {
     <section className={`py-12 bg-gray-50 ${className}`}>
       <div className="container">
         <div className="text-center mb-10">
-          <p className="text-sm font-semibold text-teal-600 uppercase tracking-widest">Our Collections</p>
+          <p className="text-sm font-semibold text-primary uppercase tracking-widest">Our Collections</p>
           <h2 className="font-display font-bold text-2xl sm:text-3xl mt-1">Streetwear Blantyre Collections</h2>
           <p className="text-muted-foreground mt-2">Premium streetwear fashion</p>
         </div>

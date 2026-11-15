@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Product, formatMWK } from "@/data/products";
+import { Product, formatMWK, getBrandName, getCategoryLabel } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { useCompare } from "@/contexts/CompareContext";
-import { ShoppingBag, Plus, Heart, Star, Check, Zap, GitCompare, Music, Dumbbell, Cross, Briefcase } from "lucide-react";
+import { useWishlist } from "@/hooks/useWishlist";
+import { Heart, Star, GitCompare, Plus, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "@/hooks/use-toast";
 
@@ -16,219 +17,231 @@ interface ProductCardProps {
 export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const { add } = useCart();
   const { addToCompare, isInCompare } = useCompare();
+  const { isWishlisted, toggle } = useWishlist(product.id);
   const [selectedType, setSelectedType] = useState(product.types?.[0]?.id || "");
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  
-  // Get sale/discount from product data (admin controlled)
+  const [justAdded, setJustAdded] = useState(false);
+
+  // Keep the selected size valid when product variants load or change.
+  useEffect(() => {
+    if (!product.types?.length) {
+      setSelectedType("");
+      return;
+    }
+    if (!product.types.some((type) => type.id === selectedType)) {
+      setSelectedType(product.types[0].id);
+    }
+  }, [product.types, selectedType]);
+
   const isOnSale = product.is_on_sale || false;
   const discountPercent = product.discount_percent || 0;
   const isBestSeller = product.is_best_seller || false;
+  const isNew = product.is_new_arrival || false;
   const isFeatured = product.is_featured || false;
   const rating = product.rating || 0;
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const typeName = product.types.find(t => t.id === selectedType)?.name || product.types[0]?.name || "";
-    const fullName = `${product.name} (${typeName})`;
+    const typeName = product.types.find((t) => t.id === selectedType)?.name || product.types[0]?.name || "";
+    const fullName = typeName ? `${product.name} (${typeName})` : product.name;
     const finalPrice = isOnSale && discountPercent > 0 ? product.price * (1 - discountPercent / 100) : product.price;
-    add({ productKey: `${product.id}-${selectedType}`, name: fullName, price: finalPrice, image: product.image });
-    toast({ title: "Added to your experience", description: fullName });
+    add({ productKey: `${product.id}-${selectedType}`, productId: product.id, name: fullName, price: finalPrice, image: product.image });
+    setJustAdded(true);
+    window.setTimeout(() => setJustAdded(false), 1600);
+    toast({ title: "Added to cart", description: fullName });
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
+    const saved = toggle(product.id);
     toast({
-      title: isWishlisted ? "Removed from wishlist" : "Added to wishlist",
+      title: saved ? "Saved to wishlist" : "Removed from wishlist",
+      description: product.name,
+    });
+  };
+
+  const handleCompare = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCompare(product);
+    toast({
+      title: isInCompare(product.id) ? "Already in compare" : "Added to compare",
       description: product.name,
     });
   };
 
   const visibleTypes = (product.types || []).slice(0, 3);
-  const hiddenTypes = (product.types || []).length > 3 ? (product.types || []).slice(3) : [];
+  const hiddenTypes = (product.types || []).length > 3 ? (product.types || []).length - 3 : 0;
   const displayPrice = isOnSale && discountPercent > 0 ? product.price * (1 - discountPercent / 100) : product.price;
-  const originalPrice = product.price;
-  const stockQty = product.stock ?? 10;
+  const stockQty = product.stock ?? 0;
   const isInStock = stockQty > 0;
 
-  const badgeConfig = {
-    new: { label: "NEW", bg: "bg-green-500", text: "text-gray-900" },
-    sale: { label: `-${discountPercent}%`, bg: "bg-red-500", text: "text-gray-900" },
-    best: { label: "MOST WORN", bg: "bg-gray-100", text: "text-gray-900" },
-    hot: { label: "HOT", bg: "bg-yellow-500", text: "text-gray-900" },
-  };
-  
-  // Determine badges based on admin flags
-  const displayBadges: string[] = [];
-  if (isOnSale && discountPercent > 0) displayBadges.push("sale");
-  if (isBestSeller) displayBadges.push("best");
-  if (isFeatured) displayBadges.push("hot");
+  const badges: { key: string; label: string; className: string }[] = [];
+  if (isOnSale && discountPercent > 0) {
+    badges.push({ key: "sale", label: `-${discountPercent}%`, className: "bg-red-600 text-white" });
+  }
+  if (isNew) {
+    badges.push({ key: "new", label: "NEW", className: "bg-primary text-white" });
+  }
+  if (isBestSeller) {
+    badges.push({ key: "best", label: "BEST SELLER", className: "bg-gray-900 text-white" });
+  } else if (isFeatured && !isNew) {
+    badges.push({ key: "hot", label: "FEATURED", className: "bg-amber-400 text-gray-900" });
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-20px" }}
-      transition={{ duration: 0.3, delay: index * 0.03 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.3) }}
+      className="h-full"
     >
-       <Link
-         to={`/product/${product.id}`}
-         className="group block rounded-2xl bg-gray-100 border border-gray-800 overflow-hidden hover:border-gray-700 hover:shadow-lg hover:shadow-black/20 hover:opacity-90 transition-all duration-200 max-w-full"
+      <Link
+        to={`/product/${product.id}`}
+        className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-gray-900/5"
       >
-        <div className="relative aspect-[3/4] overflow-hidden bg-gray-800">
-           <img
-             src={product.image}
-             alt={product.name}
-             loading="lazy"
-             className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-           />
-          
-          {/* Badges */}
-          {displayBadges.length > 0 && (
-            <div className="absolute top-2 left-2 flex flex-col gap-0.5">
-              {displayBadges.map((badge) => (
-                <span key={badge} className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${badgeConfig[badge].bg} ${badgeConfig[badge].text}`}>
-                  {badgeConfig[badge].label}
+        <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
+          {product.image ? (
+            <img
+              src={product.image}
+              alt={product.name}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-100 to-gray-200 px-4 text-center">
+              <span className="font-display text-2xl font-extrabold uppercase tracking-[0.24em] text-primary/25">
+                SB
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                {getCategoryLabel(product.category)}
+              </span>
+            </div>
+          )}
+
+          {badges.length > 0 && (
+            <div className="absolute left-3 top-3 flex flex-col gap-1">
+              {badges.map((badge) => (
+                <span
+                  key={badge.key}
+                  className={`rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] ${badge.className}`}
+                >
+                  {badge.label}
                 </span>
               ))}
             </div>
           )}
 
-          {/* Culture Pillar Badge */}
-          {product.culture_pillar && (
-            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[10px] font-bold text-gray-900 rounded" style={{ backgroundColor: product.culture_pillar_color || '#8B5CF6' }}>
-              {product.culture_pillar.toUpperCase()}
-            </span>
-          )}
+          <div className="absolute right-3 top-3 flex flex-col gap-2">
+            <button
+              type="button"
+              onClick={handleWishlist}
+              aria-label={isWishlisted ? "Remove from wishlist" : "Save to wishlist"}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/95 shadow-sm backdrop-blur transition-colors hover:bg-white"
+            >
+              <Heart
+                className={`h-4 w-4 transition-colors ${
+                  isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"
+                }`}
+              />
+            </button>
+            <button
+              type="button"
+              onClick={handleCompare}
+              aria-label="Add to compare"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/95 shadow-sm backdrop-blur transition-colors hover:bg-white"
+            >
+              <GitCompare
+                className={`h-4 w-4 transition-colors ${
+                  isInCompare(product.id) ? "text-primary" : "text-gray-500"
+                }`}
+              />
+            </button>
+          </div>
 
-          {/* Wishlist */}
-          <button
-            onClick={handleWishlist}
-            className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow hover:bg-white hover:opacity-80 transition-all duration-150"
-          >
-            <Heart
-              className={`h-3.5 w-3.5 transition-colors ${
-                isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"
-              }`}
-            />
-          </button>
-          
-          {/* Compare */}
-          <button
-            onClick={(e) => {
-              e.preventDefault(); e.stopPropagation();
-              if (isInCompare(product.id)) { toast({ title: "Removed from compare" }); }
-              else { toast({ title: "Added to compare" }); }
-              addToCompare(product);
-            }}
-            className="absolute top-8 right-2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow hover:bg-white hover:opacity-80 transition-all duration-150"
-          >
-            <GitCompare
-              className={`h-3.5 w-3.5 transition-colors ${
-                isInCompare(product.id) ? "fill-gray-900 text-gray-900" : "text-gray-500"
-              }`}
-            />
-          </button>
-
-          {/* Low stock warning - prominent */}
           {isInStock && stockQty <= 5 && (
-            <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[11px] font-bold bg-red-500 text-gray-900 rounded">
+            <span className="absolute bottom-3 left-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-semibold text-red-600 shadow-sm">
               Only {stockQty} left
             </span>
           )}
 
-          {/* Quick add overlay */}
-          <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 translate-y-2 group-hover:translate-y-0">
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-              className="flex items-center justify-center w-full py-2 px-4 bg-white/90 text-gray-900 rounded-full font-medium hover:bg-white transition-colors text-xs backdrop-blur-sm"
-            >
-              Quick View
-            </button>
-          </div>
-        </div>
-
-        <div className="p-3 sm:p-4 space-y-2">
-          {/* Brand + stock indicator */}
-          <div className="flex items-center justify-between">
-            {(product as any).brand && (
-              <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
-                {(product as any).brand}
+          {!isInStock && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/55 backdrop-blur-[1px]">
+              <span className="rounded-full bg-gray-900 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white">
+                Sold out
               </span>
-            )}
-            {!isInStock && (
-              <span className="text-[10px] font-semibold text-red-500">Out of stock</span>
-            )}
-          </div>
-
-          {/* Name */}
-          <h3 className="font-semibold text-gray-900 text-sm sm:text-base line-clamp-2 leading-tight">
-            {product.name}
-          </h3>
-
-          {/* Rating */}
-          {rating > 0 && (
-            <div className="flex items-center gap-1">
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className={`h-2.5 w-2.5 ${
-                      star <= rating ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
-                    }`}
-                  />
-                ))}
-              </div>
             </div>
           )}
 
-          {/* Type selector */}
-          {(product.types || []).length > 0 && (
-            <div className="flex gap-1.5 flex-wrap">
+          <div className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/55 to-transparent p-3 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
+            <span className="flex items-center justify-center gap-1.5 rounded-full bg-white/95 py-2 text-[10px] font-bold uppercase tracking-widest text-gray-900">
+              View piece <ArrowUpRight className="h-3 w-3" />
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
+          <div className="flex items-center justify-between gap-2">
+            <span className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+              {getBrandName(product.brand)}
+            </span>
+            {rating > 0 && (
+              <span className="flex shrink-0 items-center gap-0.5 text-[10px] font-semibold text-gray-600">
+                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                {rating.toFixed(1)}
+              </span>
+            )}
+          </div>
+
+          <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-gray-900 sm:text-[15px]">
+            {product.name}
+          </h3>
+
+          {visibleTypes.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
               {visibleTypes.map((type) => (
                 <button
                   key={type.id}
+                  type="button"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     setSelectedType(type.id);
                   }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
                     selectedType === type.id
-                      ? "bg-gray-100 text-gray-900"
-                      : "bg-gray-800 text-gray-500 hover:bg-gray-700"
+                      ? "border-primary bg-primary text-white"
+                      : "border-gray-200 bg-white text-gray-600 hover:border-primary/40 hover:text-primary"
                   }`}
                 >
                   {type.name}
                 </button>
               ))}
-              {hiddenTypes.length > 0 && (
-                <button
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                  className="px-3 py-1.5 rounded-full text-xs font-medium bg-gray-800 text-gray-500"
-                >
-                  <Plus className="h-3 w-3 inline" /> {hiddenTypes.length}
-                </button>
+              {hiddenTypes > 0 && (
+                <span className="flex items-center gap-0.5 rounded-full border border-gray-200 px-2.5 py-1 text-[10px] font-semibold text-gray-500">
+                  <Plus className="h-3 w-3" /> {hiddenTypes}
+                </span>
               )}
             </div>
           )}
 
-          {/* Price */}
-          <div className="flex items-center gap-2 pt-1">
-            <span className="font-bold text-lg sm:text-xl text-gray-900">
-              {formatMWK(displayPrice)}
-            </span>
-            {isOnSale && discountPercent > 0 && originalPrice > displayPrice && (
-              <span className="text-xs text-gray-500 line-through">
-                {formatMWK(originalPrice)}
-              </span>
+          <div className="mt-auto flex items-end gap-2 pt-1">
+            <span className="text-base font-bold text-gray-900 sm:text-lg">{formatMWK(displayPrice)}</span>
+            {isOnSale && discountPercent > 0 && (
+              <span className="pb-0.5 text-[11px] text-gray-400 line-through">{formatMWK(product.price)}</span>
             )}
           </div>
 
-          <Button onClick={handleAdd} variant="hero" size="sm" className="w-full text-xs h-9" disabled={!isInStock}>
-            {isInStock ? "Wear Your Identity" : "Sold Out"}
+          <Button
+            onClick={handleAdd}
+            variant="hero"
+            size="sm"
+            className="h-9 w-full"
+            disabled={!isInStock}
+          >
+            {justAdded ? "Added to Cart" : isInStock ? "Add to Cart" : "Sold Out"}
           </Button>
         </div>
       </Link>

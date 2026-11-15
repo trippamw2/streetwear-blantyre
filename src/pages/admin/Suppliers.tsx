@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -127,7 +127,7 @@ const AdminSuppliers = () => {
         
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-100 hover:bg-gray-800" onClick={() => { setEditingSupplier(null); resetForm(); }}>
+            <Button className="" onClick={() => { setEditingSupplier(null); resetForm(); }}>
               <Plus className="h-4 w-4" /> Add Supplier
             </Button>
           </DialogTrigger>
@@ -183,7 +183,7 @@ const AdminSuppliers = () => {
                 />
               </div>
               
-              <Button type="submit" className="w-full bg-gray-100 hover:bg-gray-800">
+              <Button type="submit" className="w-full ">
                 {editingSupplier ? "Update Supplier" : "Add Supplier"}
               </Button>
             </form>

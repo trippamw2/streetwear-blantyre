@@ -2,113 +2,129 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { KitCard } from "@/components/KitCard";
 import { useCombos } from "@/hooks/useCombos";
+import { useWearableCategories } from "@/hooks/useWearableCategories";
 import { SEO, defaultSEO } from "@/components/SEO";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
+import { ArrowRight, MessageCircle } from "lucide-react";
+
+const benefits = [
+  { title: "Better value", desc: "Less than buying the pieces separately." },
+  { title: "Styled for you", desc: "Pieces chosen to work together, not against each other." },
+  { title: "One delivery", desc: "A full look arrives in one order." },
+];
 
 const Combos = () => {
   const combos = useCombos();
+  const { categories } = useWearableCategories();
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen bg-white">
       <SEO {...defaultSEO.combos} />
 
-      {/* ─── HERO ─── */}
-      <section className="bg-white text-gray-900 overflow-hidden">
-        <div className="container relative py-20 sm:py-28 lg:py-36">
-          <div className="relative max-w-2xl mx-auto text-center">
-            <span className="inline-block px-4 py-1.5 border border-gray-700 text-gray-500 text-xs font-semibold tracking-[0.15em] uppercase mb-6">
-              Save 15% vs buying separate
+      {/* HERO */}
+      <section className="border-b border-gray-200 bg-gray-50">
+        <div className="container py-16 text-center sm:py-24">
+          <div className="mx-auto max-w-2xl space-y-5">
+            <span className="inline-block rounded-full border border-gray-300 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-600">
+              Save up to 25% vs buying separately
             </span>
-            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight text-gray-900">
-              YOUR OUTFIT.
+            <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+              Your outfit.
               <br />
-              ONE BOX.
+              One order.
             </h1>
-            <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
-              Outfit looking stale? Nothing goes together? You're not alone.
-              Most people waste hours guessing what works. We solved that —
-              curated Culture Packs styled by people who actually understand style.
+            <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-500 sm:text-base">
+              Not sure what goes together? Our kits put a full look in one place, chosen for the
+              street, the pitch and everyday life.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-              <a
-                href={buildWhatsAppLink("Hi Streetwear Blantyre! Which bundle should I pick?")}
-                target="_blank" rel="noopener noreferrer"
-              >
-                <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 w-full sm:w-auto px-8 py-3.5 font-semibold">
-                  Need Help? Chat
-                </Button>
-              </a>
-              <Button asChild size="lg" variant="outline" className="border-white/20 text-gray-900 hover:bg-gray-200 w-full sm:w-auto px-8 py-3.5 font-semibold">
-                <Link to="/shop">Browse Shop All</Link>
+            <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
+              <Button asChild size="lg" variant="hero">
+                <a
+                  href={buildWhatsAppLink("Hi Streetwear Blantyre, which kit should I pick?")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="h-4 w-4" /> Ask Which Kit
+                </a>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link to="/shop">
+                  Shop All <ArrowRight className="h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── WHY BUNDLES ─── */}
-      <section className="border-b border-gray-200 bg-gray-100">
-        <div className="container py-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {[
-              { title: "Save 15–25%", desc: "Less than buying separate. Always." },
-              { title: "No Research Needed", desc: "We matched the right pieces for your vibe." },
-              { title: "30 Day Guarantee", desc: "Not happy? Send it back. Simple." },
-            ].map((item) => (
-              <div key={item.title} className="p-4 bg-gray-100">
-                <p className="font-semibold text-sm text-gray-900">{item.title}</p>
-                <p className="text-xs text-gray-500 mt-1">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-gray-500 italic mt-4 text-center">
-            Mismatched outfits cost you confidence. Culture Packs fix that.
-          </p>
-        </div>
-      </section>
-
-      {/* ─── KITS GRID ─── */}
-      <section className="bg-white container py-16 sm:py-20 lg:py-24">
-        <div className="text-center mb-10 sm:mb-12">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Pick Your Kit</p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Culture Kits</h2>
-          <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
-            Each bundle solves a style problem. No filler. Just what your wardrobe needs.
-            Pick your vibe. We handle the rest.
-          </p>
-        </div>
-
-        <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
-          {combos.map((kit, i) => (
-            <KitCard key={kit.id} kit={kit} index={i} />
+      {/* BENEFITS */}
+      <section className="border-b border-gray-200 bg-white">
+        <div className="container grid gap-4 py-8 sm:grid-cols-3">
+          {benefits.map((item) => (
+            <div key={item.title} className="rounded-xl border border-gray-200 p-4">
+              <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+              <p className="mt-1 text-xs leading-relaxed text-gray-500">{item.desc}</p>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* ─── BROWSE BY CATEGORY ─── */}
-      <section className="bg-gray-100 py-16 sm:py-20">
-        <div className="container text-center">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-2">Need Just One Thing?</p>
-          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900">Shop by Category</h2>
-          <p className="text-gray-500 text-sm mt-2">Every item available individually too. Your culture, your way.</p>
+      {/* KITS */}
+      <section className="container py-16 sm:py-20">
+        <div className="mb-10 text-center sm:mb-12">
+          <p className="eyebrow mb-3 text-primary">Pick Your Kit</p>
+          <h2 className="font-display text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            Kits & Bundles
+          </h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-gray-500">
+            Each kit solves a style problem. No filler, just pieces your wardrobe will use.
+          </p>
+        </div>
 
-          <div className="flex flex-wrap justify-center gap-3 mt-8">
-            {[
-              { label: "T Shirts", cat: "t-shirts" },
-              { label: "Hoodies", cat: "hoodies" },
-              { label: "Caps", cat: "caps" },
-              { label: "Hut Caps", cat: "hut-caps" },
-              { label: "Bracelets", cat: "bracelets" },
-              { label: "Socks", cat: "socks" },
-              { label: "Stickers", cat: "stickers" },
-              { label: "Earbuds", cat: "earbuds" },
-            ].map((item) => (
+        {combos.length > 0 ? (
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
+            {combos.map((kit, i) => (
+              <KitCard key={kit.id} kit={kit} index={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-gray-200 bg-gray-50 px-6 py-14 text-center">
+            <p className="font-display text-xl font-bold text-gray-900">New kits are on the way</p>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-gray-500">
+              In the meantime, shop individual pieces or ask us on WhatsApp what is available.
+            </p>
+            <Button asChild className="mt-6" variant="hero">
+              <Link to="/shop">Shop the Collection</Link>
+            </Button>
+          </div>
+        )}
+      </section>
+
+      {/* SHOP BY CATEGORY */}
+      <section className="bg-gray-50 py-16 sm:py-20">
+        <div className="container text-center">
+          <p className="eyebrow mb-2 text-primary">Need Just One Thing?</p>
+          <h2 className="font-display text-2xl font-extrabold text-gray-900 sm:text-3xl">
+            Shop by Category
+          </h2>
+          <p className="mt-2 text-sm text-gray-500">
+            Every piece is also available on its own.
+          </p>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              to="/shop"
+              className="rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-colors hover:border-primary/40 hover:text-primary"
+            >
+              All
+            </Link>
+            {categories.map((category) => (
               <Link
-                key={item.cat}
-                to={`/shop?cat=${item.cat}`}
-                className="px-6 py-3 bg-gray-100 border border-gray-200 text-sm font-medium text-gray-600 hover:border-white/30 hover:text-gray-900 transition-all duration-200"
+                key={category.id}
+                to={`/shop?category=${category.slug}`}
+                className="rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-colors hover:border-primary/40 hover:text-primary"
               >
-                {item.label}
+                {category.name}
               </Link>
             ))}
           </div>

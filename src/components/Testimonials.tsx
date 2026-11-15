@@ -39,46 +39,10 @@ export const Testimonials = ({ className }: { className?: string }) => {
     if (data && data.length > 0) {
       setTestimonials(data);
     } else {
-      setTestimonials(getDefaultTestimonials());
+      setTestimonials([]);
     }
     setLoading(false);
   };
-
-  const getDefaultTestimonials = (): Testimonial[] => [
-    {
-      id: "t1",
-      name: "Chimwemwe Phiri",
-      role: "Student, Lilongwe",
-      message: "Streetwear Blantyre changed my campus style! Best quality fits and the delivery was super fast.",
-      rating: 5,
-      image: "",
-      is_active: true,
-      sort_order: 1,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "t2",
-      name: "Grace Banda",
-      role: "Business Owner, Blantyre",
-      message: "Best fits in Blantyre! My friends always compliment my style. Fast delivery across Malawi!",
-      rating: 5,
-      image: "",
-      is_active: true,
-      sort_order: 2,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: "t3",
-      name: "Davies Mkandawire",
-      role: "Tech Enthusiast, Mzuzu",
-      message: "Genuine products at great prices. The wireless charger is a game changer for my desk setup.",
-      rating: 4,
-      image: "",
-      is_active: true,
-      sort_order: 3,
-      created_at: new Date().toISOString(),
-    },
-  ];
 
   if (loading) return null;
 
@@ -234,7 +198,7 @@ export const AdminTestimonials = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-100 hover:bg-gray-800">
+            <Button className="">
               <Plus className="h-4 w-4" /> Add Testimonial
             </Button>
           </DialogTrigger>
@@ -307,7 +271,7 @@ export const AdminTestimonials = () => {
 
               <Button
                 onClick={handleSave}
-                className="w-full bg-gray-100 hover:bg-gray-800"
+                className="w-full "
                 disabled={saving || !formData.name || !formData.message}
               >
                 {saving && <Loader2 className="h-4 w-4 animate-spin" />}

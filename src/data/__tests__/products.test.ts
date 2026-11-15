@@ -9,11 +9,57 @@ import {
   getKitItemNames,
   getRecommendations,
   getItemImage,
-  products,
-  kits,
   type Product,
   type Kit,
 } from "../products";
+
+const tee: Product = {
+  id: "test-tee",
+  name: "Test Tee",
+  benefit: "Test",
+  price: 20000,
+  category: "t-shirts",
+  image: "https://example.com/tee.jpg",
+  types: [],
+  brand: "sb-original",
+};
+
+const jersey: Product = {
+  id: "test-jersey",
+  name: "Test Jersey",
+  benefit: "Test",
+  price: 30000,
+  category: "jerseys",
+  image: "https://example.com/jersey.jpg",
+  types: [],
+  brand: "sb-original",
+};
+
+const shirt: Product = {
+  id: "test-shirt",
+  name: "Test Shirt",
+  benefit: "Test",
+  price: 25000,
+  category: "short-sleeve-shirts",
+  image: "https://example.com/shirt.jpg",
+  types: [],
+  brand: "sb-street",
+};
+
+const fixtureProducts: Product[] = [tee, jersey, shirt];
+
+const kit: Kit = {
+  id: "test-kit",
+  name: "Test Kit",
+  hook: "test",
+  lifestyle: "student",
+  tagline: "test",
+  description: "test",
+  discountPercent: 10,
+  productIds: [tee.id, jersey.id],
+  image: "",
+  vibe: "test",
+};
 
 describe("formatMWK", () => {
   it("formats whole numbers with commas", () => {
@@ -35,148 +81,105 @@ describe("formatMWK", () => {
 
 describe("getKitProducts", () => {
   it("returns products for a valid kit", () => {
-    const kit = kits[0]; // Daily Essential Kit
-    const result = getKitProducts(kit);
-    expect(result.length).toBeGreaterThan(0);
+    const result = getKitProducts(kit, fixtureProducts);
+    expect(result).toHaveLength(2);
     expect(result.every((p) => typeof p.id === "string")).toBe(true);
   });
 
   it("filters out missing products", () => {
-    const kit: Kit = {
-      id: "test",
-      name: "Test Kit",
-      hook: "test",
-      lifestyle: "student",
-      tagline: "test",
-      description: "test",
-      discountPercent: 10,
-      productIds: ["nonexistent-id", products[0].id],
-      image: "",
-      vibe: "test",
-    };
-    const result = getKitProducts(kit);
+    const partialKit: Kit = { ...kit, productIds: ["nonexistent-id", tee.id] };
+    const result = getKitProducts(partialKit, fixtureProducts);
     expect(result).toHaveLength(1);
-    expect(result[0].id).toBe(products[0].id);
+    expect(result[0].id).toBe(tee.id);
   });
 });
 
 describe("getKitSeparateTotal", () => {
   it("calculates sum of product prices in a kit", () => {
-    const kit = kits[0];
-    const kitProducts = getKitProducts(kit);
+    const kitProducts = getKitProducts(kit, fixtureProducts);
     const expected = kitProducts.reduce((sum, p) => sum + p.price, 0);
-    expect(getKitSeparateTotal(kit)).toBe(expected);
+    expect(getKitSeparateTotal(kit, fixtureProducts)).toBe(expected);
   });
 
   it("returns 0 for a kit with no valid products", () => {
-    const kit: Kit = {
-      id: "empty",
-      name: "Empty Kit",
-      hook: "test",
-      lifestyle: "student",
-      tagline: "test",
-      description: "test",
-      discountPercent: 10,
-      productIds: ["nonexistent"],
-      image: "",
-      vibe: "test",
-    };
-    expect(getKitSeparateTotal(kit)).toBe(0);
+    const emptyKit: Kit = { ...kit, productIds: ["nonexistent"] };
+    expect(getKitSeparateTotal(emptyKit, fixtureProducts)).toBe(0);
   });
 });
 
 describe("getKitPrice", () => {
   it("applies discount to separate total", () => {
-    const kit = kits[0];
-    const total = getKitSeparateTotal(kit);
+    const total = getKitSeparateTotal(kit, fixtureProducts);
     const expected = Math.round(total * (1 - kit.discountPercent / 100));
-    expect(getKitPrice(kit)).toBe(expected);
+    expect(getKitPrice(kit, fixtureProducts)).toBe(expected);
   });
 
   it("returns discounted price lower than separate total", () => {
-    const kit = kits.find((k) => k.discountPercent > 0)!;
-    expect(getKitPrice(kit)).toBeLessThan(getKitSeparateTotal(kit));
+    expect(getKitPrice(kit, fixtureProducts)).toBeLessThan(
+      getKitSeparateTotal(kit, fixtureProducts),
+    );
   });
 });
 
 describe("getKitRealSaving", () => {
   it("calculates positive savings for discounted kits", () => {
-    const kit = kits.find((k) => k.discountPercent > 0)!;
-    expect(getKitRealSaving(kit)).toBeGreaterThan(0);
+    expect(getKitRealSaving(kit, fixtureProducts)).toBeGreaterThan(0);
   });
 
   it("savings equals total minus discounted price", () => {
-    const kit = kits[0];
-    expect(getKitRealSaving(kit)).toBe(
-      getKitSeparateTotal(kit) - getKitPrice(kit)
+    expect(getKitRealSaving(kit, fixtureProducts)).toBe(
+      getKitSeparateTotal(kit, fixtureProducts) - getKitPrice(kit, fixtureProducts),
     );
   });
 });
 
 describe("getKitDiscountPercent", () => {
   it("returns the kit discount percent", () => {
-    const kit = kits[0];
     expect(getKitDiscountPercent(kit)).toBe(kit.discountPercent);
   });
 });
 
 describe("getKitItemNames", () => {
   it("returns names of products in a kit", () => {
-    const kit = kits[0];
-    const names = getKitItemNames(kit);
-    const kitProducts = getKitProducts(kit);
+    const names = getKitItemNames(kit, fixtureProducts);
+    const kitProducts = getKitProducts(kit, fixtureProducts);
     expect(names).toEqual(kitProducts.map((p) => p.name));
   });
 });
 
 describe("getRecommendations", () => {
-  const testProduct: Product = {
-    id: "test-prod",
-    name: "Test Product",
-    benefit: "Test",
-    price: 50000,
-    category: "t-shirts",
-    image: "",
-    types: [],
-    brand: "sb-original",
-  };
-
   it("returns at most limited products", () => {
-    const result = getRecommendations(testProduct, products, 2);
+    const result = getRecommendations(tee, fixtureProducts, 2);
     expect(result.length).toBeLessThanOrEqual(2);
   });
 
   it("excludes the input product", () => {
-    const result = getRecommendations(testProduct, [testProduct, ...products], 5);
-    expect(result.find((p) => p.id === testProduct.id)).toBeUndefined();
+    const result = getRecommendations(tee, fixtureProducts, 5);
+    expect(result.find((p) => p.id === tee.id)).toBeUndefined();
   });
 
   it("prefers same-brand products", () => {
     const otherBrandProduct: Product = {
-      ...testProduct,
+      ...tee,
       id: "other-brand",
       brand: "sb-street",
     };
-    const result = getRecommendations(testProduct, [otherBrandProduct, products[0]], 5);
-    const first = result[0];
-    expect(first.brand).toBe(testProduct.brand);
+    const result = getRecommendations(tee, [otherBrandProduct, jersey], 5);
+    expect(result[0].brand).toBe(tee.brand);
   });
 
   it("returns empty array for empty product list", () => {
-    const result = getRecommendations(testProduct, [], 4);
-    expect(result).toEqual([]);
+    expect(getRecommendations(tee, [], 4)).toEqual([]);
   });
 });
 
 describe("getItemImage", () => {
   it("returns product image for a valid product ID", () => {
-    const img = getItemImage(products[0].id);
-    expect(img).toBe(products[0].image);
+    expect(getItemImage(tee.id, fixtureProducts)).toBe(tee.image);
   });
 
   it("returns product image for a valid product name", () => {
-    const img = getItemImage(products[0].name);
-    expect(img).toBe(products[0].image);
+    expect(getItemImage(tee.name, fixtureProducts)).toBe(tee.image);
   });
 
   it("returns fallback for unknown name", () => {

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,18 +48,14 @@ const LIFESTYLES = [
   { value: "student", label: "Student" },
   { value: "work", label: "Work" },
   { value: "travel", label: "Travel" },
-  { value: "audio", label: "Audio" },
+  { value: "casual", label: "Casual" },
   { value: "premium", label: "Premium" },
 ];
 
 const CATEGORIES = [
-  { id: "t-shirts", label: "T-Shirts" },
-  { id: "hoodies", label: "Hoodies" },
-  { id: "caps", label: "Caps" },
-  { id: "sneakers", label: "Sneakers" },
-  { id: "pants", label: "Pants" },
-  { id: "jackets", label: "Jackets" },
-  { id: "accessories", label: "Accessories" },
+  { id: "t-shirts", label: "T Shirts" },
+  { id: "jerseys", label: "Jerseys" },
+  { id: "short-sleeve-shirts", label: "Short Sleeve Shirts" },
 ];
 
 const formatMWK = (n: number) => `MK ${n.toLocaleString("en-US")}`;
@@ -330,7 +326,7 @@ const AdminCombos = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-teal-600 hover:bg-teal-700">
+            <Button className="bg-primary hover:bg-primary/90">
               <Plus className="h-4 w-4" /> Add Combo
             </Button>
           </DialogTrigger>
@@ -543,7 +539,7 @@ const AdminCombos = () => {
 
               <Button
                 onClick={handleSave}
-                className="w-full bg-teal-600 hover:bg-teal-700"
+                className="w-full bg-primary hover:bg-primary/90"
                 disabled={
                   saving || !formData.name || formData.selectedProductIds.length === 0
                 }

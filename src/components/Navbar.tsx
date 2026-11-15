@@ -5,6 +5,7 @@ import { Logo } from "./Logo";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useWearableCategories } from "@/hooks/useWearableCategories";
 import { CartDrawer } from "./CartDrawer";
 import {
   DropdownMenu,
@@ -14,24 +15,26 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-const links = [
-  { to: "/", label: "Home" },
-  { to: "/shop", label: "Shop All" },
-  { to: "/shop?category=t-shirts", label: "T Shirts" },
-  { to: "/shop?category=jerseys", label: "Jerseys" },
-  { to: "/shop?category=short-sleeve-shirts", label: "Short Sleeve Shirts" },
-  { to: "/about", label: "Our Story" },
-  { to: "/contact", label: "Contact" },
-];
-
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { count } = useCart();
   const { user, signOut } = useAuth();
+  const { categories } = useWearableCategories();
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
+
+  const links = [
+    { to: "/", label: "Home" },
+    { to: "/shop", label: "Shop All" },
+    ...categories.map((category) => ({
+      to: `/shop?category=${category.slug}`,
+      label: category.name,
+    })),
+    { to: "/about", label: "Our Story" },
+    { to: "/contact", label: "Contact" },
+  ];
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {

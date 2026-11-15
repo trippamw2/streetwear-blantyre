@@ -119,7 +119,7 @@ const ScheduledGift = () => {
     <div>
       <SEO
         title="Schedule a Gift — Streetwear Blantyre"
-        description="Gift a Culture Piece with a personal message. Schedule delivery for any occasion."
+        description="Gift a Streetwear Piece with a personal message. Schedule delivery for any occasion."
       />
 
       <section className="bg-white text-gray-900 overflow-hidden">
@@ -129,12 +129,12 @@ const ScheduledGift = () => {
               <Calendar className="h-3.5 w-3.5" /> Scheduled Gift
             </span>
             <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight">
-              SEND THE CULTURE.
+              SEND A PIECE.
               <br />
-              <span className="text-gray-500">ON THEIR DAY.</span>
+              <span className="text-primary">ON THEIR DAY.</span>
             </h1>
             <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
-              Pick a Culture Piece. Pay online. We deliver it on the perfect day — with your message inside.
+              Pick a Streetwear Piece. Pay online. We deliver it on the perfect day — with your message inside.
             </p>
           </div>
         </div>
@@ -171,7 +171,7 @@ const ScheduledGift = () => {
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-10">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Step 1</p>
-              <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Pick a Culture Piece</h2>
+              <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Pick a Streetwear Piece</h2>
               <p className="text-gray-500 text-sm mt-2">Search by name or category to find the perfect gift.</p>
             </div>
 
@@ -292,7 +292,7 @@ const ScheduledGift = () => {
               <Button
                 onClick={() => setStep(3)}
                 disabled={!recipientName || !recipientPhone || !deliveryLocation}
-                className="flex-1 bg-gray-100 text-gray-900 hover:bg-gray-800 rounded-full py-3 font-semibold disabled:opacity-50"
+                className="flex-1  rounded-full py-3 font-semibold disabled:opacity-50"
               >
                 Continue <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -364,7 +364,7 @@ const ScheduledGift = () => {
               <Button
                 onClick={handleSendGift}
                 disabled={submitting}
-                className="flex-1 bg-gray-100 text-gray-900 hover:bg-gray-800 rounded-full py-3 font-semibold"
+                className="flex-1  rounded-full py-3 font-semibold"
               >
                 {submitting ? (
                   <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Processing...</>
@@ -385,8 +385,8 @@ const ScheduledGift = () => {
         <div className="container">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto text-center">
             {[
-              { icon: Gift, title: "Premium Wrapping", desc: "Every gift arrives wrapped in our signature packaging" },
-              { icon: MessageCircle, title: "Handwritten Note", desc: "Your message printed on a Culture card inside" },
+              { icon: Gift, title: "Signature Wrapping", desc: "Every gift arrives wrapped in our signature packaging" },
+              { icon: MessageCircle, title: "Handwritten Note", desc: "Your message printed on a gift card inside" },
               { icon: Calendar, title: "Scheduled Delivery", desc: "Choose the perfect date for delivery in Blantyre" },
             ].map((item) => (
               <div key={item.title} className="flex flex-col items-center">

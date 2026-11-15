@@ -17,13 +17,12 @@ interface AIResponse {
 // ============================================
 const KNOWLEDGE_BASE = `
 Streetwear Blantyre Store Information:
-- We sell fashion: t-shirts, hoodies, caps, sneakers, pants, jackets
+- We sell clothing: T shirts, football jerseys, short sleeve shirts
 - Brands: SB Original, SB Street
-- Delivery: Blantyre (same day), Southern (1-2 days), Central/Northern (2-3 days)
+- Delivery: Blantyre (same day or 1-3 days), other areas in Malawi (3-5 working days)
 - Payment: PayChangu (online payment gateway)
-- Warranty: 30 days on all items
-- Returns: 7 days with receipt
-- Hours: 8am-6pm Mon-Sat, 9am-4pm Sun
+- Quality cover: 30 days on manufacturing faults
+- Returns: 14 days for unworn items with tags attached
 `;
 
 // ============================================
@@ -62,7 +61,7 @@ export class AIAgent {
       return {
         response: `Our prices vary by product! What are you interested in?
 
-T-Shirts, Hoodies, Sneakers, Caps
+T Shirts, Football Jerseys, Short Sleeve Shirts
 
 Reply with the product type and I'll check current prices!`,
         action: 'reply'
@@ -105,7 +104,7 @@ Open: Mon-Sat 8am-6pm, Sun 9am-4pm`,
       return {
         response: `Welcome to Streetwear Blantyre!
 
-We sell t-shirts, hoodies, caps, sneakers & more.
+We sell T shirts, football jerseys and short sleeve shirts.
 
 How can I help you today?`,
         action: 'reply'

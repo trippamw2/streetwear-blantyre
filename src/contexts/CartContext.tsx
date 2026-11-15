@@ -3,6 +3,7 @@ import { useDeliverySettings } from "@/hooks/useDeliverySettings";
 
 export interface CartItem {
   productKey: string;
+  productId?: string;
   name: string;
   price: number;
   image: string;

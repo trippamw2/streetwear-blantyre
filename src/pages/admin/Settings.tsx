@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -101,7 +101,7 @@ const AdminSettings = () => {
           <h1 className="text-2xl font-bold">Site Settings</h1>
           <p className="text-sm text-muted-foreground">Configure your store settings</p>
         </div>
-        <Button onClick={saveSettings} disabled={saving} className="bg-gray-100 hover:bg-gray-800">
+        <Button onClick={saveSettings} disabled={saving} className="">
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Save Changes
         </Button>

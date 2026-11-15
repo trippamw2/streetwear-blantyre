@@ -72,34 +72,59 @@ export function useProducts() {
         .from("inventory")
         .select("product_id, quantity, reserved_quantity");
 
+      // Fetch product variants (sizes)
+      const { data: productTypes } = await supabase
+        .from("product_types")
+        .select("id, product_id, name, sort_order")
+        .order("sort_order", { ascending: true });
+
       // Build inventory map
       const inventoryMap = new Map<string, InventoryRecord>();
       inventory?.forEach((inv) => {
         inventoryMap.set(inv.product_id, inv as InventoryRecord);
       });
 
+      // Build variants map
+      const typesMap = new Map<string, { id: string; name: string }[]>();
+      productTypes?.forEach((t: any) => {
+        if (!t?.product_id || !t?.name) return;
+        const list = typesMap.get(t.product_id) || [];
+        list.push({ id: t.id, name: t.name });
+        typesMap.set(t.product_id, list);
+      });
+
       // Map database products to frontend format
-      const mappedProducts: Product[] = productsArray.map((p: any) => ({
-        id: p.id,
-        name: p.name,
-        benefit: p.description || p.benefit || "",
-        price: p.price,
-        category: (p.category || "all") as any,
-        image: p.image || "",
-        brand: p.brand || "Generic",
-        types: typesMap.get(p.id) || [],
-        stock: p.stock_quantity || 10,
-        is_featured: p.is_featured || false,
-        is_best_seller: p.is_best_seller || false,
-        is_on_sale: p.is_on_sale || false,
-        discount_percent: p.discount_percent || 0,
-        gallery_images: p.gallery_images || [],
-        specs: p.specs || {},
-        reward_points: p.reward_points || Math.round(p.price / 100),
-        rating: p.rating || 0,
-        culture_pillar: p.culture_pillar || "",
-        culture_pillar_color: culturePillars.find(cp => cp.id === p.culture_pillar)?.color || "#8B5CF6",
-      }));
+      const mappedProducts: Product[] = productsArray.map((p: any) => {
+        const inventoryRecord = inventoryMap.get(p.id);
+        const availableStock = inventoryRecord
+          ? Math.max(0, (inventoryRecord.quantity || 0) - (inventoryRecord.reserved_quantity || 0))
+          : Math.max(0, p.stock_quantity || 0);
+
+        return {
+          id: p.id,
+          name: p.name,
+          benefit: p.description || p.benefit || "",
+          price: p.price,
+          category: (p.category || "all") as any,
+          image: p.image || "",
+          brand: p.brand || "SB Streetwear",
+          types: typesMap.get(p.id) || [],
+          stock: availableStock,
+          is_featured: p.is_featured || false,
+          is_best_seller: p.is_best_seller || false,
+          is_new_arrival: p.is_new_arrival || false,
+          is_on_sale: p.is_on_sale || false,
+          discount_percent: p.discount_percent || 0,
+          gallery_images: p.gallery_images || [],
+          specs: p.specs || {},
+          reward_points: p.reward_points || Math.round(p.price / 100),
+          rating: p.rating || 0,
+          culture_pillar: p.culture_pillar || "",
+          culture_pillar_color: culturePillars.find((cp) => cp.id === p.culture_pillar)?.color || "#102C54",
+          culture_story: p.culture_story || "",
+          culture_context: p.culture_context || "",
+        };
+      });
 
       setProducts(mappedProducts);
     } catch (err) {

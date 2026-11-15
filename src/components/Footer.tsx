@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { Loader2 } from "lucide-react";
 import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
+import { useWearableCategories } from "@/hooks/useWearableCategories";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -10,6 +11,7 @@ export const Footer = () => {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { categories } = useWearableCategories();
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +44,7 @@ export const Footer = () => {
 
     if (saved) {
       setSubscribed(true);
-      toast({ title: "You're in.", description: "Welcome to the movement. Check your inbox." });
+      toast({ title: "You're in.", description: "Check your inbox for a welcome message." });
     } else {
       toast({ variant: "destructive", title: "Something went wrong", description: "Could not subscribe. Try again later." });
     }
@@ -58,11 +60,11 @@ export const Footer = () => {
       <div className="border-b border-white/10">
         <div className="container py-12">
           {subscribed ? (
-            <p className="text-sm text-white/60">Thanks for joining. You're part of the movement now.</p>
+            <p className="text-sm text-white/60">Thanks for joining. Keep an eye on your inbox for new drops.</p>
           ) : (
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-lg">
               <div className="flex-1 w-full">
-                <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2 block">Become Part of the Culture</p>
+                <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2 block">Join the list</p>
                 <input
                   id="footer-email"
                   type="email"
@@ -105,14 +107,20 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold text-sm text-white mb-4">Experience</h4>
+            <h4 className="font-semibold text-sm text-white mb-4">Shop</h4>
             <ul className="space-y-2.5 text-sm text-white/50">
               <li><Link to="/shop" className="hover:text-white transition-colors">Shop All</Link></li>
-              <li><Link to="/shop?category=t-shirts" className="hover:text-white transition-colors">T Shirts</Link></li>
-              <li><Link to="/shop?category=jerseys" className="hover:text-white transition-colors">Football Jerseys</Link></li>
-              <li><Link to="/shop?category=short-sleeve-shirts" className="hover:text-white transition-colors">Short Sleeve Shirts</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">Our Story</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+              {categories.map((category) => (
+                <li key={category.id}>
+                  <Link
+                    to={`/shop?category=${category.slug}`}
+                    className="hover:text-white transition-colors"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
+              <li><Link to="/combos" className="hover:text-white transition-colors">Kits & Bundles</Link></li>
             </ul>
           </div>
 

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
 import { Button } from "@/components/ui/button";
@@ -154,7 +154,7 @@ const AdminPromos = () => {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-gray-100 hover:bg-gray-800">
+            <Button className="">
               <Plus className="h-4 w-4" /> Add Promo Code
             </Button>
           </DialogTrigger>
@@ -267,7 +267,7 @@ const AdminPromos = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-gray-100 hover:bg-gray-800">
+              <Button type="submit" className="w-full ">
                 {editingPromo ? "Update Promo Code" : "Create Promo Code"}
               </Button>
             </form>

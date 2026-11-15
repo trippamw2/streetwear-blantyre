@@ -169,7 +169,7 @@ const AdminCategories = () => {
           </div>
           <Dialog open={catDialog} onOpenChange={(open) => { setCatDialog(open); if (!open) { setEditingCat(null); setCatForm(emptyCategory); } }}>
             <DialogTrigger asChild>
-              <Button className="bg-gray-100 hover:bg-gray-800"><Plus className="h-4 w-4" /> Add Category</Button>
+              <Button className=""><Plus className="h-4 w-4" /> Add Category</Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -202,7 +202,7 @@ const AdminCategories = () => {
                   <input type="checkbox" checked={catForm.is_active} onChange={(e) => setCatForm(p => ({ ...p, is_active: e.target.checked }))} className="rounded" />
                   <Label>Active</Label>
                 </div>
-                <Button onClick={saveCategory} disabled={catSaving || !catForm.name} className="w-full bg-gray-100 hover:bg-gray-800">
+                <Button onClick={saveCategory} disabled={catSaving || !catForm.name} className="w-full ">
                   {catSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                   {editingCat ? "Update" : "Create"}
                 </Button>
@@ -268,7 +268,7 @@ const AdminCategories = () => {
           </div>
           <Dialog open={pillarDialog} onOpenChange={(open) => { setPillarDialog(open); if (!open) { setEditingPillar(null); setPillarForm(emptyPillar); } }}>
             <DialogTrigger asChild>
-              <Button className="bg-gray-100 hover:bg-gray-800"><Plus className="h-4 w-4" /> Add Pillar</Button>
+              <Button className=""><Plus className="h-4 w-4" /> Add Pillar</Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -310,7 +310,7 @@ const AdminCategories = () => {
                     <Label>Active</Label>
                   </div>
                 </div>
-                <Button onClick={savePillar} disabled={pillarSaving || !pillarForm.name} className="w-full bg-gray-100 hover:bg-gray-800">
+                <Button onClick={savePillar} disabled={pillarSaving || !pillarForm.name} className="w-full ">
                   {pillarSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                   {editingPillar ? "Update" : "Create"}
                 </Button>
