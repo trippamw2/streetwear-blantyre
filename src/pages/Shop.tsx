@@ -119,11 +119,11 @@ const Shop = () => {
         </div>
 
         <div className="max-w-3xl space-y-2 sm:space-y-3 mb-4 sm:mb-8">
-          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-white">Culture Pieces</h1>
+          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-white">Shop All</h1>
           <p className="text-gray-400 text-sm sm:text-base">
             Every piece represents a belief. A story. An identity.
-            Browse by what moves you — music, sport, faith, or hustle.
-            Find the one that speaks for who you are and who you're becoming.
+            Browse T-shirts, football jerseys and short-sleeve shirts.
+            Find the style that fits your everyday life.
           </p>
         </div>
 
