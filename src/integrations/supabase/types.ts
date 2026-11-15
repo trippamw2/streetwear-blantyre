@@ -491,6 +491,7 @@ export type Database = {
           is_best_seller: boolean | null
           is_featured: boolean | null
           is_on_sale: boolean | null
+          is_new_arrival: boolean | null
           name: string
           price: number
           rating: number | null
@@ -541,6 +542,7 @@ export type Database = {
           is_best_seller?: boolean | null
           is_featured?: boolean | null
           is_on_sale?: boolean | null
+          is_new_arrival?: boolean | null
           name?: string
           price?: number
           rating?: number | null
