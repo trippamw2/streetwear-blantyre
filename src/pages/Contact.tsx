@@ -12,7 +12,7 @@ const Contact = () => (
           Contact Us
         </h1>
         <p className="text-gray-400 text-sm sm:text-base sm:text-lg">
-          Most brands don't listen. We do. Whether you're an African creator looking to express
+          SB Streetwear. T-shirts, football jerseys and short sleeve shirts for everyday life.
           yourself, a community member wanting to connect, or someone interested in our mission —
           we're here. Fastest way to reach us is WhatsApp — we reply in minutes.
         </p>
