@@ -107,11 +107,12 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold text-sm text-white mb-4">Experience</h4>
             <ul className="space-y-2.5 text-sm text-white/50">
-              <li><Link to="/shop" className="hover:text-white transition-colors">Shop Collection</Link></li>
-              <li><Link to="/combos" className="hover:text-white transition-colors">Culture Packs</Link></li>
-              <li><Link to="/gifts" className="hover:text-white transition-colors">Gift the Culture</Link></li>
-              <li><Link to="/editorial" className="hover:text-white transition-colors">Culture Journal</Link></li>
-              <li><Link to="/loyalty" className="hover:text-white transition-colors">Rewards</Link></li>
+              <li><Link to="/shop" className="hover:text-white transition-colors">Shop All</Link></li>
+              <li><Link to="/shop?category=t-shirts" className="hover:text-white transition-colors">T-Shirts</Link></li>
+              <li><Link to="/shop?category=jerseys" className="hover:text-white transition-colors">Football Jerseys</Link></li>
+              <li><Link to="/shop?category=short-sleeve-shirts" className="hover:text-white transition-colors">Short-Sleeve Shirts</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Our Story</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
