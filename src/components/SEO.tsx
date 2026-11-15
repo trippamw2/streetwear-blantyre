@@ -64,7 +64,7 @@ export const defaultSEO = {
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Culture Pieces — Premium African Streetwear",
+    title: "Shop All — Premium African Streetwear",
     description: "Discover culture pieces — t-shirts, hoodies, caps, bracelets, earbuds, and stickers. Every piece tells a story. Fast delivery across Malawi.",
   },
   combos: {
@@ -96,7 +96,7 @@ export const defaultSEO = {
     description: "Earn points on every purchase. Redeem for discounts. Refer friends and grow our community together.",
   },
   compare: {
-    title: "Compare Culture Pieces — Streetwear Blantyre",
+    title: "Compare Shop All — Streetwear Blantyre",
     description: "Compare culture pieces side by side. Find the pieces that express your story.",
   },
   faq: {

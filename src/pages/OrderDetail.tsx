@@ -183,7 +183,7 @@ const OrderDetailPage = () => {
               <Link to="/combos">View Culture Packs</Link>
             </Button>
             <Button asChild variant="outline" size="sm" className="text-xs">
-              <Link to="/shop">Browse Culture Pieces</Link>
+              <Link to="/shop">Browse Shop All</Link>
             </Button>
           </div>
         </div>

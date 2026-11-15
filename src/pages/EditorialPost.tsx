@@ -188,7 +188,7 @@ const EditorialPost = () => {
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-            <h2 className="font-display font-bold text-2xl mb-8">Culture Pieces</h2>
+            <h2 className="font-display font-bold text-2xl mb-8">Shop All</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {relatedProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />

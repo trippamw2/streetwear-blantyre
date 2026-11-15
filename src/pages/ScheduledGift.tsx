@@ -179,7 +179,7 @@ const ScheduledGift = () => {
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search Culture Pieces..."
+                placeholder="Search Shop All..."
                 className="pl-10 rounded-full"
               />
               <Package className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />

@@ -34,7 +34,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
               <p className="text-sm text-muted-foreground mt-1">Discover culture pieces to get started</p>
             </div>
             <Button asChild variant="hero" size="lg" onClick={() => setOpen(false)}>
-              <Link to="/shop">Discover Culture Pieces</Link>
+              <Link to="/shop">Discover Shop All</Link>
             </Button>
           </div>
         ) : (

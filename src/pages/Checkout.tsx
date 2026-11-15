@@ -257,7 +257,7 @@ const Checkout = () => {
         <p className="text-gray-500 mb-6">Grab a culture pack. Better value, one box, delivered.</p>
         <div className="flex gap-3 justify-center">
           <Button asChild><Link to="/combos">View Culture Packs</Link></Button>
-          <Button asChild variant="outline"><Link to="/shop">Browse Culture Pieces</Link></Button>
+          <Button asChild variant="outline"><Link to="/shop">Browse Shop All</Link></Button>
         </div>
       </div>
     );

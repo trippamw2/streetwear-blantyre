@@ -430,7 +430,7 @@ const GiftPacks = () => {
               <Link to="/gift">Schedule a Gift</Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full px-8 py-3 font-semibold border-white/20 text-white hover:bg-white/10">
-              <Link to="/shop">Browse Culture Pieces</Link>
+              <Link to="/shop">Browse Shop All</Link>
             </Button>
           </div>
         </div>
