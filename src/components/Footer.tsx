@@ -88,10 +88,9 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-24 sm:h-28 md:h-32 lg:h-40 xl:h-48" />
             <p className="text-white/50 max-w-sm text-sm leading-relaxed">
-              We help ambitious young Africans express who they are and who they are becoming.
-              Streetwear is our medium. Identity is our purpose.
+              Born in Blantyre, Malawi. SB brings together T-shirts, football jerseys and short-sleeve shirts for everyday life, sport and outdoor experiences.
             </p>
-            <p className="text-sm text-white/80 font-medium">Wear the Culture. Wear Your Story.</p>
+            <p className="text-sm text-white/80 font-medium">SB Streetwear — Wear Your Identity.</p>
 
             <div className="pt-4">
               <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">We accept</p>
@@ -139,7 +138,7 @@ export const Footer = () => {
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row gap-4 items-center justify-between">
           <p className="text-xs text-white/40 text-center md:text-left">
-            &copy; {new Date().getFullYear()} Streetwear Blantyre. Wear the Culture. Wear Your Story. Represent Your Roots. Build Your Future.
+            &copy; {new Date().getFullYear()} SB Streetwear. Wear Your Identity. Blantyre, Malawi.
           </p>
           <p className="text-xs text-white/40 uppercase tracking-wider">Blantyre, Malawi</p>
         </div>

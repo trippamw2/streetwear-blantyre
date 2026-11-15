@@ -19,7 +19,7 @@ export const DEFAULT_CONFIG: StoreConfig = {
   expressDeliveryFee: 8500,
   supportEmail: "hello@streetwearblantyre.mw",
   storeName: "Streetwear Blantyre",
-  storeTagline: "Wear the Culture",
+  storeTagline: "Wear Your Identity",
 };
 
 export const getStoreConfig = (): StoreConfig => {

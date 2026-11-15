@@ -20,8 +20,8 @@ export default {
       colors: {
         background: "#ffffff",
         foreground: "#0a0a0a",
-        navy: "#0f172a",
-        "navy-light": "#1e293b",
+        navy: "#102C54",
+        "navy-light": "#1e3a8a",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -75,8 +75,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        display: ["Cormorant Garamond", "serif"],
-        sans: ["DM Sans", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        display: ["Montserrat", "sans-serif"],
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
       },
       backgroundImage: {
         "gradient-brand": "var(--gradient-brand)",

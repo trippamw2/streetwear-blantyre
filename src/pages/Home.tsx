@@ -48,18 +48,17 @@ const Home = () => {
         <div className="container relative py-20 sm:py-28 lg:py-36">
           <div className="max-w-2xl space-y-6 sm:space-y-8">
             <span className="inline-flex px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-gray-400">
-              Identity Expression. Streetwear Is Our Medium.
+              SB Streetwear — Blantyre, Malawi
             </span>
 
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl text-white leading-[0.95] tracking-tight">
-              Wear the
+              Style That
               <br />
-              Culture.
+              Moves With You.
             </h1>
 
             <p className="text-gray-300 text-base sm:text-lg max-w-md leading-relaxed">
-              You are not looking for clothes. You are looking for identity.
-              Something that says "this is who I am" before you speak a word.
+              From everyday essentials to football-inspired fashion, discover clothing that fits your lifestyle.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -67,7 +66,7 @@ const Home = () => {
                 <Link to="/shop">Shop Collection</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-3.5 font-semibold text-sm sm:text-base rounded-full">
-                <Link to="/community">Join the Community</Link>
+                <Link to="/about">Explore SB</Link>
               </Button>
             </div>
 
@@ -82,6 +81,33 @@ const Home = () => {
             <p className="text-xs text-gray-600 italic max-w-md">
               Fashion fades. Identity lasts. Don't chase trends. Wear purpose.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SHOP BY CATEGORY ─── */}
+      <section className="bg-gray-900 py-16 sm:py-20">
+        <div className="container">
+          <div className="text-center mb-8 sm:mb-10">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Find Your Style</p>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white">Shop by Category</h2>
+            <p className="text-gray-400 text-sm mt-2">Explore clothing for every mood, moment and everyday adventure.</p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-4 sm:gap-6">
+            {[
+              { label: "T-Shirts", desc: "Everyday essentials.", to: "/shop?category=t-shirts", img: "https://placehold.co/600x400/102C54/ffffff?text=T-Shirts" },
+              { label: "Football Jerseys", desc: "Sport meets style.", to: "/shop?category=jerseys", img: "https://placehold.co/600x400/102C54/ffffff?text=Jerseys" },
+              { label: "Short-Sleeve Shirts", desc: "Relaxed everyday looks.", to: "/shop?category=short-sleeve-shirts", img: "https://placehold.co/600x400/102C54/ffffff?text=Short+Sleeve+Shirts" },
+            ].map((c) => (
+              <Link key={c.label} to={c.to} className="group relative block overflow-hidden bg-gray-800">
+                <img src={c.img} alt={c.label} className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 to-transparent" />
+                <div className="absolute bottom-4 left-4">
+                  <h3 className="font-display font-bold text-xl text-white">{c.label}</h3>
+                  <p className="text-sm text-gray-300">{c.desc}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

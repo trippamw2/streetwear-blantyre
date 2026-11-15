@@ -17,7 +17,10 @@ const Shop = () => {
   const { products, loading: productsLoading, getProductsByCategory, getProductsByCulture } = useProducts();
   const { categories, loading: categoriesLoading } = useWearableCategories();
   const loading = productsLoading || categoriesLoading;
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("category") || "all";
+  });
   const [selectedCulture, setSelectedCulture] = useState<string>(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get("culture") || "";

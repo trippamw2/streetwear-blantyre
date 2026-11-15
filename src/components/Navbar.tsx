@@ -16,11 +16,12 @@ import {
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/shop", label: "Shop" },
-  { to: "/combos", label: "Culture Packs" },
-  { to: "/editorial", label: "Culture Journal" },
+  { to: "/shop", label: "Shop All" },
+  { to: "/shop?category=t-shirts", label: "T-Shirts" },
+  { to: "/shop?category=jerseys", label: "Jerseys" },
+  { to: "/shop?category=short-sleeve-shirts", label: "Short-Sleeve Shirts" },
   { to: "/about", label: "Our Story" },
-  { to: "/contact", label: "Connect" },
+  { to: "/contact", label: "Contact" },
 ];
 
 export const Navbar = () => {
