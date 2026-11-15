@@ -60,6 +60,7 @@ interface Product {
   images: string[];
   is_featured: boolean;
   is_best_seller: boolean;
+  is_new_arrival: boolean;
   brand?: string;
   types: ProductType[];
   supplier_id?: string;
@@ -86,6 +87,7 @@ const AdminProducts = () => {
     images: [""],
     is_featured: false,
     is_best_seller: false,
+    is_new_arrival: false,
     is_on_sale: false,
     discount_percent: 0,
     brand: "generic",
@@ -139,6 +141,7 @@ const AdminProducts = () => {
         images: validImages,
         is_featured: formData.is_featured,
         is_best_seller: formData.is_best_seller,
+        is_new_arrival: formData.is_new_arrival,
         is_on_sale: formData.is_on_sale,
         discount_percent: formData.discount_percent || 0,
         brand: formData.brand,
@@ -237,6 +240,7 @@ const AdminProducts = () => {
       images: product.images && product.images.length > 0 ? product.images : [product.image || ""],
       is_featured: product.is_featured || false,
       is_best_seller: product.is_best_seller || false,
+      is_new_arrival: (product as any).is_new_arrival || false,
       is_on_sale: (product as any).is_on_sale || false,
       discount_percent: (product as any).discount_percent || 0,
       brand: product.brand || "generic",
@@ -593,6 +597,15 @@ const AdminProducts = () => {
                     className="h-4 w-4 rounded border-gray-300"
                   />
                   <span className="text-sm font-medium">Best Seller</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.is_new_arrival}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, is_new_arrival: e.target.checked }))}
+                    className="h-4 w-4 rounded border-gray-300"
+                  />
+                  <span className="text-sm font-medium">New Arrival</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input

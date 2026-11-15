@@ -17,6 +17,7 @@ export interface Product {
   stock?: number;
   is_featured?: boolean;
   is_best_seller?: boolean;
+  is_new_arrival?: boolean;
   is_on_sale?: boolean;
   discount_percent?: number;
   gallery_images?: string[];
