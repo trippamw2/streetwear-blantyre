@@ -17,7 +17,7 @@ const Contact = () => (
           we're here. Fastest way to reach us is WhatsApp — we reply in minutes.
         </p>
         <p className="text-gray-500 text-xs italic">
-          Your story matters. Don't let it go unworn.
+          Wear Your Identity.
         </p>
       </div>
 
