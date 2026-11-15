@@ -87,7 +87,7 @@ export function useProducts() {
         category: (p.category || "all") as any,
         image: p.image || "",
         brand: p.brand || "Generic",
-        types: [],
+        types: typesMap.get(p.id) || [],
         stock: p.stock_quantity || 10,
         is_featured: p.is_featured || false,
         is_best_seller: p.is_best_seller || false,

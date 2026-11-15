@@ -15,6 +15,7 @@ const PRODUCTS_PER_PAGE = 12;
 
 const Shop = () => {
   const { products, loading: productsLoading, getProductsByCategory, getProductsByCulture } = useProducts();
+  const allSizes = [...new Set(products.flatMap((p: any) => (p.types || []).map((t: any) => t.name)))].sort();
   const { categories, loading: categoriesLoading } = useWearableCategories();
   const loading = productsLoading || categoriesLoading;
   const [selectedCategory, setSelectedCategory] = useState<string>(() => {
@@ -29,6 +30,7 @@ const Shop = () => {
   const [sortBy, setSortBy] = useState<"newest" | "price-low" | "price-high" | "name">("newest");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedSize, setSelectedSize] = useState<string>("all");
   const [inStockOnly, setInStockOnly] = useState(false);
   const [priceMin, setPriceMin] = useState(0);
   const [priceMax, setPriceMax] = useState(200000);
@@ -52,7 +54,8 @@ const Shop = () => {
     const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes((p as any).brand?.toLowerCase() || "");
     const matchesPrice = p.price >= priceMin && p.price <= priceMax;
     const matchesStock = !inStockOnly || (p.stock ?? 0) > 0;
-    return matchesCategory && matchesCulture && matchesSearch && matchesBrand && matchesPrice && matchesStock;
+    const matchesSize = selectedSize === "all" || (p.types || []).some((t: any) => t.name === selectedSize);
+    return matchesCategory && matchesCulture && matchesSearch && matchesBrand && matchesPrice && matchesStock && matchesSize;
   });
 
   const sorted = [...filtered].sort((a, b) => {
@@ -231,6 +234,20 @@ const Shop = () => {
                 </div>
               </div>
               
+              <div>
+                <h3 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Size</h3>
+                <select
+                  value={selectedSize}
+                  onChange={(e) => { setSelectedSize(e.target.value); setVisibleCount(PRODUCTS_PER_PAGE); }}
+                  className="w-full px-3 py-2 border border-white/10 bg-white/5 rounded-lg text-sm text-white"
+                >
+                  <option value="all">All Sizes</option>
+                  {allSizes.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+
               <div>
                 <h3 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Price (MWK)</h3>
                 <div className="flex items-center gap-2 sm:gap-3">
