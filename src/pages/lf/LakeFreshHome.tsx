@@ -65,9 +65,8 @@ const LakeFreshHome = () => {
               READY FOR YOUR TABLE.
             </h1>
             <p className="mt-5 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
-              Order fresh fish before {formatCutoff(deliveryConfig.cutoff)} and we deliver it on{" "}
-              <span className="font-semibold text-white">{formatDeliveryDate(earliest)}</span> — whole, cleaned or
-              portioned to your table.
+              More than fish. Everything for your fish meal — fresh catch, signature spices, marinades, ready-to-cook
+              and complete meal kits, delivered next day across Blantyre.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -186,6 +185,39 @@ const LakeFreshHome = () => {
         )}
       </section>
 
+      {/* SHOP BY CATEGORY */}
+      <section className="border-b border-gray-200 bg-white">
+        <div className="container py-14 sm:py-20">
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#073B78]/50">Shop by category</span>
+          <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+            MORE THAN FISH
+          </h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {[
+              { to: "/lf/fish", label: "Fresh Fish", copy: "Chambo, Ncheni, Usipa." },
+              { to: "/lf/spices", label: "Spices", copy: "Signature blends." },
+              { to: "/lf/marinades", label: "Marinades", copy: "Ready-to-use sauces." },
+              { to: "/lf/ready-to-cook", label: "Ready to Cook", copy: "Prepped portions." },
+              { to: "/lf/meal-kits", label: "Meal Kits", copy: "Complete meals." },
+            ].map((cat) => (
+              <Link
+                key={cat.to}
+                to={cat.to}
+                className="rounded-2xl border border-gray-200 bg-[#EAF6FB]/40 p-5 transition-shadow hover:shadow-md"
+              >
+                <p className="font-display text-base font-extrabold text-[#073B78]">{cat.label}</p>
+                <p className="mt-1 text-xs text-gray-500">{cat.copy}</p>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-6">
+            <Link to="/lf/recipes" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]">
+              Browse recipes <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* HOW IT WORKS */}
       <section className="border-y border-gray-200 bg-gray-50">
         <div className="container py-14 sm:py-20">
@@ -252,6 +284,30 @@ const LakeFreshHome = () => {
             <p className="mt-3 text-[11px] text-gray-400">
               Delivery areas are managed by Lake Fresh. Availability can change by day.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* WHY LAKE FRESH */}
+      <section className="border-y border-gray-200 bg-gray-50">
+        <div className="container py-14 sm:py-20">
+          <h2 className="font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+            WHY LAKE FRESH
+          </h2>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { title: "Fresh from the lake", copy: "Short freshness windows and cold-chain handling from lake to door." },
+              { title: "Honest weights", copy: "Priced per kilogram with clear packed weights. No silent overcharging." },
+              { title: "Complete meals", copy: "Spices, marinades and meal kits to finish your fish dish." },
+              { title: "Next-day delivery", copy: "Order before the cut-off for next-day delivery across Blantyre." },
+              { title: "Business supply", copy: "LakeFresh PRO for restaurants, hotels and caterers." },
+              { title: "Rewards", copy: "Earn points on every order and refer friends." },
+            ].map((item) => (
+              <div key={item.title} className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h3 className="font-display text-sm font-extrabold uppercase tracking-wide text-[#073B78]">{item.title}</h3>
+                <p className="mt-1 text-sm text-gray-500">{item.copy}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
