@@ -165,6 +165,7 @@ const LakeFreshFooter = () => (
           <Link to="/lf/meal-kits" className="hover:text-white">Meal Kits</Link>
           <Link to="/lf/recipes" className="hover:text-white">Recipes</Link>
           <Link to="/lf/loyalty" className="hover:text-white">Rewards</Link>
+          <Link to="/lf/subscribe" className="hover:text-white">Subscribe</Link>
           <Link to="/lf/pro" className="hover:text-white">LakeFresh PRO</Link>
           <Link to="/lf/cart" className="hover:text-white">Basket</Link>
           <Link to="/lf/orders" className="hover:text-white">My Orders</Link>

@@ -22,7 +22,7 @@ import {
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "spices" | "kits" | "recipes" | "pro" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery";
+type Tab = "catalog" | "spices" | "kits" | "recipes" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
@@ -30,6 +30,7 @@ const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "kits", label: "Meal Kits", icon: Package },
   { key: "recipes", label: "Recipes", icon: Package },
   { key: "pro", label: "PRO", icon: Package },
+  { key: "subscriptions", label: "Subs", icon: Package },
   { key: "analytics", label: "Analytics", icon: Package },
   { key: "batches", label: "Batches", icon: Package },
   { key: "slots", label: "Slots", icon: CalendarDays },
@@ -113,6 +114,9 @@ const AdminLakeFresh = () => {
 
   // ---- Analytics state ----
   const [analytics, setAnalytics] = useState<any>(null);
+
+  // ---- Subscriptions state ----
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -214,6 +218,11 @@ const AdminLakeFresh = () => {
     });
   };
 
+  const loadSubscriptions = async () => {
+    const { data } = await supabase.from("lf_subscriptions").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    setSubscriptions(data || []);
+  };
+
   const loadBatches = async () => {
     const { data } = await supabase
       .from("fish_inventory_batches")
@@ -303,6 +312,7 @@ const AdminLakeFresh = () => {
     loadBusinessAccounts();
     loadQuotes();
     loadAnalytics();
+    loadSubscriptions();
     loadBatches();
     loadSlots();
     loadOrders();
@@ -321,6 +331,7 @@ const AdminLakeFresh = () => {
       loadBusinessAccounts(),
       loadQuotes(),
       loadAnalytics(),
+      loadSubscriptions(),
       loadBatches(),
       loadSlots(),
       loadOrders(),
@@ -459,6 +470,12 @@ const AdminLakeFresh = () => {
       .eq("id", id);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else { toast({ title: `Account ${status}` }); await loadBusinessAccounts(); }
+  };
+
+  const updateSubscriptionStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("lf_subscriptions").update({ status, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else { toast({ title: "Updated" }); await loadSubscriptions(); }
   };
 
   const toggleSpiceActive = async (id: string, next: boolean) => {
@@ -1094,6 +1111,59 @@ const AdminLakeFresh = () => {
               </div>
             </>
           )}
+        </div>
+      )}
+
+      {/* SUBSCRIPTIONS */}
+      {tab === "subscriptions" && (
+        <div className="rounded-xl border bg-white overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+              <tr>
+                <th className="px-4 py-3 text-left">Customer</th>
+                <th className="px-4 py-3 text-left">Plan</th>
+                <th className="px-4 py-3 text-right">Qty (kg)</th>
+                <th className="px-4 py-3 text-left">Prep</th>
+                <th className="px-4 py-3 text-left">Consent</th>
+                <th className="px-4 py-3 text-left">Status</th>
+                <th className="px-4 py-3 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subscriptions.map((s) => (
+                <tr key={s.id} className="border-t">
+                  <td className="px-4 py-3">
+                    <div className="font-medium">{s.customer_name}</div>
+                    <div className="text-xs text-gray-500">{s.customer_phone}</div>
+                  </td>
+                  <td className="px-4 py-3">{s.plan}</td>
+                  <td className="px-4 py-3 text-right">{s.quantity_kg}</td>
+                  <td className="px-4 py-3">{s.preparation}</td>
+                  <td className="px-4 py-3">
+                    <span className={`text-xs font-bold ${s.consent_given ? "text-emerald-600" : "text-red-600"}`}>
+                      {s.consent_given ? "Yes" : "No"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">{s.status}</td>
+                  <td className="px-4 py-3">
+                    <select
+                      value={s.status}
+                      onChange={(e) => updateSubscriptionStatus(s.id, e.target.value)}
+                      className="h-8 rounded border border-gray-300 px-2 text-xs"
+                    >
+                      <option value="pending_consent">pending_consent</option>
+                      <option value="active">active</option>
+                      <option value="paused">paused</option>
+                      <option value="cancelled">cancelled</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+              {subscriptions.length === 0 && (
+                <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No subscriptions yet.</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
       )}
 

@@ -1983,6 +1983,87 @@ export type Database = {
           },
         ]
       }
+      lf_subscriptions: {
+        Row: {
+          brand_id: string
+          consent_given: boolean
+          consent_given_at: string | null
+          created_at: string
+          customer_email: string | null
+          customer_name: string
+          customer_phone: string
+          delivery_zone_id: string | null
+          id: string
+          last_charged_at: string | null
+          mandate_ref: string | null
+          next_charge_date: string | null
+          notes: string | null
+          plan: string
+          preparation: string
+          quantity_kg: number
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          brand_id?: string
+          consent_given?: boolean
+          consent_given_at?: string | null
+          created_at?: string
+          customer_email?: string | null
+          customer_name: string
+          customer_phone: string
+          delivery_zone_id?: string | null
+          id?: string
+          last_charged_at?: string | null
+          mandate_ref?: string | null
+          next_charge_date?: string | null
+          notes?: string | null
+          plan: string
+          preparation?: string
+          quantity_kg?: number
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          brand_id?: string
+          consent_given?: boolean
+          consent_given_at?: string | null
+          created_at?: string
+          customer_email?: string | null
+          customer_name?: string
+          customer_phone?: string
+          delivery_zone_id?: string | null
+          id?: string
+          last_charged_at?: string | null
+          mandate_ref?: string | null
+          next_charge_date?: string | null
+          notes?: string | null
+          plan?: string
+          preparation?: string
+          quantity_kg?: number
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_subscriptions_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lf_subscriptions_delivery_zone_id_fkey"
+            columns: ["delivery_zone_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lf_wholesale_prices: {
         Row: {
           brand_id: string
