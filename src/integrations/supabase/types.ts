@@ -112,6 +112,9 @@ export type Database = {
       business_accounts: {
         Row: {
           account_manager_id: string | null
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
           brand_id: string
           business_type: string | null
           company_name: string
@@ -119,14 +122,20 @@ export type Database = {
           credit_limit_mwk: number | null
           id: string
           is_active: boolean
+          min_order_mwk: number
           notes: string | null
+          notes_internal: string | null
           payment_terms: string | null
           tax_id: string | null
           updated_at: string
           user_id: string
+          wholesale_discount_percent: number
         }
         Insert: {
           account_manager_id?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
           brand_id?: string
           business_type?: string | null
           company_name: string
@@ -134,14 +143,20 @@ export type Database = {
           credit_limit_mwk?: number | null
           id?: string
           is_active?: boolean
+          min_order_mwk?: number
           notes?: string | null
+          notes_internal?: string | null
           payment_terms?: string | null
           tax_id?: string | null
           updated_at?: string
           user_id: string
+          wholesale_discount_percent?: number
         }
         Update: {
           account_manager_id?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
           brand_id?: string
           business_type?: string | null
           company_name?: string
@@ -149,11 +164,14 @@ export type Database = {
           credit_limit_mwk?: number | null
           id?: string
           is_active?: boolean
+          min_order_mwk?: number
           notes?: string | null
+          notes_internal?: string | null
           payment_terms?: string | null
           tax_id?: string | null
           updated_at?: string
           user_id?: string
+          wholesale_discount_percent?: number
         }
         Relationships: [
           {
@@ -1546,6 +1564,104 @@ export type Database = {
           },
         ]
       }
+      lf_quote_items: {
+        Row: {
+          estimated_unit_price_mwk: number | null
+          id: string
+          notes: string | null
+          product_name: string
+          product_type: string
+          quantity: number
+          quote_id: string
+          unit: string | null
+        }
+        Insert: {
+          estimated_unit_price_mwk?: number | null
+          id?: string
+          notes?: string | null
+          product_name: string
+          product_type: string
+          quantity?: number
+          quote_id: string
+          unit?: string | null
+        }
+        Update: {
+          estimated_unit_price_mwk?: number | null
+          id?: string
+          notes?: string | null
+          product_name?: string
+          product_type?: string
+          quantity?: number
+          quote_id?: string
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_quote_items_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "lf_quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lf_quotes: {
+        Row: {
+          brand_id: string
+          business_account_id: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          requester_email: string | null
+          requester_name: string
+          requester_phone: string | null
+          status: string
+          total_mwk: number | null
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string
+          business_account_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          requester_email?: string | null
+          requester_name: string
+          requester_phone?: string | null
+          status?: string
+          total_mwk?: number | null
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          business_account_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          requester_email?: string | null
+          requester_name?: string
+          requester_phone?: string | null
+          status?: string
+          total_mwk?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_quotes_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lf_quotes_business_account_id_fkey"
+            columns: ["business_account_id"]
+            isOneToOne: false
+            referencedRelation: "business_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lf_ready_to_cook: {
         Row: {
           brand_id: string
@@ -1731,6 +1847,86 @@ export type Database = {
           },
         ]
       }
+      lf_saved_list_items: {
+        Row: {
+          id: string
+          list_id: string
+          product_id: string | null
+          product_name: string
+          product_type: string
+          quantity: number
+          unit: string | null
+        }
+        Insert: {
+          id?: string
+          list_id: string
+          product_id?: string | null
+          product_name: string
+          product_type: string
+          quantity?: number
+          unit?: string | null
+        }
+        Update: {
+          id?: string
+          list_id?: string
+          product_id?: string | null
+          product_name?: string
+          product_type?: string
+          quantity?: number
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_saved_list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "lf_saved_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lf_saved_lists: {
+        Row: {
+          brand_id: string
+          business_account_id: string | null
+          created_at: string
+          id: string
+          name: string
+          user_id: string | null
+        }
+        Insert: {
+          brand_id?: string
+          business_account_id?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          user_id?: string | null
+        }
+        Update: {
+          brand_id?: string
+          business_account_id?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_saved_lists_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lf_saved_lists_business_account_id_fkey"
+            columns: ["business_account_id"]
+            isOneToOne: false
+            referencedRelation: "business_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lf_spices: {
         Row: {
           brand_id: string
@@ -1780,6 +1976,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "lf_spices_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lf_wholesale_prices: {
+        Row: {
+          brand_id: string
+          created_at: string
+          id: string
+          is_active: boolean
+          min_qty: number
+          product_id: string
+          product_name: string
+          product_type: string
+          updated_at: string
+          wholesale_price_mwk: number
+        }
+        Insert: {
+          brand_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          min_qty?: number
+          product_id: string
+          product_name: string
+          product_type: string
+          updated_at?: string
+          wholesale_price_mwk?: number
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          min_qty?: number
+          product_id?: string
+          product_name?: string
+          product_type?: string
+          updated_at?: string
+          wholesale_price_mwk?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_wholesale_prices_brand_id_fkey"
             columns: ["brand_id"]
             isOneToOne: false
             referencedRelation: "brands"

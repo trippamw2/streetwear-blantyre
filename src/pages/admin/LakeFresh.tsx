@@ -22,13 +22,14 @@ import {
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "spices" | "kits" | "recipes" | "batches" | "slots" | "orders" | "preparation" | "delivery";
+type Tab = "catalog" | "spices" | "kits" | "recipes" | "pro" | "batches" | "slots" | "orders" | "preparation" | "delivery";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
   { key: "spices", label: "Spices", icon: Package },
   { key: "kits", label: "Meal Kits", icon: Package },
   { key: "recipes", label: "Recipes", icon: Package },
+  { key: "pro", label: "PRO", icon: Package },
   { key: "batches", label: "Batches", icon: Package },
   { key: "slots", label: "Slots", icon: CalendarDays },
   { key: "orders", label: "Orders", icon: ClipboardList },
@@ -105,6 +106,10 @@ const AdminLakeFresh = () => {
     ingredients: "", steps: "",
   });
 
+  // ---- PRO state ----
+  const [businessAccounts, setBusinessAccounts] = useState<any[]>([]);
+  const [quotes, setQuotes] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(false);
 
   const loadSpecies = async () => {
@@ -138,6 +143,16 @@ const AdminLakeFresh = () => {
   const loadRecipes = async () => {
     const { data } = await supabase.from("lf_recipes").select("*, fish_species(name)").eq("brand_id", LF_BRAND_ID).order("sort_order");
     setRecipes(data || []);
+  };
+
+  const loadBusinessAccounts = async () => {
+    const { data } = await supabase.from("business_accounts").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    setBusinessAccounts(data || []);
+  };
+
+  const loadQuotes = async () => {
+    const { data } = await supabase.from("lf_quotes").select("*, lf_quote_items(*)").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    setQuotes(data || []);
   };
 
   const loadBatches = async () => {
@@ -226,6 +241,8 @@ const AdminLakeFresh = () => {
     loadSpices();
     loadKits();
     loadRecipes();
+    loadBusinessAccounts();
+    loadQuotes();
     loadBatches();
     loadSlots();
     loadOrders();
@@ -241,6 +258,8 @@ const AdminLakeFresh = () => {
       loadSpices(),
       loadKits(),
       loadRecipes(),
+      loadBusinessAccounts(),
+      loadQuotes(),
       loadBatches(),
       loadSlots(),
       loadOrders(),
@@ -370,6 +389,15 @@ const AdminLakeFresh = () => {
     const { error } = await supabase.from("lf_recipes").update({ is_active: next }).eq("id", id);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else await loadRecipes();
+  };
+
+  const approveBusiness = async (id: string, status: "approved" | "rejected") => {
+    const { error } = await supabase
+      .from("business_accounts")
+      .update({ approval_status: status, approved_at: new Date().toISOString(), approved_by: null })
+      .eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else { toast({ title: `Account ${status}` }); await loadBusinessAccounts(); }
   };
 
   const toggleSpiceActive = async (id: string, next: boolean) => {
@@ -858,6 +886,83 @@ const AdminLakeFresh = () => {
                 )}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* PRO */}
+      {tab === "pro" && (
+        <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold mb-4">Business accounts</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                  <tr>
+                    <th className="px-4 py-3 text-left">Company</th>
+                    <th className="px-4 py-3 text-left">Type</th>
+                    <th className="px-4 py-3 text-left">Contact</th>
+                    <th className="px-4 py-3 text-left">Phone</th>
+                    <th className="px-4 py-3 text-left">Status</th>
+                    <th className="px-4 py-3 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {businessAccounts.map((b) => (
+                    <tr key={b.id} className="border-t">
+                      <td className="px-4 py-3 font-medium">{b.company_name}</td>
+                      <td className="px-4 py-3">{b.business_type || "—"}</td>
+                      <td className="px-4 py-3">{b.contact_name || "—"}</td>
+                      <td className="px-4 py-3">{b.phone}</td>
+                      <td className="px-4 py-3">
+                        <span className={`text-xs font-bold ${b.approval_status === "approved" ? "text-emerald-600" : b.approval_status === "rejected" ? "text-red-600" : "text-amber-600"}`}>
+                          {b.approval_status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 flex gap-2">
+                        {b.approval_status !== "approved" && (
+                          <button onClick={() => approveBusiness(b.id, "approved")} className="text-xs font-bold text-emerald-600">Approve</button>
+                        )}
+                        {b.approval_status !== "rejected" && (
+                          <button onClick={() => approveBusiness(b.id, "rejected")} className="text-xs font-bold text-red-600">Reject</button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  {businessAccounts.length === 0 && (
+                    <tr><td colSpan={6} className="px-4 py-6 text-center text-gray-500">No business accounts yet.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold mb-4">Quote requests</h2>
+            <div className="space-y-4">
+              {quotes.map((q) => (
+                <div key={q.id} className="rounded-lg border border-gray-200 p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <p className="font-medium text-[#0a2540]">{q.requester_name}</p>
+                      <p className="text-xs text-gray-500">{q.requester_email || "—"} · {q.requester_phone || "—"}</p>
+                    </div>
+                    <span className="text-xs font-bold text-amber-600">{q.status}</span>
+                  </div>
+                  {q.notes ? <p className="mt-2 text-sm text-gray-600">{q.notes}</p> : null}
+                  {Array.isArray(q.lf_quote_items) && q.lf_quote_items.length > 0 ? (
+                    <ul className="mt-2 space-y-1 text-xs text-gray-500">
+                      {q.lf_quote_items.map((it: any) => (
+                        <li key={it.id}>• {it.product_name} × {it.quantity} {it.unit || ""}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              ))}
+              {quotes.length === 0 && (
+                <p className="text-sm text-gray-500">No quote requests yet.</p>
+              )}
+            </div>
           </div>
         </div>
       )}
