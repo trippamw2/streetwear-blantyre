@@ -50,6 +50,9 @@ const LakeFreshHeader = () => {
           <NavLink to="/lf/fish" className={navLinkClass}>
             The Catch
           </NavLink>
+          <NavLink to="/lf/recipes" className={navLinkClass}>
+            Recipes
+          </NavLink>
           <NavLink to="/lf/orders" className={navLinkClass}>
             Orders
           </NavLink>
@@ -138,6 +141,7 @@ const LakeFreshFooter = () => (
         <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Shop</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-white/75">
           <Link to="/lf/fish" className="hover:text-white">The Catch</Link>
+          <Link to="/lf/recipes" className="hover:text-white">Recipes</Link>
           <Link to="/lf/cart" className="hover:text-white">Basket</Link>
           <Link to="/lf/orders" className="hover:text-white">My Orders</Link>
         </div>
