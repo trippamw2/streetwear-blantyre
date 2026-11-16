@@ -1,56 +1,304 @@
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Fish } from "lucide-react";
+import { ArrowLeft, AlertCircle, Fish, Loader2, Minus, Plus, Snowflake, ShieldCheck, Truck } from "lucide-react";
 import { SEO } from "@/components/SEO";
-import { FISH_SPECIES, FISH_PRODUCTS, getFishPriceForWeight, DEFAULT_LF_DELIVERY_FEE_MWK } from "@/data/lakefresh";
-import { Button } from "@/components/ui/button";
+import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
+import {
+  useLakeFreshCatalog,
+  useLakeFreshDeliveryConfig,
+} from "@/hooks/useLakeFresh";
+import {
+  calculateFinalPrice,
+  formatCutoff,
+  formatDeliveryDate,
+  getEarliestDeliveryDate,
+} from "@/lib/lfDelivery";
+import { formatMWK } from "@/data/products";
+import { toast } from "@/hooks/use-toast";
+
+const prepCopy: Record<string, { label: string; description: string }> = {
+  whole: { label: "Whole", description: "Whole fish, cleaned and ready to cook." },
+  cleaned: { label: "Cleaned", description: "Gutted, scaled and cleaned." },
+  portioned: { label: "Portioned", description: "Cut into evenly sized portions." },
+};
 
 const LakeFreshProduct = () => {
   const { id } = useParams();
-  const product = FISH_PRODUCTS.find((p) => p.id === id) || FISH_PRODUCTS[0];
+  const { data: products, isLoading, isError, refetch } = useLakeFreshCatalog();
+  const { data: config } = useLakeFreshDeliveryConfig();
+  const { add } = useLakeFreshCart();
 
-  const species = FISH_SPECIES.find((s) => s.id === product.speciesId);
+  const product = useMemo(() => products?.find((item) => item.id === id), [products, id]);
+  const [weightKg, setWeightKg] = useState(0.5);
+  const [preparation, setPreparation] = useState("whole");
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center gap-3 text-sm text-gray-500">
+        <Loader2 className="h-5 w-5 animate-spin text-[#0a2540]" /> Loading fish…
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="container max-w-lg py-16 text-center">
+        <AlertCircle className="mx-auto h-6 w-6 text-red-500" />
+        <p className="mt-2 font-semibold text-red-700">We couldn&apos;t load this fish.</p>
+        <button
+          type="button"
+          onClick={() => refetch()}
+          className="mt-4 rounded-lg bg-[#0a2540] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="container py-16 text-center">
+        <Fish className="mx-auto h-10 w-10 text-gray-300" />
+        <h1 className="mt-4 font-display text-2xl font-extrabold text-[#0a2540]">Fish not found</h1>
+        <p className="mt-2 text-sm text-gray-500">This fish is no longer on the catch list.</p>
+        <Link
+          to="/lf/fish"
+          className="mt-6 inline-flex rounded-lg bg-[#0a2540] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white"
+        >
+          Back to the catch
+        </Link>
+      </div>
+    );
+  }
+
+  const soldOut = product.availabilityStatus !== "available" || product.availableKg <= 0;
+  const minWeight = product.minOrderQtyKg || 0.5;
+  const effectiveWeight = Math.max(weightKg || 0, minWeight);
+  const lineTotal = calculateFinalPrice(product.pricePerKgMwk, weightKg, minWeight);
+  const overStock = !soldOut && product.availableKg > 0 && effectiveWeight > product.availableKg;
+  const options = product.preparationOptions.length > 0 ? product.preparationOptions : ["whole"];
+  const selectedPreparation = options.includes(preparation) ? preparation : options[0];
+  const deliveryConfig = config;
+  const earliestDate = deliveryConfig
+    ? getEarliestDeliveryDate(new Date(), deliveryConfig)
+    : null;
+
+  const adjustWeight = (delta: number) => {
+    setWeightKg((current) => Math.max(minWeight, Math.round((current + delta) * 1000) / 1000));
+  };
+
+  const handleAdd = () => {
+    if (soldOut) return;
+    if (overStock) {
+      toast({
+        title: "Not enough stock",
+        description: `Only ${product.availableKg.toFixed(1)} kg is available right now.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    add({
+      productId: product.id,
+      name: product.name,
+      speciesName: product.speciesName || product.name,
+      weightKg: effectiveWeight,
+      preparation: selectedPreparation,
+      pricePerKgMwk: product.pricePerKgMwk,
+      minOrderQtyKg: minWeight,
+      preparationOptions: options,
+      image: product.image,
+    });
+    toast({
+      title: "Added to basket",
+      description: `${effectiveWeight} kg ${product.speciesName || product.name} · ${prepCopy[selectedPreparation]?.label || selectedPreparation}`,
+    });
+  };
 
   return (
     <div className="bg-white text-gray-900">
       <SEO
-        title={`${product.name} — Lake Fresh Fish Mart`}
-        description={`${product.name}. Priced per kilogram with next-day delivery. ${species?.description || ""}`}
+        brand="lake-fresh"
+        title={`${product.speciesName || product.name} — Lake Fresh Fish Mart`}
+        description={`${product.description || product.name} Priced ${formatMWK(product.pricePerKgMwk)} per kilogram with next-day delivery in Blantyre.`}
       />
 
-      <section className="bg-gray-50 border-b border-gray-200">
-        <div className="container py-12 sm:py-16">
-          <Link to="/lf/fish">
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-gray-900">
-              <ArrowLeft className="h-3.5 w-3.5" /> Back to the catch
-            </span>
+      <section className="border-b border-gray-200 bg-[#ecfeff]/50">
+        <div className="container py-10 sm:py-14">
+          <Link
+            to="/lf/fish"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#0a2540]"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" /> Back to the catch
           </Link>
-          <div className="mt-6 flex flex-col sm:flex-row gap-8 items-start">
-            <div className="w-full sm:w-72 rounded-2xl bg-[#0a2540] h-72 flex items-center justify-center">
-              <Fish className="h-16 w-16 text-[#22d3ee]" />
+
+          <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
+            <div className="flex h-72 w-full items-center justify-center rounded-2xl bg-[#0a2540] lg:w-96">
+              {product.image ? (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="h-full w-full rounded-2xl object-cover"
+                />
+              ) : (
+                <Fish className="h-20 w-20 text-[#22d3ee]" />
+              )}
             </div>
-            <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-gray-200 bg-gray-50 text-gray-700 text-xs font-semibold tracking-[0.15em] uppercase mb-4">
-                <Fish className="h-3.5 w-3.5" /> {species?.name || "Fresh Fish"}
-              </span>
-              <h1 className="font-display font-extrabold text-4xl sm:text-5xl tracking-tight">
-                {product.name}
-              </h1>
-              <p className="text-gray-500 mt-3 leading-relaxed">{product.description}</p>
-              <p className="mt-4 text-sm text-gray-600">
-                <span className="font-bold uppercase tracking-wide text-gray-900">Pricing:</span>{" "}
-                {`MK ${product.pricePerKgMwk.toLocaleString("en-US")} per kilogram`} · Min. order {product.minOrderQtyKg} kg
-              </p>
-              <p className="text-sm text-gray-600 mt-1">
-                Delivery fee: MK {DEFAULT_LF_DELIVERY_FEE_MWK.toLocaleString("en-US")} · Free over threshold (TBD per brand rules).
-              </p>
-              <p className="text-sm text-gray-600 mt-1">
-                Next weight-based price: MK {getFishPriceForWeight(product.pricePerKgMwk, product.minOrderQtyKg, product.minOrderQtyKg).toLocaleString("en-US")}
-              </p>
-              <div className="mt-6">
-                <Button className="rounded-lg bg-[#0a2540] text-white hover:bg-[#0a2540]/90 font-bold uppercase tracking-widest text-xs">
-                  Add to order (checkout coming soon)
-                </Button>
+
+            <div className="max-w-2xl flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-2 border border-[#0a2540]/15 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#0a2540]">
+                  <Fish className="h-3.5 w-3.5" /> {product.speciesName || "Fresh Fish"}
+                </span>
+                <span
+                  className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest ${
+                    soldOut ? "bg-gray-100 text-gray-500" : "bg-emerald-50 text-emerald-700"
+                  }`}
+                >
+                  {soldOut ? "Sold out" : `${product.availableKg.toFixed(1)} kg available`}
+                </span>
               </div>
+
+              <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#0a2540] sm:text-5xl">
+                {product.speciesName || product.name}
+              </h1>
+              <p className="mt-3 leading-relaxed text-gray-600">{product.description}</p>
+
+              <p className="mt-4 text-sm text-gray-600">
+                <span className="font-bold uppercase tracking-wide text-[#0a2540]">Price:</span>{" "}
+                {formatMWK(product.pricePerKgMwk)} per kilogram · minimum {minWeight} kg
+              </p>
+
+              {!soldOut && (
+                <div className="mt-6 space-y-5 rounded-2xl border border-gray-200 bg-white p-5">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Weight</p>
+                    <div className="mt-2 flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => adjustWeight(-0.5)}
+                        disabled={weightKg <= minWeight}
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 text-[#0a2540] disabled:opacity-40"
+                        aria-label="Reduce weight"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      <div className="flex items-baseline gap-1">
+                        <input
+                          type="number"
+                          min={minWeight}
+                          step={0.5}
+                          value={weightKg}
+                          onChange={(e) => {
+                            const value = Number(e.target.value);
+                            setWeightKg(Number.isFinite(value) ? Math.max(minWeight, value) : minWeight);
+                          }}
+                          className="w-20 rounded-lg border border-gray-300 px-2 py-2 text-center text-lg font-bold text-[#0a2540]"
+                          aria-label="Weight in kilograms"
+                        />
+                        <span className="text-sm font-semibold text-gray-500">kg</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => adjustWeight(0.5)}
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 text-[#0a2540]"
+                        aria-label="Increase weight"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <p className="mt-2 text-xs text-gray-500">
+                      Charged on packed weight at dispatch. Price differences are reconciled transparently.
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Preparation</p>
+                    <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                      {options.map((option) => {
+                        const copy = prepCopy[option] || { label: option, description: "" };
+                        const selected = selectedPreparation === option;
+                        return (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => setPreparation(option)}
+                            className={`rounded-xl border p-3 text-left transition-colors ${
+                              selected
+                                ? "border-[#0a2540] bg-[#0a2540] text-white"
+                                : "border-gray-200 bg-white text-[#0a2540] hover:border-[#0a2540]/40"
+                            }`}
+                          >
+                            <span className="block text-sm font-bold">{copy.label}</span>
+                            <span className={`mt-1 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
+                              {copy.description}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-4">
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Estimated total</p>
+                      <p className="text-2xl font-extrabold text-[#0a2540]">{formatMWK(lineTotal)}</p>
+                      <p className="text-xs text-gray-500">
+                        {effectiveWeight} kg × {formatMWK(product.pricePerKgMwk)}/kg
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAdd}
+                      disabled={overStock}
+                      className="inline-flex items-center justify-center rounded-lg bg-[#0a2540] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#0a2540]/90 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {overStock ? "Not enough stock" : "Add to basket"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {soldOut && (
+                <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+                  This fish is sold out for the current batch. It will return with the next catch.
+                </div>
+              )}
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="flex gap-3 rounded-xl border border-gray-200 p-4">
+                  <Truck className="h-5 w-5 shrink-0 text-[#0a2540]" />
+                  <div>
+                    <p className="text-sm font-bold text-[#0a2540]">Next-day delivery</p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {earliestDate ? (
+                        <>
+                          Order before {formatCutoff(deliveryConfig.cutoff)} for{" "}
+                          {formatDeliveryDate(earliestDate)}.
+                        </>
+                      ) : (
+                        "Order before the daily cut-off for next-day delivery."
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-3 rounded-xl border border-gray-200 p-4">
+                  <Snowflake className="h-5 w-5 shrink-0 text-[#0a2540]" />
+                  <div>
+                    <p className="text-sm font-bold text-[#0a2540]">Storage &amp; handling</p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {product.storageInfo || "Keep refrigerated at 0–4°C and consume within 2 days."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {product.handlingInfo && (
+                <p className="mt-4 flex items-start gap-2 text-xs text-gray-500">
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#0a2540]/60" />
+                  {product.handlingInfo}
+                </p>
+              )}
             </div>
           </div>
         </div>

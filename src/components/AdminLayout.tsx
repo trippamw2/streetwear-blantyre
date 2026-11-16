@@ -140,14 +140,15 @@ export const AdminLayout = () => {
             {adminLinks.map((link) => {
               const isActive = location.pathname === link.to ||
                 (link.to !== "/admin" && location.pathname.startsWith(link.to));
+              const target = `${link.to}?brand=${brandParam}`;
 
               return (
                 <a
                   key={link.to}
-                  href={link.to}
+                  href={target}
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate(link.to);
+                    navigate(target);
                     setSidebarOpen(false);
                   }}
                   className={cn(

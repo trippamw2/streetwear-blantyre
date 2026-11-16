@@ -66,6 +66,13 @@ import Scan from "./pages/Scan";
 import LakeFreshHome from "./pages/lf/LakeFreshHome";
 import LakeFreshCatalog from "./pages/lf/LakeFreshCatalog";
 import LakeFreshProduct from "./pages/lf/LakeFreshProduct";
+import LakeFreshCart from "./pages/lf/LakeFreshCart";
+import LakeFreshCheckout from "./pages/lf/LakeFreshCheckout";
+import LakeFreshAuth from "./pages/lf/LakeFreshAuth";
+import LakeFreshOrders from "./pages/lf/LakeFreshOrders";
+import LakeFreshOrder from "./pages/lf/LakeFreshOrder";
+import { LakeFreshLayout } from "./components/lf/LakeFreshLayout";
+import { LakeFreshProtectedRoute } from "./components/lf/LakeFreshProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -135,10 +142,17 @@ const App = () => (
                   <Route path="/culture/:pillar" element={<Culture />} />
                   <Route path="/lookbook" element={<Lookbooks />} />
                   <Route path="/lookbook/:slug" element={<LookbookDetail />} />
-                  {/* Lake Fresh storefront (brand-scoped) */}
-                  <Route path="/lf" element={<Navigate to="/lf/fish" replace />} />
-                  <Route path="/lf/fish" element={<LakeFreshCatalog />} />
-                  <Route path="/lf/fish/:id" element={<LakeFreshProduct />} />
+                </Route>
+                {/* Lake Fresh storefront — independent brand layout, no SB chrome */}
+                <Route path="/lf" element={<LakeFreshLayout />}>
+                  <Route index element={<LakeFreshHome />} />
+                  <Route path="fish" element={<LakeFreshCatalog />} />
+                  <Route path="fish/:id" element={<LakeFreshProduct />} />
+                  <Route path="cart" element={<LakeFreshCart />} />
+                  <Route path="auth" element={<LakeFreshAuth />} />
+                  <Route path="checkout" element={<LakeFreshProtectedRoute><LakeFreshCheckout /></LakeFreshProtectedRoute>} />
+                  <Route path="orders" element={<LakeFreshProtectedRoute><LakeFreshOrders /></LakeFreshProtectedRoute>} />
+                  <Route path="orders/:id" element={<LakeFreshProtectedRoute><LakeFreshOrder /></LakeFreshProtectedRoute>} />
                 </Route>
                 {/* Standalone pages (no header/footer) */}
                 <Route path="/verify/:token" element={<Verify />} />

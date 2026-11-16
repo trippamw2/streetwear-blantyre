@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
+import { BRANDS, type BrandSlug } from "@/lib/brands";
 import { Link, useSearchParams } from "react-router-dom";
 import { Package, DollarSign, TrendingUp, Users, ArrowUpRight, ArrowDownRight, Wallet, Banknote, Receipt } from "lucide-react";
 
@@ -42,15 +43,17 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchStats();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [brand]);
 
   const fetchStats = async () => {
-    const brandFilter = brand === "all" ? undefined : brand;
+    const brandFilter =
+      brand === "all" ? undefined : BRANDS[brand as BrandSlug]?.id ?? BRANDS.sb.id;
     let ordersQuery = supabase
       .from("orders")
-      .select("id, total_mwk, delivery_fee_mwk, is_paid, payment_method, status");
+      .select("id, total_mwk, delivery_fee_mwk, payment_method, status, customer_phone");
 
-    if (brandFilter && brandFilter !== "all") {
+    if (brandFilter) {
       ordersQuery = ordersQuery.eq("brand_id", brandFilter);
     }
 
@@ -60,8 +63,9 @@ const AdminDashboard = () => {
       // Gross orders - all orders total
       const grossOrders = allOrders.reduce((sum, o) => sum + (o.total_mwk || 0), 0);
       
-      // Paid orders only
-      const paidOrdersList = allOrders.filter(o => o.is_paid === true);
+      // Paid orders only. The orders enum has no separate paid flag; any status
+      // past "new" (other than cancelled) means payment was confirmed.
+      const paidOrdersList = allOrders.filter(o => o.status !== "new" && o.status !== "cancelled");
       const paidOrders = paidOrdersList.length;
       
       // Net Revenue - paid orders subtotal (without delivery fees)
@@ -216,22 +220,28 @@ const AdminDashboard = () => {
       </div>
 
       {/* Recent Orders Preview */}
-      <RecentOrders />
+      <RecentOrders brand={brand} />
     </div>
   );
 };
 
-const RecentOrders = () => {
+const RecentOrders = ({ brand }: { brand: string }) => {
   const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
-    supabase
+    const brandFilter =
+      brand === "all" ? undefined : BRANDS[brand as BrandSlug]?.id ?? BRANDS.sb.id;
+
+    let query = supabase
       .from("orders")
       .select("id, status, total_mwk, created_at, customer_name")
       .order("created_at", { ascending: false })
-      .limit(5)
-      .then(({ data }) => setOrders(data || []));
-  }, []);
+      .limit(5);
+
+    if (brandFilter) query = query.eq("brand_id", brandFilter);
+
+    query.then(({ data }) => setOrders(data || []));
+  }, [brand]);
 
   const statusColors: Record<string, string> = {
     new: "bg-accent",

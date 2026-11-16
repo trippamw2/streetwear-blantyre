@@ -1,0 +1,273 @@
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { AlertCircle, ArrowLeft, CalendarDays, CreditCard, Fish, Loader2, MapPin, Snowflake } from "lucide-react";
+import { SEO } from "@/components/SEO";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
+import { formatDeliveryDate } from "@/lib/lfDelivery";
+import { buildLakeFreshPaymentRef } from "@/lib/lfPayments";
+import { formatMWK } from "@/data/products";
+import { toast } from "@/hooks/use-toast";
+
+const statusCopy: Record<string, { label: string; tone: string }> = {
+  new: { label: "Pending payment", tone: "bg-amber-50 text-amber-800 border-amber-200" },
+  confirmed: { label: "Payment confirmed", tone: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+  processing: { label: "Preparing", tone: "bg-[#ecfeff] text-[#0a2540] border-[#22d3ee]/30" },
+  dispatched: { label: "Out for delivery", tone: "bg-[#ecfeff] text-[#0a2540] border-[#22d3ee]/30" },
+  delivered: { label: "Delivered", tone: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+  cancelled: { label: "Cancelled", tone: "bg-red-50 text-red-700 border-red-200" },
+};
+
+const prepLabel = (value: string) =>
+  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Portioned" : value;
+
+const LakeFreshOrder = () => {
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const { user } = useAuth();
+  const paymentParam = searchParams.get("payment");
+
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["lf", "order", id],
+    enabled: Boolean(id),
+    queryFn: async () => {
+      const { data: order, error: orderError } = await supabase
+        .from("orders")
+        .select(
+          "id, status, customer_name, customer_phone, customer_location, notes, subtotal_mwk, delivery_fee_mwk, discount_mwk, total_mwk, payment_method, payment_reference, delivery_date, delivery_window, created_at"
+        )
+        .eq("id", id as string)
+        .eq("brand_id", LF_BRAND_ID)
+        .maybeSingle();
+
+      if (orderError) throw new Error(orderError.message);
+      if (!order) throw new Error("Order not found");
+
+      const { data: items, error: itemsError } = await supabase
+        .from("order_items")
+        .select("id, product_name, unit_price_mwk, quantity")
+        .eq("order_id", order.id);
+      if (itemsError) throw new Error(itemsError.message);
+
+      const itemIds = (items || []).map((item) => item.id);
+      const { data: prep, error: prepError } = itemIds.length
+        ? await supabase
+            .from("order_preparation")
+            .select("order_item_id, preparation_type, requested_weight_kg, packed_weight_kg, price_per_kg_mwk, final_price_mwk")
+            .in("order_item_id", itemIds)
+        : { data: [], error: null };
+      if (prepError) throw new Error(prepError.message);
+
+      const prepByItem = new Map((prep || []).map((row) => [row.order_item_id, row]));
+      return {
+        order,
+        items: (items || []).map((item) => ({ ...item, preparation: prepByItem.get(item.id) || null })),
+      };
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center gap-3 text-sm text-gray-500">
+        <Loader2 className="h-5 w-5 animate-spin text-[#0a2540]" /> Loading order…
+      </div>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <div className="container max-w-lg py-20 text-center">
+        <Fish className="mx-auto h-10 w-10 text-gray-300" />
+        <h1 className="mt-4 font-display text-2xl font-extrabold text-[#0a2540]">Order not available</h1>
+        <p className="mt-2 text-sm text-gray-500">
+          {error instanceof Error ? error.message : "We could not load this order."}
+        </p>
+        <Link
+          to="/lf/orders"
+          className="mt-6 inline-flex rounded-lg bg-[#0a2540] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white"
+        >
+          My orders
+        </Link>
+      </div>
+    );
+  }
+
+  const { order, items } = data;
+  const status = statusCopy[order.status] || {
+    label: order.status,
+    tone: "bg-gray-50 text-gray-700 border-gray-200",
+  };
+  const paymentRef = order.payment_reference || buildLakeFreshPaymentRef(order.id);
+  const isPaid = order.status !== "new" && order.status !== "cancelled";
+  const canPay = order.status === "new";
+
+  const handlePay = async () => {
+    const [firstName, ...rest] = order.customer_name.trim().split(/\s+/);
+    const cleanPhone = order.customer_phone.replace(/[^0-9]/g, "");
+    const { redirectToPayChangu } = await import("@/lib/paychangu");
+    redirectToPayChangu({
+      amount: order.total_mwk,
+      currency: "MWK",
+      email: user?.email || `${cleanPhone}@lakefreshmw.com`,
+      firstName: firstName || "Lake",
+      lastName: rest.join(" ") || "Fresh",
+      txRef: paymentRef,
+      callbackUrl: `${window.location.origin}/lf/orders/${order.id}?payment=callback`,
+      returnUrl: `${window.location.origin}/lf/orders/${order.id}?payment=complete`,
+      title: "Lake Fresh Fish Mart Order",
+      description: `Order ${paymentRef}`,
+    });
+    toast({ title: "Redirecting to PayChangu…" });
+  };
+
+  return (
+    <div className="bg-white">
+      <SEO
+        brand="lake-fresh"
+        title={`${paymentRef} — Lake Fresh Fish Mart`}
+        description="Your Lake Fresh fish order details and delivery status."
+      />
+      <div className="container max-w-3xl py-8 sm:py-12">
+        <Link
+          to="/lf/orders"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#0a2540]"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" /> All orders
+        </Link>
+
+        <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="font-mono text-xs font-bold text-gray-500">{paymentRef}</p>
+            <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-[#0a2540] sm:text-4xl">
+              {formatMWK(order.total_mwk)}
+            </h1>
+            <p className="mt-1 text-xs text-gray-500">
+              Placed {new Date(order.created_at).toLocaleString("en-GB", { timeZone: "Africa/Blantyre" })}
+            </p>
+          </div>
+          <span className={`rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest ${status.tone}`}>
+            {status.label}
+          </span>
+        </div>
+
+        {paymentParam && !isPaid && (
+          <div className="mt-5 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <div>
+              <p className="font-bold">Payment is being verified.</p>
+              <p className="mt-1 text-xs">
+                Returning from PayChangu does not mark an order paid. We update it only after the payment provider
+                confirms the transaction.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {canPay && (
+          <div className="mt-5 flex flex-col gap-3 rounded-xl border border-[#22d3ee]/40 bg-[#ecfeff]/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-bold text-[#0a2540]">Complete your payment</p>
+              <p className="text-xs text-gray-600">Your fish is reserved while payment is pending.</p>
+            </div>
+            <button
+              type="button"
+              onClick={handlePay}
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0a2540] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
+            >
+              <CreditCard className="h-3.5 w-3.5" /> Pay now
+            </button>
+          </div>
+        )}
+
+        <section className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl border border-gray-200 p-4">
+            <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+              <CalendarDays className="h-3.5 w-3.5 text-[#22d3ee]" /> Delivery
+            </p>
+            <p className="mt-2 text-sm font-bold text-[#0a2540]">
+              {order.delivery_date ? formatDeliveryDate(order.delivery_date) : "Date pending"}
+            </p>
+            <p className="mt-1 text-xs text-gray-500">{order.delivery_window || "Next-day delivery window"}</p>
+            <p className="mt-2 flex items-start gap-1.5 text-xs text-gray-500">
+              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> {order.customer_location}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-gray-200 p-4">
+            <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+              <Snowflake className="h-3.5 w-3.5 text-[#22d3ee]" /> Cold-chain promise
+            </p>
+            <p className="mt-2 text-sm font-bold text-[#0a2540]">Kept at 0–4°C</p>
+            <p className="mt-1 text-xs text-gray-500">Consume within 2 days of delivery. Rinse before cooking.</p>
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-2xl border border-gray-200 p-5">
+          <h2 className="font-display text-lg font-extrabold text-[#0a2540]">Your fish</h2>
+          <div className="mt-3 divide-y divide-gray-100">
+            {items.map((item) => (
+              <div key={item.id} className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0">
+                <div>
+                  <p className="text-sm font-semibold text-[#0a2540]">{item.product_name}</p>
+                  <p className="mt-0.5 text-xs text-gray-500">
+                    {item.preparation
+                      ? `${Number(item.preparation.requested_weight_kg || 0).toFixed(1)} kg · ${prepLabel(item.preparation.preparation_type)}`
+                      : `${item.quantity} item${item.quantity === 1 ? "" : "s"}`}
+                  </p>
+                  {item.preparation?.price_per_kg_mwk ? (
+                    <p className="mt-0.5 text-[11px] text-gray-400">
+                      {formatMWK(item.preparation.price_per_kg_mwk)} / kg
+                      {item.preparation.packed_weight_kg
+                        ? ` · packed ${Number(item.preparation.packed_weight_kg).toFixed(2)} kg`
+                        : " · packed weight confirmed at dispatch"}
+                    </p>
+                  ) : null}
+                </div>
+                <span className="text-sm font-semibold text-[#0a2540]">{formatMWK(item.unit_price_mwk)}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 space-y-2 border-t border-gray-100 pt-4 text-sm">
+            <div className="flex justify-between text-gray-600">
+              <span>Subtotal</span>
+              <span>{formatMWK(order.subtotal_mwk || 0)}</span>
+            </div>
+            <div className="flex justify-between text-gray-600">
+              <span>Delivery</span>
+              <span>{order.delivery_fee_mwk ? formatMWK(order.delivery_fee_mwk) : "Free"}</span>
+            </div>
+            {(order.discount_mwk || 0) > 0 && (
+              <div className="flex justify-between text-emerald-700">
+                <span>Discount</span>
+                <span>-{formatMWK(order.discount_mwk || 0)}</span>
+              </div>
+            )}
+            <div className="flex justify-between border-t border-gray-100 pt-2 text-base font-extrabold text-[#0a2540]">
+              <span>{isPaid ? "Total paid" : "Estimated total"}</span>
+              <span>{formatMWK(order.total_mwk)}</span>
+            </div>
+          </div>
+
+          <p className="mt-3 text-xs text-gray-500">
+            The amount authorized at checkout is based on estimated weight. Packed weight is recorded before dispatch
+            and any difference is handled transparently — we never silently charge more than you authorized.
+          </p>
+        </section>
+
+        {order.notes && (
+          <section className="mt-4 rounded-2xl border border-gray-200 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Delivery notes</p>
+            <p className="mt-1 text-sm text-gray-700">{order.notes}</p>
+          </section>
+        )}
+
+        <p className="mt-6 text-center text-xs text-gray-400">
+          Payment method: PayChangu · Reference {paymentRef}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default LakeFreshOrder;

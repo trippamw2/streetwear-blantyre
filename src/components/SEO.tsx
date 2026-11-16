@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { BRANDS, type BrandSlug } from "@/lib/brands";
 
 interface SEOProps {
   title: string;
@@ -6,6 +7,8 @@ interface SEOProps {
   path?: string;
   image?: string;
   type?: "website" | "product";
+  /** Brand whose name/domain/metadata should be used. Defaults to SB. */
+  brand?: BrandSlug;
 }
 
 const SITE_NAME = "Streetwear Blantyre";
@@ -13,15 +16,27 @@ const SITE_URL = "https://www.wearsb.com";
 const DEFAULT_DESC = "SB Streetwear - T shirts, football jerseys, short sleeve shirts and vests for everyday life, sport and outdoor experiences. Blantyre, Malawi. Wear Your Identity.";
 const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Streetwear+Blantyre";
 
+const BRAND_META: Record<BrandSlug, { siteName: string; siteUrl: string; image: string }> = {
+  sb: { siteName: SITE_NAME, siteUrl: SITE_URL, image: DEFAULT_IMAGE },
+  "lake-fresh": {
+    siteName: BRANDS["lake-fresh"].name,
+    siteUrl: `https://${BRANDS["lake-fresh"].domain}`,
+    image: "https://placehold.co/600x600/0a2540/22d3ee?text=Lake+Fresh+Fish+Mart",
+  },
+};
+
 export const SEO = ({
   title,
   description,
   path = "",
-  image = DEFAULT_IMAGE,
+  image,
   type = "website",
+  brand = "sb",
 }: SEOProps) => {
-  const fullTitle = `${title} | ${SITE_NAME}`;
-  const url = `${SITE_URL}${path}`;
+  const meta = BRAND_META[brand] ?? BRAND_META.sb;
+  const resolvedImage = image ?? meta.image;
+  const fullTitle = title.includes(meta.siteName) ? title : `${title} | ${meta.siteName}`;
+  const url = `${meta.siteUrl}${path}`;
 
   return (
     <Helmet>
@@ -33,15 +48,15 @@ export const SEO = ({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={resolvedImage} />
       <meta property="og:type" content={type} />
-      <meta property="og:site_name" content={SITE_NAME} />
+      <meta property="og:site_name" content={meta.siteName} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={resolvedImage} />
 
       {/* JSON-LD Structured Data */}
       <script type="application/ld+json">
@@ -51,7 +66,7 @@ export const SEO = ({
           name: title,
           description,
           url,
-          ...(type === "product" ? { image } : {}),
+          ...(type === "product" ? { image: resolvedImage } : {}),
         })}
       </script>
     </Helmet>
