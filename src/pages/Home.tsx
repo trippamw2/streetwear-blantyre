@@ -147,7 +147,7 @@ const Home = () => {
             </div>
 
             <h1 className="font-display text-[2.6rem] font-extrabold uppercase leading-[0.95] tracking-tight text-white sm:text-6xl lg:text-7xl">
-              Style That
+              Style That{" "}
               <br />
               Moves With You.
             </h1>

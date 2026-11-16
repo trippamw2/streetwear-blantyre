@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import { ArrowRight, BookOpen, Clock, Fish, Loader2, Sparkles, Users } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
@@ -60,7 +60,7 @@ const LakeFreshRecipes = () => {
             {(data || []).map((r: any, index: number) => {
               const accent = accents[index % accents.length];
               return (
-                <Link
+                <LFLink
                   key={r.id}
                   to={`/lf/recipes/${r.slug}`}
                   className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-lg"
@@ -125,7 +125,7 @@ const LakeFreshRecipes = () => {
                       </span>
                     </div>
                   </div>
-                </Link>
+                </LFLink>
               );
             })}
             {(data || []).length === 0 && (

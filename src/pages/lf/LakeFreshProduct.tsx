@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import { ArrowLeft, AlertCircle, Check, Fish, Loader2, Minus, Plus, Snowflake, ShieldCheck, Truck } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
@@ -123,12 +124,12 @@ const LakeFreshProduct = () => {
         <Fish className="mx-auto h-10 w-10 text-gray-300" />
         <h1 className="mt-4 font-display text-2xl font-extrabold text-[#073B78]">Fish not found</h1>
         <p className="mt-2 text-sm text-gray-500">This fish is no longer on the catch list.</p>
-        <Link
+        <LFLink
           to="/lf/fish"
           className="mt-6 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white"
         >
           Back to the catch
-        </Link>
+        </LFLink>
       </div>
     );
   }
@@ -210,17 +211,17 @@ const LakeFreshProduct = () => {
       <SEO
         brand="lake-fresh"
         title={`${product.speciesName || product.name} — Lake Fresh Fish Mart`}
-        description={`${product.description || product.name} Priced ${formatMWK(product.pricePerKgMwk)} per kilogram with next-day delivery in Blantyre.`}
+        description={`${product.description || product.name} Priced ${formatMWK(product.pricePerKgMwk)} per kilogram with next day delivery in Blantyre.`}
       />
 
       <section className="border-b border-gray-200 bg-[#EAF6FB]/50">
         <div className="container py-10 sm:py-14">
-          <Link
+          <LFLink
             to="/lf/fish"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back to the catch
-          </Link>
+          </LFLink>
 
           <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
             <div className="flex h-72 w-full items-center justify-center rounded-2xl bg-[#073B78] lg:w-96">
@@ -361,7 +362,7 @@ const LakeFreshProduct = () => {
                 <div className="flex gap-3 rounded-xl border border-gray-200 p-4">
                   <Truck className="h-5 w-5 shrink-0 text-[#073B78]" />
                   <div>
-                    <p className="text-sm font-bold text-[#073B78]">Next-day delivery</p>
+                    <p className="text-sm font-bold text-[#073B78]">Next day delivery</p>
                     <p className="mt-1 text-xs text-gray-500">
                       {earliestDate ? (
                         <>
@@ -369,7 +370,7 @@ const LakeFreshProduct = () => {
                           {formatDeliveryDate(earliestDate)}.
                         </>
                       ) : (
-                        "Order before the daily cut-off for next-day delivery."
+                        "Order before the daily cutoff for next day delivery."
                       )}
                     </p>
                   </div>
@@ -379,7 +380,7 @@ const LakeFreshProduct = () => {
                   <div>
                     <p className="text-sm font-bold text-[#073B78]">Storage &amp; handling</p>
                     <p className="mt-1 text-xs text-gray-500">
-                      {product.storageInfo || "Keep refrigerated at 0–4°C and consume within 2 days."}
+                      {product.storageInfo || "Keep refrigerated at 0 to 4°C and consume within 2 days."}
                     </p>
                   </div>
                 </div>

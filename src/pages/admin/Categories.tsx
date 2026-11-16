@@ -178,7 +178,7 @@ const AdminCategories = () => {
               <div className="space-y-4 mt-4">
                 <div className="space-y-2">
                   <Label>Name *</Label>
-                  <Input value={catForm.name} onChange={(e) => setCatForm(p => ({ ...p, name: e.target.value, slug: p.slug || slugify(e.target.value) }))} placeholder="e.g., T-Shirts" />
+                  <Input value={catForm.name} onChange={(e) => setCatForm(p => ({ ...p, name: e.target.value, slug: p.slug || slugify(e.target.value) }))} placeholder="e.g., T Shirts" />
                 </div>
                 <div className="space-y-2">
                   <Label>Slug</Label>

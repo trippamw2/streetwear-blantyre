@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import { ArrowRight, Fish, Leaf, Loader2, Plus } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
@@ -63,18 +63,18 @@ const LakeFreshSpices = () => {
             list, so you always know what works.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
-            <Link
+            <LFLink
               to="/lf/fish"
               className="inline-flex items-center gap-2 rounded-full border border-[#073B78]/15 bg-white px-3.5 py-2 text-[10px] font-bold uppercase tracking-wide text-[#073B78]"
             >
               <Fish className="h-3.5 w-3.5 text-[#08A9E8]" /> Shop the catch
-            </Link>
-            <Link
+            </LFLink>
+            <LFLink
               to="/lf/recipes"
               className="inline-flex items-center gap-2 rounded-full border border-[#39B54A]/30 bg-white px-3.5 py-2 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]"
             >
               Free recipes <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+            </LFLink>
           </div>
         </div>
       </section>

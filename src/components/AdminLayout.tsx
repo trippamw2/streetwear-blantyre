@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Menu, X, Building2, Warehouse, ChevronLeft, Zap, MessageCircle, Truck, Users, Tag, LayoutGrid, Shield, Gift, BookOpen, Camera, Fish } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { cn } from "@/lib/utils";
-import { BRANDS } from "@/lib/brands";
+import { lfPath, storefrontHome } from "@/lib/brandSite";
 import { supabase } from "@/integrations/supabase/client";
 
 const adminLinks = [
@@ -42,6 +42,9 @@ export const AdminLayout = () => {
   const [checkingRole, setCheckingRole] = useState(true);
   const [staffBrands, setStaffBrands] = useState<{ brand_id: string; role: string }[]>([]);
   const brandParam = searchParams.get("brand") || "sb";
+  const isLfAdmin = brandParam === "lake-fresh";
+  const storeHome = storefrontHome(isLfAdmin);
+  const authPath = isLfAdmin ? lfPath("/auth") : "/auth";
 
   // Check if user has admin access for any brand (user_roles admin OR staff_permissions)
   useEffect(() => {
@@ -87,16 +90,17 @@ export const AdminLayout = () => {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate("/auth?redirect=/admin", { replace: true });
+      const redirect = encodeURIComponent(`/admin?brand=${brandParam}`);
+      navigate(`${authPath}?redirect=${redirect}`, { replace: true });
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, authPath, brandParam]);
 
   // Redirect non-admins
   useEffect(() => {
     if (!checkingRole && user && !isAdmin) {
-      navigate("/", { replace: true });
+      navigate(storeHome, { replace: true });
     }
-  }, [checkingRole, user, isAdmin, navigate]);
+  }, [checkingRole, user, isAdmin, navigate, storeHome]);
 
   // Enforce staff brand scoping: non-global admins may only view brands they
   // have an explicit staff_permissions row for.
@@ -137,8 +141,16 @@ export const AdminLayout = () => {
       )}>
         <div className="flex flex-col h-full">
           <div className="p-4 border-b border-gray-100 bg-navy">
-            <Logo className="h-8" />
-            <p className="text-xs text-white/60 mt-1">Admin Panel</p>
+            {isLfAdmin ? (
+              <img
+                src="/brand/lake-fresh/icon.png"
+                alt="Lake Fresh Fish Mart"
+                className="h-8 w-auto max-w-[160px] object-contain"
+              />
+            ) : (
+              <Logo className="h-8" />
+            )}
+            <p className="text-xs text-white/60 mt-1">{isLfAdmin ? "Lake Fresh Admin" : "Admin Panel"}</p>
             <select
               value={brandParam}
               onChange={(e) => navigate(`/admin?brand=${e.target.value}`, { replace: true })}
@@ -182,10 +194,10 @@ export const AdminLayout = () => {
 
           <div className="p-4 border-t border-gray-100 space-y-2">
             <a
-              href="/"
+              href={storeHome}
               onClick={(e) => {
                 e.preventDefault();
-                window.location.href = "/";
+                window.location.href = storeHome;
               }}
               className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100"
             >
@@ -195,7 +207,7 @@ export const AdminLayout = () => {
             <button
               onClick={async () => {
                 await supabase.auth.signOut();
-                navigate("/");
+                navigate(storeHome);
               }}
               className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
             >
@@ -210,7 +222,15 @@ export const AdminLayout = () => {
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Mobile Header */}
         <header className="lg:hidden flex items-center justify-between p-4 bg-navy border-b border-white/10">
-          <Logo className="h-8" />
+          {isLfAdmin ? (
+            <img
+              src="/brand/lake-fresh/icon.png"
+              alt="Lake Fresh Fish Mart"
+              className="h-8 w-auto max-w-[150px] object-contain"
+            />
+          ) : (
+            <Logo className="h-8" />
+          )}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 rounded-lg hover:bg-white/10"

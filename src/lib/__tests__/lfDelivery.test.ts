@@ -19,21 +19,21 @@ import {
 } from "../lfDelivery";
 
 describe("Lake Fresh delivery engine (Stage 5 core)", () => {
-  it("schedules next day delivery when order is placed before the cut-off", () => {
+  it("schedules next day delivery when order is placed before the cutoff", () => {
     const now = new Date("2026-11-16T09:00:00Z");
     const placed = new Date("2026-11-16T09:30:00Z");
     const next = getNextDeliveryDate(placed, parseCutoff("14:00"), DEFAULT_LF_DELIVERY_CONFIG, now);
     expect(next).toBe("2026-11-17");
   });
 
-  it("schedules following day when order is placed after the cut-off", () => {
+  it("schedules following day when order is placed after the cutoff", () => {
     const now = new Date("2026-11-16T09:00:00Z");
     const placed = new Date("2026-11-16T16:30:00Z");
     const next = getNextDeliveryDate(placed, parseCutoff("14:00"), DEFAULT_LF_DELIVERY_CONFIG, now);
     expect(next).toBe("2026-11-18");
   });
 
-  it("treats the exact cut-off minute as after the cut-off", () => {
+  it("treats the exact cutoff minute as after the cutoff", () => {
     const now = new Date("2026-11-16T09:00:00Z");
     const placed = new Date("2026-11-16T12:00:00Z"); // 14:00 Blantyre
     const next = getNextDeliveryDate(placed, parseCutoff("14:00"), DEFAULT_LF_DELIVERY_CONFIG, now);
@@ -41,7 +41,7 @@ describe("Lake Fresh delivery engine (Stage 5 core)", () => {
   });
 
   it("uses the Blantyre calendar across the UTC date boundary", () => {
-    // 23:00 UTC on the 16th = 01:00 on the 17th in Blantyre, before cut-off.
+    // 23:00 UTC on the 16th = 01:00 on the 17th in Blantyre, before cutoff.
     const now = new Date("2026-11-16T23:00:00Z");
     expect(getBlantyreNow(now).dateISO).toBe("2026-11-17");
     expect(getEarliestDeliveryDate(now)).toBe("2026-11-18");
@@ -60,7 +60,7 @@ describe("Lake Fresh delivery engine (Stage 5 core)", () => {
     expect(dates).toEqual(["2026-11-17", "2026-11-18", "2026-11-19"]);
   });
 
-  it("uses default cut-off of 14:00 when unparseable", () => {
+  it("uses default cutoff of 14:00 when unparseable", () => {
     expect(parseCutoff("bogus").hour).toBe(14);
     expect(getCutoffMinutes(parseCutoff("08:30"))).toBe(8 * 60 + 30);
   });
@@ -111,7 +111,7 @@ describe("Lake Fresh delivery engine (Stage 5 core)", () => {
     expect(getDeliveryFee(2500, 0)).toBe(0);
   });
 
-  it("derives the slot cut-off timestamp from the delivery date", () => {
+  it("derives the slot cutoff timestamp from the delivery date", () => {
     expect(getSlotCutoffISO("2026-11-17", { hour: 14, minute: 0 })).toBe("2026-11-16T12:00:00.000Z");
     expect(getSlotCutoffISO("2026-11-17", { hour: 8, minute: 30 })).toBe("2026-11-16T06:30:00.000Z");
   });

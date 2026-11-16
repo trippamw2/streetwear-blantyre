@@ -1,4 +1,5 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import { ArrowLeft, ArrowRight, BookOpen, Clock, Fish, Leaf, Loader2, Sparkles, Users } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,12 +39,12 @@ const LakeFreshRecipe = () => {
         <BookOpen className="mx-auto h-10 w-10 text-gray-300" />
         <h1 className="mt-4 font-display text-2xl font-extrabold text-[#073B78]">Recipe not available</h1>
         <p className="mt-2 text-sm text-gray-500">{error instanceof Error ? error.message : "We could not load this recipe."}</p>
-        <Link
+        <LFLink
           to="/lf/recipes"
           className="mt-6 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white"
         >
           All recipes
-        </Link>
+        </LFLink>
       </div>
     );
   }
@@ -58,12 +59,12 @@ const LakeFreshRecipe = () => {
 
       <section className="border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
         <div className="container max-w-4xl py-10 sm:py-14">
-          <Link
+          <LFLink
             to="/lf/recipes"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> All recipes
-          </Link>
+          </LFLink>
 
           <div className="mt-5 grid gap-6 sm:grid-cols-[1fr_1.05fr] sm:items-center">
             <div className="relative flex h-52 items-center justify-center overflow-hidden rounded-2xl bg-[#EAF6FB]">
@@ -121,12 +122,12 @@ const LakeFreshRecipe = () => {
               <p className="mt-1 text-xs text-gray-500">Pick it on any {data.fish_species?.name || "fish"} page and it arrives with your basket.</p>
             </div>
           </div>
-          <Link
+          <LFLink
             to="/lf/fish"
             className="mt-3 inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-[#39B54A] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white sm:mt-0"
           >
             Shop fish <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          </LFLink>
         </div>
 
         {data.recommended_spice ? (
@@ -140,12 +141,12 @@ const LakeFreshRecipe = () => {
                 <p className="text-sm font-bold text-[#073B78]">{data.recommended_spice}</p>
               </div>
             </div>
-            <Link
+            <LFLink
               to="/lf/spices"
               className="text-[10px] font-extrabold uppercase tracking-widest text-[#2c6e12] underline underline-offset-4"
             >
               Shop seasonings
-            </Link>
+            </LFLink>
           </div>
         ) : null}
 

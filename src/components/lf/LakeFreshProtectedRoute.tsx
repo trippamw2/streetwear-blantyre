@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { lfPath } from "@/lib/brandSite";
 
 export const LakeFreshProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { user, loading } = useAuth();
@@ -17,7 +18,7 @@ export const LakeFreshProtectedRoute = ({ children }: { children: ReactNode }) =
 
   if (!user) {
     const redirect = `${location.pathname}${location.search}`;
-    return <Navigate to={`/lf/auth?redirect=${encodeURIComponent(redirect)}`} replace />;
+    return <Navigate to={`${lfPath("/auth")}?redirect=${encodeURIComponent(redirect)}`} replace />;
   }
 
   return <>{children}</>;

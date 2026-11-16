@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
+import { lfPath, lfUrl } from "@/lib/brandSite";
 import { z } from "zod";
 import { Loader2, Fish } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,7 +18,7 @@ const nameSchema = z.string().trim().min(1, "Name is required").max(100);
 const phoneSchema = z.string().trim().min(7, "Enter a valid phone").max(20);
 
 const LakeFreshAuth = () => {
-  const navigate = useNavigate();
+  const navigate = useLFNavigate();
   const { user, loading: authLoading } = useAuth();
   const [searchParams] = useSearchParams();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -26,7 +28,7 @@ const LakeFreshAuth = () => {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const redirect = searchParams.get("redirect") || "/lf";
+  const redirect = searchParams.get("redirect") || lfPath("/");
 
   useEffect(() => {
     if (!authLoading && user) navigate(redirect, { replace: true });
@@ -51,7 +53,7 @@ const LakeFreshAuth = () => {
           email: parsedEmail.data,
           password: parsedPassword.data,
           options: {
-            emailRedirectTo: `${window.location.origin}/lf/auth`,
+            emailRedirectTo: lfUrl("/auth"),
             data: { full_name: parsedName.data, phone: parsedPhone.data },
           },
         });
@@ -90,19 +92,23 @@ const LakeFreshAuth = () => {
       <SEO
         brand="lake-fresh"
         title="Sign in — Lake Fresh Fish Mart"
-        description="Sign in to order fresh fish for next-day delivery in Blantyre."
+        description="Sign in to order fresh fish for next day delivery in Blantyre."
       />
       <div className="container flex min-h-[70vh] max-w-md flex-col justify-center py-14">
         <div className="mb-6 text-center">
-          <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-white">
-            <img src="/brand/lake-fresh/icon.png" alt="Lake Fresh" className="h-12 w-12 object-contain" />
+          <span className="mx-auto inline-flex w-full max-w-[280px] items-center justify-center rounded-3xl bg-white px-6 py-4 shadow-lg ring-4 ring-white">
+            <img
+              src="/brand/lake-fresh/icon.png"
+              alt="Lake Fresh Fish Mart"
+              className="h-20 w-auto max-w-full object-contain sm:h-24"
+            />
           </span>
-          <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-[#073B78]">
+          <h1 className="mt-6 font-display text-3xl font-extrabold tracking-tight text-[#073B78]">
             {mode === "signin" ? "Welcome back" : "Join Lake Fresh"}
           </h1>
           <p className="mt-2 text-sm text-gray-500">
             {mode === "signin"
-              ? "Sign in to place a next-day fish order and track it."
+              ? "Sign in to place a next day fish order and track it."
               : "Create an account to order fresh fish for your table."}
           </p>
         </div>
@@ -181,7 +187,7 @@ const LakeFreshAuth = () => {
         </div>
 
         <p className="mt-5 text-center text-xs text-gray-400">
-          <Link to="/lf" className="hover:text-[#073B78]">← Back to Lake Fresh</Link>
+          <LFLink to="/lf" className="hover:text-[#073B78]">← Back to Lake Fresh</LFLink>
         </p>
       </div>
     </div>

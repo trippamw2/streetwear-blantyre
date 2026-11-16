@@ -170,7 +170,7 @@ const OrderDetailPage = () => {
           <h2 className="font-display font-semibold">Items</h2>
           {items.map((i) => (
             <div key={i.id} className="flex items-center justify-between gap-3 py-2 border-b border-border/60 last:border-0">
-              <p className="text-sm">{i.quantity} Ã— {i.product_name}</p>
+              <p className="text-sm">{i.quantity} × {i.product_name}</p>
               <p className="text-sm font-semibold">{formatMWK(i.unit_price_mwk * i.quantity)}</p>
             </div>
           ))}
@@ -232,7 +232,7 @@ const OrderDetailPage = () => {
           </div>
         )}
 
-        {/* Post-purchase upsell */}
+        {/* Post purchase upsell */}
         <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-3">
           <p className="font-semibold text-sm">Complete your look.</p>
           <p className="text-xs text-gray-500">

@@ -568,7 +568,7 @@ const AdminLakeFresh = () => {
         <div>
           <h1 className="font-display text-2xl font-bold">Lake Fresh Admin</h1>
           <p className="text-sm text-muted-foreground">
-            Brand: {brand} Â· Manage catalog, batches, slots, orders, preparation and delivery.
+            Brand: {brand} · Manage catalog, batches, slots, orders, preparation and delivery.
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={refreshAll} disabled={loading}>
@@ -603,7 +603,7 @@ const AdminLakeFresh = () => {
                   onChange={(e) => setProductForm({ ...productForm, species_id: e.target.value })}
                   className="mt-1 w-full h-10 rounded-md border border-gray-300 px-3 text-sm"
                 >
-                  <option value="">Selectâ€¦</option>
+                  <option value="">Select...</option>
                   {species.map((s) => (
                     <option key={s.id} value={s.id}>{s.name}</option>
                   ))}
@@ -660,7 +660,7 @@ const AdminLakeFresh = () => {
                 {products.map((p) => (
                   <tr key={p.id} className="border-t">
                     <td className="px-4 py-3 font-medium">{p.name}</td>
-                    <td className="px-4 py-3">{p.fish_species?.name || "â€”"}</td>
+                    <td className="px-4 py-3">{p.fish_species?.name || "N/A"}</td>
                     <td className="px-4 py-3 text-right">{formatMWK(p.price_per_kg_mwk)}</td>
                     <td className="px-4 py-3 text-right">{p.min_order_qty_kg}</td>
                     <td className="px-4 py-3">{(p.preparation_options || []).join(", ")}</td>
@@ -769,10 +769,10 @@ const AdminLakeFresh = () => {
                 {spices.map((s) => (
                   <tr key={s.id} className="border-t">
                     <td className="px-4 py-3 font-medium">{s.name}</td>
-                    <td className="px-4 py-3">{s.size_label || "â€”"}</td>
+                    <td className="px-4 py-3">{s.size_label || "N/A"}</td>
                     <td className="px-4 py-3 text-right">{formatMWK(s.price_mwk)}</td>
                     <td className="px-4 py-3 text-right">{s.stock_qty}</td>
-                    <td className="px-4 py-3 text-xs">{(s.recommended_species || []).map((id: string) => species.find((sp: any) => sp.id === id)?.name).filter(Boolean).join(", ") || "â€”"}</td>
+                    <td className="px-4 py-3 text-xs">{(s.recommended_species || []).map((id: string) => species.find((sp: any) => sp.id === id)?.name).filter(Boolean).join(", ") || "N/A"}</td>
                     <td className="px-4 py-3">
                       <button onClick={() => toggleSpiceActive(s.id, !s.is_active)} className={`text-xs font-bold ${s.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
                         {s.is_active ? "Active" : "Inactive"}
@@ -806,7 +806,7 @@ const AdminLakeFresh = () => {
               <div>
                 <Label>Species</Label>
                 <select value={recipeForm.species_id} onChange={(e) => setRecipeForm({ ...recipeForm, species_id: e.target.value, recommended_spice: "" })} className="mt-1 w-full h-10 rounded-md border border-gray-300 px-3 text-sm">
-                  <option value="">Selectâ€¦</option>
+                  <option value="">Select...</option>
                   {species.map((s) => (<option key={s.id} value={s.id}>{s.name}</option>))}
                 </select>
               </div>
@@ -882,11 +882,11 @@ const AdminLakeFresh = () => {
                 {recipes.map((r) => (
                   <tr key={r.id} className="border-t">
                     <td className="px-4 py-3 font-medium">{r.title}</td>
-                    <td className="px-4 py-3">{r.fish_species?.name || "â€”"}</td>
-                    <td className="px-4 py-3 text-right">{r.prep_time_min ?? "â€”"}</td>
-                    <td className="px-4 py-3 text-right">{r.cook_time_min ?? "â€”"}</td>
-                    <td className="px-4 py-3">{r.cooking_method || "â€”"}</td>
-                    <td className="px-4 py-3 text-xs">{r.recommended_spice || "â€”"}</td>
+                    <td className="px-4 py-3">{r.fish_species?.name || "N/A"}</td>
+                    <td className="px-4 py-3 text-right">{r.prep_time_min ?? "N/A"}</td>
+                    <td className="px-4 py-3 text-right">{r.cook_time_min ?? "N/A"}</td>
+                    <td className="px-4 py-3">{r.cooking_method || "N/A"}</td>
+                    <td className="px-4 py-3 text-xs">{r.recommended_spice || "N/A"}</td>
                     <td className="px-4 py-3">
                       <button onClick={() => toggleRecipeActive(r.id, !r.is_active)} className={`text-xs font-bold ${r.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
                         {r.is_active ? "Active" : "Inactive"}
@@ -924,8 +924,8 @@ const AdminLakeFresh = () => {
                   {businessAccounts.map((b) => (
                     <tr key={b.id} className="border-t">
                       <td className="px-4 py-3 font-medium">{b.company_name}</td>
-                      <td className="px-4 py-3">{b.business_type || "â€”"}</td>
-                      <td className="px-4 py-3">{b.contact_name || "â€”"}</td>
+                      <td className="px-4 py-3">{b.business_type || "N/A"}</td>
+                      <td className="px-4 py-3">{b.contact_name || "N/A"}</td>
                       <td className="px-4 py-3">{b.phone}</td>
                       <td className="px-4 py-3">
                         <span className={`text-xs font-bold ${b.approval_status === "approved" ? "text-[#39B54A]" : b.approval_status === "rejected" ? "text-red-600" : "text-amber-600"}`}>
@@ -958,7 +958,7 @@ const AdminLakeFresh = () => {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <p className="font-medium text-[#073B78]">{q.requester_name}</p>
-                      <p className="text-xs text-gray-500">{q.requester_email || "â€”"} Â· {q.requester_phone || "â€”"}</p>
+                      <p className="text-xs text-gray-500">{q.requester_email || "N/A"} · {q.requester_phone || "N/A"}</p>
                     </div>
                     <span className="text-xs font-bold text-amber-600">{q.status}</span>
                   </div>
@@ -966,7 +966,7 @@ const AdminLakeFresh = () => {
                   {Array.isArray(q.lf_quote_items) && q.lf_quote_items.length > 0 ? (
                     <ul className="mt-2 space-y-1 text-xs text-gray-500">
                       {q.lf_quote_items.map((it: any) => (
-                        <li key={it.id}>â€¢ {it.product_name} Ã— {it.quantity} {it.unit || ""}</li>
+                        <li key={it.id}>• {it.product_name} × {it.quantity} {it.unit || ""}</li>
                       ))}
                     </ul>
                   ) : null}
@@ -984,7 +984,7 @@ const AdminLakeFresh = () => {
       {tab === "analytics" && (
         <div className="space-y-6">
           {!analytics ? (
-            <p className="text-sm text-gray-500">Loading analyticsâ€¦</p>
+            <p className="text-sm text-gray-500">Loading analytics...</p>
           ) : (
             <>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1004,7 +1004,7 @@ const AdminLakeFresh = () => {
                 <div className="rounded-xl border bg-white p-5">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Attachment rates</p>
                   <p className="mt-2 text-3xl font-extrabold text-[#073B78]">{analytics.recipeAttachment}%</p>
-                  <p className="mt-1 text-xs text-gray-500">Free recipe Â· spices {analytics.spiceAttachment}%</p>
+                  <p className="mt-1 text-xs text-gray-500">Free recipe · spices {analytics.spiceAttachment}%</p>
                 </div>
               </div>
 
@@ -1106,7 +1106,7 @@ const AdminLakeFresh = () => {
                   onChange={(e) => setBatchForm({ ...batchForm, species_id: e.target.value })}
                   className="mt-1 w-full h-10 rounded-md border border-gray-300 px-3 text-sm"
                 >
-                  <option value="">Selectâ€¦</option>
+                  <option value="">Select...</option>
                   {species.map((s) => (
                     <option key={s.id} value={s.id}>{s.name}</option>
                   ))}
@@ -1155,14 +1155,14 @@ const AdminLakeFresh = () => {
               <tbody>
                 {batches.map((b) => (
                   <tr key={b.id} className="border-t">
-                    <td className="px-4 py-3 font-medium">{b.fish_species?.name || "â€”"}</td>
+                    <td className="px-4 py-3 font-medium">{b.fish_species?.name || "N/A"}</td>
                     <td className="px-4 py-3">{b.received_date}</td>
-                    <td className="px-4 py-3">{b.expiry_date || "â€”"}</td>
+                    <td className="px-4 py-3">{b.expiry_date || "N/A"}</td>
                     <td className="px-4 py-3 text-right">{Number(b.weight_kg_received).toFixed(2)}</td>
                     <td className="px-4 py-3 text-right">{Number(b.weight_kg_available).toFixed(2)}</td>
                     <td className="px-4 py-3 text-right">{Number(b.weight_kg_reserved).toFixed(2)}</td>
                     <td className="px-4 py-3 text-right">{Number(b.weight_kg_sold).toFixed(2)}</td>
-                    <td className="px-4 py-3">{b.freshness_grade || "â€”"}</td>
+                    <td className="px-4 py-3">{b.freshness_grade || "N/A"}</td>
                   </tr>
                 ))}
                 {batches.length === 0 && (
@@ -1212,7 +1212,7 @@ const AdminLakeFresh = () => {
               <tbody>
                 {slots.map((s) => (
                   <tr key={s.id} className="border-t">
-                    <td className="px-4 py-3 font-medium">{s.delivery_zones?.name || "â€”"}</td>
+                    <td className="px-4 py-3 font-medium">{s.delivery_zones?.name || "N/A"}</td>
                     <td className="px-4 py-3">{s.delivery_date}</td>
                     <td className="px-4 py-3 text-right">{s.booked_orders}</td>
                     <td className="px-4 py-3 text-right">{s.capacity_orders}</td>
@@ -1263,7 +1263,7 @@ const AdminLakeFresh = () => {
                         <div className="text-xs text-gray-500">{o.customer_phone}</div>
                       </td>
                       <td className="px-4 py-3 text-xs">
-                        {o.delivery_date || "â€”"}<br />{o.delivery_window || ""}
+                        {o.delivery_date || "N/A"}<br />{o.delivery_window || ""}
                       </td>
                       <td className="px-4 py-3 text-right font-semibold">{formatMWK(o.total_mwk)}</td>
                       <td className="px-4 py-3">
@@ -1309,10 +1309,10 @@ const AdminLakeFresh = () => {
                             <div key={item.id} className="flex justify-between text-xs py-1">
                               <span>
                                 {item.product_name} - {item.preparation
-                                  ? `${Number(item.preparation.requested_weight_kg).toFixed(1)} kg Â· ${item.preparation.preparation_type}`
+                                  ? `${Number(item.preparation.requested_weight_kg).toFixed(1)} kg · ${item.preparation.preparation_type}`
                                   : `${item.quantity} item(s)`}
                                 {item.recipe_title ? (
-                                  <span className="ml-1 text-[#39B54A]">Â· free recipe: {item.recipe_title}</span>
+                                  <span className="ml-1 text-[#39B54A]">· free recipe: {item.recipe_title}</span>
                                 ) : null}
                               </span>
                               <span>{formatMWK(item.unit_price_mwk)}</span>
@@ -1434,12 +1434,12 @@ const PreparationRow = ({ prep, onSave }: { prep: any; onSave: (id: string, pack
   return (
     <tr className="border-t">
       <td className="px-4 py-3 text-xs font-mono">{prep.order?.customer_name || prep.item?.order_id?.slice(0, 8)}</td>
-      <td className="px-4 py-3 text-xs">{prep.item?.product_name || "â€”"}</td>
+      <td className="px-4 py-3 text-xs">{prep.item?.product_name || "N/A"}</td>
       <td className="px-4 py-3 text-right">{Number(prep.requested_weight_kg || 0).toFixed(2)}</td>
       <td className="px-4 py-3">
         <Input className="h-8 w-20" type="number" step="0.01" value={packed} onChange={(e) => setPacked(e.target.value)} />
       </td>
-      <td className="px-4 py-3 text-right">{prep.price_per_kg_mwk ? formatMWK(prep.price_per_kg_mwk) : "â€”"}</td>
+      <td className="px-4 py-3 text-right">{prep.price_per_kg_mwk ? formatMWK(prep.price_per_kg_mwk) : "N/A"}</td>
       <td className="px-4 py-3">
         <Input className="h-8 w-24" type="number" value={finalPrice} onChange={(e) => setFinalPrice(e.target.value)} />
       </td>

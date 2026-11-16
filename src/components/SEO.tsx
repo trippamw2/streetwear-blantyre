@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { BRANDS, type BrandSlug } from "@/lib/brands";
 
@@ -25,6 +26,21 @@ const BRAND_META: Record<BrandSlug, { siteName: string; siteUrl: string; image: 
   },
 };
 
+const BRAND_ICONS: Record<BrandSlug, { icon: string; apple: string; manifest: string; theme: string }> = {
+  sb: {
+    icon: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
+    manifest: "/site.webmanifest",
+    theme: "#0a0a0a",
+  },
+  "lake-fresh": {
+    icon: "/brand/lake-fresh/icon.png",
+    apple: "/brand/lake-fresh/icon.png",
+    manifest: "/brand/lake-fresh/site.webmanifest",
+    theme: "#073B78",
+  },
+};
+
 export const SEO = ({
   title,
   description,
@@ -34,15 +50,30 @@ export const SEO = ({
   brand = "sb",
 }: SEOProps) => {
   const meta = BRAND_META[brand] ?? BRAND_META.sb;
+  const icons = BRAND_ICONS[brand] ?? BRAND_ICONS.sb;
+  const iconKey = brand === "lake-fresh" ? "lf" : "sb";
   const resolvedImage = image ?? meta.image;
   const fullTitle = title.includes(meta.siteName) ? title : `${title} | ${meta.siteName}`;
   const url = `${meta.siteUrl}${path}`;
+
+  // Drop the other brand's bootstrap icons so a shared/local host never shows
+  // the wrong tab icon after client-side navigation between storefronts.
+  useEffect(() => {
+    const opposite = iconKey === "lf" ? "sb" : "lf";
+    document
+      .querySelectorAll(`link[data-brand-icon="${opposite}"]`)
+      .forEach((el) => el.parentNode?.removeChild(el));
+  }, [iconKey]);
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
+      <meta name="theme-color" content={icons.theme} />
       <link rel="canonical" href={url} />
+      <link rel="icon" type="image/png" href={icons.icon} data-brand-icon={iconKey} />
+      <link rel="apple-touch-icon" sizes="180x180" href={icons.apple} data-brand-icon={iconKey} />
+      <link rel="manifest" href={icons.manifest} data-brand-icon={iconKey} />
 
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
+import { lfUrl } from "@/lib/brandSite";
 import { AlertCircle, ArrowLeft, CalendarDays, CreditCard, Fish, Loader2, MapPin, Snowflake, Truck } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/contexts/AuthContext";
@@ -31,7 +32,7 @@ const prepLabel = (value: string) =>
 const LakeFreshCheckout = () => {
   const { user } = useAuth();
   const { items, subtotal, totalWeight, clear } = useLakeFreshCart();
-  const navigate = useNavigate();
+  const navigate = useLFNavigate();
 
   const { data: zones, isLoading: zonesLoading, isError: zonesError, refetch: refetchZones } = useLakeFreshZones();
   const { data: config } = useLakeFreshDeliveryConfig();
@@ -112,12 +113,12 @@ const LakeFreshCheckout = () => {
         <Fish className="mx-auto h-12 w-12 text-gray-300" />
         <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">Your basket is empty</h1>
         <p className="mt-2 text-sm text-gray-500">Choose fresh fish before checking out.</p>
-        <Link
+        <LFLink
           to="/lf/fish"
           className="mt-6 inline-flex rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white"
         >
           Browse the catch
-        </Link>
+        </LFLink>
       </div>
     );
   }
@@ -204,7 +205,7 @@ const LakeFreshCheckout = () => {
           items: emailItems,
           total: estimatedTotal,
           location: selectedZone?.name || "",
-          deliveryMethod: selectedSlot ? `Next-day · ${selectedSlot.deliveryDate}` : "Next-day delivery",
+          deliveryMethod: selectedSlot ? `Next day · ${selectedSlot.deliveryDate}` : "Next day delivery",
           type: "confirmation",
           brand: "lake-fresh",
         });
@@ -222,8 +223,8 @@ const LakeFreshCheckout = () => {
         firstName: firstName || "Lake",
         lastName: rest.join(" ") || "Fresh",
         txRef,
-        callbackUrl: `${window.location.origin}/lf/orders/${orderId}?payment=callback`,
-        returnUrl: `${window.location.origin}/lf/orders/${orderId}?payment=complete`,
+        callbackUrl: `${lfUrl(`/orders/${orderId}`)}?payment=callback`,
+        returnUrl: `${lfUrl(`/orders/${orderId}`)}?payment=complete`,
         title: "Lake Fresh Fish Mart Order",
         description: `Order ${txRef}`,
       });
@@ -242,7 +243,7 @@ const LakeFreshCheckout = () => {
       <SEO
         brand="lake-fresh"
         title="Checkout — Lake Fresh Fish Mart"
-        description="Place your Lake Fresh fish order for next-day delivery in Blantyre."
+        description="Place your Lake Fresh fish order for next day delivery in Blantyre."
       />
       <div className="container max-w-5xl py-8 sm:py-12">
         <button
@@ -256,7 +257,7 @@ const LakeFreshCheckout = () => {
         <div className="mt-4">
           <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#073B78]">CHECKOUT</h1>
           <p className="mt-2 text-sm text-gray-500">
-            Next-day delivery · signed in as {user?.email}
+            Next day delivery · signed in as {user?.email}
           </p>
         </div>
 
@@ -354,7 +355,7 @@ const LakeFreshCheckout = () => {
                 <CalendarDays className="h-4 w-4 text-[#08A9E8]" /> Delivery date
               </h2>
               <p className="mt-1 text-xs text-gray-500">
-                Orders placed before {formatCutoff(deliveryConfig.cutoff)} qualify for next-day delivery.
+                Orders placed before {formatCutoff(deliveryConfig.cutoff)} qualify for next day delivery.
               </p>
 
               {!zoneId && <p className="mt-3 text-sm text-gray-500">Choose a delivery area first.</p>}
@@ -376,7 +377,7 @@ const LakeFreshCheckout = () => {
                     const status = !slot
                       ? "Unavailable"
                       : cutoffPassed
-                      ? "Cut-off passed"
+                      ? "Cutoff passed"
                       : full
                       ? "Full"
                       : slot.bookedOrders >= slot.capacityOrders

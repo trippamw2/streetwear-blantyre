@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import { CalendarDays, Loader2, Repeat } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/contexts/AuthContext";
@@ -69,9 +69,9 @@ const LakeFreshSubscribe = () => {
     <div className="bg-white">
       <SEO brand="lake-fresh" title="Subscribe — Lake Fresh Fish Mart" description="Lake Fresh fish subscription plans." />
       <div className="container max-w-2xl py-10 sm:py-14">
-        <Link to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]">
+        <LFLink to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]">
           <Repeat className="h-3.5 w-3.5" /> Lake Fresh
-        </Link>
+        </LFLink>
         <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">SUBSCRIBE</h1>
         <p className="mt-2 text-sm text-gray-500">
           Get fresh fish delivered on a recurring schedule. No automatic charges without your consent.
@@ -82,7 +82,7 @@ const LakeFreshSubscribe = () => {
             <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Plan</label>
             <select className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.plan} onChange={(e) => setForm({ ...form, plan: e.target.value })}>
               <option value="weekly">Weekly</option>
-              <option value="biweekly">Bi-weekly</option>
+              <option value="biweekly">Biweekly</option>
               <option value="monthly">Monthly</option>
             </select>
           </div>

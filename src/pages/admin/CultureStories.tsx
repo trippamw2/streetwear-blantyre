@@ -186,7 +186,7 @@ const AdminCultureStories = () => {
                     onGenerated={(type, content) => setFormData(p => ({ ...p, title: content }))}
                   />
                 </div>
-                <Input value={formData.title} onChange={(e) => setFormData(p => ({ ...p, title: e.target.value }))} placeholder="e.g., Why Hip-Hop Still Shapes Streetwear" />
+                <Input value={formData.title} onChange={(e) => setFormData(p => ({ ...p, title: e.target.value }))} placeholder="e.g., Why Hip Hop Still Shapes Streetwear" />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -230,7 +230,7 @@ const AdminCultureStories = () => {
                 </div>
                 <div className="space-y-2">
                   <Label>Tags (comma separated)</Label>
-                  <Input value={formData.tags} onChange={(e) => setFormData(p => ({ ...p, tags: e.target.value }))} placeholder="streetwear, hip-hop, culture" />
+                  <Input value={formData.tags} onChange={(e) => setFormData(p => ({ ...p, tags: e.target.value }))} placeholder="streetwear, hip hop, culture" />
                   <div className="space-y-2 mt-2">
                     <Label>Read Time (minutes)</Label>
                     <Input type="number" value={formData.read_time_minutes} onChange={(e) => setFormData(p => ({ ...p, read_time_minutes: parseInt(e.target.value) || 5 }))} />

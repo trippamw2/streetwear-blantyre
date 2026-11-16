@@ -52,7 +52,7 @@ const rewardReferrer = async (userId: string) => {
       user_id: referral.referrer_id,
       points: referral.referrer_reward || 500,
       type: "referral_bonus",
-      description: "Referral bonus - friend made first order",
+      description: "Referral bonus: friend made first order",
     });
   } catch (e) {
     console.error("Referral reward error:", e);
@@ -203,7 +203,7 @@ const AdminOrders = () => {
 
 Your order #${order.id.slice(0, 8).toUpperCase()} status: *${newStatus.toUpperCase()}*
 
-${itemsList.map(i => `â€¢ ${i.quantity}Ã— ${i.name}`).join('\n')}
+${itemsList.map(i => `• ${i.quantity}× ${i.name}`).join('\n')}
 
 Total: MK ${order.total_mwk.toLocaleString()}
 
@@ -398,7 +398,7 @@ Track: https://www.wearsb.com/track/${order.id}`;
               <div className="space-y-2">
                 {orderItems.map((item) => (
                   <div key={item.id} className="flex justify-between py-2 border-b border-border/30">
-                    <span>{item.quantity} Ã— {item.product_name}</span>
+                    <span>{item.quantity} × {item.product_name}</span>
                     <span className="font-semibold">{formatMWK(item.unit_price_mwk * item.quantity)}</span>
                   </div>
                 ))}

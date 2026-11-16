@@ -59,7 +59,7 @@ const KitDetail = () => {
   return (
     <div>
       <SEO title={kit?.name || "Fashion Bundle"} description={kit?.description || "Curated fashion bundle for your style"} path={"/kits/" + kit?.id} />
-      {/* â”€â”€â”€ BACK LINK â”€â”€â”€ */}
+      {/* === BACK LINK === */}
       <div className="container pt-4 sm:pt-6">
         <button
           onClick={() => navigate("/combos")}
@@ -69,7 +69,7 @@ const KitDetail = () => {
         </button>
       </div>
 
-      {/* â”€â”€â”€ KIT HERO â”€â”€â”€ */}
+      {/* === KIT HERO === */}
       <section className="container py-6 sm:py-10">
         <div className="grid lg:grid-cols-5 gap-8 sm:gap-12">
           {/* Left - Kit Info */}
@@ -101,7 +101,7 @@ const KitDetail = () => {
             <p className="text-lg sm:text-xl text-gray-600 font-medium">{kit.hook}</p>
             <p className="text-sm text-gray-500 leading-relaxed">{kit.description}</p>
 
-            {/* â”€â”€â”€ Price Block â”€â”€â”€ */}
+            {/* === Price Block === */}
             <div className="bg-gray-50 rounded-xl p-5 sm:p-6 space-y-4">
               <div>
                 <div className="flex items-baseline gap-3">
@@ -167,7 +167,7 @@ const KitDetail = () => {
               </div>
             </div>
 
-            {/* â”€â”€â”€ Why This Kit â”€â”€â”€ */}
+            {/* === Why This Kit === */}
             <div className="rounded-xl border border-gray-100 p-4 sm:p-5 space-y-3">
               <h3 className="font-display font-semibold text-sm">Why this kit?</h3>
               <ul className="space-y-2 text-sm text-gray-600">
@@ -187,7 +187,7 @@ const KitDetail = () => {
             </div>
           </motion.div>
 
-          {/* â”€â”€â”€ Right - What's Inside â”€â”€â”€ */}
+          {/* === Right - What's Inside === */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -226,7 +226,7 @@ const KitDetail = () => {
                 ))}
               </div>
 
-              {/* â”€â”€â”€ Price Breakdown â”€â”€â”€ */}
+              {/* === Price Breakdown === */}
               <div className="mt-6 pt-6 border-t border-gray-100 space-y-2 text-sm">
                 <div className="flex justify-between text-gray-500">
                   <span>Separate total</span>
@@ -256,7 +256,7 @@ const KitDetail = () => {
         </div>
       </section>
 
-      {/* â”€â”€â”€ OTHER KITS â”€â”€â”€ */}
+      {/* === OTHER KITS === */}
       {otherKits.length > 0 && (
         <section className="bg-gray-50/50 py-10 sm:py-14">
           <div className="container">

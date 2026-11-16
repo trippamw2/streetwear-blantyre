@@ -2,8 +2,8 @@
  * Lake Fresh Fish Mart — Next-Day Delivery Engine (Stage 5, core logic)
  *
  * Default fulfilment model:
- * - Orders placed before the configured daily cut-off qualify for next delivery day.
- * - Orders placed after the cut-off schedule for the following eligible delivery day.
+ * - Orders placed before the configured daily cutoff qualify for next delivery day.
+ * - Orders placed after the cutoff schedule for the following eligible delivery day.
  *
  * Malawi (Africa/Blantyre) has no DST, so a fixed UTC+2 offset is used for local
  * wall-clock calculations. Dates are handled as YYYY-MM-DD strings in the
@@ -98,7 +98,7 @@ export const isBeforeCutoff = (now: Date, cutoff: LFCutoffConfig): boolean =>
 
 /**
  * First date a customer ordering now can receive on.
- * Before cut-off → today + deliveryDays; after cut-off → one extra eligible day.
+ * Before cutoff → today + deliveryDays; after cutoff → one extra eligible day.
  */
 export const getEarliestDeliveryDate = (
   now: Date,
@@ -122,7 +122,7 @@ export const getEligibleDeliveryDates = (
 
 /**
  * Calculate the next eligible delivery date for an order.
- * `placedAtUtc` decides cut-off eligibility; `nowUtc` supplies the calendar base.
+ * `placedAtUtc` decides cutoff eligibility; `nowUtc` supplies the calendar base.
  */
 export const getNextDeliveryDate = (
   placedAtUtc: Date,

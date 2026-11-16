@@ -229,13 +229,13 @@ const Passport = () => {
             </div>
             <div>
               <p className="text-lg font-bold text-gray-900">
-                {product.first_scan_date ? new Date(product.first_scan_date).toLocaleDateString() : "—"}
+                {product.first_scan_date ? new Date(product.first_scan_date).toLocaleDateString() : "N/A"}
               </p>
               <p className="text-xs text-gray-900/40">First Scan</p>
             </div>
             <div>
               <p className="text-lg font-bold text-gray-900">
-                {product.last_scan_date ? new Date(product.last_scan_date).toLocaleDateString() : "—"}
+                {product.last_scan_date ? new Date(product.last_scan_date).toLocaleDateString() : "N/A"}
               </p>
               <p className="text-xs text-gray-900/40">Last Scan</p>
             </div>

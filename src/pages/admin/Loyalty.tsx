@@ -160,7 +160,7 @@ const AdminLoyalty = () => {
                   <p className="font-semibold">{prog.name}</p>
                   <p className="text-sm text-gray-500">{prog.description}</p>
                   <p className="text-xs mt-1">
-                    Earn 1 pt per MK {prog.points_per_mwk.toLocaleString()} â€¢ 
+                    Earn 1 pt per MK {prog.points_per_mwk.toLocaleString()} • 
                     Redeem {prog.points_to_redeem} pts = MK {prog.reward_value_mwk.toLocaleString()}
                   </p>
                 </div>
@@ -215,8 +215,8 @@ const AdminLoyalty = () => {
         </CardHeader>
         <CardContent>
           <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600">
-            <li>Set up reward programs - how customers earn points per MWK spent</li>
-            <li>Define tiers - bronze, silver, gold, platinum with benefits</li>
+            <li>Set up reward programs: how customers earn points per MWK spent</li>
+            <li>Define tiers: bronze, silver, gold, platinum with benefits</li>
             <li>Customers automatically earn points on purchases</li>
             <li>Points are tracked in customer_loyalty table</li>
             <li>Customers can view their points at /rewards page</li>

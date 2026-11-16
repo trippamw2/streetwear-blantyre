@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Fish, Loader2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
@@ -48,7 +48,7 @@ const LakeFreshOrders = () => {
       <SEO brand="lake-fresh" title="My Orders — Lake Fresh Fish Mart" description="Track your Lake Fresh fish orders." />
       <div className="container max-w-3xl py-10 sm:py-14">
         <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#073B78]">MY ORDERS</h1>
-        <p className="mt-2 text-sm text-gray-500">Next-day fish orders and their delivery dates.</p>
+        <p className="mt-2 text-sm text-gray-500">Next day fish orders and their delivery dates.</p>
 
         {isLoading && (
           <p className="mt-8 flex items-center gap-2 text-sm text-gray-500">
@@ -70,18 +70,18 @@ const LakeFreshOrders = () => {
             <Fish className="mx-auto h-10 w-10 text-gray-300" />
             <p className="mt-3 font-display text-xl font-extrabold text-[#073B78]">No orders yet</p>
             <p className="mt-1 text-sm text-gray-500">Your Lake Fresh orders will appear here.</p>
-            <Link
+            <LFLink
               to="/lf/fish"
               className="mt-5 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white"
             >
               Browse the catch
-            </Link>
+            </LFLink>
           </div>
         )}
 
         <div className="mt-6 space-y-3">
           {(orders || []).map((order) => (
-            <Link
+            <LFLink
               key={order.id}
               to={`/lf/orders/${order.id}`}
               className="block rounded-2xl border border-gray-200 p-4 transition-colors hover:border-[#073B78]/40"
@@ -107,7 +107,7 @@ const LakeFreshOrders = () => {
                   <ArrowRight className="h-4 w-4 text-gray-400" />
                 </div>
               </div>
-            </Link>
+            </LFLink>
           ))}
         </div>
       </div>

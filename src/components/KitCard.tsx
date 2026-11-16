@@ -49,7 +49,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
         to={`/kits/${kit.id}`}
         className="group relative block rounded-xl sm:rounded-2xl bg-white border border-gray-100 overflow-hidden hover:border-gray-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 h-full"
       >
-        {/* â”€â”€â”€ Image â”€â”€â”€ */}
+        {/* === Image === */}
         <div className="relative bg-gray-50 border-b border-gray-100">
           {kit.badge && (
             <span className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-gray-100 text-gray-900 text-[10px] sm:text-xs font-semibold">
@@ -70,7 +70,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
           </div>
         </div>
 
-        {/* â”€â”€â”€ Content â”€â”€â”€ */}
+        {/* === Content === */}
         <div className="p-4 sm:p-5">
           {/* lifestyle tag */}
           <div className="flex items-center gap-2 mb-2.5">

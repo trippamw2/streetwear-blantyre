@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import {
   ArrowRight,
   BookOpen,
@@ -29,7 +29,7 @@ const steps = [
   { title: "Choose your fish", copy: "Pick from today's catch and set the weight you need.", accent: "#08A9E8" },
   { title: "Choose preparation", copy: "Whole, cleaned or portioned — prepared before dispatch.", accent: "#39B54A" },
   { title: "Add a seasoning", copy: "Five signature spice blends, paired to your fish.", accent: "#7ED321" },
-  { title: "Pick delivery day", copy: "Order before cut-off for next-day delivery across Blantyre.", accent: "#08A9E8" },
+  { title: "Pick delivery day", copy: "Order before cutoff for next day delivery across Blantyre.", accent: "#08A9E8" },
 ];
 
 const categories = [
@@ -68,13 +68,13 @@ const categories = [
 ];
 
 const trustPoints = [
-  { title: "Next-day delivery", copy: "Order before cut-off, delivered the next eligible day.", icon: Truck, accent: "#08A9E8" },
-  { title: "Freshness first", copy: "Short windows and cold-chain handling from lake to door.", icon: Snowflake, accent: "#39B54A" },
+  { title: "Next day delivery", copy: "Order before cutoff, delivered the next eligible day.", icon: Truck, accent: "#08A9E8" },
+  { title: "Freshness first", copy: "Short windows and cold chain handling from lake to door.", icon: Snowflake, accent: "#39B54A" },
   { title: "Honest weights", copy: "Priced per kilogram with clear packed weights.", icon: Scale, accent: "#7ED321" },
 ];
 
 const whyPoints = [
-  { title: "Fresh from the lake", copy: "Short freshness windows and cold-chain handling from lake to door.", icon: Fish, accent: "#073B78" },
+  { title: "Fresh from the lake", copy: "Short freshness windows and cold chain handling from lake to door.", icon: Fish, accent: "#073B78" },
   { title: "Honest weights", copy: "Priced per kilogram with clear packed weights. No silent overcharging.", icon: Scale, accent: "#39B54A" },
   { title: "Season it right", copy: "Signature spice blends matched to each fish on the catch list.", icon: Leaf, accent: "#7ED321" },
   { title: "Free recipes", copy: "Choose a recipe with your fish — it arrives free with your order.", icon: BookOpen, accent: "#08A9E8" },
@@ -97,7 +97,7 @@ const LakeFreshHome = () => {
       <SEO
         brand="lake-fresh"
         title="Lake Fresh Fish Mart — Fresh from the Lake. Ready for Your Table."
-        description="Fresh fish delivered next-day across Blantyre, Malawi. Chambo, Ncheni/Micheni and Usipa — whole, cleaned or portioned, priced per kilogram, with signature spices and free recipes."
+        description="Fresh fish delivered next day across Blantyre, Malawi. Chambo, Ncheni/Micheni and Usipa — whole, cleaned or portioned, priced per kilogram, with signature spices and free recipes."
       />
 
       {/* HERO */}
@@ -116,39 +116,39 @@ const LakeFreshHome = () => {
               Lake Fresh Fish Mart
             </span>
             <h1 className="mt-6 font-display text-[2.35rem] font-extrabold leading-[0.96] tracking-tight sm:text-5xl lg:text-6xl">
-              FRESH FROM THE
+              FRESH FROM THE{" "}
               <br />
-              <span className="bg-gradient-to-r from-[#7ED321] to-[#08A9E8] bg-clip-text text-transparent">LAKE.</span>
+              <span className="bg-gradient-to-r from-[#7ED321] to-[#08A9E8] bg-clip-text text-transparent">LAKE.</span>{" "}
               <br />
               READY FOR YOUR TABLE.
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/75 sm:text-base">
-              Real fish, honest weights and next-day delivery across Blantyre. Add signature spices and a free recipe —
+              Real fish, honest weights and next day delivery across Blantyre. Add signature spices and a free recipe —
               everything you need for a proper fish meal.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
+              <LFLink
                 to="/lf/fish"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#7ED321] px-6 py-3.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#073B78] transition-transform hover:-translate-y-0.5"
               >
                 Shop the catch <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-              <Link
+              </LFLink>
+              <LFLink
                 to="/lf/spices"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/5 px-6 py-3.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white backdrop-blur transition-colors hover:bg-white/10"
               >
                 <Leaf className="h-4 w-4 text-[#7ED321]" /> Explore spices
-              </Link>
+              </LFLink>
             </div>
             <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[11px] text-white/70">
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#7ED321]" /> Next-day delivery
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#7ED321]" /> Next day delivery
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="h-3.5 w-3.5 text-[#08A9E8]" /> Priced per kilogram
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#39B54A]" /> Cold-chain handled
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#39B54A]" /> Cold chain handled
               </span>
             </div>
           </div>
@@ -164,7 +164,7 @@ const LakeFreshHome = () => {
               />
               <div className="absolute bottom-5 left-5 right-5 flex flex-wrap gap-2">
                 <span className="rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-[#073B78]">
-                  Wild-caught
+                  Wild caught
                 </span>
                 <span className="rounded-full bg-[#39B54A] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-white">
                   Delivered fresh
@@ -218,7 +218,7 @@ const LakeFreshHome = () => {
               </p>
             </div>
             <ul className="mt-4 space-y-2.5 text-sm text-gray-600">
-              {["Clear weight, clear price", "Cold-chain handling", "Free recipe with every fish", "Next-day delivery"].map(
+              {["Clear weight, clear price", "Cold chain handling", "Free recipe with every fish", "Next day delivery"].map(
                 (item) => (
                   <li key={item} className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-[#39B54A]" /> {item}
@@ -241,12 +241,12 @@ const LakeFreshHome = () => {
               TODAY&apos;S CATCH
             </h2>
           </div>
-          <Link
+          <LFLink
             to="/lf/fish"
             className="inline-flex items-center gap-2 rounded-full border border-[#073B78]/15 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78] transition-colors hover:border-[#39B54A] hover:text-[#39B54A]"
           >
             View all fish <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          </LFLink>
         </div>
 
         {productsLoading ? (
@@ -260,7 +260,7 @@ const LakeFreshHome = () => {
               const accents = ["#39B54A", "#08A9E8", "#7ED321"];
               const accent = accents[index % accents.length];
               return (
-                <Link
+                <LFLink
                   key={product.id}
                   to={`/lf/fish/${product.id}`}
                   className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-lg"
@@ -306,7 +306,7 @@ const LakeFreshHome = () => {
                       </span>
                     </div>
                   </div>
-                </Link>
+                </LFLink>
               );
             })}
             {featured.length === 0 && (
@@ -325,7 +325,7 @@ const LakeFreshHome = () => {
           </h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((cat) => (
-              <Link
+              <LFLink
                 key={cat.to}
                 to={cat.to}
                 className="group rounded-2xl border border-gray-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
@@ -345,7 +345,7 @@ const LakeFreshHome = () => {
                 >
                   Explore <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                 </span>
-              </Link>
+              </LFLink>
             ))}
           </div>
         </div>
@@ -375,7 +375,7 @@ const LakeFreshHome = () => {
             ))}
           </div>
           <p className="mt-6 text-xs text-gray-500">
-            Daily cut-off: {formatCutoff(deliveryConfig.cutoff)} · Free delivery over{" "}
+            Daily cutoff: {formatCutoff(deliveryConfig.cutoff)} · Free delivery over{" "}
             {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)}
             {earliest ? ` · Next available: ${formatDeliveryDate(earliest)}` : ""}.
           </p>
@@ -397,12 +397,12 @@ const LakeFreshHome = () => {
               {formatMWK(deliveryConfig.deliveryFeeMwk)}, and orders over{" "}
               {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)} deliver free.
             </p>
-            <Link
+            <LFLink
               to="/lf/fish"
               className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#073B78] px-6 py-3.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#073B78]/90"
             >
               Start your order <ArrowRight className="h-3.5 w-3.5 text-[#7ED321]" />
-            </Link>
+            </LFLink>
           </div>
           <div className="rounded-2xl border border-[#08A9E8]/25 bg-[#EAF6FB]/60 p-5">
             {zonesLoading ? (
@@ -475,18 +475,18 @@ const LakeFreshHome = () => {
             Chambo, Ncheni / Micheni and Usipa — priced per kilogram, prepared for your table, delivered next day.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
+            <LFLink
               to="/lf/fish"
               className="inline-flex items-center justify-center rounded-xl bg-[#7ED321] px-8 py-3.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#073B78] transition-transform hover:-translate-y-0.5"
             >
               Browse the catch
-            </Link>
-            <Link
+            </LFLink>
+            <LFLink
               to="/lf/recipes"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 px-8 py-3.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors hover:bg-white/10"
             >
               <BookOpen className="h-4 w-4 text-[#08A9E8]" /> Free recipes
-            </Link>
+            </LFLink>
           </div>
         </div>
       </section>

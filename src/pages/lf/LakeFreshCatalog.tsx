@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import { Fish, ArrowRight, Leaf, BookOpen, Snowflake, AlertCircle, Loader2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useLakeFreshCatalog } from "@/hooks/useLakeFresh";
@@ -17,7 +17,7 @@ const LakeFreshCatalog = () => {
       <SEO
         brand="lake-fresh"
         title="The Catch — Lake Fresh Fish Mart"
-        description="Browse fresh Chambo, Ncheni/Micheni and Usipa. Priced per kilogram with signature spices, free recipes and next-day delivery across Blantyre."
+        description="Browse fresh Chambo, Ncheni/Micheni and Usipa. Priced per kilogram with signature spices, free recipes and next day delivery across Blantyre."
       />
 
       <section className="relative overflow-hidden border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
@@ -29,22 +29,22 @@ const LakeFreshCatalog = () => {
             THE CATCH
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Fresh fish from the lake, prepared whole, cleaned or portioned. Priced per kilogram with next-day delivery
+            Fresh fish from the lake, prepared whole, cleaned or portioned. Priced per kilogram with next day delivery
             — then add signature spices and a free recipe to finish the meal.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
-            <Link
+            <LFLink
               to="/lf/spices"
               className="inline-flex items-center gap-2 rounded-full border border-[#39B54A]/30 bg-white px-3.5 py-2 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]"
             >
               <Leaf className="h-3.5 w-3.5 text-[#39B54A]" /> Signature spices
-            </Link>
-            <Link
+            </LFLink>
+            <LFLink
               to="/lf/recipes"
               className="inline-flex items-center gap-2 rounded-full border border-[#08A9E8]/30 bg-white px-3.5 py-2 text-[10px] font-bold uppercase tracking-wide text-[#073B78]"
             >
               <BookOpen className="h-3.5 w-3.5 text-[#08A9E8]" /> Free recipes
-            </Link>
+            </LFLink>
           </div>
         </div>
       </section>
@@ -128,17 +128,17 @@ const LakeFreshCatalog = () => {
                             Min. {product.minOrderQtyKg} kg · {product.preparationOptions.map(prepLabel).join(" · ")}
                           </p>
                           <div className="mt-3 flex items-center gap-2 text-[11px] text-gray-500">
-                            <Snowflake className="h-3.5 w-3.5 text-[#08A9E8]" /> Cold-chain handled · free recipe included
+                            <Snowflake className="h-3.5 w-3.5 text-[#08A9E8]" /> Cold chain handled · free recipe included
                           </div>
                         </div>
 
-                        <Link
+                        <LFLink
                           to={`/lf/fish/${product.id}`}
                           className="mt-5 inline-flex items-center justify-between rounded-xl bg-[#073B78] px-4 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#073B78]/90"
                         >
                           {soldOut ? "View details" : "Choose weight"}
                           <ArrowRight className="h-3.5 w-3.5" style={{ color: accent }} />
-                        </Link>
+                        </LFLink>
                       </div>
                     </div>
                   );

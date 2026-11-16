@@ -48,7 +48,7 @@ Identity, Culture, Faith, Creativity, Courage, Community, Quality, Purpose, Auth
 - Additional wearable categories may be added by the store over time.
 
 ### Culture Pillars
-- **Music**: "Music is more than sound. It's the rhythm of our streets, the voice of our generation." We draw from Malawian and African music culture — from Phalombe to the club, from gospel to hip-hop. We speak to the ones who feel music in their bones.
+- **Music**: "Music is more than sound. It's the rhythm of our streets, the voice of our generation." We draw from Malawian and African music culture — from Phalombe to the club, from gospel to hip hop. We speak to the ones who feel music in their bones.
 - **Sports**: "Sport is not just competition. It's discipline. It's showing up when no one's watching." We celebrate the athlete in every young African — the footballer training at dawn, the netball player giving everything, the ones who understand that sport builds character.
 - **Faith**: "Faith is the foundation. The quiet confidence that you are part of something bigger." Malawi is a deeply spiritual nation. We honour that without being preachy. Faith shows up in how you carry yourself.
 - **Hustle**: "Hustle is the engine. The grind that turns dreams into reality." We speak to the entrepreneurs, the side-hustlers, the ones building something from nothing. The street hawker, the startup founder, the creative freelancer.

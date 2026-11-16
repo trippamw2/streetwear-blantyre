@@ -120,7 +120,7 @@ const AdminCombos = () => {
     setProducts(data || []);
   };
 
-  // Computed pricing from selected products Ã— discount percent
+  // Computed pricing from selected products × discount percent
   const computedPricing = useMemo(() => {
     const selectedProducts = products.filter((p) =>
       formData.selectedProductIds.includes(p.id)

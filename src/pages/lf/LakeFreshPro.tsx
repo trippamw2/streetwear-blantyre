@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import {
   ArrowRight,
   Building2,
@@ -33,7 +33,7 @@ const benefits = [
     tint: "#EAF6FB",
   },
   {
-    title: "Cold-chain fresh",
+    title: "Cold chain fresh",
     copy: "Handled cold from the lake to your door.",
     icon: Snowflake,
     accent: "#073B78",
@@ -154,7 +154,7 @@ const LakeFreshPro = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title="LakeFresh PRO — Wholesale & Business Supply" description="Lake Fresh PRO for restaurants, hotels and food businesses: wholesale fish supply, volume pricing and reliable cold-chain delivery across Blantyre." />
+      <SEO brand="lake-fresh" title="LakeFresh PRO — Wholesale & Business Supply" description="Lake Fresh PRO for restaurants, hotels and food businesses: wholesale fish supply, volume pricing and reliable cold chain delivery across Blantyre." />
 
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
@@ -166,12 +166,12 @@ const LakeFreshPro = () => {
           }}
         />
         <div className="container relative max-w-5xl py-12 sm:py-16">
-          <Link
+          <LFLink
             to="/lf"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 transition-colors hover:text-[#073B78]"
           >
             <Building2 className="h-3.5 w-3.5" /> Lake Fresh
-          </Link>
+          </LFLink>
           <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#39B54A] shadow-sm">
             <Building2 className="h-3.5 w-3.5" /> For business
           </span>
@@ -190,7 +190,7 @@ const LakeFreshPro = () => {
               <Truck className="h-3.5 w-3.5 text-[#08A9E8]" /> Scheduled delivery
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#7ED321]/40 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]">
-              <Snowflake className="h-3.5 w-3.5 text-[#7ED321]" /> Cold-chain fresh
+              <Snowflake className="h-3.5 w-3.5 text-[#7ED321]" /> Cold chain fresh
             </span>
           </div>
         </div>
@@ -385,12 +385,12 @@ const LakeFreshPro = () => {
             <p className="font-display text-base font-extrabold text-white">Not a business? Shop the catch.</p>
             <p className="mt-1 text-xs text-white/60">Priced per kilogram, with signature spices and a free recipe.</p>
           </div>
-          <Link
+          <LFLink
             to="/lf/fish"
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#7ED321] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
           >
             Shop the catch <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          </LFLink>
         </div>
       </section>
     </div>

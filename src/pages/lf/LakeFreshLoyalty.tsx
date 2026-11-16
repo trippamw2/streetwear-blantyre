@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
 import { ArrowRight, Copy, Gift, Loader2, Sparkles, Star, Users } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/contexts/AuthContext";
@@ -101,12 +101,12 @@ const LakeFreshLoyalty = () => {
             <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-600">
               Sign in to earn points on every order, unlock tiers and refer friends for more.
             </p>
-            <Link
+            <LFLink
               to="/lf/auth"
               className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#39B54A] px-6 py-3.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
             >
               Sign in <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+            </LFLink>
           </div>
         </section>
       </div>
@@ -198,7 +198,7 @@ const LakeFreshLoyalty = () => {
           <p className="mt-2 text-sm leading-relaxed text-gray-500">Share your code and earn rewards when friends order.</p>
           <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
             <code className="flex-1 rounded-xl border border-dashed border-[#08A9E8]/40 bg-[#EAF6FB]/50 px-3 py-2.5 text-sm font-bold tracking-wide text-[#073B78]">
-              {referral?.code || "—"}
+              {referral?.code || "N/A"}
             </code>
             <button
               type="button"
@@ -220,12 +220,12 @@ const LakeFreshLoyalty = () => {
             <p className="font-display text-base font-extrabold text-white">Ready for more points?</p>
             <p className="mt-1 text-xs text-white/60">Fresh fish, signature spices and a free recipe — all in one order.</p>
           </div>
-          <Link
+          <LFLink
             to="/lf/fish"
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#7ED321] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
           >
             Shop the catch <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          </LFLink>
         </div>
       </div>
     </div>

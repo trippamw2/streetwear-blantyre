@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
 import { ArrowLeft, Fish, Minus, Package, Plus, ShoppingBasket, Trash2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
@@ -12,7 +12,7 @@ const prepLabel = (value: string) =>
 const LakeFreshCart = () => {
   const { items, setWeight, setQuantity, setPreparation, setRecipe, remove, subtotal, totalWeight } = useLakeFreshCart();
   const { data: config } = useLakeFreshDeliveryConfig();
-  const navigate = useNavigate();
+  const navigate = useLFNavigate();
 
   if (items.length === 0) {
     return (
@@ -21,12 +21,12 @@ const LakeFreshCart = () => {
         <ShoppingBasket className="mx-auto h-12 w-12 text-gray-300" />
         <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">Your basket is empty</h1>
         <p className="mt-2 text-sm text-gray-500">Add fresh fish from today&apos;s catch to get started.</p>
-        <Link
+        <LFLink
           to="/lf/fish"
           className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white"
         >
           Browse the catch
-        </Link>
+        </LFLink>
       </div>
     );
   }
@@ -37,12 +37,12 @@ const LakeFreshCart = () => {
     <div className="bg-white">
       <SEO brand="lake-fresh" title="Your Basket — Lake Fresh Fish Mart" description="Review your Lake Fresh fish order." />
       <div className="container max-w-4xl py-10 sm:py-14">
-        <Link
+        <LFLink
           to="/lf/fish"
           className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Keep shopping
-        </Link>
+        </LFLink>
         <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">YOUR BASKET</h1>
         <p className="mt-2 text-sm text-gray-500">
           {totalWeight.toFixed(1)} kg of fresh fish
@@ -216,12 +216,12 @@ const LakeFreshCart = () => {
                         </button>
                       </div>
                     ) : (
-                      <Link
+                      <LFLink
                         to={`/lf/fish/${item.productId}`}
                         className="mt-3 inline-block text-[11px] font-bold text-[#073B78] underline hover:text-[#08A9E8]"
                       >
                         Choose a free recipe for this fish
-                      </Link>
+                      </LFLink>
                     )}
                   </div>
 

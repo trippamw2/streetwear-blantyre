@@ -30,7 +30,7 @@ const PILLAR_INFO: Record<Pillar, { name: string; description: string; color: st
   },
   hustle: {
     name: "Hustle Culture",
-    description: "Built from nothing. Every piece tells the come-up story.",
+    description: "Built from nothing. Every piece tells the come up story.",
     color: "text-red-300",
     bg: "bg-red-500/10",
   },

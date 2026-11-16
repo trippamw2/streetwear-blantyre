@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+import { LFLink } from "@/components/lf/lfRouter";
+import { lfUrl } from "@/lib/brandSite";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, ArrowLeft, CalendarDays, CheckCircle2, CreditCard, Fish, Loader2, MapPin, Snowflake } from "lucide-react";
 import { SEO } from "@/components/SEO";
@@ -120,12 +122,12 @@ const LakeFreshOrder = () => {
         <p className="mt-2 text-sm text-gray-500">
           {error instanceof Error ? error.message : "We could not load this order."}
         </p>
-        <Link
+        <LFLink
           to="/lf/orders"
           className="mt-6 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white"
         >
           My orders
-        </Link>
+        </LFLink>
       </div>
     );
   }
@@ -150,8 +152,8 @@ const LakeFreshOrder = () => {
       firstName: firstName || "Lake",
       lastName: rest.join(" ") || "Fresh",
       txRef: paymentRef,
-      callbackUrl: `${window.location.origin}/lf/orders/${order.id}?payment=callback`,
-      returnUrl: `${window.location.origin}/lf/orders/${order.id}?payment=complete`,
+      callbackUrl: `${lfUrl(`/orders/${order.id}`)}?payment=callback`,
+      returnUrl: `${lfUrl(`/orders/${order.id}`)}?payment=complete`,
       title: "Lake Fresh Fish Mart Order",
       description: `Order ${paymentRef}`,
     });
@@ -166,12 +168,12 @@ const LakeFreshOrder = () => {
         description="Your Lake Fresh fish order details and delivery status."
       />
       <div className="container max-w-3xl py-8 sm:py-12">
-        <Link
+        <LFLink
           to="/lf/orders"
           className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> All orders
-        </Link>
+        </LFLink>
 
         <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -249,16 +251,16 @@ const LakeFreshOrder = () => {
             <p className="mt-2 text-sm font-bold text-[#073B78]">
               {order.delivery_date ? formatDeliveryDate(order.delivery_date) : "Date pending"}
             </p>
-            <p className="mt-1 text-xs text-gray-500">{order.delivery_window || "Next-day delivery window"}</p>
+            <p className="mt-1 text-xs text-gray-500">{order.delivery_window || "Next day delivery window"}</p>
             <p className="mt-2 flex items-start gap-1.5 text-xs text-gray-500">
               <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> {order.customer_location}
             </p>
           </div>
           <div className="rounded-2xl border border-gray-200 p-4">
             <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">
-              <Snowflake className="h-3.5 w-3.5 text-[#08A9E8]" /> Cold-chain promise
+              <Snowflake className="h-3.5 w-3.5 text-[#08A9E8]" /> Cold chain promise
             </p>
-            <p className="mt-2 text-sm font-bold text-[#073B78]">Kept at 0–4°C</p>
+            <p className="mt-2 text-sm font-bold text-[#073B78]">Kept at 0 to 4°C</p>
             <p className="mt-1 text-xs text-gray-500">Consume within 2 days of delivery. Rinse before cooking.</p>
           </div>
         </section>

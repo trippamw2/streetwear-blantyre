@@ -48,7 +48,7 @@ export const PartnerBrands = ({ className }: { className?: string }) => {
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-8">
-          Our own in-house collections
+          Our own in house collections
         </p>
       </div>
     </section>

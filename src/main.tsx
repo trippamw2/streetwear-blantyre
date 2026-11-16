@@ -2,6 +2,7 @@ import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import Sentry from "@/lib/sentry";
 import App from "./App.tsx";
+import { IS_LF_SITE } from "@/lib/brandSite";
 import "./index.css";
 
 const LoadingSpinner = () => (
@@ -26,11 +27,29 @@ const LoadingSpinner = () => (
   </div>
 );
 
+const LakeFreshLoading = () => (
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '100vh',
+    background: '#EAF6FB',
+  }}>
+    <img
+      src="/brand/lake-fresh/icon.png"
+      alt="Lake Fresh Fish Mart"
+      style={{ width: 180, maxWidth: '60vw', height: 'auto', objectFit: 'contain' }}
+    />
+  </div>
+);
+
+const LoadingFallback = () => (IS_LF_SITE ? <LakeFreshLoading /> : <LoadingSpinner />);
+
 const AppWrapper = () => {
   return (
     <StrictMode>
       <Sentry.ErrorBoundary fallback={<p>Something went wrong. Please refresh.</p>}>
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<LoadingFallback />}>
           <App />
         </Suspense>
       </Sentry.ErrorBoundary>

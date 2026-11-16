@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import { LFLink, LFNavLink, useLFNavigate } from "@/components/lf/lfRouter";
 import { Menu, ShoppingBasket, X, LogOut, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLakeFreshCart, LakeFreshCartProvider } from "@/contexts/LakeFreshCartContext";
@@ -18,19 +19,7 @@ const LakeFreshHeader = () => {
   const { user } = useAuth();
   const { count, subtotal } = useLakeFreshCart();
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const link = document.querySelector("link[rel*='icon']") as HTMLLinkElement | null;
-    if (link) link.href = "/brand/lake-fresh/icon.png";
-    else {
-      const newLink = document.createElement("link");
-      newLink.rel = "icon";
-      newLink.href = "/brand/lake-fresh/icon.png";
-      document.head.appendChild(newLink);
-    }
-    document.title = "Lake Fresh";
-  }, []);
+  const navigate = useLFNavigate();
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -45,17 +34,17 @@ const LakeFreshHeader = () => {
         </div>
       </div>
       <div className="container flex h-16 items-center justify-between gap-4">
-        <Link to="/lf" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
+        <LFLink to="/lf" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
           <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-10 w-auto max-w-[200px] object-contain sm:h-12" />
-        </Link>
+        </LFLink>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="Lake Fresh">
-          <NavLink to="/lf" end className={navLinkClass}>Home</NavLink>
-          <NavLink to="/lf/fish" className={navLinkClass}>The Catch</NavLink>
-          <NavLink to="/lf/spices" className={navLinkClass}>Spices</NavLink>
-          <NavLink to="/lf/recipes" className={navLinkClass}>Recipes</NavLink>
-          <NavLink to="/lf/loyalty" className={navLinkClass}>Rewards</NavLink>
-          <NavLink to="/lf/pro" className={navLinkClass}>PRO</NavLink>
+          <LFNavLink to="/lf" end className={navLinkClass}>Home</LFNavLink>
+          <LFNavLink to="/lf/fish" className={navLinkClass}>The Catch</LFNavLink>
+          <LFNavLink to="/lf/spices" className={navLinkClass}>Spices</LFNavLink>
+          <LFNavLink to="/lf/recipes" className={navLinkClass}>Recipes</LFNavLink>
+          <LFNavLink to="/lf/loyalty" className={navLinkClass}>Rewards</LFNavLink>
+          <LFNavLink to="/lf/pro" className={navLinkClass}>PRO</LFNavLink>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -68,15 +57,15 @@ const LakeFreshHeader = () => {
               <LogOut className="h-3.5 w-3.5" /> Sign out
             </button>
           ) : (
-            <Link
+            <LFLink
               to="/lf/auth"
               className="hidden items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/80 hover:text-[#073B78] sm:inline-flex"
             >
               <User className="h-3.5 w-3.5" /> Sign in
-            </Link>
+            </LFLink>
           )}
 
-          <Link
+          <LFLink
             to="/lf/cart"
             className="relative inline-flex items-center gap-2 rounded-full bg-[#073B78] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white"
             aria-label={`Basket, ${count} item${count === 1 ? "" : "s"}`}
@@ -88,7 +77,7 @@ const LakeFreshHeader = () => {
                 {count}
               </span>
             )}
-          </Link>
+          </LFLink>
 
           <button
             type="button"
@@ -105,16 +94,16 @@ const LakeFreshHeader = () => {
       {menuOpen && (
         <div className="border-t border-gray-100 bg-white md:hidden">
           <div className="container flex flex-col gap-4 py-4" onClick={() => setMenuOpen(false)}>
-            <NavLink to="/lf" end className={navLinkClass}>Home</NavLink>
-            <NavLink to="/lf/fish" className={navLinkClass}>The Catch</NavLink>
-            <NavLink to="/lf/spices" className={navLinkClass}>Spices</NavLink>
-            <NavLink to="/lf/recipes" className={navLinkClass}>Recipes</NavLink>
-            <NavLink to="/lf/cart" className={navLinkClass}>Basket</NavLink>
-            <NavLink to="/lf/orders" className={navLinkClass}>My orders</NavLink>
-            <NavLink to="/lf/loyalty" className={navLinkClass}>Rewards</NavLink>
-            <NavLink to="/lf/subscribe" className={navLinkClass}>Subscribe</NavLink>
-            <NavLink to="/lf/pro" className={navLinkClass}>PRO</NavLink>
-            {!user && <NavLink to="/lf/auth" className={navLinkClass}>Sign in</NavLink>}
+            <LFNavLink to="/lf" end className={navLinkClass}>Home</LFNavLink>
+            <LFNavLink to="/lf/fish" className={navLinkClass}>The Catch</LFNavLink>
+            <LFNavLink to="/lf/spices" className={navLinkClass}>Spices</LFNavLink>
+            <LFNavLink to="/lf/recipes" className={navLinkClass}>Recipes</LFNavLink>
+            <LFNavLink to="/lf/cart" className={navLinkClass}>Basket</LFNavLink>
+            <LFNavLink to="/lf/orders" className={navLinkClass}>My orders</LFNavLink>
+            <LFNavLink to="/lf/loyalty" className={navLinkClass}>Rewards</LFNavLink>
+            <LFNavLink to="/lf/subscribe" className={navLinkClass}>Subscribe</LFNavLink>
+            <LFNavLink to="/lf/pro" className={navLinkClass}>PRO</LFNavLink>
+            {!user && <LFNavLink to="/lf/auth" className={navLinkClass}>Sign in</LFNavLink>}
           </div>
         </div>
       )}
@@ -132,27 +121,27 @@ const LakeFreshFooter = () => (
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Shop</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
-          <Link to="/lf/fish" className="hover:text-[#073B78]">The Catch</Link>
-          <Link to="/lf/spices" className="hover:text-[#073B78]">Spices</Link>
-          <Link to="/lf/recipes" className="hover:text-[#073B78]">Recipes</Link>
+          <LFLink to="/lf/fish" className="hover:text-[#073B78]">The Catch</LFLink>
+          <LFLink to="/lf/spices" className="hover:text-[#073B78]">Spices</LFLink>
+          <LFLink to="/lf/recipes" className="hover:text-[#073B78]">Recipes</LFLink>
         </div>
       </div>
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Account</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
-          <Link to="/lf/cart" className="hover:text-[#073B78]">Basket</Link>
-          <Link to="/lf/orders" className="hover:text-[#073B78]">My Orders</Link>
-          <Link to="/lf/loyalty" className="hover:text-[#073B78]">Rewards</Link>
-          <Link to="/lf/subscribe" className="hover:text-[#073B78]">Subscribe</Link>
-          <Link to="/lf/pro" className="hover:text-[#073B78]">LakeFresh PRO</Link>
+          <LFLink to="/lf/cart" className="hover:text-[#073B78]">Basket</LFLink>
+          <LFLink to="/lf/orders" className="hover:text-[#073B78]">My Orders</LFLink>
+          <LFLink to="/lf/loyalty" className="hover:text-[#073B78]">Rewards</LFLink>
+          <LFLink to="/lf/subscribe" className="hover:text-[#073B78]">Subscribe</LFLink>
+          <LFLink to="/lf/pro" className="hover:text-[#073B78]">LakeFresh PRO</LFLink>
         </div>
       </div>
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Delivery</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
-          <span>Next-day delivery</span>
+          <span>Next day delivery</span>
           <span>Blantyre, Malawi</span>
-          <span>Cold-chain handled</span>
+          <span>Cold chain handled</span>
         </div>
       </div>
     </div>
