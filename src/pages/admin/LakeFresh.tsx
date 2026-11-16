@@ -22,10 +22,12 @@ import {
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "batches" | "slots" | "orders" | "preparation" | "delivery";
+type Tab = "catalog" | "spices" | "kits" | "batches" | "slots" | "orders" | "preparation" | "delivery";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
+  { key: "spices", label: "Spices", icon: Package },
+  { key: "kits", label: "Meal Kits", icon: Package },
   { key: "batches", label: "Batches", icon: Package },
   { key: "slots", label: "Slots", icon: CalendarDays },
   { key: "orders", label: "Orders", icon: ClipboardList },
@@ -86,6 +88,14 @@ const AdminLakeFresh = () => {
     min_order_mwk: "0",
   });
 
+  // ---- Spices state ----
+  const [spices, setSpices] = useState<any[]>([]);
+  const [spiceForm, setSpiceForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "" });
+
+  // ---- Meal kits state ----
+  const [kits, setKits] = useState<any[]>([]);
+  const [kitForm, setKitForm] = useState({ name: "", price_mwk: "", discount_percent: "", description: "", items: "" });
+
   const [loading, setLoading] = useState(false);
 
   const loadSpecies = async () => {
@@ -104,6 +114,16 @@ const AdminLakeFresh = () => {
       .eq("brand_id", LF_BRAND_ID)
       .order("sort_order");
     setProducts(data || []);
+  };
+
+  const loadSpices = async () => {
+    const { data } = await supabase.from("lf_spices").select("*").eq("brand_id", LF_BRAND_ID).order("sort_order");
+    setSpices(data || []);
+  };
+
+  const loadKits = async () => {
+    const { data } = await supabase.from("lf_meal_kits").select("*").eq("brand_id", LF_BRAND_ID).order("sort_order");
+    setKits(data || []);
   };
 
   const loadBatches = async () => {
@@ -189,6 +209,8 @@ const AdminLakeFresh = () => {
   useEffect(() => {
     loadSpecies();
     loadProducts();
+    loadSpices();
+    loadKits();
     loadBatches();
     loadSlots();
     loadOrders();
@@ -201,6 +223,8 @@ const AdminLakeFresh = () => {
     await Promise.all([
       loadSpecies(),
       loadProducts(),
+      loadSpices(),
+      loadKits(),
       loadBatches(),
       loadSlots(),
       loadOrders(),
@@ -234,6 +258,79 @@ const AdminLakeFresh = () => {
     toast({ title: "Product created" });
     setProductForm({ ...productForm, name: "", price_per_kg_mwk: "" });
     await loadProducts();
+  };
+
+  const handleCreateSpice = async () => {
+    if (!spiceForm.name || !spiceForm.price_mwk) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.from("lf_spices").insert({
+      brand_id: LF_BRAND_ID,
+      name: spiceForm.name,
+      description: spiceForm.description || null,
+      price_mwk: Number(spiceForm.price_mwk),
+      size_label: spiceForm.size_label || null,
+      stock_qty: Number(spiceForm.stock_qty || 0),
+      ingredients: spiceForm.ingredients || null,
+      is_active: true,
+    });
+    if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
+    else {
+      toast({ title: "Spice created" });
+      setSpiceForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "" });
+      await loadSpices();
+    }
+  };
+
+  const handleCreateKit = async () => {
+    if (!kitForm.name || !kitForm.price_mwk) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { data, error } = await supabase.from("lf_meal_kits").insert({
+      brand_id: LF_BRAND_ID,
+      name: kitForm.name,
+      description: kitForm.description || null,
+      price_mwk: Number(kitForm.price_mwk),
+      discount_percent: Number(kitForm.discount_percent || 0),
+      is_active: true,
+    }).select().single();
+    if (error) {
+      toast({ title: "Create failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    // Optional items as newline "name|qty|unit"
+    const lines = kitForm.items.split("\n").map((l) => l.trim()).filter(Boolean);
+    if (lines.length && data) {
+      const rows = lines.map((line, idx) => {
+        const [itemName, qty, unit] = line.split("|").map((s) => s.trim());
+        return {
+          kit_id: data.id,
+          item_type: "other",
+          item_name: itemName,
+          quantity: Number(qty || 1),
+          unit: unit || null,
+          sort_order: idx,
+        };
+      });
+      await supabase.from("lf_meal_kit_items").insert(rows);
+    }
+    toast({ title: "Meal kit created" });
+    setKitForm({ name: "", price_mwk: "", discount_percent: "", description: "", items: "" });
+    await loadKits();
+  };
+
+  const toggleSpiceActive = async (id: string, next: boolean) => {
+    const { error } = await supabase.from("lf_spices").update({ is_active: next }).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else await loadSpices();
+  };
+
+  const toggleKitActive = async (id: string, next: boolean) => {
+    const { error } = await supabase.from("lf_meal_kits").update({ is_active: next }).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else await loadKits();
   };
 
   const toggleProductActive = async (id: string, next: boolean) => {
@@ -474,6 +571,140 @@ const AdminLakeFresh = () => {
                 ))}
                 {products.length === 0 && (
                   <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No products yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* SPICES */}
+      {tab === "spices" && (
+        <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold mb-4">Add spice</h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <Label>Name</Label>
+                <Input value={spiceForm.name} onChange={(e) => setSpiceForm({ ...spiceForm, name: e.target.value })} />
+              </div>
+              <div>
+                <Label>Price (MWK)</Label>
+                <Input type="number" value={spiceForm.price_mwk} onChange={(e) => setSpiceForm({ ...spiceForm, price_mwk: e.target.value })} />
+              </div>
+              <div>
+                <Label>Size label</Label>
+                <Input value={spiceForm.size_label} onChange={(e) => setSpiceForm({ ...spiceForm, size_label: e.target.value })} placeholder="100g" />
+              </div>
+              <div>
+                <Label>Stock qty</Label>
+                <Input type="number" value={spiceForm.stock_qty} onChange={(e) => setSpiceForm({ ...spiceForm, stock_qty: e.target.value })} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Ingredients</Label>
+                <Input value={spiceForm.ingredients} onChange={(e) => setSpiceForm({ ...spiceForm, ingredients: e.target.value })} />
+              </div>
+              <div className="sm:col-span-3">
+                <Label>Description</Label>
+                <Textarea value={spiceForm.description} onChange={(e) => setSpiceForm({ ...spiceForm, description: e.target.value })} />
+              </div>
+            </div>
+            <Button className="mt-4" onClick={handleCreateSpice}>
+              <Plus className="h-4 w-4 mr-2" /> Add spice
+            </Button>
+          </div>
+
+          <div className="rounded-xl border bg-white overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th className="px-4 py-3 text-left">Name</th>
+                  <th className="px-4 py-3 text-left">Size</th>
+                  <th className="px-4 py-3 text-right">Price</th>
+                  <th className="px-4 py-3 text-right">Stock</th>
+                  <th className="px-4 py-3 text-left">Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                {spices.map((s) => (
+                  <tr key={s.id} className="border-t">
+                    <td className="px-4 py-3 font-medium">{s.name}</td>
+                    <td className="px-4 py-3">{s.size_label || "—"}</td>
+                    <td className="px-4 py-3 text-right">{formatMWK(s.price_mwk)}</td>
+                    <td className="px-4 py-3 text-right">{s.stock_qty}</td>
+                    <td className="px-4 py-3">
+                      <button onClick={() => toggleSpiceActive(s.id, !s.is_active)} className={`text-xs font-bold ${s.is_active ? "text-emerald-600" : "text-gray-400"}`}>
+                        {s.is_active ? "Active" : "Inactive"}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {spices.length === 0 && (
+                  <tr><td colSpan={5} className="px-4 py-6 text-center text-gray-500">No spices yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* MEAL KITS */}
+      {tab === "kits" && (
+        <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold mb-4">Add meal kit</h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <Label>Name</Label>
+                <Input value={kitForm.name} onChange={(e) => setKitForm({ ...kitForm, name: e.target.value })} />
+              </div>
+              <div>
+                <Label>Price (MWK)</Label>
+                <Input type="number" value={kitForm.price_mwk} onChange={(e) => setKitForm({ ...kitForm, price_mwk: e.target.value })} />
+              </div>
+              <div>
+                <Label>Discount %</Label>
+                <Input type="number" value={kitForm.discount_percent} onChange={(e) => setKitForm({ ...kitForm, discount_percent: e.target.value })} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Description</Label>
+                <Textarea value={kitForm.description} onChange={(e) => setKitForm({ ...kitForm, description: e.target.value })} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Items (one per line: Name | qty | unit)</Label>
+                <Textarea value={kitForm.items} onChange={(e) => setKitForm({ ...kitForm, items: e.target.value })} placeholder="Lake Fresh Chambo | 1 | kg" />
+              </div>
+            </div>
+            <Button className="mt-4" onClick={handleCreateKit}>
+              <Plus className="h-4 w-4 mr-2" /> Add meal kit
+            </Button>
+          </div>
+
+          <div className="rounded-xl border bg-white overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th className="px-4 py-3 text-left">Name</th>
+                  <th className="px-4 py-3 text-right">Price</th>
+                  <th className="px-4 py-3 text-right">Discount</th>
+                  <th className="px-4 py-3 text-left">Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                {kits.map((k) => (
+                  <tr key={k.id} className="border-t">
+                    <td className="px-4 py-3 font-medium">{k.name}</td>
+                    <td className="px-4 py-3 text-right">{formatMWK(k.price_mwk)}</td>
+                    <td className="px-4 py-3 text-right">{k.discount_percent}%</td>
+                    <td className="px-4 py-3">
+                      <button onClick={() => toggleKitActive(k.id, !k.is_active)} className={`text-xs font-bold ${k.is_active ? "text-emerald-600" : "text-gray-400"}`}>
+                        {k.is_active ? "Active" : "Inactive"}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {kits.length === 0 && (
+                  <tr><td colSpan={4} className="px-4 py-6 text-center text-gray-500">No meal kits yet.</td></tr>
                 )}
               </tbody>
             </table>

@@ -1399,6 +1399,268 @@ export type Database = {
           },
         ]
       }
+      lf_marinades: {
+        Row: {
+          brand_id: string
+          created_at: string
+          description: string | null
+          id: string
+          image: string | null
+          ingredients: string | null
+          is_active: boolean
+          name: string
+          price_mwk: number
+          size_label: string | null
+          sort_order: number
+          stock_qty: number
+          storage_info: string | null
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image?: string | null
+          ingredients?: string | null
+          is_active?: boolean
+          name: string
+          price_mwk?: number
+          size_label?: string | null
+          sort_order?: number
+          stock_qty?: number
+          storage_info?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image?: string | null
+          ingredients?: string | null
+          is_active?: boolean
+          name?: string
+          price_mwk?: number
+          size_label?: string | null
+          sort_order?: number
+          stock_qty?: number
+          storage_info?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_marinades_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lf_meal_kit_items: {
+        Row: {
+          id: string
+          item_name: string
+          item_type: string
+          kit_id: string
+          quantity: number
+          sort_order: number
+          unit: string | null
+        }
+        Insert: {
+          id?: string
+          item_name: string
+          item_type: string
+          kit_id: string
+          quantity?: number
+          sort_order?: number
+          unit?: string | null
+        }
+        Update: {
+          id?: string
+          item_name?: string
+          item_type?: string
+          kit_id?: string
+          quantity?: number
+          sort_order?: number
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_meal_kit_items_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "lf_meal_kits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lf_meal_kits: {
+        Row: {
+          brand_id: string
+          created_at: string
+          description: string | null
+          discount_percent: number
+          id: string
+          image: string | null
+          is_active: boolean
+          name: string
+          price_mwk: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          name: string
+          price_mwk?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          name?: string
+          price_mwk?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_meal_kits_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lf_ready_to_cook: {
+        Row: {
+          brand_id: string
+          cooking_info: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image: string | null
+          is_active: boolean
+          name: string
+          price_mwk: number
+          size_label: string | null
+          sort_order: number
+          stock_qty: number
+          storage_info: string | null
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string
+          cooking_info?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          name: string
+          price_mwk?: number
+          size_label?: string | null
+          sort_order?: number
+          stock_qty?: number
+          storage_info?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          cooking_info?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          name?: string
+          price_mwk?: number
+          size_label?: string | null
+          sort_order?: number
+          stock_qty?: number
+          storage_info?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_ready_to_cook_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lf_spices: {
+        Row: {
+          brand_id: string
+          created_at: string
+          description: string | null
+          id: string
+          image: string | null
+          ingredients: string | null
+          is_active: boolean
+          name: string
+          price_mwk: number
+          size_label: string | null
+          sort_order: number
+          stock_qty: number
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image?: string | null
+          ingredients?: string | null
+          is_active?: boolean
+          name: string
+          price_mwk?: number
+          size_label?: string | null
+          sort_order?: number
+          stock_qty?: number
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image?: string | null
+          ingredients?: string | null
+          is_active?: boolean
+          name?: string
+          price_mwk?: number
+          size_label?: string | null
+          sort_order?: number
+          stock_qty?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_spices_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lookbook_items: {
         Row: {
           brand_id: string

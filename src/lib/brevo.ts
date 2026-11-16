@@ -4,23 +4,52 @@
 
 const BREVO_PROXY_URL = "/api/send-email";
 
-// Brand configuration
-const BRAND = {
-  name: "Streetwear Blantyre",
-  tagline: "Wear Your Identity",
-  email: "orders@wearsb.com",
-  website: "https://www.wearsb.com",
-  useLogoImage: false,
-  phone: import.meta.env.VITE_WHATSAPP_BUSINESS || "+265 991 234 567",
-  facebook: "https://facebook.com/streetwearblantyre",
-  instagram: "https://instagram.com/streetwearblantyre",
-  whatsapp: `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"}`,
-  address: "Blantyre, Malawi",
-  businessName: "Streetwear Blantyre",
+export type EmailBrand = "sb" | "lake-fresh";
+
+interface BrandConfig {
+  name: string;
+  tagline: string;
+  email: string;
+  website: string;
+  primaryColor: string;
+  businessName: string;
+  address: string;
+  whatsapp: string;
+  logoText: string;
+}
+
+const BRANDS: Record<EmailBrand, BrandConfig> = {
+  sb: {
+    name: "Streetwear Blantyre",
+    tagline: "Wear Your Identity",
+    email: "orders@wearsb.com",
+    website: "https://www.wearsb.com",
+    primaryColor: "${primary}",
+    businessName: "Streetwear Blantyre",
+    address: "Blantyre, Malawi",
+    whatsapp: `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"}`,
+    logoText: "SB",
+  },
+  "lake-fresh": {
+    name: "Lake Fresh Fish Mart",
+    tagline: "Fresh from the Lake. Ready for Your Table.",
+    email: "orders@lakefreshmw.com",
+    website: "https://lakefreshmw.com",
+    primaryColor: "#0a2540",
+    businessName: "Lake Fresh Fish Mart",
+    address: "Blantyre, Malawi",
+    whatsapp: `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"}`,
+    logoText: "LF",
+  },
 };
 
+const getBrand = (brand?: EmailBrand): BrandConfig => BRANDS[brand || "sb"];
+
 // Premium Email wrapper with branding - LIGHT THEME
-const wrapEmail = (content: string, title: string) => `
+const wrapEmail = (content: string, title: string, brand?: EmailBrand) => {
+  const BRAND = getBrand(brand);
+  const primary = BRAND.primaryColor;
+  return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,13 +69,13 @@ const wrapEmail = (content: string, title: string) => `
           
           <!-- Premium Header -->
           <tr>
-            <td style="background: linear-gradient(135deg, #2563eb 0%, #2563eb 50%, #2563eb 100%); padding: 40px 32px; position: relative; overflow: hidden;">
+            <td style="background: linear-gradient(135deg, ${primary} 0%, ${primary} 50%, ${primary} 100%); padding: 40px 32px; position: relative; overflow: hidden;">
               <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%); pointer-events: none;"></div>
               
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
-                    <div style="display: inline-block; width: 64px; height: 64px; background: rgba(255,255,255,0.9); border-radius: 20px; line-height: 64px; font-size: 24px; font-weight: 800; color: #2563eb; margin-bottom: 16px;">SB</div>
+                    <div style="display: inline-block; width: 64px; height: 64px; background: rgba(255,255,255,0.9); border-radius: 20px; line-height: 64px; font-size: 24px; font-weight: 800; color: ${primary}; margin-bottom: 16px;">${BRAND.logoText}</div>
                     <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: 3px; text-shadow: 0 2px 20px rgba(0,0,0,0.2);">${BRAND.name}</h1>
                     <p style="color: rgba(255, 255, 255, 0.95); margin: 8px 0 0 0; font-size: 13px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase;">${BRAND.tagline}</p>
                   </td>
@@ -76,7 +105,7 @@ const wrapEmail = (content: string, title: string) => `
                 <tr>
                   <td align="center">
                     <div style="display: inline-block; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.3); border-radius: 12px; padding: 8px 16px; margin-bottom: 20px;">
-                      <span style="color: #2563eb; font-size: 12px; font-weight: 600; letter-spacing: 1px;">${BRAND.businessName}</span>
+                      <span style="color: ${primary}; font-size: 12px; font-weight: 600; letter-spacing: 1px;">${BRAND.businessName}</span>
                     </div>
                     
                     <p style="color: #6b7280; font-size: 13px; margin: 0 0 4px 0;">${BRAND.address}</p>
@@ -85,7 +114,7 @@ const wrapEmail = (content: string, title: string) => `
                     <table cellpadding="0" cellspacing="0" style="margin: 0 auto 24px auto;">
                       <tr>
                         <td style="padding: 0 8px;"><a href="${BRAND.whatsapp}" style="display: inline-block; background: #25D366; color: #ffffff; text-decoration: none; font-size: 11px; font-weight: 600; padding: 10px 16px; border-radius: 10px; letter-spacing: 0.5px;">WhatsApp</a></td>
-                        <td style="padding: 0 8px;"><a href="${BRAND.website}" style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; font-size: 11px; font-weight: 600; padding: 10px 16px; border-radius: 10px; letter-spacing: 0.5px;">Shop</a></td>
+                        <td style="padding: 0 8px;"><a href="${BRAND.website}" style="display: inline-block; background: ${primary}; color: #ffffff; text-decoration: none; font-size: 11px; font-weight: 600; padding: 10px 16px; border-radius: 10px; letter-spacing: 0.5px;">Shop</a></td>
                       </tr>
                     </table>
                     
@@ -102,7 +131,7 @@ const wrapEmail = (content: string, title: string) => `
         <!-- Tagline badge -->
         <div style="margin-top: 24px; text-align: center;">
           <span style="display: inline-block; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2); border-radius: 20px; padding: 8px 20px;">
-            <span style="color: #2563eb; font-size: 11px; font-weight: 600; letter-spacing: 2px;">${BRAND.tagline}</span>
+            <span style="color: ${primary}; font-size: 11px; font-weight: 600; letter-spacing: 2px;">${BRAND.tagline}</span>
           </span>
         </div>
       </td>
@@ -111,6 +140,8 @@ const wrapEmail = (content: string, title: string) => `
 </body>
 </html>
 `;
+
+};
 
 // ============================================
 // PROXIED BREVO API CALL
@@ -146,12 +177,14 @@ interface OrderEmailParams {
   deliveryMethod: string;
   eta?: string;
   type: 'confirmation' | 'payment' | 'dispatched' | 'delivered';
+  brand?: EmailBrand;
 }
 
 // ============================================
 // ORDER CONFIRMATION EMAIL
 // ============================================
 export const sendOrderConfirmationEmail = async (order: OrderEmailParams) => {
+  const B = getBrand(order.brand);
   const itemsHtml = order.items
     .map(
       (item) => `
@@ -167,7 +200,7 @@ export const sendOrderConfirmationEmail = async (order: OrderEmailParams) => {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #0f172a;">Order Confirmed</h2>
       <p>Hi ${order.toName},</p>
-      <p>Your Streetwear Blantyre order is in. Here is the summary:</p>
+      <p>Your ${B.name} order is in. Here is the summary:</p>
       
       <table style="width: 100%; border-collapse: collapse;">
         ${itemsHtml}
@@ -185,7 +218,7 @@ export const sendOrderConfirmationEmail = async (order: OrderEmailParams) => {
       
       <p>Order #${order.orderId.slice(0, 8).toUpperCase()}</p>
       <p style="color: #6b7280; font-size: 14px;">We will WhatsApp you with updates.</p>
-      <p style="margin-top: 24px;">Thanks, Streetwear Blantyre Team</p>
+      <p style="margin-top: 24px;">Thanks, ${B.name} Team</p>
     </div>
   `;
 
@@ -193,7 +226,7 @@ export const sendOrderConfirmationEmail = async (order: OrderEmailParams) => {
     to: order.to,
     toName: order.toName,
     subject: `Order Confirmed. #${order.orderId.slice(0, 8).toUpperCase()}`,
-    htmlContent: wrapEmail(html, "Order Confirmed"),
+    htmlContent: wrapEmail(html, "Order Confirmed", order.brand),
   });
 };
 
@@ -201,6 +234,7 @@ export const sendOrderConfirmationEmail = async (order: OrderEmailParams) => {
 // PAYMENT RECEIVED EMAIL
 // ============================================
 export const sendPaymentReceivedEmail = async (order: OrderEmailParams) => {
+  const B = getBrand(order.brand);
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #0f172a;">Payment Confirmed</h2>
@@ -214,7 +248,7 @@ export const sendPaymentReceivedEmail = async (order: OrderEmailParams) => {
       </div>
       
       <p>We will let you know when it is dispatched.</p>
-      <p style="margin-top: 24px;">Thanks, Streetwear Blantyre Team</p>
+      <p style="margin-top: 24px;">Thanks, ${B.name} Team</p>
     </div>
   `;
 
@@ -222,7 +256,7 @@ export const sendPaymentReceivedEmail = async (order: OrderEmailParams) => {
     to: order.to,
     toName: order.toName,
     subject: `Payment Received. #${order.orderId.slice(0, 8).toUpperCase()}`,
-    htmlContent: wrapEmail(html, "Payment Received"),
+    htmlContent: wrapEmail(html, "Payment Received", order.brand),
   });
 };
 
@@ -230,6 +264,7 @@ export const sendPaymentReceivedEmail = async (order: OrderEmailParams) => {
 // ORDER DISPATCHED EMAIL
 // ============================================
 export const sendDispatchedEmail = async (order: OrderEmailParams) => {
+  const B = getBrand(order.brand);
   const itemsHtml = order.items
     .map((item) => `<li>${item.quantity} × ${item.name}</li>`)
     .join("");
@@ -238,13 +273,13 @@ export const sendDispatchedEmail = async (order: OrderEmailParams) => {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #0f172a;">On The Way</h2>
       <p>Hi ${order.toName},</p>
-      <p>Your Streetwear Blantyre order is out for delivery.</p>
+      <p>Your ${B.name} order is out for delivery.</p>
       
       <ul>${itemsHtml}</ul>
       
       <p>Est. delivery: ${order.eta || "later today"}</p>
       <p style="margin-top: 16px;">Track: <a href="https://www.wearsb.com/track/${order.orderId}" style="color: #0f172a;">www.wearsb.com/track/${order.orderId.slice(0, 8)}</a></p>
-      <p style="margin-top: 24px;">Thanks, Streetwear Blantyre Team</p>
+      <p style="margin-top: 24px;">Thanks, ${B.name} Team</p>
     </div>
   `;
 
@@ -252,7 +287,7 @@ export const sendDispatchedEmail = async (order: OrderEmailParams) => {
     to: order.to,
     toName: order.toName,
     subject: `Order On The Way. #${order.orderId.slice(0, 8).toUpperCase()}`,
-    htmlContent: wrapEmail(html, "Order On The Way"),
+    htmlContent: wrapEmail(html, "Order On The Way", order.brand),
   });
 };
 
@@ -260,6 +295,7 @@ export const sendDispatchedEmail = async (order: OrderEmailParams) => {
 // ORDER DELIVERED EMAIL
 // ============================================
 export const sendDeliveredEmail = async (order: OrderEmailParams) => {
+  const B = getBrand(order.brand);
   const itemsHtml = order.items
     .map((item) => `<li>${item.quantity} × ${item.name}</li>`)
     .join("");
@@ -272,9 +308,9 @@ export const sendDeliveredEmail = async (order: OrderEmailParams) => {
       
       <ul>${itemsHtml}</ul>
       
-      <p style="margin: 16px 0;">Hope you love your Streetwear Blantyre gear.</p>
+      <p style="margin: 16px 0;">Hope you love your ${B.name} gear.</p>
       <p>Please leave a review: <a href="https://www.wearsb.com/reviews" style="color: #0f172a;">www.wearsb.com/reviews</a></p>
-      <p style="margin-top: 24px;">Thanks for choosing Streetwear Blantyre.</p>
+      <p style="margin-top: 24px;">Thanks for choosing ${B.name}.</p>
     </div>
   `;
 
@@ -282,18 +318,19 @@ export const sendDeliveredEmail = async (order: OrderEmailParams) => {
     to: order.to,
     toName: order.toName,
     subject: `Order Delivered. #${order.orderId.slice(0, 8).toUpperCase()}`,
-    htmlContent: wrapEmail(html, "Order Delivered"),
+    htmlContent: wrapEmail(html, "Order Delivered", order.brand),
   });
 };
 
 // ============================================
 // SEND GENERIC EMAIL
 // ============================================
-export const sendEmail = async (to: string, subject: string, html: string) => {
+export const sendEmail = async (to: string, subject: string, html: string, brand?: EmailBrand) => {
+  const B = getBrand(brand);
   return sendViaProxy("send-email", {
     to,
     subject,
-    htmlContent: wrapEmail(html, subject),
+    htmlContent: wrapEmail(html, subject, brand),
   });
 };
 
@@ -303,6 +340,7 @@ export const sendEmail = async (to: string, subject: string, html: string) => {
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || "martinezkaponda@gmail.com";
 
 export const sendAdminNotificationEmail = async (order: OrderEmailParams) => {
+  const B = getBrand(order.brand);
   const itemsHtml = order.items
     .map(
       (item) => `
@@ -344,7 +382,7 @@ export const sendAdminNotificationEmail = async (order: OrderEmailParams) => {
     to: ADMIN_EMAIL,
     toName: "Streetwear Blantyre Admin",
     subject: `NEW ORDER #${order.orderId.slice(0, 8).toUpperCase()} - MK ${order.total.toLocaleString()}`,
-    htmlContent: wrapEmail(html, "New Order"),
+    htmlContent: wrapEmail(html, "New Order", order.brand),
   });
 };
 
