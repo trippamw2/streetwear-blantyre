@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, AlertCircle, Fish, Loader2, Minus, Plus, Snowflake, ShieldCheck, Truck } from "lucide-react";
+import { ArrowLeft, AlertCircle, BookOpen, Fish, Loader2, Leaf, Minus, Plus, Snowflake, ShieldCheck, Truck } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import {
@@ -14,6 +14,9 @@ import {
   getEarliestDeliveryDate,
 } from "@/lib/lfDelivery";
 import { formatMWK } from "@/data/products";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { toast } from "@/hooks/use-toast";
 
 const prepCopy: Record<string, { label: string; description: string }> = {
@@ -27,6 +30,36 @@ const LakeFreshProduct = () => {
   const { data: products, isLoading, isError, refetch } = useLakeFreshCatalog();
   const { data: config } = useLakeFreshDeliveryConfig();
   const { add } = useLakeFreshCart();
+
+  const { data: spices } = useQuery({
+    queryKey: ["lf", "spices"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("lf_spices")
+        .select("id, name, price_mwk, size_label, stock_qty")
+        .eq("brand_id", LF_BRAND_ID)
+        .eq("is_active", true)
+        .order("sort_order")
+        .limit(4);
+      if (error) throw new Error(error.message);
+      return data || [];
+    },
+  });
+
+  const { data: recipes } = useQuery({
+    queryKey: ["lf", "recipes"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("lf_recipes")
+        .select("id, title, slug, prep_time_min, cook_time_min")
+        .eq("brand_id", LF_BRAND_ID)
+        .eq("is_active", true)
+        .order("sort_order")
+        .limit(3);
+      if (error) throw new Error(error.message);
+      return data || [];
+    },
+  });
 
   const product = useMemo(() => products?.find((item) => item.id === id), [products, id]);
   const [weightKg, setWeightKg] = useState(0.5);
@@ -303,6 +336,55 @@ const LakeFreshProduct = () => {
           </div>
         </div>
       </section>
+
+      <section className="border-t border-gray-200 bg-[#ecfeff]/40">
+        <div className="container py-12 sm:py-16">
+          <h2 className="font-display text-2xl font-extrabold text-[#0a2540]">COMPLETE YOUR MEAL</h2>
+          <p className="mt-2 text-sm text-gray-500">Seasonings and recipes to go with your fish.</p>
+
+          {spices && spices.length > 0 ? (
+            <div className="mt-6">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">LakeFresh spices</p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {spices.map((s: any) => (
+                  <Link
+                    key={s.id}
+                    to="/lf/spices"
+                    className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+                  >
+                    <p className="font-display text-base font-extrabold text-[#0a2540]">{s.name}</p>
+                    <p className="mt-1 text-xs text-gray-500">{s.size_label || "Seasoning"}</p>
+                    <p className="mt-2 text-sm font-bold text-[#0a2540]">{formatMWK(s.price_mwk)}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {recipes && recipes.length > 0 ? (
+            <div className="mt-8">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Recipes for this fish</p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {recipes.map((r: any) => (
+                  <Link
+                    key={r.id}
+                    to={`/lf/recipes/${r.slug}`}
+                    className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+                  >
+                    <p className="font-display text-base font-extrabold text-[#0a2540]">{r.title}</p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {r.prep_time_min ? `Prep ${r.prep_time_min}m` : ""}
+                      {r.prep_time_min && r.cook_time_min ? " · " : ""}
+                      {r.cook_time_min ? `Cook ${r.cook_time_min}m` : ""}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
     </div>
   );
 };
