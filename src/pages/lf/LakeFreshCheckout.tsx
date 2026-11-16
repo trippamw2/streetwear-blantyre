@@ -20,6 +20,7 @@ import {
   calculateFinalPrice,
 } from "@/lib/lfDelivery";
 import { buildLakeFreshPaymentRef } from "@/lib/lfPayments";
+import { sendOrderConfirmationEmail } from "@/lib/brevo";
 import { formatMWK } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -146,11 +147,22 @@ const LakeFreshCheckout = () => {
 
     setSubmitting(true);
     try {
-      const payload = items.map((item) => ({
-        product_id: item.productId,
-        weight_kg: getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg),
-        preparation: item.preparation,
-      }));
+      const payload = items.map((item) => {
+        if (item.kind === "unit") {
+          return {
+            kind: "unit",
+            item_type: item.itemType || "other",
+            product_id: item.productId,
+            quantity: item.quantity || 1,
+          };
+        }
+        return {
+          kind: "fish",
+          product_id: item.productId,
+          weight_kg: getEffectiveWeightKg(item.weightKg || 0, item.minOrderQtyKg || 0.5),
+          preparation: item.preparation || "whole",
+        };
+      });
 
       const { data, error } = await supabase.rpc("lf_place_order", {
         p_customer_name: name.trim(),
@@ -169,6 +181,31 @@ const LakeFreshCheckout = () => {
       const txRef = buildLakeFreshPaymentRef(orderId);
       const cleanPhone = phone.replace(/[^0-9]/g, "");
       const [firstName, ...rest] = name.trim().split(/\s+/);
+
+      // Send order confirmation email (Lake Fresh branded)
+      try {
+        const emailItems = items.map((item) => ({
+          name: item.name,
+          quantity: item.kind === "unit" ? item.quantity || 1 : 1,
+          price:
+            item.kind === "unit"
+              ? (item.unitPriceMwk || 0) * (item.quantity || 1)
+              : calculateFinalPrice(item.pricePerKgMwk || 0, item.weightKg || 0, item.minOrderQtyKg || 0.5),
+        }));
+        await sendOrderConfirmationEmail({
+          to: user?.email || `${cleanPhone}@lakefreshmw.com`,
+          toName: name.trim(),
+          orderId,
+          items: emailItems,
+          total: estimatedTotal,
+          location: selectedZone?.name || "",
+          deliveryMethod: selectedSlot ? `Next-day · ${selectedSlot.deliveryDate}` : "Next-day delivery",
+          type: "confirmation",
+          brand: "lake-fresh",
+        });
+      } catch (emailErr) {
+        console.warn("LF order confirmation email failed", emailErr);
+      }
 
       clear();
 
