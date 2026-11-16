@@ -74,6 +74,8 @@ import LakeFreshOrders from "./pages/lf/LakeFreshOrders";
 import LakeFreshOrder from "./pages/lf/LakeFreshOrder";
 import LakeFreshRecipes from "./pages/lf/LakeFreshRecipes";
 import LakeFreshRecipe from "./pages/lf/LakeFreshRecipe";
+import LakeFreshSpices from "./pages/lf/LakeFreshSpices";
+import LakeFreshMealKits from "./pages/lf/LakeFreshMealKits";
 import { LakeFreshLayout } from "./components/lf/LakeFreshLayout";
 import { LakeFreshProtectedRoute } from "./components/lf/LakeFreshProtectedRoute";
 
@@ -158,6 +160,8 @@ const App = () => (
                   <Route path="orders/:id" element={<LakeFreshProtectedRoute><LakeFreshOrder /></LakeFreshProtectedRoute>} />
                   <Route path="recipes" element={<LakeFreshRecipes />} />
                   <Route path="recipes/:slug" element={<LakeFreshRecipe />} />
+                  <Route path="spices" element={<LakeFreshSpices />} />
+                  <Route path="meal-kits" element={<LakeFreshMealKits />} />
                 </Route>
                 {/* Standalone pages (no header/footer) */}
                 <Route path="/verify/:token" element={<Verify />} />
