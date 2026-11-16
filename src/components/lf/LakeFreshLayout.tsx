@@ -46,7 +46,7 @@ const LakeFreshHeader = () => {
       </div>
       <div className="container flex h-16 items-center justify-between gap-4">
         <Link to="/lf" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
-          <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-9 w-auto object-contain" />
+          <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-8 w-auto max-w-[150px] object-contain sm:h-9" />
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="Lake Fresh">
@@ -132,7 +132,7 @@ const LakeFreshFooter = () => (
   <footer className="border-t border-gray-100 bg-[#F7FBFC] text-[#073B78]">
     <div className="container grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4">
       <div className="sm:col-span-2 lg:col-span-1">
-        <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-10 w-auto object-contain" />
+        <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-8 w-auto max-w-[150px] object-contain" />
         <p className="mt-3 max-w-xs text-sm text-[#073B78]/70">{brand.tagline}</p>
       </div>
       <div>
