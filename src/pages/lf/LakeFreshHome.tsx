@@ -49,7 +49,7 @@ const LakeFreshHome = () => {
           className="pointer-events-none absolute inset-0 opacity-20"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 80% 20%, #08A9E8 0, transparent 40%), radial-gradient(circle at 10% 90%, #08A9E8 0, transparent 35%)",
+              "radial-gradient(circle at 80% 20%, #08A9E8 0, transparent 40%), radial-gradient(circle at 10% 90%, #39B54A 0, transparent 35%)",
           }}
         />
         <div className="container relative py-20 sm:py-28 lg:py-32">
@@ -220,7 +220,7 @@ const LakeFreshHome = () => {
               <Link
                 key={cat.to}
                 to={cat.to}
-                className="rounded-2xl border border-gray-200 bg-[#EAF6FB]/40 p-5 transition-shadow hover:shadow-md"
+                className="rounded-2xl border border-[#39B54A]/30 bg-[#EAF6FB]/40 p-5 transition-shadow hover:shadow-md hover:border-[#39B54A]"
               >
                 <p className="font-display text-base font-extrabold text-[#073B78]">{cat.label}</p>
                 <p className="mt-1 text-xs text-gray-500">{cat.copy}</p>
@@ -320,7 +320,7 @@ const LakeFreshHome = () => {
               { title: "Business supply", copy: "LakeFresh PRO for restaurants, hotels and caterers." },
               { title: "Rewards", copy: "Earn points on every order and refer friends." },
             ].map((item) => (
-              <div key={item.title} className="rounded-2xl border border-gray-200 bg-white p-5">
+              <div key={item.title} className="rounded-2xl border border-[#39B54A]/20 bg-white p-5">
                 <h3 className="font-display text-sm font-extrabold uppercase tracking-wide text-[#073B78]">{item.title}</h3>
                 <p className="mt-1 text-sm text-gray-500">{item.copy}</p>
               </div>
