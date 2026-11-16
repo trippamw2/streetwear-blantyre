@@ -1417,153 +1417,6 @@ export type Database = {
           },
         ]
       }
-      lf_marinades: {
-        Row: {
-          brand_id: string
-          created_at: string
-          description: string | null
-          id: string
-          image: string | null
-          ingredients: string | null
-          is_active: boolean
-          name: string
-          price_mwk: number
-          size_label: string | null
-          sort_order: number
-          stock_qty: number
-          storage_info: string | null
-          updated_at: string
-        }
-        Insert: {
-          brand_id?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          image?: string | null
-          ingredients?: string | null
-          is_active?: boolean
-          name: string
-          price_mwk?: number
-          size_label?: string | null
-          sort_order?: number
-          stock_qty?: number
-          storage_info?: string | null
-          updated_at?: string
-        }
-        Update: {
-          brand_id?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          image?: string | null
-          ingredients?: string | null
-          is_active?: boolean
-          name?: string
-          price_mwk?: number
-          size_label?: string | null
-          sort_order?: number
-          stock_qty?: number
-          storage_info?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lf_marinades_brand_id_fkey"
-            columns: ["brand_id"]
-            isOneToOne: false
-            referencedRelation: "brands"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lf_meal_kit_items: {
-        Row: {
-          id: string
-          item_name: string
-          item_type: string
-          kit_id: string
-          quantity: number
-          sort_order: number
-          unit: string | null
-        }
-        Insert: {
-          id?: string
-          item_name: string
-          item_type: string
-          kit_id: string
-          quantity?: number
-          sort_order?: number
-          unit?: string | null
-        }
-        Update: {
-          id?: string
-          item_name?: string
-          item_type?: string
-          kit_id?: string
-          quantity?: number
-          sort_order?: number
-          unit?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lf_meal_kit_items_kit_id_fkey"
-            columns: ["kit_id"]
-            isOneToOne: false
-            referencedRelation: "lf_meal_kits"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      lf_meal_kits: {
-        Row: {
-          brand_id: string
-          created_at: string
-          description: string | null
-          discount_percent: number
-          id: string
-          image: string | null
-          is_active: boolean
-          name: string
-          price_mwk: number
-          sort_order: number
-          updated_at: string
-        }
-        Insert: {
-          brand_id?: string
-          created_at?: string
-          description?: string | null
-          discount_percent?: number
-          id?: string
-          image?: string | null
-          is_active?: boolean
-          name: string
-          price_mwk?: number
-          sort_order?: number
-          updated_at?: string
-        }
-        Update: {
-          brand_id?: string
-          created_at?: string
-          description?: string | null
-          discount_percent?: number
-          id?: string
-          image?: string | null
-          is_active?: boolean
-          name?: string
-          price_mwk?: number
-          sort_order?: number
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lf_meal_kits_brand_id_fkey"
-            columns: ["brand_id"]
-            isOneToOne: false
-            referencedRelation: "brands"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       lf_quote_items: {
         Row: {
           estimated_unit_price_mwk: number | null
@@ -1662,65 +1515,6 @@ export type Database = {
           },
         ]
       }
-      lf_ready_to_cook: {
-        Row: {
-          brand_id: string
-          cooking_info: string | null
-          created_at: string
-          description: string | null
-          id: string
-          image: string | null
-          is_active: boolean
-          name: string
-          price_mwk: number
-          size_label: string | null
-          sort_order: number
-          stock_qty: number
-          storage_info: string | null
-          updated_at: string
-        }
-        Insert: {
-          brand_id?: string
-          cooking_info?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          image?: string | null
-          is_active?: boolean
-          name: string
-          price_mwk?: number
-          size_label?: string | null
-          sort_order?: number
-          stock_qty?: number
-          storage_info?: string | null
-          updated_at?: string
-        }
-        Update: {
-          brand_id?: string
-          cooking_info?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          image?: string | null
-          is_active?: boolean
-          name?: string
-          price_mwk?: number
-          size_label?: string | null
-          sort_order?: number
-          stock_qty?: number
-          storage_info?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "lf_ready_to_cook_brand_id_fkey"
-            columns: ["brand_id"]
-            isOneToOne: false
-            referencedRelation: "brands"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       lf_recipe_products: {
         Row: {
           fish_product_id: string | null
@@ -1775,7 +1569,6 @@ export type Database = {
           is_active: boolean
           prep_time_min: number | null
           qr_target_url: string | null
-          recommended_marinade: string | null
           recommended_spice: string | null
           safety_notes: string | null
           servings: number | null
@@ -1797,7 +1590,6 @@ export type Database = {
           is_active?: boolean
           prep_time_min?: number | null
           qr_target_url?: string | null
-          recommended_marinade?: string | null
           recommended_spice?: string | null
           safety_notes?: string | null
           servings?: number | null
@@ -1819,7 +1611,6 @@ export type Database = {
           is_active?: boolean
           prep_time_min?: number | null
           qr_target_url?: string | null
-          recommended_marinade?: string | null
           recommended_spice?: string | null
           safety_notes?: string | null
           servings?: number | null
@@ -1938,6 +1729,7 @@ export type Database = {
           is_active: boolean
           name: string
           price_mwk: number
+          recommended_species: string[]
           size_label: string | null
           sort_order: number
           stock_qty: number
@@ -1953,6 +1745,7 @@ export type Database = {
           is_active?: boolean
           name: string
           price_mwk?: number
+          recommended_species?: string[]
           size_label?: string | null
           sort_order?: number
           stock_qty?: number
@@ -1968,6 +1761,7 @@ export type Database = {
           is_active?: boolean
           name?: string
           price_mwk?: number
+          recommended_species?: string[]
           size_label?: string | null
           sort_order?: number
           stock_qty?: number
@@ -2365,6 +2159,8 @@ export type Database = {
           product_key: string
           product_name: string
           quantity: number
+          recipe_id: string | null
+          recipe_title: string | null
           unit_price_mwk: number
         }
         Insert: {
@@ -2375,6 +2171,8 @@ export type Database = {
           product_key: string
           product_name: string
           quantity: number
+          recipe_id?: string | null
+          recipe_title?: string | null
           unit_price_mwk: number
         }
         Update: {
@@ -2385,6 +2183,8 @@ export type Database = {
           product_key?: string
           product_name?: string
           quantity?: number
+          recipe_id?: string | null
+          recipe_title?: string | null
           unit_price_mwk?: number
         }
         Relationships: [
@@ -2400,6 +2200,13 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "lf_recipes"
             referencedColumns: ["id"]
           },
         ]

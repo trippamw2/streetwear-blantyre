@@ -75,9 +75,6 @@ import LakeFreshOrder from "./pages/lf/LakeFreshOrder";
 import LakeFreshRecipes from "./pages/lf/LakeFreshRecipes";
 import LakeFreshRecipe from "./pages/lf/LakeFreshRecipe";
 import LakeFreshSpices from "./pages/lf/LakeFreshSpices";
-import LakeFreshMealKits from "./pages/lf/LakeFreshMealKits";
-import LakeFreshMarinades from "./pages/lf/LakeFreshMarinades";
-import LakeFreshReadyToCook from "./pages/lf/LakeFreshReadyToCook";
 import LakeFreshPro from "./pages/lf/LakeFreshPro";
 import LakeFreshLoyalty from "./pages/lf/LakeFreshLoyalty";
 import LakeFreshSubscribe from "./pages/lf/LakeFreshSubscribe";
@@ -176,9 +173,6 @@ const App = () => {
                   <Route path="recipes" element={<LakeFreshRecipes />} />
                   <Route path="recipes/:slug" element={<LakeFreshRecipe />} />
                   <Route path="spices" element={<LakeFreshSpices />} />
-                  <Route path="meal-kits" element={<LakeFreshMealKits />} />
-                  <Route path="marinades" element={<LakeFreshMarinades />} />
-                  <Route path="ready-to-cook" element={<LakeFreshReadyToCook />} />
                   <Route path="pro" element={<LakeFreshPro />} />
                   <Route path="loyalty" element={<LakeFreshLoyalty />} />
                   <Route path="subscribe" element={<LakeFreshSubscribe />} />

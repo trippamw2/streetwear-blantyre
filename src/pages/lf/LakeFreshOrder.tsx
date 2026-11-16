@@ -51,7 +51,7 @@ const LakeFreshOrder = () => {
 
       const { data: items, error: itemsError } = await supabase
         .from("order_items")
-        .select("id, product_name, unit_price_mwk, quantity")
+        .select("id, product_name, unit_price_mwk, quantity, recipe_title")
         .eq("order_id", order.id);
       if (itemsError) throw new Error(itemsError.message);
 
@@ -281,6 +281,11 @@ const LakeFreshOrder = () => {
                       {item.preparation.packed_weight_kg
                         ? ` · packed ${Number(item.preparation.packed_weight_kg).toFixed(2)} kg`
                         : " · packed weight confirmed at dispatch"}
+                    </p>
+                  ) : null}
+                  {item.recipe_title ? (
+                    <p className="mt-1 text-[11px] font-semibold text-[#2c6e12]">
+                      Free recipe: {item.recipe_title}
                     </p>
                   ) : null}
                 </div>

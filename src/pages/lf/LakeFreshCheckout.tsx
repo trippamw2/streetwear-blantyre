@@ -161,6 +161,8 @@ const LakeFreshCheckout = () => {
           product_id: item.productId,
           weight_kg: getEffectiveWeightKg(item.weightKg || 0, item.minOrderQtyKg || 0.5),
           preparation: item.preparation || "whole",
+          recipe_id: item.recipeId || undefined,
+          recipe_title: item.recipeTitle || undefined,
         };
       });
 
@@ -185,7 +187,10 @@ const LakeFreshCheckout = () => {
       // Send order confirmation email (Lake Fresh branded)
       try {
         const emailItems = items.map((item) => ({
-          name: item.name,
+          name:
+            item.kind === "fish" && item.recipeTitle
+              ? `${item.name} (free recipe: ${item.recipeTitle})`
+              : item.name,
           quantity: item.kind === "unit" ? item.quantity || 1 : 1,
           price:
             item.kind === "unit"

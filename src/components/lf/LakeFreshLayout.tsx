@@ -53,9 +53,6 @@ const LakeFreshHeader = () => {
           <NavLink to="/lf" end className={navLinkClass}>Home</NavLink>
           <NavLink to="/lf/fish" className={navLinkClass}>The Catch</NavLink>
           <NavLink to="/lf/spices" className={navLinkClass}>Spices</NavLink>
-          <NavLink to="/lf/marinades" className={navLinkClass}>Marinades</NavLink>
-          <NavLink to="/lf/ready-to-cook" className={navLinkClass}>Ready to Cook</NavLink>
-          <NavLink to="/lf/meal-kits" className={navLinkClass}>Meal Kits</NavLink>
           <NavLink to="/lf/recipes" className={navLinkClass}>Recipes</NavLink>
           <NavLink to="/lf/loyalty" className={navLinkClass}>Rewards</NavLink>
           <NavLink to="/lf/pro" className={navLinkClass}>PRO</NavLink>
@@ -111,9 +108,6 @@ const LakeFreshHeader = () => {
             <NavLink to="/lf" end className={navLinkClass}>Home</NavLink>
             <NavLink to="/lf/fish" className={navLinkClass}>The Catch</NavLink>
             <NavLink to="/lf/spices" className={navLinkClass}>Spices</NavLink>
-            <NavLink to="/lf/marinades" className={navLinkClass}>Marinades</NavLink>
-            <NavLink to="/lf/ready-to-cook" className={navLinkClass}>Ready to Cook</NavLink>
-            <NavLink to="/lf/meal-kits" className={navLinkClass}>Meal Kits</NavLink>
             <NavLink to="/lf/recipes" className={navLinkClass}>Recipes</NavLink>
             <NavLink to="/lf/cart" className={navLinkClass}>Basket</NavLink>
             <NavLink to="/lf/orders" className={navLinkClass}>My orders</NavLink>
@@ -140,9 +134,6 @@ const LakeFreshFooter = () => (
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
           <Link to="/lf/fish" className="hover:text-[#073B78]">The Catch</Link>
           <Link to="/lf/spices" className="hover:text-[#073B78]">Spices</Link>
-          <Link to="/lf/marinades" className="hover:text-[#073B78]">Marinades</Link>
-          <Link to="/lf/ready-to-cook" className="hover:text-[#073B78]">Ready to Cook</Link>
-          <Link to="/lf/meal-kits" className="hover:text-[#073B78]">Meal Kits</Link>
           <Link to="/lf/recipes" className="hover:text-[#073B78]">Recipes</Link>
         </div>
       </div>

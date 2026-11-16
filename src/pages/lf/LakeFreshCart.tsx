@@ -10,7 +10,7 @@ const prepLabel = (value: string) =>
   value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Portioned" : value;
 
 const LakeFreshCart = () => {
-  const { items, setWeight, setQuantity, setPreparation, remove, subtotal, totalWeight } = useLakeFreshCart();
+  const { items, setWeight, setQuantity, setPreparation, setRecipe, remove, subtotal, totalWeight } = useLakeFreshCart();
   const { data: config } = useLakeFreshDeliveryConfig();
   const navigate = useNavigate();
 
@@ -45,7 +45,9 @@ const LakeFreshCart = () => {
         </Link>
         <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">YOUR BASKET</h1>
         <p className="mt-2 text-sm text-gray-500">
-          {totalWeight.toFixed(1)} kg of fresh fish · delivery date and slot selected at checkout.
+          {totalWeight.toFixed(1)} kg of fresh fish
+          {items.some((item) => item.kind === "unit") ? " plus selected extras" : ""} · delivery date and slot
+          selected at checkout.
         </p>
 
         <div className="mt-8 space-y-4">
@@ -199,6 +201,28 @@ const LakeFreshCart = () => {
                         </select>
                       </div>
                     </div>
+
+                    {item.recipeTitle ? (
+                      <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-[#39B54A]/40 bg-[#7ED321]/10 px-3 py-2">
+                        <p className="text-[11px] font-semibold text-[#2c6e12]">
+                          Free recipe: <span className="font-extrabold">{item.recipeTitle}</span>
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setRecipe(item.key, null, null)}
+                          className="shrink-0 rounded px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12] hover:bg-[#39B54A]/15"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <Link
+                        to={`/lf/fish/${item.productId}`}
+                        className="mt-3 inline-block text-[11px] font-bold text-[#073B78] underline hover:text-[#08A9E8]"
+                      >
+                        Choose a free recipe for this fish
+                      </Link>
+                    )}
                   </div>
 
                   <div className="text-right sm:w-28">
