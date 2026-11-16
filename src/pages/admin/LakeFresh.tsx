@@ -22,11 +22,12 @@ import {
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "spices" | "kits" | "recipes" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery";
+type Tab = "catalog" | "spices" | "marinades" | "kits" | "recipes" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
   { key: "spices", label: "Spices", icon: Package },
+  { key: "marinades", label: "Marinades", icon: Package },
   { key: "kits", label: "Meal Kits", icon: Package },
   { key: "recipes", label: "Recipes", icon: Package },
   { key: "pro", label: "PRO", icon: Package },
@@ -94,7 +95,7 @@ const AdminLakeFresh = () => {
 
   // ---- Spices state ----
   const [spices, setSpices] = useState<any[]>([]);
-  const [spiceForm, setSpiceForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "" });
+  const [spiceForm, setSpiceForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "" });
 
   // ---- Meal kits state ----
   const [kits, setKits] = useState<any[]>([]);
@@ -117,6 +118,10 @@ const AdminLakeFresh = () => {
 
   // ---- Subscriptions state ----
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
+
+  // ---- Marinades state ----
+  const [marinades, setMarinades] = useState<any[]>([]);
+  const [marinadeForm, setMarinadeForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", storage_info: "", description: "", recommended_species: "" });
 
   const [loading, setLoading] = useState(false);
 
@@ -223,6 +228,11 @@ const AdminLakeFresh = () => {
     setSubscriptions(data || []);
   };
 
+  const loadMarinades = async () => {
+    const { data } = await supabase.from("lf_marinades").select("*").eq("brand_id", LF_BRAND_ID).order("sort_order");
+    setMarinades(data || []);
+  };
+
   const loadBatches = async () => {
     const { data } = await supabase
       .from("fish_inventory_batches")
@@ -307,6 +317,7 @@ const AdminLakeFresh = () => {
     loadSpecies();
     loadProducts();
     loadSpices();
+    loadMarinades();
     loadKits();
     loadRecipes();
     loadBusinessAccounts();
@@ -326,6 +337,7 @@ const AdminLakeFresh = () => {
       loadSpecies(),
       loadProducts(),
       loadSpices(),
+      loadMarinades(),
       loadKits(),
       loadRecipes(),
       loadBusinessAccounts(),
@@ -381,11 +393,12 @@ const AdminLakeFresh = () => {
       stock_qty: Number(spiceForm.stock_qty || 0),
       ingredients: spiceForm.ingredients || null,
       is_active: true,
+      recommended_species: spiceForm.recommended_species.split(",").map((s) => s.trim()).filter(Boolean),
     });
     if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Spice created" });
-      setSpiceForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "" });
+      setSpiceForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "" });
       await loadSpices();
     }
   };
@@ -476,6 +489,38 @@ const AdminLakeFresh = () => {
     const { error } = await supabase.from("lf_subscriptions").update({ status, updated_at: new Date().toISOString() }).eq("id", id);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else { toast({ title: "Updated" }); await loadSubscriptions(); }
+  };
+
+  const handleCreateMarinade = async () => {
+    if (!marinadeForm.name || !marinadeForm.price_mwk) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const speciesIds = marinadeForm.recommended_species.split(",").map((s) => s.trim()).filter(Boolean);
+    const { error } = await supabase.from("lf_marinades").insert({
+      brand_id: LF_BRAND_ID,
+      name: marinadeForm.name,
+      description: marinadeForm.description || null,
+      price_mwk: Number(marinadeForm.price_mwk),
+      size_label: marinadeForm.size_label || null,
+      stock_qty: Number(marinadeForm.stock_qty || 0),
+      ingredients: marinadeForm.ingredients || null,
+      storage_info: marinadeForm.storage_info || null,
+      is_active: true,
+      recommended_species: speciesIds,
+    });
+    if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
+    else {
+      toast({ title: "Marinade created" });
+      setMarinadeForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", storage_info: "", description: "", recommended_species: "" });
+      await loadMarinades();
+    }
+  };
+
+  const toggleMarinadeActive = async (id: string, next: boolean) => {
+    const { error } = await supabase.from("lf_marinades").update({ is_active: next }).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else await loadMarinades();
   };
 
   const toggleSpiceActive = async (id: string, next: boolean) => {
@@ -761,6 +806,10 @@ const AdminLakeFresh = () => {
                 <Label>Ingredients</Label>
                 <Input value={spiceForm.ingredients} onChange={(e) => setSpiceForm({ ...spiceForm, ingredients: e.target.value })} />
               </div>
+              <div className="sm:col-span-2">
+                <Label>Pairs with (species IDs, comma separated)</Label>
+                <Input value={spiceForm.recommended_species} onChange={(e) => setSpiceForm({ ...spiceForm, recommended_species: e.target.value })} placeholder="Chambo, Micheni, Usipa UUIDs" />
+              </div>
               <div className="sm:col-span-3">
                 <Label>Description</Label>
                 <Textarea value={spiceForm.description} onChange={(e) => setSpiceForm({ ...spiceForm, description: e.target.value })} />
@@ -779,6 +828,7 @@ const AdminLakeFresh = () => {
                   <th className="px-4 py-3 text-left">Size</th>
                   <th className="px-4 py-3 text-right">Price</th>
                   <th className="px-4 py-3 text-right">Stock</th>
+                  <th className="px-4 py-3 text-left">Pairs with</th>
                   <th className="px-4 py-3 text-left">Active</th>
                 </tr>
               </thead>
@@ -789,6 +839,7 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3">{s.size_label || "—"}</td>
                     <td className="px-4 py-3 text-right">{formatMWK(s.price_mwk)}</td>
                     <td className="px-4 py-3 text-right">{s.stock_qty}</td>
+                    <td className="px-4 py-3 text-xs">{(s.recommended_species || []).map((id: string) => species.find((sp: any) => sp.id === id)?.name).filter(Boolean).join(", ") || "—"}</td>
                     <td className="px-4 py-3">
                       <button onClick={() => toggleSpiceActive(s.id, !s.is_active)} className={`text-xs font-bold ${s.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
                         {s.is_active ? "Active" : "Inactive"}
@@ -1164,6 +1215,86 @@ const AdminLakeFresh = () => {
               )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* MARINADES */}
+      {tab === "marinades" && (
+        <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold mb-4">Add marinade</h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <Label>Name</Label>
+                <Input value={marinadeForm.name} onChange={(e) => setMarinadeForm({ ...marinadeForm, name: e.target.value })} />
+              </div>
+              <div>
+                <Label>Price (MWK)</Label>
+                <Input type="number" value={marinadeForm.price_mwk} onChange={(e) => setMarinadeForm({ ...marinadeForm, price_mwk: e.target.value })} />
+              </div>
+              <div>
+                <Label>Size label</Label>
+                <Input value={marinadeForm.size_label} onChange={(e) => setMarinadeForm({ ...marinadeForm, size_label: e.target.value })} placeholder="250ml" />
+              </div>
+              <div>
+                <Label>Stock qty</Label>
+                <Input type="number" value={marinadeForm.stock_qty} onChange={(e) => setMarinadeForm({ ...marinadeForm, stock_qty: e.target.value })} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Ingredients</Label>
+                <Input value={marinadeForm.ingredients} onChange={(e) => setMarinadeForm({ ...marinadeForm, ingredients: e.target.value })} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Storage info</Label>
+                <Input value={marinadeForm.storage_info} onChange={(e) => setMarinadeForm({ ...marinadeForm, storage_info: e.target.value })} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Description</Label>
+                <Textarea value={marinadeForm.description} onChange={(e) => setMarinadeForm({ ...marinadeForm, description: e.target.value })} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Pairs with (species IDs, comma separated)</Label>
+                <Input value={marinadeForm.recommended_species} onChange={(e) => setMarinadeForm({ ...marinadeForm, recommended_species: e.target.value })} />
+              </div>
+            </div>
+            <Button className="mt-4" onClick={handleCreateMarinade}>
+              <Plus className="h-4 w-4 mr-2" /> Add marinade
+            </Button>
+          </div>
+
+          <div className="rounded-xl border bg-white overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th className="px-4 py-3 text-left">Name</th>
+                  <th className="px-4 py-3 text-left">Size</th>
+                  <th className="px-4 py-3 text-right">Price</th>
+                  <th className="px-4 py-3 text-right">Stock</th>
+                  <th className="px-4 py-3 text-left">Pairs with</th>
+                  <th className="px-4 py-3 text-left">Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                {marinades.map((m) => (
+                  <tr key={m.id} className="border-t">
+                    <td className="px-4 py-3 font-medium">{m.name}</td>
+                    <td className="px-4 py-3">{m.size_label || "—"}</td>
+                    <td className="px-4 py-3 text-right">{formatMWK(m.price_mwk)}</td>
+                    <td className="px-4 py-3 text-right">{m.stock_qty}</td>
+                    <td className="px-4 py-3 text-xs">{(m.recommended_species || []).map((id: string) => species.find((sp: any) => sp.id === id)?.name).filter(Boolean).join(", ") || "—"}</td>
+                    <td className="px-4 py-3">
+                      <button onClick={() => toggleMarinadeActive(m.id, !m.is_active)} className={`text-xs font-bold ${m.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
+                        {m.is_active ? "Active" : "Inactive"}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {marinades.length === 0 && (
+                  <tr><td colSpan={6} className="px-4 py-6 text-center text-gray-500">No marinades yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

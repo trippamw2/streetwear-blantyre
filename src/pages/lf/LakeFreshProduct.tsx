@@ -36,11 +36,24 @@ const LakeFreshProduct = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("lf_spices")
-        .select("id, name, price_mwk, size_label, stock_qty")
+        .select("id, name, price_mwk, size_label, stock_qty, recommended_species")
         .eq("brand_id", LF_BRAND_ID)
         .eq("is_active", true)
-        .order("sort_order")
-        .limit(4);
+        .order("sort_order");
+      if (error) throw new Error(error.message);
+      return data || [];
+    },
+  });
+
+  const { data: marinades } = useQuery({
+    queryKey: ["lf", "marinades"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("lf_marinades")
+        .select("id, name, price_mwk, size_label, stock_qty, recommended_species")
+        .eq("brand_id", LF_BRAND_ID)
+        .eq("is_active", true)
+        .order("sort_order");
       if (error) throw new Error(error.message);
       return data || [];
     },
@@ -51,11 +64,10 @@ const LakeFreshProduct = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("lf_recipes")
-        .select("id, title, slug, prep_time_min, cook_time_min")
+        .select("id, title, slug, species_id, prep_time_min, cook_time_min, recommended_spice, recommended_marinade")
         .eq("brand_id", LF_BRAND_ID)
         .eq("is_active", true)
-        .order("sort_order")
-        .limit(3);
+        .order("sort_order");
       if (error) throw new Error(error.message);
       return data || [];
     },
@@ -342,46 +354,64 @@ const LakeFreshProduct = () => {
           <h2 className="font-display text-2xl font-extrabold text-[#073B78]">COMPLETE YOUR MEAL</h2>
           <p className="mt-2 text-sm text-gray-500">Seasonings and recipes to go with your fish.</p>
 
-          {spices && spices.length > 0 ? (
-            <div className="mt-6">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">LakeFresh spices</p>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {spices.map((s: any) => (
-                  <Link
-                    key={s.id}
-                    to="/lf/spices"
-                    className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
-                  >
-                    <p className="font-display text-base font-extrabold text-[#073B78]">{s.name}</p>
-                    <p className="mt-1 text-xs text-gray-500">{s.size_label || "Seasoning"}</p>
-                    <p className="mt-2 text-sm font-bold text-[#073B78]">{formatMWK(s.price_mwk)}</p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ) : null}
+          {(() => {
+            const recSpices = (spices || []).filter((s: any) => (s.recommended_species || []).includes(product.speciesId));
+            const recMarinades = (marinades || []).filter((m: any) => (m.recommended_species || []).includes(product.speciesId));
+            const recRecipes = (recipes || []).filter((r: any) => r.species_id === product.speciesId);
+            return (
+              <>
+                {recSpices.length > 0 ? (
+                  <div className="mt-6">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">LakeFresh spices (choose up to 5)</p>
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                      {recSpices.map((s: any) => (
+                        <Link key={s.id} to="/lf/spices" className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
+                          <p className="font-display text-base font-extrabold text-[#073B78]">{s.name}</p>
+                          <p className="mt-1 text-xs text-gray-500">{s.size_label || "Seasoning"}</p>
+                          <p className="mt-2 text-sm font-bold text-[#073B78]">{formatMWK(s.price_mwk)}</p>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
 
-          {recipes && recipes.length > 0 ? (
-            <div className="mt-8">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Recipes for this fish</p>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {recipes.map((r: any) => (
-                  <Link
-                    key={r.id}
-                    to={`/lf/recipes/${r.slug}`}
-                    className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
-                  >
-                    <p className="font-display text-base font-extrabold text-[#073B78]">{r.title}</p>
-                    <p className="mt-1 text-xs text-gray-500">
-                      {r.prep_time_min ? `Prep ${r.prep_time_min}m` : ""}
-                      {r.prep_time_min && r.cook_time_min ? " · " : ""}
-                      {r.cook_time_min ? `Cook ${r.cook_time_min}m` : ""}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ) : null}
+                {recMarinades.length > 0 ? (
+                  <div className="mt-8">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">LakeFresh marinades</p>
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                      {recMarinades.map((m: any) => (
+                        <Link key={m.id} to="/lf/marinades" className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
+                          <p className="font-display text-base font-extrabold text-[#073B78]">{m.name}</p>
+                          <p className="mt-1 text-xs text-gray-500">{m.size_label || "Marinade"}</p>
+                          <p className="mt-2 text-sm font-bold text-[#073B78]">{formatMWK(m.price_mwk)}</p>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {recRecipes.length > 0 ? (
+                  <div className="mt-8">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Free recipes for this fish</p>
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {recRecipes.map((r: any) => (
+                        <Link key={r.id} to={`/lf/recipes/${r.slug}`} className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md">
+                          <p className="font-display text-base font-extrabold text-[#073B78]">{r.title}</p>
+                          <p className="mt-1 text-xs text-gray-500">
+                            {r.prep_time_min ? `Prep ${r.prep_time_min}m` : ""}
+                            {r.prep_time_min && r.cook_time_min ? " · " : ""}
+                            {r.cook_time_min ? `Cook ${r.cook_time_min}m` : ""}
+                          </p>
+                          {r.recommended_spice ? <p className="mt-2 text-[11px] text-[#39B54A]">Spice: {r.recommended_spice}</p> : null}
+                          {r.recommended_marinade ? <p className="text-[11px] text-[#39B54A]">Marinade: {r.recommended_marinade}</p> : null}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </>
+            );
+          })()}
         </div>
       </section>
 
