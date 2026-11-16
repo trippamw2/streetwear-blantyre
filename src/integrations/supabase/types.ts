@@ -1605,6 +1605,132 @@ export type Database = {
           },
         ]
       }
+      lf_recipe_products: {
+        Row: {
+          fish_product_id: string | null
+          id: string
+          product_name: string | null
+          product_type: string
+          recipe_id: string
+          sort_order: number
+        }
+        Insert: {
+          fish_product_id?: string | null
+          id?: string
+          product_name?: string | null
+          product_type?: string
+          recipe_id: string
+          sort_order?: number
+        }
+        Update: {
+          fish_product_id?: string | null
+          id?: string
+          product_name?: string | null
+          product_type?: string
+          recipe_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_recipe_products_fish_product_id_fkey"
+            columns: ["fish_product_id"]
+            isOneToOne: false
+            referencedRelation: "fish_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lf_recipe_products_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "lf_recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lf_recipes: {
+        Row: {
+          brand_id: string
+          cook_time_min: number | null
+          cooking_method: string | null
+          created_at: string
+          id: string
+          image: string | null
+          ingredients: Json
+          is_active: boolean
+          prep_time_min: number | null
+          qr_target_url: string | null
+          recommended_marinade: string | null
+          recommended_spice: string | null
+          safety_notes: string | null
+          servings: number | null
+          slug: string
+          sort_order: number
+          species_id: string | null
+          steps: Json
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string
+          cook_time_min?: number | null
+          cooking_method?: string | null
+          created_at?: string
+          id?: string
+          image?: string | null
+          ingredients?: Json
+          is_active?: boolean
+          prep_time_min?: number | null
+          qr_target_url?: string | null
+          recommended_marinade?: string | null
+          recommended_spice?: string | null
+          safety_notes?: string | null
+          servings?: number | null
+          slug: string
+          sort_order?: number
+          species_id?: string | null
+          steps?: Json
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          cook_time_min?: number | null
+          cooking_method?: string | null
+          created_at?: string
+          id?: string
+          image?: string | null
+          ingredients?: Json
+          is_active?: boolean
+          prep_time_min?: number | null
+          qr_target_url?: string | null
+          recommended_marinade?: string | null
+          recommended_spice?: string | null
+          safety_notes?: string | null
+          servings?: number | null
+          slug?: string
+          sort_order?: number
+          species_id?: string | null
+          steps?: Json
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lf_recipes_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lf_recipes_species_id_fkey"
+            columns: ["species_id"]
+            isOneToOne: false
+            referencedRelation: "fish_species"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lf_spices: {
         Row: {
           brand_id: string

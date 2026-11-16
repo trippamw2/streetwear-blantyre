@@ -22,12 +22,13 @@ import {
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "spices" | "kits" | "batches" | "slots" | "orders" | "preparation" | "delivery";
+type Tab = "catalog" | "spices" | "kits" | "recipes" | "batches" | "slots" | "orders" | "preparation" | "delivery";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
   { key: "spices", label: "Spices", icon: Package },
   { key: "kits", label: "Meal Kits", icon: Package },
+  { key: "recipes", label: "Recipes", icon: Package },
   { key: "batches", label: "Batches", icon: Package },
   { key: "slots", label: "Slots", icon: CalendarDays },
   { key: "orders", label: "Orders", icon: ClipboardList },
@@ -96,6 +97,14 @@ const AdminLakeFresh = () => {
   const [kits, setKits] = useState<any[]>([]);
   const [kitForm, setKitForm] = useState({ name: "", price_mwk: "", discount_percent: "", description: "", items: "" });
 
+  // ---- Recipes state ----
+  const [recipes, setRecipes] = useState<any[]>([]);
+  const [recipeForm, setRecipeForm] = useState({
+    title: "", slug: "", species_id: "", prep_time_min: "", cook_time_min: "", servings: "",
+    cooking_method: "", recommended_spice: "", recommended_marinade: "", safety_notes: "",
+    ingredients: "", steps: "",
+  });
+
   const [loading, setLoading] = useState(false);
 
   const loadSpecies = async () => {
@@ -124,6 +133,11 @@ const AdminLakeFresh = () => {
   const loadKits = async () => {
     const { data } = await supabase.from("lf_meal_kits").select("*").eq("brand_id", LF_BRAND_ID).order("sort_order");
     setKits(data || []);
+  };
+
+  const loadRecipes = async () => {
+    const { data } = await supabase.from("lf_recipes").select("*, fish_species(name)").eq("brand_id", LF_BRAND_ID).order("sort_order");
+    setRecipes(data || []);
   };
 
   const loadBatches = async () => {
@@ -211,6 +225,7 @@ const AdminLakeFresh = () => {
     loadProducts();
     loadSpices();
     loadKits();
+    loadRecipes();
     loadBatches();
     loadSlots();
     loadOrders();
@@ -225,6 +240,7 @@ const AdminLakeFresh = () => {
       loadProducts(),
       loadSpices(),
       loadKits(),
+      loadRecipes(),
       loadBatches(),
       loadSlots(),
       loadOrders(),
@@ -319,6 +335,41 @@ const AdminLakeFresh = () => {
     toast({ title: "Meal kit created" });
     setKitForm({ name: "", price_mwk: "", discount_percent: "", description: "", items: "" });
     await loadKits();
+  };
+
+  const handleCreateRecipe = async () => {
+    if (!recipeForm.title || !recipeForm.slug) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.from("lf_recipes").insert({
+      brand_id: LF_BRAND_ID,
+      title: recipeForm.title,
+      slug: recipeForm.slug,
+      species_id: recipeForm.species_id || null,
+      prep_time_min: recipeForm.prep_time_min ? Number(recipeForm.prep_time_min) : null,
+      cook_time_min: recipeForm.cook_time_min ? Number(recipeForm.cook_time_min) : null,
+      servings: recipeForm.servings ? Number(recipeForm.servings) : null,
+      cooking_method: recipeForm.cooking_method || null,
+      recommended_spice: recipeForm.recommended_spice || null,
+      recommended_marinade: recipeForm.recommended_marinade || null,
+      safety_notes: recipeForm.safety_notes || null,
+      ingredients: recipeForm.ingredients.split("\n").map((s) => s.trim()).filter(Boolean),
+      steps: recipeForm.steps.split("\n").map((s) => s.trim()).filter(Boolean),
+      is_active: true,
+    });
+    if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
+    else {
+      toast({ title: "Recipe created" });
+      setRecipeForm({ title: "", slug: "", species_id: "", prep_time_min: "", cook_time_min: "", servings: "", cooking_method: "", recommended_spice: "", recommended_marinade: "", safety_notes: "", ingredients: "", steps: "" });
+      await loadRecipes();
+    }
+  };
+
+  const toggleRecipeActive = async (id: string, next: boolean) => {
+    const { error } = await supabase.from("lf_recipes").update({ is_active: next }).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else await loadRecipes();
   };
 
   const toggleSpiceActive = async (id: string, next: boolean) => {
@@ -705,6 +756,105 @@ const AdminLakeFresh = () => {
                 ))}
                 {kits.length === 0 && (
                   <tr><td colSpan={4} className="px-4 py-6 text-center text-gray-500">No meal kits yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* RECIPES */}
+      {tab === "recipes" && (
+        <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold mb-4">Add recipe</h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <Label>Title</Label>
+                <Input value={recipeForm.title} onChange={(e) => setRecipeForm({ ...recipeForm, title: e.target.value })} />
+              </div>
+              <div>
+                <Label>Slug</Label>
+                <Input value={recipeForm.slug} onChange={(e) => setRecipeForm({ ...recipeForm, slug: e.target.value })} />
+              </div>
+              <div>
+                <Label>Species</Label>
+                <select value={recipeForm.species_id} onChange={(e) => setRecipeForm({ ...recipeForm, species_id: e.target.value })} className="mt-1 w-full h-10 rounded-md border border-gray-300 px-3 text-sm">
+                  <option value="">Select…</option>
+                  {species.map((s) => (<option key={s.id} value={s.id}>{s.name}</option>))}
+                </select>
+              </div>
+              <div>
+                <Label>Prep time (min)</Label>
+                <Input type="number" value={recipeForm.prep_time_min} onChange={(e) => setRecipeForm({ ...recipeForm, prep_time_min: e.target.value })} />
+              </div>
+              <div>
+                <Label>Cook time (min)</Label>
+                <Input type="number" value={recipeForm.cook_time_min} onChange={(e) => setRecipeForm({ ...recipeForm, cook_time_min: e.target.value })} />
+              </div>
+              <div>
+                <Label>Servings</Label>
+                <Input type="number" value={recipeForm.servings} onChange={(e) => setRecipeForm({ ...recipeForm, servings: e.target.value })} />
+              </div>
+              <div>
+                <Label>Cooking method</Label>
+                <Input value={recipeForm.cooking_method} onChange={(e) => setRecipeForm({ ...recipeForm, cooking_method: e.target.value })} />
+              </div>
+              <div>
+                <Label>Recommended spice</Label>
+                <Input value={recipeForm.recommended_spice} onChange={(e) => setRecipeForm({ ...recipeForm, recommended_spice: e.target.value })} />
+              </div>
+              <div>
+                <Label>Recommended marinade</Label>
+                <Input value={recipeForm.recommended_marinade} onChange={(e) => setRecipeForm({ ...recipeForm, recommended_marinade: e.target.value })} />
+              </div>
+              <div className="sm:col-span-3">
+                <Label>Ingredients (one per line)</Label>
+                <Textarea value={recipeForm.ingredients} onChange={(e) => setRecipeForm({ ...recipeForm, ingredients: e.target.value })} />
+              </div>
+              <div className="sm:col-span-3">
+                <Label>Steps (one per line)</Label>
+                <Textarea value={recipeForm.steps} onChange={(e) => setRecipeForm({ ...recipeForm, steps: e.target.value })} />
+              </div>
+              <div className="sm:col-span-3">
+                <Label>Safety notes</Label>
+                <Textarea value={recipeForm.safety_notes} onChange={(e) => setRecipeForm({ ...recipeForm, safety_notes: e.target.value })} />
+              </div>
+            </div>
+            <Button className="mt-4" onClick={handleCreateRecipe}>
+              <Plus className="h-4 w-4 mr-2" /> Add recipe
+            </Button>
+          </div>
+
+          <div className="rounded-xl border bg-white overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th className="px-4 py-3 text-left">Title</th>
+                  <th className="px-4 py-3 text-left">Species</th>
+                  <th className="px-4 py-3 text-right">Prep</th>
+                  <th className="px-4 py-3 text-right">Cook</th>
+                  <th className="px-4 py-3 text-left">Method</th>
+                  <th className="px-4 py-3 text-left">Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recipes.map((r) => (
+                  <tr key={r.id} className="border-t">
+                    <td className="px-4 py-3 font-medium">{r.title}</td>
+                    <td className="px-4 py-3">{r.fish_species?.name || "—"}</td>
+                    <td className="px-4 py-3 text-right">{r.prep_time_min ?? "—"}</td>
+                    <td className="px-4 py-3 text-right">{r.cook_time_min ?? "—"}</td>
+                    <td className="px-4 py-3">{r.cooking_method || "—"}</td>
+                    <td className="px-4 py-3">
+                      <button onClick={() => toggleRecipeActive(r.id, !r.is_active)} className={`text-xs font-bold ${r.is_active ? "text-emerald-600" : "text-gray-400"}`}>
+                        {r.is_active ? "Active" : "Inactive"}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {recipes.length === 0 && (
+                  <tr><td colSpan={6} className="px-4 py-6 text-center text-gray-500">No recipes yet.</td></tr>
                 )}
               </tbody>
             </table>
