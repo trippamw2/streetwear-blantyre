@@ -91,6 +91,23 @@ const LakeFreshHome = () => {
         </div>
       </section>
 
+      {/* PROBLEM / FAILURE */}
+      <section className="border-b border-gray-200 bg-[#EAF6FB]/40">
+        <div className="container py-12 sm:py-16">
+          <div className="max-w-3xl">
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#073B78]/50">The problem</span>
+            <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+              TIRED OF UNCERTAIN WEIGHTS, NO DELIVERY AND FISH THAT ISN&apos;T FRESH?
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-gray-600">
+              Most fish sellers leave you guessing on weight, offer no delivery, and give you no guidance on how to
+              cook what you buy. Lake Fresh fixes that: priced per kilogram, weighed honestly, delivered next day,
+              with recipes and meal kits so dinner is sorted.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* PROPOSITION */}
       <section className="border-b border-gray-200 bg-[#EAF6FB]/50">
         <div className="container grid gap-8 py-12 sm:py-16 md:grid-cols-3">

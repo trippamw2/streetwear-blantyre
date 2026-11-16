@@ -27,6 +27,11 @@ const LakeFreshHeader = () => {
 
   return (
     <header className="sticky top-0 z-40 bg-[#073B78] text-white">
+      <div className="border-b border-white/10 bg-[#073B78]">
+        <div className="container flex h-7 items-center justify-center text-[10px] font-semibold uppercase tracking-[0.25em] text-white/80">
+          Fresh from the Lake. Ready for Your Table.
+        </div>
+      </div>
       <div className="container flex h-16 items-center justify-between gap-4">
         <Link to="/lf" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
           <img
