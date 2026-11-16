@@ -223,7 +223,7 @@ const AdminSettings = () => {
                 onChange={e => setSettings(s => ({ ...s, paychangu_public_key: e.target.value }))}
                 placeholder="PUB-..."
               />
-              <p className="text-xs text-muted-foreground">Used client-side for HTML Checkout form.</p>
+              <p className="text-xs text-muted-foreground">Used on the client side for the HTML checkout form.</p>
             </div>
 
             <div className="space-y-2">
@@ -234,7 +234,7 @@ const AdminSettings = () => {
                 onChange={e => setSettings(s => ({ ...s, paychangu_secret_key: e.target.value }))}
                 placeholder="SEC-..."
               />
-              <p className="text-xs text-muted-foreground">Used server-side for API verification. Never exposed to client.</p>
+              <p className="text-xs text-muted-foreground">Used on the server side for API verification. Never exposed to the client.</p>
             </div>
 
             <div className="space-y-2">

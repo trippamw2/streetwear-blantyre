@@ -289,7 +289,7 @@ const AdminPromotions = () => {
                     <Plus className="h-3 w-3 mr-1" /> Add
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500">Add multiple images for auto-sliding gallery</p>
+                <p className="text-xs text-gray-500">Add multiple images for the auto sliding gallery</p>
                 <div className="space-y-2">
                   {formData.images.map((img, idx) => (
                     <div key={idx} className="flex gap-2">

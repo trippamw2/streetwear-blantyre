@@ -229,7 +229,7 @@ const Checkout = () => {
       const orderRef = orderId.slice(0, 8).toUpperCase();
       const txRef = buildSbPaymentRef(orderId);
 
-      // PayChangu online payment — redirect via form POST (no secret key exposed)
+      // PayChangu online payment, redirect via form POST (no secret key exposed)
       clear();
       const { redirectToPayChangu } = await import("@/lib/paychangu");
       redirectToPayChangu({
@@ -244,7 +244,7 @@ const Checkout = () => {
         title: "Streetwear Blantyre Order",
         description: `Order #${orderRef}`,
       });
-      // Browser navigates to PayChangu via form submit — no code after this runs
+      // Browser navigates to PayChangu via form submit, no code after this runs
     } catch (err: any) {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     } finally {

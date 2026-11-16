@@ -35,7 +35,7 @@ export const productMessage = (name: string, price: number, imageUrl?: string, b
   return `Hi ${getBrandConfig(b).name}.
 
 I would like to order:
-${name} — MK ${price.toLocaleString("en-US")}
+${name}, MK ${price.toLocaleString("en-US")}
 ${imagePart}
 
 Please share next steps. Thanks.`;
@@ -46,7 +46,7 @@ export const comboMessage = (name: string, price: number, imageUrl?: string, bra
   const imagePart = imageUrl ? `\nView: ${imageUrl}` : "";
   return `Hi ${getBrandConfig(b).name}.
 
-I would like to order the ${name} bundle — MK ${price.toLocaleString("en-US")}.
+I would like to order the ${name} bundle, MK ${price.toLocaleString("en-US")}.
 ${imagePart}
 
 Please share next steps. Thanks.`;

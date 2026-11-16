@@ -55,7 +55,7 @@ const LakeFreshRecipe = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title={`${data.title} — Lake Fresh Fish Mart`} description="Lake Fresh fish recipe." />
+      <SEO brand="lake-fresh" title={`${data.title} | Lake Fresh Fish Mart`} description="Lake Fresh fish recipe." />
 
       <section className="border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
         <div className="container max-w-4xl py-10 sm:py-14">

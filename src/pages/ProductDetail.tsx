@@ -219,7 +219,7 @@ const ProductDetail = () => {
 
   const handleShare = (platform: string) => {
     const shareUrl = `${window.location.origin}/product/${product.id}`;
-    const shareText = `${product.name} — ${formatMWK(displayPrice)}. Wear Your Identity.`;
+    const shareText = `${product.name}, ${formatMWK(displayPrice)}. Wear Your Identity.`;
 
     let url = "";
     if (platform === "whatsapp") {

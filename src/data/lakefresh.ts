@@ -1,5 +1,5 @@
 /**
- * Lake Fresh Fish Mart — storefront data layer (Stage 4)
+ * Lake Fresh Fish Mart, storefront data layer (Stage 4)
  * Brand-scoped defaults for the independent fresh-fish business.
  */
 import { getBrandConfig, normalizeBrandSlug, type BrandSlug } from "@/lib/brands";

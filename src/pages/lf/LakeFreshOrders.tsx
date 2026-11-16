@@ -45,7 +45,7 @@ const LakeFreshOrders = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title="My Orders — Lake Fresh Fish Mart" description="Track your Lake Fresh fish orders." />
+      <SEO brand="lake-fresh" title="My Orders | Lake Fresh Fish Mart" description="Track your Lake Fresh fish orders." />
       <div className="container max-w-3xl py-10 sm:py-14">
         <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#073B78]">MY ORDERS</h1>
         <p className="mt-2 text-sm text-gray-500">Next day fish orders and their delivery dates.</p>

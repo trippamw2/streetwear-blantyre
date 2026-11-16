@@ -42,7 +42,7 @@ const Scan = () => {
   const [scanLogged, setScanLogged] = useState(false);
 
   useEffect(() => {
-    document.title = "Scan Product — Streetwear Blantyre";
+    document.title = "Scan Product | Streetwear Blantyre";
   }, []);
 
   useEffect(() => {
@@ -111,7 +111,7 @@ const Scan = () => {
     if (navigator.share) {
       await navigator.share({
         title: `Verify: ${product?.name}`,
-        text: `Authentic Streetwear Blantyre product — ${product?.name}`,
+        text: `Authentic Streetwear Blantyre product, ${product?.name}`,
         url: window.location.href,
       });
     } else {

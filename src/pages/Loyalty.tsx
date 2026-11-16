@@ -73,7 +73,7 @@ const Loyalty = () => {
           <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-gray-900">Streetwear Blantyre Rewards</h1>
           <p className="text-gray-500 text-sm sm:text-base">
             Most rewards programs forget why you shop. Points without purpose go nowhere.
-            Every purchase here earns points toward what actually matters — culture that represents you.
+            Every purchase here earns points toward what actually matters, culture that represents you.
           </p>
         </div>
 

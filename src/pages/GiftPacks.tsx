@@ -123,10 +123,10 @@ const GiftPacks = () => {
         txRef,
         callbackUrl: `${window.location.origin}/gift-track/${trackingToken}?payment=callback`,
         returnUrl: `${window.location.origin}/gift-track/${trackingToken}?payment=complete`,
-        title: `Streetwear Blantyre Gift — ${selectedKit.name}`,
+        title: `Streetwear Blantyre Gift | ${selectedKit.name}`,
         description: `Gift for ${formData.recipientName}`,
       });
-      // Browser navigates to PayChangu — no code after this runs
+      // Browser navigates to PayChangu, no code after this runs
     } catch (err: any) {
       console.error("Gift creation error:", err);
       setSubmitting(false);
@@ -165,7 +165,7 @@ const GiftPacks = () => {
             </h1>
             <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
               Generic gifts get forgotten. Real gifts get worn.
-              Pick a Kit, pay online, and we'll wrap it and deliver it —
+              Pick a Kit, pay online, and we'll wrap it and deliver it, 
               with your personal message inside.
             </p>
           </div>
@@ -205,7 +205,7 @@ const GiftPacks = () => {
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Curated for Them</p>
           <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Kits</h2>
           <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
-            Each pack is a complete look — styled, coordinated, and ready to gift.
+            Each pack is a complete look, styled, coordinated, and ready to gift.
           </p>
         </div>
 
@@ -312,7 +312,7 @@ const GiftPacks = () => {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="font-display font-bold text-xl text-gray-900">Gift Details</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">For: {selectedKit?.name} — {selectedKit && formatMWK(getKitPrice(selectedKit, products))}</p>
+                    <p className="text-sm text-gray-500 mt-0.5">For: {selectedKit?.name}, {selectedKit && formatMWK(getKitPrice(selectedKit, products))}</p>
                   </div>
                   <button onClick={resetForm} className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-white/20 transition-colors">
                     <X className="h-4 w-4 text-gray-500" />

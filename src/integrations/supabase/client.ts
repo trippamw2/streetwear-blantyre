@@ -33,7 +33,7 @@ if (isConfigured) {
     },
   });
 } else {
-  // Fatal: Supabase not configured — show error instead of silent mock
+  // Fatal: Supabase not configured, show error instead of silent mock
   console.error('Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.');
   
   // Throw so the app fails loudly instead of silently showing empty data

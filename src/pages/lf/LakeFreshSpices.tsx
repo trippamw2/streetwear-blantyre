@@ -46,7 +46,7 @@ const LakeFreshSpices = () => {
     <div className="bg-white">
       <SEO
         brand="lake-fresh"
-        title="Signature Spices — Lake Fresh Fish Mart"
+        title="Signature Spices | Lake Fresh Fish Mart"
         description="Lake Fresh signature fish spices and seasonings, paired with Chambo, Ncheni and Usipa."
       />
 
@@ -59,7 +59,7 @@ const LakeFreshSpices = () => {
             SIGNATURE SPICES
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Five blends built to lift fresh fish — not bury it. Every seasoning is matched to the fish on our catch
+            Five blends built to lift fresh fish, not bury it. Every seasoning is matched to the fish on our catch
             list, so you always know what works.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">

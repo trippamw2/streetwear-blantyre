@@ -539,7 +539,7 @@ const AdminProducts = () => {
                 <Textarea
                   value={formData.culture_story}
                   onChange={(e) => setFormData((prev) => ({ ...prev, culture_story: e.target.value }))}
-                  placeholder="Editorial narrative about this piece — the story behind the culture..."
+                  placeholder="Editorial narrative about this piece, the story behind the culture..."
                   rows={3}
                 />
               </div>
@@ -549,7 +549,7 @@ const AdminProducts = () => {
                 <Textarea
                   value={formData.culture_context}
                   onChange={(e) => setFormData((prev) => ({ ...prev, culture_context: e.target.value }))}
-                  placeholder="Brief context — how this piece connects to the culture pillar..."
+                  placeholder="Brief context, how this piece connects to the culture pillar..."
                   rows={2}
                 />
               </div>

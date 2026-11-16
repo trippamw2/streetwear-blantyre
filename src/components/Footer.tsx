@@ -39,7 +39,7 @@ export const Footer = () => {
       const ok = await subscribeToList(email, email.split("@")[0]);
       if (ok) saved = true;
     } catch {
-      // brevo not configured – non-critical
+      // brevo not configured, non-critical
     }
 
     if (saved) {
@@ -92,7 +92,7 @@ export const Footer = () => {
             <p className="text-white/50 max-w-sm text-sm leading-relaxed">
               Born in Blantyre, Malawi. SB brings together T shirts, football jerseys, short sleeve shirts and vests for everyday life, sport and outdoor experiences.
             </p>
-            <p className="text-sm text-white/80 font-medium">SB Streetwear — Wear Your Identity.</p>
+            <p className="text-sm text-white/80 font-medium">SB Streetwear. Wear Your Identity.</p>
 
             <div className="pt-4">
               <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">We accept</p>

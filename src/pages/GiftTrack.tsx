@@ -173,7 +173,7 @@ const GiftTrack = () => {
   return (
     <div>
       <SEO
-        title={`Gift for ${gift.recipient_name} — Streetwear Blantyre`}
+        title={`Gift for ${gift.recipient_name} | Streetwear Blantyre`}
         description={`Track your gift from ${gift.sender_name}`}
       />
 

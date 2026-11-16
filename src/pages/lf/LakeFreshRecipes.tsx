@@ -26,7 +26,7 @@ const LakeFreshRecipes = () => {
     <div className="bg-white">
       <SEO
         brand="lake-fresh"
-        title="Recipes — Lake Fresh Fish Mart"
+        title="Recipes | Lake Fresh Fish Mart"
         description="Lake Fresh fish recipes: clean, season and cook your fish at home. Free with every fish order."
       />
 
@@ -37,7 +37,7 @@ const LakeFreshRecipes = () => {
           </span>
           <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">RECIPES</h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Learn how to clean, season and cook your fresh fish at home. Choose any recipe free with your fish order —
+            Learn how to clean, season and cook your fresh fish at home. Choose any recipe free with your fish order, 
             it arrives with your basket.
           </p>
           <div className="mt-6 inline-flex items-start gap-3 rounded-2xl border border-[#7ED321]/40 bg-white px-4 py-3">

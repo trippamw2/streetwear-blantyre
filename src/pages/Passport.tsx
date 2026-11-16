@@ -12,14 +12,14 @@ const Passport = () => {
   const { product, loading, error } = useProductAuthByToken(token);
 
   useEffect(() => {
-    document.title = "Digital Product Passport — Streetwear Blantyre";
+    document.title = "Digital Product Passport | Streetwear Blantyre";
   }, []);
 
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({
         title: `SB Passport: ${product?.product_name}`,
-        text: `Digital Product Passport — ${product?.product_name} (${product?.serial_number})`,
+        text: `Digital Product Passport, ${product?.product_name} (${product?.serial_number})`,
         url: window.location.href,
       });
     } else {
@@ -268,7 +268,7 @@ const Passport = () => {
         {/* Footer */}
         <div className="text-center pb-8">
           <p className="text-xs text-gray-900/20">
-            Streetwear Blantyre — Digital Product Passport
+            Streetwear Blantyre, Digital Product Passport
           </p>
         </div>
       </div>

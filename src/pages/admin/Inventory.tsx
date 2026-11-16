@@ -193,7 +193,7 @@ const AdminInventory = () => {
                   <Input 
                     value={formData.sku}
                     onChange={(e) => setFormData(p => ({ ...p, sku: e.target.value }))}
-                    placeholder="Auto-generated if empty"
+                    placeholder="Auto generated if empty"
                   />
                 </div>
                 <div className="space-y-2">

@@ -10,7 +10,7 @@ interface AIWritingButtonProps {
   contentTypes: ContentKeyType[];
   /** Current form values to pass as context to the AI */
   variables: Record<string, string>;
-  /** Callback when content is generated — receives the content type key and generated text */
+  /** Callback when content is generated, receives the content type key and generated text */
   onGenerated: (contentType: ContentKeyType, content: string) => void;
   /** Optional: size variant */
   size?: "sm" | "default";

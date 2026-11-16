@@ -118,7 +118,7 @@ export function getDeliveryOptions(location: string, subtotal: number): Delivery
         id: "same_day",
         label: "Same-Day Delivery",
         description: isFree
-          ? "Delivered today — free on orders over K50,000!"
+          ? "Delivered today, free on orders over K50,000!"
           : "Delivered today to your door in Blantyre",
         estimatedDays: "Today",
         fee: calculateDeliveryFee(zone, "same_day", subtotal),
@@ -134,7 +134,7 @@ export function getDeliveryOptions(location: string, subtotal: number): Delivery
       id: "standard",
       label: "Standard Delivery",
       description: isFree
-        ? "Free nationwide delivery — delivered within 5 working days"
+        ? "Free nationwide delivery, delivered within 5 working days"
         : "Delivered within 5 working days anywhere in Malawi",
       estimatedDays: "5 working days",
       fee: calculateDeliveryFee(zone, "standard", subtotal),
@@ -145,8 +145,8 @@ export function getDeliveryOptions(location: string, subtotal: number): Delivery
       id: "express",
       label: "Express Delivery",
       description: isFree
-        ? "Fast delivery — K2,000 express surcharge on orders over K50,000"
-        : "Get it fast — delivered in 2-3 working days",
+        ? "Fast delivery, K2,000 express surcharge on orders over K50,000"
+        : "Get it fast, delivered in 2-3 working days",
       estimatedDays: "2-3 working days",
       fee: calculateDeliveryFee(zone, "express", subtotal),
       isAvailable: true,

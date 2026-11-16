@@ -951,7 +951,7 @@ const AdminAuthentication = () => {
   );
 };
 
-// ─── Sub-components ─────────────────────────────────────────────────
+// Sub components
 
 const StatCard = ({ icon: Icon, label, value, color, bg }: {
   icon: any; label: string; value: string; color: string; bg: string;

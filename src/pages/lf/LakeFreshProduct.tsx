@@ -210,7 +210,7 @@ const LakeFreshProduct = () => {
     <div className="bg-white text-gray-900">
       <SEO
         brand="lake-fresh"
-        title={`${product.speciesName || product.name} — Lake Fresh Fish Mart`}
+        title={`${product.speciesName || product.name} | Lake Fresh Fish Mart`}
         description={`${product.description || product.name} Priced ${formatMWK(product.pricePerKgMwk)} per kilogram with next day delivery in Blantyre.`}
       />
 
@@ -493,7 +493,7 @@ const LakeFreshProduct = () => {
                       ) : null}
                       {selected ? (
                         <span className="mt-2 flex items-center gap-1 text-[11px] font-bold text-[#2c6e12]">
-                          <Check className="h-3.5 w-3.5" /> Chosen — emailed with your order
+                          <Check className="h-3.5 w-3.5" /> Chosen, emailed with your order
                         </span>
                       ) : null}
                     </button>

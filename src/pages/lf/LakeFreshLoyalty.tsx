@@ -89,7 +89,7 @@ const LakeFreshLoyalty = () => {
   if (!user) {
     return (
       <div className="bg-white">
-        <SEO brand="lake-fresh" title="Rewards — Lake Fresh Fish Mart" description="Lake Fresh loyalty rewards." />
+        <SEO brand="lake-fresh" title="Rewards | Lake Fresh Fish Mart" description="Lake Fresh loyalty rewards." />
         <section className="relative overflow-hidden bg-gradient-to-br from-[#F4FBF7] via-white to-[#F7FCEB]">
           <div className="container py-16 text-center sm:py-20">
             <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7ED321]/20 text-[#39B54A]">
@@ -125,7 +125,7 @@ const LakeFreshLoyalty = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title="Rewards — Lake Fresh Fish Mart" description="Lake Fresh loyalty rewards." />
+      <SEO brand="lake-fresh" title="Rewards | Lake Fresh Fish Mart" description="Lake Fresh loyalty rewards." />
 
       <section className="relative overflow-hidden border-b border-[#F2FBEE] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
         <div className="container py-12 sm:py-16">
@@ -218,7 +218,7 @@ const LakeFreshLoyalty = () => {
         <div className="mt-6 flex flex-col justify-between gap-3 rounded-2xl bg-[#073B78] p-5 sm:flex-row sm:items-center">
           <div>
             <p className="font-display text-base font-extrabold text-white">Ready for more points?</p>
-            <p className="mt-1 text-xs text-white/60">Fresh fish, signature spices and a free recipe — all in one order.</p>
+            <p className="mt-1 text-xs text-white/60">Fresh fish, signature spices and a free recipe, all in one order.</p>
           </div>
           <LFLink
             to="/lf/fish"

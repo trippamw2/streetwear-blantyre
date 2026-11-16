@@ -19,7 +19,7 @@ const Verify = () => {
   const [registered, setRegistered] = useState(false);
 
   useEffect(() => {
-    document.title = "Verify Product — Streetwear Blantyre";
+    document.title = "Verify Product | Streetwear Blantyre";
   }, []);
 
   // Log scan on successful product load
@@ -67,7 +67,7 @@ const Verify = () => {
     if (navigator.share) {
       await navigator.share({
         title: `Verify: ${product?.product_name}`,
-        text: `Authentic Streetwear Blantyre product — ${product?.product_name}`,
+        text: `Authentic Streetwear Blantyre product, ${product?.product_name}`,
         url: window.location.href,
       });
     } else {

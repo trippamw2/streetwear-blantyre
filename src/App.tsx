@@ -168,7 +168,7 @@ const App = () => {
                 <BrowserRouter>
                   <ScrollToTop />
                   <Routes>
-                    {/* SB Streetwear storefront — never mounted on the LF domain */}
+                    {/* SB Streetwear storefront, never mounted on the LF domain */}
                     {SHOWS_SB && (
                       <Route element={<Layout />}>
                         <Route path="/" element={<Home />} />
@@ -207,7 +207,7 @@ const App = () => {
                       </Route>
                     )}
 
-                    {/* Dedicated Lake Fresh domain — storefront at the root */}
+                    {/* Dedicated Lake Fresh domain, storefront at the root */}
                     {IS_LF_SITE && (
                       <>
                         <Route element={<LakeFreshLayout />}>
@@ -218,7 +218,7 @@ const App = () => {
                       </>
                     )}
 
-                    {/* Local QA / preview — Lake Fresh remains namespaced under /lf */}
+                    {/* Local QA / preview, Lake Fresh remains namespaced under /lf */}
                     {IS_DUAL_SITE && (
                       <Route path="/lf" element={<LakeFreshLayout />}>
                         {lakeFreshRouteChildren}
@@ -230,7 +230,7 @@ const App = () => {
                     <Route path="/passport/:token" element={<Passport />} />
                     <Route path="/scan/:barcode" element={<Scan />} />
 
-                    {/* Shared admin panel — operates both brands as parallel systems */}
+                    {/* Shared admin panel, operates both brands as parallel systems */}
                     <Route path="/admin" element={<AdminLayout />}>
                       <Route index element={<AdminDashboard />} />
                       <Route path="products" element={<AdminProducts />} />
@@ -257,7 +257,7 @@ const App = () => {
                       <Route path="lookbooks" element={<AdminLookbooks />} />
                     </Route>
 
-                    {/* 404 catch-all — must be LAST so it doesn't swallow /admin */}
+                    {/* 404 catch-all, must be LAST so it doesn't swallow /admin */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </BrowserRouter>

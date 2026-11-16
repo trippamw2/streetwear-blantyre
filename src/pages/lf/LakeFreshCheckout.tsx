@@ -109,7 +109,7 @@ const LakeFreshCheckout = () => {
   if (items.length === 0) {
     return (
       <div className="container py-20 text-center">
-        <SEO brand="lake-fresh" title="Checkout — Lake Fresh Fish Mart" description="Lake Fresh fish checkout." />
+        <SEO brand="lake-fresh" title="Checkout | Lake Fresh Fish Mart" description="Lake Fresh fish checkout." />
         <Fish className="mx-auto h-12 w-12 text-gray-300" />
         <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">Your basket is empty</h1>
         <p className="mt-2 text-sm text-gray-500">Choose fresh fish before checking out.</p>
@@ -242,7 +242,7 @@ const LakeFreshCheckout = () => {
     <div className="bg-[#EAF6FB]/30">
       <SEO
         brand="lake-fresh"
-        title="Checkout — Lake Fresh Fish Mart"
+        title="Checkout | Lake Fresh Fish Mart"
         description="Place your Lake Fresh fish order for next day delivery in Blantyre."
       />
       <div className="container max-w-5xl py-8 sm:py-12">

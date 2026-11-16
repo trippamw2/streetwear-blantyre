@@ -164,7 +164,7 @@ const LakeFreshOrder = () => {
     <div className="bg-white">
       <SEO
         brand="lake-fresh"
-        title={`${paymentRef} — Lake Fresh Fish Mart`}
+        title={`${paymentRef} | Lake Fresh Fish Mart`}
         description="Your Lake Fresh fish order details and delivery status."
       />
       <div className="container max-w-3xl py-8 sm:py-12">
@@ -319,7 +319,7 @@ const LakeFreshOrder = () => {
 
           <p className="mt-3 text-xs text-gray-500">
             The amount authorized at checkout is based on estimated weight. Packed weight is recorded before dispatch
-            and any difference is handled transparently — we never silently charge more than you authorized.
+            and any difference is handled transparently, we never silently charge more than you authorized.
           </p>
         </section>
 

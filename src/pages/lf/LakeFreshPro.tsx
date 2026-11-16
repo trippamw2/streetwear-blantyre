@@ -20,7 +20,7 @@ import { toast } from "@/hooks/use-toast";
 const benefits = [
   {
     title: "Wholesale pricing",
-    copy: "Volume rates quoted per order, per kilogram — no guesswork.",
+    copy: "Volume rates quoted per order, per kilogram, no guesswork.",
     icon: FileText,
     accent: "#39B54A",
     tint: "#F2FBEE",
@@ -154,7 +154,7 @@ const LakeFreshPro = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title="LakeFresh PRO — Wholesale & Business Supply" description="Lake Fresh PRO for restaurants, hotels and food businesses: wholesale fish supply, volume pricing and reliable cold chain delivery across Blantyre." />
+      <SEO brand="lake-fresh" title="LakeFresh PRO | Wholesale & Business Supply" description="Lake Fresh PRO for restaurants, hotels and food businesses: wholesale fish supply, volume pricing and reliable cold chain delivery across Blantyre." />
 
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
@@ -180,7 +180,7 @@ const LakeFreshPro = () => {
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
             Wholesale fish supply for restaurants, hotels, lodges, caterers and food businesses. Register your account
-            or request a volume quote — we handle the rest.
+            or request a volume quote, we handle the rest.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#39B54A]/30 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]">

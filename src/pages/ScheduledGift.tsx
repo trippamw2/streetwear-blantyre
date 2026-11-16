@@ -96,7 +96,7 @@ const ScheduledGift = () => {
         txRef,
         callbackUrl: `${window.location.origin}/gift-track/${trackingToken}?payment=callback`,
         returnUrl: `${window.location.origin}/gift-track/${trackingToken}?payment=complete`,
-        title: `Streetwear Blantyre Gift — ${selectedProduct.name}`,
+        title: `Streetwear Blantyre Gift | ${selectedProduct.name}`,
         description: `Gift for ${recipientName}`,
       });
     } catch (err: any) {
@@ -119,7 +119,7 @@ const ScheduledGift = () => {
   return (
     <div>
       <SEO
-        title="Schedule a Gift — Streetwear Blantyre"
+        title="Schedule a Gift | Streetwear Blantyre"
         description="Gift a Streetwear Piece with a personal message. Schedule delivery for any occasion."
       />
 
@@ -135,7 +135,7 @@ const ScheduledGift = () => {
               <span className="text-primary">ON THEIR DAY.</span>
             </h1>
             <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
-              Pick a Streetwear Piece. Pay online. We deliver it on the perfect day — with your message inside.
+              Pick a Streetwear Piece. Pay online. We deliver it on the perfect day, with your message inside.
             </p>
           </div>
         </div>

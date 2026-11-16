@@ -62,7 +62,7 @@ const Editorial = () => {
 
   return (
     <>
-      <SEO title="The Culture Journal | Streetwear Blantyre" description="Stories, editorial, and culture from the streets of Africa. Music, sport, faith, hustle — told through the people building the culture." />
+      <SEO title="The Culture Journal | Streetwear Blantyre" description="Stories, editorial, and culture from the streets of Africa. Music, sport, faith, hustle, told through the people building the culture." />
 
       <div className="min-h-screen bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
@@ -104,7 +104,7 @@ const Editorial = () => {
           {!loading && filtered.length === 0 && (
             <div className="text-center py-20">
               <p className="text-gray-500 text-lg">No stories yet{filter !== "all" ? ` in ${filter} culture` : ""}.</p>
-              <p className="text-gray-500 text-sm mt-2 italic">Without stories, culture dies. Check back soon — the culture is always growing.</p>
+              <p className="text-gray-500 text-sm mt-2 italic">Without stories, culture dies. Check back soon, the culture is always growing.</p>
             </div>
           )}
 

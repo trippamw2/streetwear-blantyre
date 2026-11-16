@@ -17,7 +17,7 @@ const LakeFreshCart = () => {
   if (items.length === 0) {
     return (
       <div className="container py-20 text-center">
-        <SEO brand="lake-fresh" title="Your Basket — Lake Fresh Fish Mart" description="Your Lake Fresh fish basket." />
+        <SEO brand="lake-fresh" title="Your Basket | Lake Fresh Fish Mart" description="Your Lake Fresh fish basket." />
         <ShoppingBasket className="mx-auto h-12 w-12 text-gray-300" />
         <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">Your basket is empty</h1>
         <p className="mt-2 text-sm text-gray-500">Add fresh fish from today&apos;s catch to get started.</p>
@@ -35,7 +35,7 @@ const LakeFreshCart = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title="Your Basket — Lake Fresh Fish Mart" description="Review your Lake Fresh fish order." />
+      <SEO brand="lake-fresh" title="Your Basket | Lake Fresh Fish Mart" description="Review your Lake Fresh fish order." />
       <div className="container max-w-4xl py-10 sm:py-14">
         <LFLink
           to="/lf/fish"

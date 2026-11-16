@@ -14,7 +14,7 @@
     <meta name="theme-color" content="#0a0a0a" />
 
     <!--
-      Brand bootstrap — runs before the body paints so the correct brand,
+      Brand bootstrap, runs before the body paints so the correct brand,
       title, favicon and loading splash are in place on first paint.
       Resolution mirrors src/lib/brandSite.ts: env → hostname → localhost → SB.
     -->
@@ -48,7 +48,7 @@
           document.documentElement.setAttribute("data-brand", lfContext ? "lf" : "sb");
 
           if (lfContext) {
-            document.title = "Lake Fresh Fish Mart — Fresh from the Lake";
+            document.title = "Lake Fresh Fish Mart | Fresh from the Lake";
 
             var desc = document.querySelector("meta[name='description']");
             if (desc) {
@@ -106,7 +106,7 @@
       html[data-brand="lf"] body {
         background-color: #EAF6FB;
       }
-      /* Loading screen while React loads — shows the active brand's logo, never a cross-brand mark */
+      /* Loading screen while React loads, shows the active brand's logo, never a cross-brand mark */
       #root:empty {
         display: flex;
         flex-direction: column;

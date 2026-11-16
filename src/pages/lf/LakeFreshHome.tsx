@@ -27,7 +27,7 @@ import { formatMWK } from "@/data/products";
 
 const steps = [
   { title: "Choose your fish", copy: "Pick from today's catch and set the weight you need.", accent: "#08A9E8" },
-  { title: "Choose preparation", copy: "Whole, cleaned or portioned — prepared before dispatch.", accent: "#39B54A" },
+  { title: "Choose preparation", copy: "Whole, cleaned or portioned, prepared before dispatch.", accent: "#39B54A" },
   { title: "Add a seasoning", copy: "Five signature spice blends, paired to your fish.", accent: "#7ED321" },
   { title: "Pick delivery day", copy: "Order before cutoff for next day delivery across Blantyre.", accent: "#08A9E8" },
 ];
@@ -36,7 +36,7 @@ const categories = [
   {
     to: "/lf/fish",
     label: "The Catch",
-    copy: "Chambo, Ncheni and Usipa — priced per kilogram.",
+    copy: "Chambo, Ncheni and Usipa, priced per kilogram.",
     icon: Fish,
     accent: "#073B78",
     tint: "#EAF6FB",
@@ -77,7 +77,7 @@ const whyPoints = [
   { title: "Fresh from the lake", copy: "Short freshness windows and cold chain handling from lake to door.", icon: Fish, accent: "#073B78" },
   { title: "Honest weights", copy: "Priced per kilogram with clear packed weights. No silent overcharging.", icon: Scale, accent: "#39B54A" },
   { title: "Season it right", copy: "Signature spice blends matched to each fish on the catch list.", icon: Leaf, accent: "#7ED321" },
-  { title: "Free recipes", copy: "Choose a recipe with your fish — it arrives free with your order.", icon: BookOpen, accent: "#08A9E8" },
+  { title: "Free recipes", copy: "Choose a recipe with your fish, it arrives free with your order.", icon: BookOpen, accent: "#08A9E8" },
   { title: "Business supply", copy: "LakeFresh PRO for restaurants, hotels and caterers.", icon: Building2, accent: "#073B78" },
   { title: "Rewards that add up", copy: "Earn points on every order and refer friends for more.", icon: Sparkles, accent: "#39B54A" },
 ];
@@ -96,8 +96,8 @@ const LakeFreshHome = () => {
     <div className="bg-white text-gray-900">
       <SEO
         brand="lake-fresh"
-        title="Lake Fresh Fish Mart — Fresh from the Lake. Ready for Your Table."
-        description="Fresh fish delivered next day across Blantyre, Malawi. Chambo, Ncheni/Micheni and Usipa — whole, cleaned or portioned, priced per kilogram, with signature spices and free recipes."
+        title="Lake Fresh Fish Mart | Fresh from the Lake. Ready for Your Table."
+        description="Fresh fish delivered next day across Blantyre, Malawi. Chambo, Ncheni/Micheni and Usipa, whole, cleaned or portioned, priced per kilogram, with signature spices and free recipes."
       />
 
       {/* HERO */}
@@ -123,7 +123,7 @@ const LakeFreshHome = () => {
               READY FOR YOUR TABLE.
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/75 sm:text-base">
-              Real fish, honest weights and next day delivery across Blantyre. Add signature spices and a free recipe —
+              Real fish, honest weights and next day delivery across Blantyre. Add signature spices and a free recipe, 
               everything you need for a proper fish meal.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -472,7 +472,7 @@ const LakeFreshHome = () => {
             ORDER FRESH TODAY
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
-            Chambo, Ncheni / Micheni and Usipa — priced per kilogram, prepared for your table, delivered next day.
+            Chambo, Ncheni / Micheni and Usipa, priced per kilogram, prepared for your table, delivered next day.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <LFLink

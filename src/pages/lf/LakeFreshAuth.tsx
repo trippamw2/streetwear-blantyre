@@ -91,7 +91,7 @@ const LakeFreshAuth = () => {
     <div className="bg-[#EAF6FB]/40">
       <SEO
         brand="lake-fresh"
-        title="Sign in — Lake Fresh Fish Mart"
+        title="Sign in | Lake Fresh Fish Mart"
         description="Sign in to order fresh fish for next day delivery in Blantyre."
       />
       <div className="container flex min-h-[70vh] max-w-md flex-col justify-center py-14">

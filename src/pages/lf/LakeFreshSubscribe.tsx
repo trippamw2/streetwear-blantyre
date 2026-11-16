@@ -67,7 +67,7 @@ const LakeFreshSubscribe = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title="Subscribe — Lake Fresh Fish Mart" description="Lake Fresh fish subscription plans." />
+      <SEO brand="lake-fresh" title="Subscribe | Lake Fresh Fish Mart" description="Lake Fresh fish subscription plans." />
       <div className="container max-w-2xl py-10 sm:py-14">
         <LFLink to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]">
           <Repeat className="h-3.5 w-3.5" /> Lake Fresh

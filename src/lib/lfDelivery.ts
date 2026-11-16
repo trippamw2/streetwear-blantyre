@@ -1,5 +1,5 @@
 /**
- * Lake Fresh Fish Mart — Next-Day Delivery Engine (Stage 5, core logic)
+ * Lake Fresh Fish Mart, Next-Day Delivery Engine (Stage 5, core logic)
  *
  * Default fulfilment model:
  * - Orders placed before the configured daily cutoff qualify for next delivery day.

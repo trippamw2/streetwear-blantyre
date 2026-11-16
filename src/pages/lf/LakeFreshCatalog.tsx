@@ -16,7 +16,7 @@ const LakeFreshCatalog = () => {
     <div className="bg-white text-gray-900">
       <SEO
         brand="lake-fresh"
-        title="The Catch — Lake Fresh Fish Mart"
+        title="The Catch | Lake Fresh Fish Mart"
         description="Browse fresh Chambo, Ncheni/Micheni and Usipa. Priced per kilogram with signature spices, free recipes and next day delivery across Blantyre."
       />
 
@@ -29,8 +29,8 @@ const LakeFreshCatalog = () => {
             THE CATCH
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Fresh fish from the lake, prepared whole, cleaned or portioned. Priced per kilogram with next day delivery
-            — then add signature spices and a free recipe to finish the meal.
+            Fresh fish from the lake, prepared whole, cleaned or portioned. Priced per kilogram with next day
+            delivery, then add signature spices and a free recipe to finish the meal.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <LFLink
