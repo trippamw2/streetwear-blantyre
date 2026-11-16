@@ -1,6 +1,16 @@
 {
   "rewrites": [
     { "source": "/api/payment/callback", "destination": "/api/payment/callback" },
+    {
+      "source": "/((?!api|assets|favicon|robots|sitemap|lf(?:/|$)).*)",
+      "has": [{ "type": "host", "value": "lakefreshmw.com" }],
+      "destination": "/lf/$1"
+    },
+    {
+      "source": "/((?!api|assets|favicon|robots|sitemap|lf(?:/|$)).*)",
+      "has": [{ "type": "host", "value": "www.lakefreshmw.com" }],
+      "destination": "/lf/$1"
+    },
     { "source": "/(.*)", "destination": "/" }
   ]
 }

@@ -104,7 +104,17 @@ const ReferralLoader = () => {
   return null;
 };
 
-const App = () => (
+const App = () => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const host = window.location.hostname.toLowerCase();
+    if (host.includes("lakefresh") && !window.location.pathname.startsWith("/lf")) {
+      const suffix = window.location.pathname === "/" ? "" : window.location.pathname;
+      window.location.replace(`/lf${suffix}${window.location.search}${window.location.hash}`);
+    }
+  }, []);
+
+  return (
   <HelmetProvider>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -212,5 +222,7 @@ const App = () => (
   </HelmetProvider>
   );
 
+
+};
 
 export default App;
