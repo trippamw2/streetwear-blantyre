@@ -65,6 +65,9 @@ const LakeFreshHeader = () => {
           <NavLink to="/lf/recipes" className={navLinkClass}>
             Recipes
           </NavLink>
+          <NavLink to="/lf/loyalty" className={navLinkClass}>
+            Rewards
+          </NavLink>
           <NavLink to="/lf/pro" className={navLinkClass}>
             PRO
           </NavLink>
@@ -161,6 +164,7 @@ const LakeFreshFooter = () => (
           <Link to="/lf/ready-to-cook" className="hover:text-white">Ready to Cook</Link>
           <Link to="/lf/meal-kits" className="hover:text-white">Meal Kits</Link>
           <Link to="/lf/recipes" className="hover:text-white">Recipes</Link>
+          <Link to="/lf/loyalty" className="hover:text-white">Rewards</Link>
           <Link to="/lf/pro" className="hover:text-white">LakeFresh PRO</Link>
           <Link to="/lf/cart" className="hover:text-white">Basket</Link>
           <Link to="/lf/orders" className="hover:text-white">My Orders</Link>
