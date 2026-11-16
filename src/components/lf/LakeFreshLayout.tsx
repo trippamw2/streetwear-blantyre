@@ -200,7 +200,7 @@ const LakeFreshFooter = () => (
 
 export const LakeFreshLayout = () => (
   <LakeFreshCartProvider>
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="lf-brand flex min-h-screen flex-col bg-white">
       <LakeFreshHeader />
       <main className="flex-1">
         <Outlet />
