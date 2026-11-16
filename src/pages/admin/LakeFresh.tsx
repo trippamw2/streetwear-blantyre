@@ -633,7 +633,7 @@ const AdminLakeFresh = () => {
             key={t.key}
             onClick={() => setTab(t.key)}
             className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
-              tab === t.key ? "bg-[#0a2540] text-white" : "text-gray-600 hover:bg-gray-100"
+              tab === t.key ? "bg-[#073B78] text-white" : "text-gray-600 hover:bg-gray-100"
             }`}
           >
             <t.icon className="h-4 w-4" /> {t.label}
@@ -1022,7 +1022,7 @@ const AdminLakeFresh = () => {
                 <div key={q.id} className="rounded-lg border border-gray-200 p-4">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                      <p className="font-medium text-[#0a2540]">{q.requester_name}</p>
+                      <p className="font-medium text-[#073B78]">{q.requester_name}</p>
                       <p className="text-xs text-gray-500">{q.requester_email || "—"} · {q.requester_phone || "—"}</p>
                     </div>
                     <span className="text-xs font-bold text-amber-600">{q.status}</span>
@@ -1055,20 +1055,20 @@ const AdminLakeFresh = () => {
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div className="rounded-xl border bg-white p-5">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Paid orders</p>
-                  <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{analytics.paidOrders}</p>
+                  <p className="mt-2 text-3xl font-extrabold text-[#073B78]">{analytics.paidOrders}</p>
                   <p className="mt-1 text-xs text-gray-500">of {analytics.totalOrders} total</p>
                 </div>
                 <div className="rounded-xl border bg-white p-5">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Revenue (MWK)</p>
-                  <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{analytics.revenue.toLocaleString()}</p>
+                  <p className="mt-2 text-3xl font-extrabold text-[#073B78]">{analytics.revenue.toLocaleString()}</p>
                 </div>
                 <div className="rounded-xl border bg-white p-5">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">AOV (MWK)</p>
-                  <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{analytics.aov.toLocaleString()}</p>
+                  <p className="mt-2 text-3xl font-extrabold text-[#073B78]">{analytics.aov.toLocaleString()}</p>
                 </div>
                 <div className="rounded-xl border bg-white p-5">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Bundle attachment</p>
-                  <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{analytics.bundleAttachment}%</p>
+                  <p className="mt-2 text-3xl font-extrabold text-[#073B78]">{analytics.bundleAttachment}%</p>
                   <p className="mt-1 text-xs text-gray-500">Add-on attachment: {analytics.addonAttachment}%</p>
                 </div>
               </div>
@@ -1079,7 +1079,7 @@ const AdminLakeFresh = () => {
                   {Object.entries(analytics.revenueByCategory).map(([cat, val]) => (
                     <div key={cat} className="flex items-center justify-between text-sm">
                       <span className="capitalize text-gray-600">{cat}</span>
-                      <span className="font-semibold text-[#0a2540]">{Number(val).toLocaleString()} MWK</span>
+                      <span className="font-semibold text-[#073B78]">{Number(val).toLocaleString()} MWK</span>
                     </div>
                   ))}
                   {Object.keys(analytics.revenueByCategory).length === 0 && (
@@ -1093,19 +1093,19 @@ const AdminLakeFresh = () => {
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Fish (kg available)</p>
-                    <p className="mt-1 text-2xl font-extrabold text-[#0a2540]">{analytics.stock.fishKg.toFixed(1)}</p>
+                    <p className="mt-1 text-2xl font-extrabold text-[#073B78]">{analytics.stock.fishKg.toFixed(1)}</p>
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Spices (units)</p>
-                    <p className="mt-1 text-2xl font-extrabold text-[#0a2540]">{analytics.stock.spices}</p>
+                    <p className="mt-1 text-2xl font-extrabold text-[#073B78]">{analytics.stock.spices}</p>
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Marinades (units)</p>
-                    <p className="mt-1 text-2xl font-extrabold text-[#0a2540]">{analytics.stock.marinades}</p>
+                    <p className="mt-1 text-2xl font-extrabold text-[#073B78]">{analytics.stock.marinades}</p>
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Ready-to-cook (units)</p>
-                    <p className="mt-1 text-2xl font-extrabold text-[#0a2540]">{analytics.stock.ready}</p>
+                    <p className="mt-1 text-2xl font-extrabold text-[#073B78]">{analytics.stock.ready}</p>
                   </div>
                 </div>
               </div>
@@ -1362,7 +1362,7 @@ const AdminLakeFresh = () => {
                             if (expandedOrder === o.id) setExpandedOrder(null);
                             else { setExpandedOrder(o.id); loadOrderItems(o.id); }
                           }}
-                          className="text-xs font-bold text-[#0a2540]"
+                          className="text-xs font-bold text-[#073B78]"
                         >
                           {expandedOrder === o.id ? "Hide" : "Items"}
                         </button>

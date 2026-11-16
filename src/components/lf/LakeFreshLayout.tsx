@@ -11,7 +11,7 @@ const brand = BRANDS["lake-fresh"];
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `text-xs font-bold uppercase tracking-[0.18em] transition-colors ${
-    isActive ? "text-[#22d3ee]" : "text-white/70 hover:text-white"
+    isActive ? "text-[#08A9E8]" : "text-white/70 hover:text-white"
   }`;
 
 const LakeFreshHeader = () => {
@@ -26,18 +26,19 @@ const LakeFreshHeader = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0a2540] text-white">
+    <header className="sticky top-0 z-40 bg-[#073B78] text-white">
       <div className="container flex h-16 items-center justify-between gap-4">
         <Link to="/lf" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
-          <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#22d3ee]/40 bg-white/5">
-            <Fish className="h-5 w-5 text-[#22d3ee]" />
-            <Waves className="absolute -bottom-0.5 h-3 w-6 text-[#22d3ee]/70" />
-          </span>
+          <img
+            src="/brand/lake-fresh/icon.png"
+            alt="Lake Fresh"
+            className="h-10 w-10 rounded-full border border-[#08A9E8]/40 bg-white/5 object-contain"
+          />
           <span className="leading-none">
             <span className="block font-display text-lg font-extrabold uppercase tracking-[0.14em]">
               Lake Fresh
             </span>
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.3em] text-[#22d3ee]">
+            <span className="block text-[10px] font-semibold uppercase tracking-[0.3em] text-[#08A9E8]">
               Fish Mart
             </span>
           </span>
@@ -96,13 +97,13 @@ const LakeFreshHeader = () => {
 
           <Link
             to="/lf/cart"
-            className="relative inline-flex items-center gap-2 rounded-full bg-[#22d3ee] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-[#0a2540]"
+            className="relative inline-flex items-center gap-2 rounded-full bg-[#08A9E8] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
             aria-label={`Basket, ${count} item${count === 1 ? "" : "s"}`}
           >
             <ShoppingBasket className="h-4 w-4" />
             <span className="hidden sm:inline">{subtotal > 0 ? formatMWK(subtotal) : "Basket"}</span>
             {count > 0 && (
-              <span className="absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-[10px] font-extrabold text-[#0a2540]">
+              <span className="absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-[10px] font-extrabold text-[#073B78]">
                 {count}
               </span>
             )}
@@ -121,7 +122,7 @@ const LakeFreshHeader = () => {
       </div>
 
       {menuOpen && (
-        <div className="border-t border-white/10 bg-[#0a2540] md:hidden">
+        <div className="border-t border-white/10 bg-[#073B78] md:hidden">
           <div className="container flex flex-col gap-4 py-4" onClick={() => setMenuOpen(false)}>
             <NavLink to="/lf" end className={navLinkClass}>
               Home
@@ -148,11 +149,11 @@ const LakeFreshHeader = () => {
 };
 
 const LakeFreshFooter = () => (
-  <footer className="border-t border-white/10 bg-[#0a2540] text-white">
+  <footer className="border-t border-white/10 bg-[#073B78] text-white">
     <div className="container grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4">
       <div className="sm:col-span-2 lg:col-span-1">
         <p className="font-display text-lg font-extrabold uppercase tracking-[0.14em]">Lake Fresh</p>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#22d3ee]">Fish Mart</p>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#08A9E8]">Fish Mart</p>
         <p className="mt-3 max-w-xs text-sm text-white/60">{brand.tagline}</p>
       </div>
       <div>

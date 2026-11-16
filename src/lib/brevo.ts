@@ -35,7 +35,7 @@ const BRANDS: Record<EmailBrand, BrandConfig> = {
     tagline: "Fresh from the Lake. Ready for Your Table.",
     email: "orders@lakefreshmw.com",
     website: "https://lakefreshmw.com",
-    primaryColor: "#0a2540",
+    primaryColor: "#073B78",
     businessName: "Lake Fresh Fish Mart",
     address: "Blantyre, Malawi",
     whatsapp: `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"}`,
