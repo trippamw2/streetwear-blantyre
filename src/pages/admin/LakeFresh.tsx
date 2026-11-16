@@ -22,7 +22,7 @@ import {
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "spices" | "kits" | "recipes" | "pro" | "batches" | "slots" | "orders" | "preparation" | "delivery";
+type Tab = "catalog" | "spices" | "kits" | "recipes" | "pro" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
@@ -30,6 +30,7 @@ const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "kits", label: "Meal Kits", icon: Package },
   { key: "recipes", label: "Recipes", icon: Package },
   { key: "pro", label: "PRO", icon: Package },
+  { key: "analytics", label: "Analytics", icon: Package },
   { key: "batches", label: "Batches", icon: Package },
   { key: "slots", label: "Slots", icon: CalendarDays },
   { key: "orders", label: "Orders", icon: ClipboardList },
@@ -110,6 +111,9 @@ const AdminLakeFresh = () => {
   const [businessAccounts, setBusinessAccounts] = useState<any[]>([]);
   const [quotes, setQuotes] = useState<any[]>([]);
 
+  // ---- Analytics state ----
+  const [analytics, setAnalytics] = useState<any>(null);
+
   const [loading, setLoading] = useState(false);
 
   const loadSpecies = async () => {
@@ -153,6 +157,61 @@ const AdminLakeFresh = () => {
   const loadQuotes = async () => {
     const { data } = await supabase.from("lf_quotes").select("*, lf_quote_items(*)").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
     setQuotes(data || []);
+  };
+
+  const loadAnalytics = async () => {
+    const { data: orders } = await supabase
+      .from("orders")
+      .select("id, total_mwk, payment_status, status")
+      .eq("brand_id", LF_BRAND_ID);
+    const paidOrders = (orders || []).filter((o: any) => o.payment_status === "paid");
+    const revenue = paidOrders.reduce((s: number, o: any) => s + (o.total_mwk || 0), 0);
+    const aov = paidOrders.length > 0 ? Math.round(revenue / paidOrders.length) : 0;
+
+    const orderIds = paidOrders.map((o: any) => o.id);
+    const { data: items } = orderIds.length
+      ? await supabase.from("order_items").select("order_id, product_key, unit_price_mwk, quantity").in("order_id", orderIds)
+      : { data: [] };
+
+    const ordersWithKits = new Set<string>();
+    const ordersWithAddons = new Set<string>();
+    const revenueByCategory: Record<string, number> = {};
+
+    (items || []).forEach((it: any) => {
+      const key = String(it.product_key || "");
+      const cat = key.includes(":") ? key.split(":")[0] : "fish";
+      revenueByCategory[cat] = (revenueByCategory[cat] || 0) + (it.unit_price_mwk || 0);
+      if (cat === "kit") ordersWithKits.add(it.order_id);
+      if (cat === "spice" || cat === "marinade") ordersWithAddons.add(it.order_id);
+    });
+
+    const eligible = paidOrders.length || 1;
+    const bundleAttachment = Math.round((ordersWithKits.size / eligible) * 100);
+    const addonAttachment = Math.round((ordersWithAddons.size / eligible) * 100);
+
+    // stock levels
+    const { data: spices } = await supabase.from("lf_spices").select("stock_qty").eq("brand_id", LF_BRAND_ID);
+    const { data: marinades } = await supabase.from("lf_marinades").select("stock_qty").eq("brand_id", LF_BRAND_ID);
+    const { data: ready } = await supabase.from("lf_ready_to_cook").select("stock_qty").eq("brand_id", LF_BRAND_ID);
+    const { data: batches } = await supabase.from("fish_inventory_batches").select("weight_kg_available").eq("brand_id", LF_BRAND_ID);
+
+    const stock = {
+      spices: (spices || []).reduce((s: number, r: any) => s + (r.stock_qty || 0), 0),
+      marinades: (marinades || []).reduce((s: number, r: any) => s + (r.stock_qty || 0), 0),
+      ready: (ready || []).reduce((s: number, r: any) => s + (r.stock_qty || 0), 0),
+      fishKg: (batches || []).reduce((s: number, r: any) => s + Number(r.weight_kg_available || 0), 0),
+    };
+
+    setAnalytics({
+      totalOrders: orders?.length || 0,
+      paidOrders: paidOrders.length,
+      revenue,
+      aov,
+      bundleAttachment,
+      addonAttachment,
+      revenueByCategory,
+      stock,
+    });
   };
 
   const loadBatches = async () => {
@@ -243,6 +302,7 @@ const AdminLakeFresh = () => {
     loadRecipes();
     loadBusinessAccounts();
     loadQuotes();
+    loadAnalytics();
     loadBatches();
     loadSlots();
     loadOrders();
@@ -260,6 +320,7 @@ const AdminLakeFresh = () => {
       loadRecipes(),
       loadBusinessAccounts(),
       loadQuotes(),
+      loadAnalytics(),
       loadBatches(),
       loadSlots(),
       loadOrders(),
@@ -964,6 +1025,75 @@ const AdminLakeFresh = () => {
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ANALYTICS */}
+      {tab === "analytics" && (
+        <div className="space-y-6">
+          {!analytics ? (
+            <p className="text-sm text-gray-500">Loading analytics…</p>
+          ) : (
+            <>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-xl border bg-white p-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Paid orders</p>
+                  <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{analytics.paidOrders}</p>
+                  <p className="mt-1 text-xs text-gray-500">of {analytics.totalOrders} total</p>
+                </div>
+                <div className="rounded-xl border bg-white p-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Revenue (MWK)</p>
+                  <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{analytics.revenue.toLocaleString()}</p>
+                </div>
+                <div className="rounded-xl border bg-white p-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">AOV (MWK)</p>
+                  <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{analytics.aov.toLocaleString()}</p>
+                </div>
+                <div className="rounded-xl border bg-white p-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Bundle attachment</p>
+                  <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{analytics.bundleAttachment}%</p>
+                  <p className="mt-1 text-xs text-gray-500">Add-on attachment: {analytics.addonAttachment}%</p>
+                </div>
+              </div>
+
+              <div className="rounded-xl border bg-white p-5">
+                <h2 className="font-display text-lg font-bold mb-4">Revenue by category</h2>
+                <div className="space-y-2">
+                  {Object.entries(analytics.revenueByCategory).map(([cat, val]) => (
+                    <div key={cat} className="flex items-center justify-between text-sm">
+                      <span className="capitalize text-gray-600">{cat}</span>
+                      <span className="font-semibold text-[#0a2540]">{Number(val).toLocaleString()} MWK</span>
+                    </div>
+                  ))}
+                  {Object.keys(analytics.revenueByCategory).length === 0 && (
+                    <p className="text-sm text-gray-500">No paid orders yet.</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-xl border bg-white p-5">
+                <h2 className="font-display text-lg font-bold mb-4">Stock levels</h2>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Fish (kg available)</p>
+                    <p className="mt-1 text-2xl font-extrabold text-[#0a2540]">{analytics.stock.fishKg.toFixed(1)}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Spices (units)</p>
+                    <p className="mt-1 text-2xl font-extrabold text-[#0a2540]">{analytics.stock.spices}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Marinades (units)</p>
+                    <p className="mt-1 text-2xl font-extrabold text-[#0a2540]">{analytics.stock.marinades}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Ready-to-cook (units)</p>
+                    <p className="mt-1 text-2xl font-extrabold text-[#0a2540]">{analytics.stock.ready}</p>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
 
