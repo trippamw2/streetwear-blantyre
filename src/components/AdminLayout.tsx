@@ -1,9 +1,10 @@
 import { Outlet, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Menu, X, Building2, Warehouse, ChevronLeft, Zap, MessageCircle, Truck, Users, Tag, LayoutGrid, Shield, Gift, BookOpen, Camera } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Menu, X, Building2, Warehouse, ChevronLeft, Zap, MessageCircle, Truck, Users, Tag, LayoutGrid, Shield, Gift, BookOpen, Camera, Fish } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { cn } from "@/lib/utils";
+import { BRANDS } from "@/lib/brands";
 import { supabase } from "@/integrations/supabase/client";
 
 const adminLinks = [
@@ -11,6 +12,7 @@ const adminLinks = [
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/categories", label: "Categories", icon: LayoutGrid },
   { to: "/admin/combos", label: "Combos", icon: Package },
+  { to: "/admin/lake-fresh", label: "Lake Fresh", icon: Fish },
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { to: "/admin/gifts", label: "Gifts", icon: Gift },
   { to: "/admin/suppliers", label: "Suppliers", icon: Truck },
@@ -36,6 +38,7 @@ export const AdminLayout = () => {
   const [searchParams] = useSearchParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isGlobalAdmin, setIsGlobalAdmin] = useState(false);
   const [checkingRole, setCheckingRole] = useState(true);
   const [staffBrands, setStaffBrands] = useState<{ brand_id: string; role: string }[]>([]);
   const brandParam = searchParams.get("brand") || "sb";
@@ -63,6 +66,7 @@ export const AdminLayout = () => {
           const rows = (staffRes.data || []) as { brand_id: string; role: string }[];
           setStaffBrands(rows);
           setIsAdmin(isAdminUser || rows.length > 0);
+          setIsGlobalAdmin(isAdminUser);
           setCheckingRole(false);
         })
         .catch(() => {
@@ -94,9 +98,20 @@ export const AdminLayout = () => {
     }
   }, [checkingRole, user, isAdmin, navigate]);
 
+  // Enforce staff brand scoping: non-global admins may only view brands they
+  // have an explicit staff_permissions row for.
+  useEffect(() => {
+    if (checkingRole || isGlobalAdmin || staffBrands.length === 0) return;
+    const allowed = staffBrands.map((row) =>
+      row.brand_id === "22222222-2222-2222-2222-222222222222" ? "lake-fresh" : "sb",
+    );
+    if (!allowed.includes(brandParam as any) && brandParam !== "all") {
+      navigate(`/admin?brand=${allowed[0]}`, { replace: true });
+    }
+  }, [checkingRole, isGlobalAdmin, staffBrands, brandParam, navigate]);
+
   if (authLoading || checkingRole || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    return (      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin h-10 w-10 border-4 border-navy border-t-transparent rounded-full mx-auto" />
           <p className="mt-4 text-gray-500">Loading...</p>

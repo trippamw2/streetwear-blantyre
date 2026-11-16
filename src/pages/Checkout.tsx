@@ -13,6 +13,7 @@ import { useLoyalty } from "@/hooks/useLoyalty";
 import { useReferral } from "@/hooks/useReferral";
 import { DeliveryOptions } from "@/components/DeliveryOptions";
 import { type DeliveryOption, FREE_DELIVERY_THRESHOLD } from "@/lib/deliveryRules";
+import { buildSbPaymentRef } from "@/lib/paymentRefs";
 import { ArrowLeft, Check, Loader2, CreditCard, Zap, Gift } from "lucide-react";
 
 const Checkout = () => {
@@ -226,7 +227,7 @@ const Checkout = () => {
       } catch {}
 
       const orderRef = orderId.slice(0, 8).toUpperCase();
-      const txRef = `SB-${orderRef}`;
+      const txRef = buildSbPaymentRef(orderId);
 
       // PayChangu online payment — redirect via form POST (no secret key exposed)
       clear();

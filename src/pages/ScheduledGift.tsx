@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProducts } from "@/hooks/useProducts";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
+import { buildSbGiftPaymentRef } from "@/lib/paymentRefs";
 import {
   Calendar, Gift, MessageCircle, ArrowRight, Check,
   Package, User, Loader2, CreditCard,
@@ -84,7 +85,7 @@ const ScheduledGift = () => {
         note: "Gift created by sender",
       });
 
-      const txRef = `SB-GIFT-${gift.id.slice(0, 8).toUpperCase()}`;
+      const txRef = buildSbGiftPaymentRef(gift.id);
       const { redirectToPayChangu } = await import("@/lib/paychangu");
       redirectToPayChangu({
         amount: selectedProduct.price,

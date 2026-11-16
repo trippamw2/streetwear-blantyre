@@ -1,12 +1,15 @@
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, ArrowLeft, CalendarDays, CreditCard, Fish, Loader2, MapPin, Snowflake } from "lucide-react";
+import { AlertCircle, ArrowLeft, CalendarDays, CheckCircle2, CreditCard, Fish, Loader2, MapPin, Snowflake } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { formatDeliveryDate } from "@/lib/lfDelivery";
 import { buildLakeFreshPaymentRef } from "@/lib/lfPayments";
+import { isOrderPaid, isOrderPayable } from "@/lib/paymentStatus";
+import { verifyOrderPayment } from "@/lib/paymentVerify";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
 
@@ -27,6 +30,8 @@ const LakeFreshOrder = () => {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const paymentParam = searchParams.get("payment");
+  const verifiedRef = useRef(false);
+  const [verifyState, setVerifyState] = useState<"idle" | "checking" | "paid" | "pending" | "failed">("idle");
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["lf", "order", id],
@@ -35,7 +40,7 @@ const LakeFreshOrder = () => {
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .select(
-          "id, status, customer_name, customer_phone, customer_location, notes, subtotal_mwk, delivery_fee_mwk, discount_mwk, total_mwk, payment_method, payment_reference, delivery_date, delivery_window, created_at"
+          "id, status, payment_status, customer_name, customer_phone, customer_location, notes, subtotal_mwk, delivery_fee_mwk, discount_mwk, total_mwk, payment_method, payment_reference, delivery_date, delivery_window, created_at"
         )
         .eq("id", id as string)
         .eq("brand_id", LF_BRAND_ID)
@@ -66,6 +71,38 @@ const LakeFreshOrder = () => {
       };
     },
   });
+
+  // PayChangu returns the browser here after checkout. Verify server-side so
+  // the order flips to paid even when the webhook is delayed or dropped.
+  useEffect(() => {
+    if (!paymentParam || !id || !user || verifiedRef.current) return;
+    verifiedRef.current = true;
+    let cancelled = false;
+    setVerifyState("checking");
+
+    verifyOrderPayment(id).then((result) => {
+      if (cancelled) return;
+
+      if (!result) {
+        setVerifyState("pending");
+        return;
+      }
+
+      if (result.status === "paid") {
+        setVerifyState("paid");
+        refetch();
+      } else if (result.status === "failed") {
+        setVerifyState("failed");
+        refetch();
+      } else {
+        setVerifyState("pending");
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [paymentParam, id, user, refetch]);
 
   if (isLoading) {
     return (
@@ -99,8 +136,8 @@ const LakeFreshOrder = () => {
     tone: "bg-gray-50 text-gray-700 border-gray-200",
   };
   const paymentRef = order.payment_reference || buildLakeFreshPaymentRef(order.id);
-  const isPaid = order.status !== "new" && order.status !== "cancelled";
-  const canPay = order.status === "new";
+  const isPaid = isOrderPaid(order.payment_status);
+  const canPay = isOrderPayable(order.payment_status);
 
   const handlePay = async () => {
     const [firstName, ...rest] = order.customer_name.trim().split(/\s+/);
@@ -151,7 +188,31 @@ const LakeFreshOrder = () => {
           </span>
         </div>
 
-        {paymentParam && !isPaid && (
+        {verifyState === "paid" || (paymentParam && isPaid) ? (
+          <div className="mt-5 flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+            <div>
+              <p className="font-bold">Payment confirmed.</p>
+              <p className="mt-1 text-xs">Your fish is reserved for your delivery window.</p>
+            </div>
+          </div>
+        ) : paymentParam && verifyState === "checking" ? (
+          <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#22d3ee]/40 bg-[#ecfeff]/60 p-4 text-sm text-[#0a2540]">
+            <Loader2 className="mt-0.5 h-4 w-4 shrink-0 animate-spin" />
+            <div>
+              <p className="font-bold">Confirming your payment…</p>
+              <p className="mt-1 text-xs">We are checking with PayChangu. This takes a few seconds.</p>
+            </div>
+          </div>
+        ) : paymentParam && verifyState === "failed" ? (
+          <div className="mt-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <div>
+              <p className="font-bold">That payment did not complete.</p>
+              <p className="mt-1 text-xs">No money was taken. You can try again with the Pay now button.</p>
+            </div>
+          </div>
+        ) : paymentParam && !isPaid ? (
           <div className="mt-5 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <div>
@@ -162,7 +223,7 @@ const LakeFreshOrder = () => {
               </p>
             </div>
           </div>
-        )}
+        ) : null}
 
         {canPay && (
           <div className="mt-5 flex flex-col gap-3 rounded-xl border border-[#22d3ee]/40 bg-[#ecfeff]/60 p-4 sm:flex-row sm:items-center sm:justify-between">

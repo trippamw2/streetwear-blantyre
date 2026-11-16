@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
+import { verifyGiftPayment } from "@/lib/paymentVerify";
 import {
   Gift, Package, Check, Truck, MapPin, Star,
   MessageCircle, Calendar, Loader2, ArrowRight,
@@ -50,6 +51,8 @@ interface GiftData {
 const GiftTrack = () => {
   const { token } = useParams();
   const [searchParams] = useSearchParams();
+  const paymentParam = searchParams.get("payment");
+  const verifiedRef = useRef(false);
   const [gift, setGift] = useState<GiftData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -84,6 +87,29 @@ const GiftTrack = () => {
 
     fetchGift();
   }, [token]);
+
+  // PayChangu returns the sender here after checkout. Re-verify server-side so
+  // the tracking timeline updates even if the webhook is delayed.
+  useEffect(() => {
+    if (!paymentParam || !gift || !token || verifiedRef.current) return;
+    verifiedRef.current = true;
+
+    verifyGiftPayment(gift.id, token).then(async (result) => {
+      if (result?.status !== "paid") return;
+
+      const { data } = await supabase
+        .from("gifts")
+        .select(`
+          *,
+          gift_items (*),
+          gift_tracking (*)
+        `)
+        .eq("tracking_token", token)
+        .single();
+
+      if (data) setGift(data as GiftData);
+    });
+  }, [paymentParam, gift, token]);
 
   const handleSubmitReview = async () => {
     if (!gift || !reviewComment.trim()) return;

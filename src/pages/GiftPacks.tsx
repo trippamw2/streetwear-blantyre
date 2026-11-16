@@ -11,6 +11,7 @@ import { useCombos } from "@/hooks/useCombos";
 import { useProducts } from "@/hooks/useProducts";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK, getKitPrice, getKitProducts, getKitSeparateTotal, getKitRealSaving, getKitDiscountPercent } from "@/data/products";
+import { buildSbGiftPaymentRef } from "@/lib/paymentRefs";
 import { Gift, Package, Heart, MessageCircle, ArrowRight, X, Check, Sparkles, Loader2, CreditCard } from "lucide-react";
 
 interface GiftFormData {
@@ -111,7 +112,7 @@ const GiftPacks = () => {
       });
 
       // Redirect to PayChangu
-      const txRef = `SB-GIFT-${gift.id.slice(0, 8).toUpperCase()}`;
+      const txRef = buildSbGiftPaymentRef(gift.id);
       const { redirectToPayChangu } = await import("@/lib/paychangu");
       redirectToPayChangu({
         amount: kitPrice,

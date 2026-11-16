@@ -51,7 +51,7 @@ const AdminDashboard = () => {
       brand === "all" ? undefined : BRANDS[brand as BrandSlug]?.id ?? BRANDS.sb.id;
     let ordersQuery = supabase
       .from("orders")
-      .select("id, total_mwk, delivery_fee_mwk, payment_method, status, customer_phone");
+      .select("id, total_mwk, delivery_fee_mwk, payment_method, status, payment_status, customer_phone");
 
     if (brandFilter) {
       ordersQuery = ordersQuery.eq("brand_id", brandFilter);
@@ -63,9 +63,8 @@ const AdminDashboard = () => {
       // Gross orders - all orders total
       const grossOrders = allOrders.reduce((sum, o) => sum + (o.total_mwk || 0), 0);
       
-      // Paid orders only. The orders enum has no separate paid flag; any status
-      // past "new" (other than cancelled) means payment was confirmed.
-      const paidOrdersList = allOrders.filter(o => o.status !== "new" && o.status !== "cancelled");
+      // Paid orders come from the payment state, not the fulfilment status.
+      const paidOrdersList = allOrders.filter(o => o.payment_status === "paid");
       const paidOrders = paidOrdersList.length;
       
       // Net Revenue - paid orders subtotal (without delivery fees)
@@ -92,7 +91,7 @@ const AdminDashboard = () => {
       const uniquePhones = new Set(allOrders.map(o => o.customer_phone).filter(Boolean));
       
       // Pending orders
-      const pendingOrders = allOrders.filter(o => o.status === "new" || o.status === "confirmed").length;
+      const pendingOrders = allOrders.filter(o => o.payment_status === "pending" && o.status !== "cancelled").length;
       
       setStats({
         totalOrders: allOrders.length,

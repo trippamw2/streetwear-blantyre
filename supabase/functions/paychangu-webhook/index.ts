@@ -1,208 +1,266 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = Deno.env.get("SUPABASE_URL") || "https://pxltbgfcwylnounuzszg.supabase.co";
-const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_SERVICE_KEY");
-const webhookSecret = Deno.env.get("PAYCHANGU_WEBHOOK_SECRET") || "77b52e880f9e58a4ea1245bbbf5ff3f18e07fae5abda8b8f73b60eb9d22e2331";
+/**
+ * PayChangu webhook handler for Supabase Edge Functions.
+ *
+ * The Vercel endpoint (`api/payment/callback.ts`) is the primary webhook, but
+ * this function is kept as a hardened second ingress. Both delegate all state
+ * changes to the same idempotent Postgres function (`process_payment_event`),
+ * so duplicate deliveries cannot double-confirm orders or inventory.
+ */
+
+const supabaseUrl = Deno.env.get("SUPABASE_URL");
+const supabaseKey =
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || Deno.env.get("SUPABASE_SERVICE_KEY");
+const webhookSecret = Deno.env.get("PAYCHANGU_WEBHOOK_SECRET");
+const payChanguSecretKey = Deno.env.get("PAYCHANGU_SECRET_KEY");
+const brevoKey = Deno.env.get("BREVO_API_KEY");
 
 interface PayChanguWebhook {
   event_type?: string;
   tx_ref?: string;
   status?: string;
   amount?: number | string;
-  charge?: string;
-  mode?: string;
-  type?: string;
   charge_id?: string;
   reference?: string;
   currency?: string;
-  authorization?: {
-    channel?: string;
-    card_details?: unknown;
-    bank_payment_details?: {
-      payer_bank_uuid?: string;
-      payer_bank?: string;
-      payer_account_number?: string;
-      payer_account_name?: string;
-    };
-    mobile_money?: unknown;
-    completed_at?: string;
-  };
-  created_at?: string;
-  updated_at?: string;
+  mode?: string;
+  data?: { tx_ref?: string };
+  authorization?: { channel?: string };
+}
+
+const json = (body: unknown, status = 200): Response =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+
+function constantTimeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
 }
 
 async function verifySignature(payload: string, signature: string): Promise<boolean> {
-  if (!webhookSecret || webhookSecret === "your_webhook_secret") {
-    console.warn("WARNING: No webhook secret - skipping verification");
-    return true;
-  }
+  if (!webhookSecret || !signature) return false;
 
-  if (!signature) {
-    console.error("Missing Signature header");
-    return false;
-  }
+  const received = signature.trim().replace(/^sha256=/i, "").toLowerCase();
+  if (!/^[0-9a-f]{64}$/.test(received)) return false;
 
-  const encoder = new TextEncoder();
-  const keyData = encoder.encode(webhookSecret);
-  const messageData = encoder.encode(payload);
-
-  const key = await globalThis.crypto.subtle.importKey(
+  const key = await crypto.subtle.importKey(
     "raw",
-    keyData,
+    new TextEncoder().encode(webhookSecret),
     { name: "HMAC", hash: "SHA-256" },
     false,
-    ["sign"]
+    ["sign"],
   );
-
-  const signatureBuffer = await globalThis.crypto.subtle.sign("HMAC", key, messageData);
-  const computedSignature = Array.from(new Uint8Array(signatureBuffer))
-    .map(b => b.toString(16).padStart(2, "0"))
+  const signatureBuffer = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    new TextEncoder().encode(payload),
+  );
+  const computed = Array.from(new Uint8Array(signatureBuffer))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
 
-  console.log("Computed signature:", computedSignature);
-  console.log("Received signature:", signature);
+  return constantTimeEqual(computed, received);
+}
 
-  return computedSignature === signature;
+async function verifyWithPayChangu(txRef: string): Promise<any | null> {
+  if (!payChanguSecretKey) return null;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10_000);
+
+  try {
+    const response = await fetch(
+      `https://api.paychangu.com/verify-payment/${encodeURIComponent(txRef)}`,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${payChanguSecretKey}`,
+        },
+        signal: controller.signal,
+      },
+    );
+
+    if (!response.ok) {
+      console.warn("paychangu-webhook: provider returned", response.status, txRef);
+      return null;
+    }
+
+    const body: any = await response.json();
+    return body?.data ?? null;
+  } catch (error) {
+    console.error("paychangu-webhook: verification failed", error);
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+const escapeHtml = (value: unknown): string =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+async function sendGiftEmail(gift: {
+  recipient_email?: string | null;
+  sender_name?: string | null;
+  tracking_token?: string | null;
+}): Promise<void> {
+  if (!brevoKey || !gift.recipient_email) return;
+
+  const trackingUrl = `https://wearsb.com/gift-track/${encodeURIComponent(
+    String(gift.tracking_token ?? ""),
+  )}`;
+
+  try {
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        "api-key": brevoKey,
+      },
+      body: JSON.stringify({
+        sender: { name: "Streetwear Blantyre", email: "noreply@wearsb.com" },
+        to: [{ email: gift.recipient_email }],
+        subject: `${gift.sender_name} sent you a gift!`,
+        htmlContent: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h1 style="font-size: 24px; color: #0f172a;">You've received a gift!</h1>
+            <p style="color: #64748b;">${escapeHtml(gift.sender_name)} sent you a Culture Piece from Streetwear Blantyre.</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${trackingUrl}" style="background-color: #0f172a; color: white; padding: 14px 32px; border-radius: 9999px; text-decoration: none; font-weight: 600;">Track Your Gift</a>
+            </div>
+            <p style="color: #94a3b8; font-size: 12px;">If the button doesn't work, copy this link: ${trackingUrl}</p>
+          </div>
+        `,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("paychangu-webhook: gift email failed", response.status);
+    }
+  } catch (error) {
+    console.error("paychangu-webhook: gift email failed", error);
+  }
 }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type, Signature" } });
+    return new Response(null, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Signature",
+      },
+    });
   }
 
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { "Content-Type": "application/json" } });
+    return json({ error: "Method not allowed" }, 405);
   }
 
+  if (!supabaseUrl || !supabaseKey) {
+    console.error("paychangu-webhook: Supabase credentials are not configured");
+    return json({ error: "Server configuration error" }, 500);
+  }
+
+  if (!webhookSecret) {
+    console.error("paychangu-webhook: PAYCHANGU_WEBHOOK_SECRET is not configured");
+    return json({ error: "Server configuration error" }, 500);
+  }
+
+  const rawBody = await req.text();
+  const signature = req.headers.get("signature") || req.headers.get("Signature") || "";
+
+  if (!(await verifySignature(rawBody, signature))) {
+    console.warn("paychangu-webhook: invalid signature");
+    return json({ error: "Invalid signature" }, 403);
+  }
+
+  let payload: PayChanguWebhook;
   try {
-    const signature = req.headers.get("signature") || req.headers.get("Signature");
-    const rawBody = await req.text();
-    console.log("Raw webhook body:", rawBody);
-
-    const isValid = await verifySignature(rawBody, signature || "");
-    if (!isValid) {
-      console.error("Invalid webhook signature");
-      return new Response(JSON.stringify({ error: "Invalid signature" }), { status: 403, headers: { "Content-Type": "application/json" } });
-    }
-
-    const payload: PayChanguWebhook = JSON.parse(rawBody);
-    console.log("Payment callback received:", payload);
-
-    const txRef = payload.tx_ref;
-    const status = payload.status;
-
-    if (!txRef) {
-      console.error("Missing tx_ref in webhook");
-      return new Response(JSON.stringify({ error: "Missing tx_ref" }), { status: 400, headers: { "Content-Type": "application/json" } });
-    }
-
-    const successfulStatuses = ["successful", "completed", "success"];
-    const isSuccessful = successfulStatuses.includes(status?.toLowerCase() || "");
-
-    if (!isSuccessful) {
-      console.log("Payment not successful, status:", status);
-      return new Response(JSON.stringify({ received: true, status: "not_successful" }), { headers: { "Content-Type": "application/json" } });
-    }
-
-    if (!supabaseKey) {
-      console.error("No SUPABASE_SERVICE_KEY");
-      return new Response(JSON.stringify({ error: "Server configuration error" }), { status: 500, headers: { "Content-Type": "application/json" } });
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    // Extract order ID from tx_ref (format: "PP-{first8chars}")
-    // Need to find order by tx_ref prefix
-    const txRefPrefix = txRef.replace(/^PP-/i, "").substring(0, 8).toUpperCase();
-    console.log("Looking for order with tx_ref prefix:", txRefPrefix);
-
-    // Find order by matching tx_ref or id
-    const { data: orders, error: findError } = await supabase
-      .from("orders")
-      .select("id, customer_name")
-      .or(`id.ilike.%${txRefPrefix}%,tracking_number.ilike.%${txRefPrefix}%`)
-      .limit(1);
-
-    if (findError) {
-      console.error("Failed to find order:", findError);
-      return new Response(JSON.stringify({ error: "Failed to find order" }), { status: 500, headers: { "Content-Type": "application/json" } });
-    }
-
-    if (!orders || orders.length === 0) {
-      console.log("Order not found for tx_ref:", txRef);
-      return new Response(JSON.stringify({ received: true, status: "order_not_found" }), { headers: { "Content-Type": "application/json" } });
-    }
-
-    const orderId = orders[0].id;
-    console.log("Found order:", orderId, "customer:", orders[0].customer_name);
-
-    // Get order items to deduct inventory
-    const { data: orderItems } = await supabase
-      .from("order_items")
-      .select("product_key, quantity")
-      .eq("order_id", orderId);
-
-    console.log("Order items:", orderItems);
-
-    // Deduct inventory for each item
-    if (orderItems) {
-      for (const item of orderItems) {
-        if (item.product_key) {
-          console.log("Deducting inventory for:", item.product_key, "qty:", item.quantity);
-          
-          // Direct SQL update instead of function call
-          const { data: invData, error: invError } = await supabase
-            .from("inventory")
-            .select("quantity, reserved_quantity")
-            .eq("product_id", item.product_key)
-            .single();
-          
-          if (invError || !invData) {
-            console.log("No inventory record for:", item.product_key);
-            continue;
-          }
-          
-          const newQty = invData.quantity - item.quantity;
-          const newReserved = Math.max(0, (invData.reserved_quantity || 0) - item.quantity);
-          
-          await supabase
-            .from("inventory")
-            .update({ 
-              quantity: newQty,
-              reserved_quantity: newReserved 
-            })
-            .eq("product_id", item.product_key);
-          
-          console.log("Inventory deducted for:", item.product_key, "new qty:", newQty);
-        }
-      }
-    }
-
-    // Update order to paid and confirmed
-    const { error: updateError } = await supabase
-      .from("orders")
-      .update({
-        status: "confirmed",
-        is_paid: true,
-        payment_status: "paid",
-        paid_at: new Date().toISOString(),
-        charge_id: payload.charge_id || null,
-        payment_reference: payload.reference || null,
-        payment_channel: payload.authorization?.channel || null,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", orderId);
-
-    if (updateError) {
-      console.error("Failed to update order:", updateError);
-      return new Response(JSON.stringify({ error: "Failed to update order" }), { status: 500, headers: { "Content-Type": "application/json" } });
-    }
-
-    console.log("Order paid and confirmed:", orderId);
-    return new Response(JSON.stringify({ success: true, orderId, status: "paid" }), { headers: { "Content-Type": "application/json" } });
-
-  } catch (error) {
-    console.error("Webhook error:", error);
-    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: { "Content-Type": "application/json" } });
+    payload = JSON.parse(rawBody);
+  } catch {
+    return json({ error: "Invalid JSON" }, 400);
   }
+
+  const txRef = String(payload.tx_ref ?? payload.data?.tx_ref ?? "").trim();
+  if (!txRef) {
+    console.warn("paychangu-webhook: missing tx_ref");
+    return json({ received: true, status: "ignored_missing_tx_ref" });
+  }
+
+  let status = String(payload.status ?? "").toLowerCase();
+  let amount = payload.amount ?? null;
+  let currency = payload.currency ?? null;
+  let chargeId = payload.charge_id ?? null;
+  let providerReference = payload.reference ?? null;
+  let channel = payload.authorization?.channel ?? null;
+  let mode = payload.mode ?? null;
+  let auditPayload: Record<string, unknown> = { webhook: payload };
+
+  const verified = await verifyWithPayChangu(txRef);
+  if (verified) {
+    if (String(verified.tx_ref ?? "").toUpperCase() !== txRef.toUpperCase()) {
+      console.warn("paychangu-webhook: reference mismatch", txRef, verified.tx_ref);
+      return json({ received: true, status: "reference_mismatch" });
+    }
+
+    status = String(verified.status ?? status).toLowerCase();
+    amount = verified.amount ?? amount;
+    currency = verified.currency ?? currency;
+    chargeId = verified.charge_id ?? chargeId;
+    providerReference = verified.reference ?? providerReference;
+    channel = verified.authorization?.channel ?? channel;
+    mode = verified.mode ?? mode;
+    auditPayload = { webhook: payload, verified };
+  } else if (payChanguSecretKey) {
+    // We have a secret key but could not re-query: ask PayChangu to retry.
+    return json({ error: "Could not verify payment, retry later" }, 502);
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey, {
+    auth: { persistSession: false },
+  });
+
+  const { data: result, error } = await supabase.rpc("process_payment_event", {
+    p_tx_ref: txRef,
+    p_status: status,
+    p_amount: amount === null || amount === undefined ? null : Number(amount),
+    p_currency: currency,
+    p_charge_id: chargeId,
+    p_provider_reference: providerReference,
+    p_channel: channel,
+    p_mode: mode,
+    p_payload: auditPayload,
+  });
+
+  if (error) {
+    console.error("paychangu-webhook: process_payment_event failed", error);
+    return json({ error: "Failed to process payment" }, 500);
+  }
+
+  const outcome = (result as any)?.outcome;
+  if (outcome === "paid" && (result as any)?.first_transition === true && (result as any)?.gift) {
+    await sendGiftEmail((result as any).gift);
+  }
+
+  return json({
+    received: true,
+    ok: (result as any)?.ok ?? false,
+    outcome,
+    kind: (result as any)?.kind,
+    orderId: (result as any)?.order_id ?? null,
+    giftId: (result as any)?.gift_id ?? null,
+  });
 });

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
@@ -8,12 +8,16 @@ import { SEO } from "@/components/SEO";
 import { PageSkeleton } from "@/components/Skeletons";
 import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
 import { redirectToPayChangu } from "@/lib/paychangu";
+import { buildSbPaymentRef } from "@/lib/paymentRefs";
+import { isOrderPayable } from "@/lib/paymentStatus";
+import { verifyOrderPayment } from "@/lib/paymentVerify";
 import { ArrowLeft, Check, Truck, Package, MessageCircle, Sparkles, CreditCard } from "lucide-react";
 import { format } from "date-fns";
 
 interface OrderDetail {
   id: string;
   status: string;
+  payment_status?: string | null;
   total_mwk: number;
   customer_name: string;
   customer_phone: string;
@@ -40,10 +44,14 @@ const stepIndex = (status: string) => steps.findIndex((s) => s.key === status);
 
 const OrderDetailPage = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const [order, setOrder] = useState<OrderDetail | null>(null);
   const [items, setItems] = useState<ItemRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [paymentNotice, setPaymentNotice] = useState<{ tone: "success" | "pending" | "error"; text: string } | null>(null);
+  const paymentParam = searchParams.get("payment");
+  const verifiedRef = useRef(false);
 
   useEffect(() => {
     if (!id || !user) return;
@@ -56,6 +64,44 @@ const OrderDetailPage = () => {
       setLoading(false);
     });
   }, [id, user]);
+
+  // PayChangu redirects the browser back here after checkout. Ask the server to
+  // re-query the provider (the webhook may still be in flight).
+  useEffect(() => {
+    if (!paymentParam || !id || !user || verifiedRef.current) return;
+    verifiedRef.current = true;
+    let cancelled = false;
+
+    verifyOrderPayment(id).then((result) => {
+      if (cancelled || !result) return;
+
+      if (result.status === "paid") {
+        setPaymentNotice({ tone: "success", text: "Payment received. Your order is confirmed." });
+        supabase
+          .from("orders")
+          .select("*")
+          .eq("id", id)
+          .maybeSingle()
+          .then(({ data }) => {
+            if (data) setOrder(data as any);
+          });
+      } else if (result.status === "pending") {
+        setPaymentNotice({
+          tone: "pending",
+          text: "We're waiting for PayChangu to confirm this payment. This page updates once it clears.",
+        });
+      } else if (result.status === "failed") {
+        setPaymentNotice({
+          tone: "error",
+          text: "That payment did not complete. You can try again below.",
+        });
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [paymentParam, id, user]);
 
   if (authLoading || loading) return <PageSkeleton />;
   if (!user) {
@@ -82,6 +128,20 @@ const OrderDetailPage = () => {
           </div>
           <span className="px-3 py-1.5 rounded-full bg-gradient-brand text-gray-900 text-xs font-bold uppercase">{order.status}</span>
         </div>
+
+        {paymentNotice && (
+          <div
+            className={`rounded-2xl border px-4 py-3 text-sm ${
+              paymentNotice.tone === "success"
+                ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                : paymentNotice.tone === "error"
+                  ? "bg-red-50 border-red-200 text-red-800"
+                  : "bg-amber-50 border-amber-200 text-amber-800"
+            }`}
+          >
+            {paymentNotice.text}
+          </div>
+        )}
 
         {/* Tracker */}
         {order.status !== "cancelled" && (
@@ -129,7 +189,7 @@ const OrderDetailPage = () => {
         </div>
 
         {/* Payment */}
-        {order.status === "new" && (
+        {isOrderPayable(order.payment_status) && order.status !== "cancelled" && (
           <div className="rounded-2xl bg-gray-50 border border-gray-200 p-5 space-y-3">
             <p className="font-display font-bold text-lg">Make Payment</p>
             <p className="text-sm text-muted-foreground">
@@ -142,9 +202,9 @@ const OrderDetailPage = () => {
                   email: user?.email || "customer@wearsb.com",
                   firstName: order.customer_name.split(" ")[0] || "Customer",
                   lastName: order.customer_name.split(" ").slice(1).join(" ") || "",
-                  txRef: `SB-${order.id.slice(0, 12)}`,
-                  callbackUrl: `${window.location.origin}/api/payment/callback`,
-                  returnUrl: `${window.location.origin}/orders/${order.id}`,
+                  txRef: buildSbPaymentRef(order.id),
+                  callbackUrl: `${window.location.origin}/orders/${order.id}?payment=callback`,
+                  returnUrl: `${window.location.origin}/orders/${order.id}?payment=complete`,
                   title: `Order #${order.id.slice(0, 8).toUpperCase()}`,
                   description: "Streetwear Blantyre order payment",
                 })
@@ -155,7 +215,7 @@ const OrderDetailPage = () => {
               Pay {formatMWK(order.total_mwk)} via PayChangu
             </Button>
             <p className="text-xs text-muted-foreground text-center">
-              Ref: <span className="font-bold">SB-{order.id.slice(0, 8).toUpperCase()}</span>
+              Ref: <span className="font-bold">{buildSbPaymentRef(order.id)}</span>
             </p>
           </div>
         )}

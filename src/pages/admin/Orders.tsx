@@ -75,7 +75,7 @@ interface Order {
   delivery_method?: string;
   tracking_number?: string;
   payment_method?: string;
-  is_paid?: boolean;
+  payment_status?: string;
 }
 
 interface OrderItem {
@@ -217,7 +217,7 @@ Track: https://www.wearsb.com/track/${order.id}`;
     const order = orders.find(o => o.id === orderId);
     const updates: any = { status: newStatus };
     if (markPaid) {
-      updates.is_paid = true;
+      updates.payment_status = "paid";
     }
     await supabase.from("orders").update(updates).eq("id", orderId);
     setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, ...updates } : o)));
@@ -280,26 +280,13 @@ Track: https://www.wearsb.com/track/${order.id}`;
   };
 
   const markAsPaid = async (orderId: string) => {
-    // Get order items to deduct inventory
-    const { data: orderItems } = await supabase
-      .from("order_items")
-      .select("product_key, quantity")
-      .eq("order_id", orderId);
+    // Single transactional transition: marks paid, confirms LF reservations,
+    // commits SB inventory exactly once, and records the audit trail.
+    const { error } = await supabase.rpc("mark_order_paid", { p_order_id: orderId });
 
-    // Deduct from actual inventory
-    if (orderItems) {
-      for (const item of orderItems) {
-        if (item.product_key) {
-          try {
-            await supabase.rpc("confirm_inventory_sale", {
-              p_product_id: item.product_key,
-              p_quantity: item.quantity,
-            });
-          } catch (err) {
-            console.error("Inventory error:", err);
-          }
-        }
-      }
+    if (error) {
+      console.error("mark_order_paid failed:", error);
+      return;
     }
 
     await updateStatus(orderId, "confirmed", true);
@@ -351,7 +338,7 @@ Track: https://www.wearsb.com/track/${order.id}`;
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-muted-foreground">{format(new Date(order.created_at), "PPp")}</span>
                     {order.payment_method === "paychangu" && <span className="text-xs bg-gray-100 text-gray-700 px-1.5 rounded">PayChangu</span>}
-                    {order.is_paid && <span className="text-xs bg-green-500 text-gray-900 px-1.5 rounded">PAID</span>}
+                    {order.payment_status === "paid" && <span className="text-xs bg-green-500 text-gray-900 px-1.5 rounded">PAID</span>}
                   </div>
                 </div>
                 <div className="text-right">
@@ -374,7 +361,7 @@ Track: https://www.wearsb.com/track/${order.id}`;
 <div className="mt-4 pt-3 border-t flex flex-wrap gap-2">
                 <Button variant="outline" size="sm" onClick={() => viewOrder(order)}><Eye className="h-3 w-3" /> Details</Button>
                 <Button variant="outline" size="sm" onClick={() => sendWhatsAppNotification(order, order.status)}><MessageCircle className="h-3 w-3" /> WhatsApp</Button>
-                {!order.is_paid && (
+                {order.payment_status !== "paid" && (
                   <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => markAsPaid(order.id)}>
                     <DollarSign className="h-3 w-3" /> Mark Paid
                   </Button>

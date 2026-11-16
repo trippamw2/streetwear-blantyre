@@ -1219,6 +1219,7 @@ export type Database = {
           payment_reference: string | null
           payment_status: string | null
           preferred_delivery_date: string | null
+          provider_reference: string | null
           recipient_email: string | null
           recipient_name: string
           recipient_phone: string
@@ -1246,6 +1247,7 @@ export type Database = {
           payment_reference?: string | null
           payment_status?: string | null
           preferred_delivery_date?: string | null
+          provider_reference?: string | null
           recipient_email?: string | null
           recipient_name: string
           recipient_phone: string
@@ -1273,6 +1275,7 @@ export type Database = {
           payment_reference?: string | null
           payment_status?: string | null
           preferred_delivery_date?: string | null
+          provider_reference?: string | null
           recipient_email?: string | null
           recipient_name?: string
           recipient_phone?: string
@@ -1749,6 +1752,7 @@ export type Database = {
       orders: {
         Row: {
           brand_id: string
+          charge_id: string | null
           created_at: string
           customer_location: string | null
           customer_name: string
@@ -1760,10 +1764,15 @@ export type Database = {
           delivery_zone_id: string | null
           discount_mwk: number | null
           id: string
+          inventory_committed_at: string | null
           notes: string | null
+          paid_at: string | null
+          payment_channel: string | null
           payment_method: string | null
           payment_reference: string | null
+          payment_status: string
           promo_code: string | null
+          provider_reference: string | null
           status: Database["public"]["Enums"]["order_status"]
           subtotal_mwk: number | null
           total_mwk: number
@@ -1773,6 +1782,7 @@ export type Database = {
         }
         Insert: {
           brand_id?: string
+          charge_id?: string | null
           created_at?: string
           customer_location?: string | null
           customer_name: string
@@ -1784,10 +1794,15 @@ export type Database = {
           delivery_zone_id?: string | null
           discount_mwk?: number | null
           id?: string
+          inventory_committed_at?: string | null
           notes?: string | null
+          paid_at?: string | null
+          payment_channel?: string | null
           payment_method?: string | null
           payment_reference?: string | null
+          payment_status?: string
           promo_code?: string | null
+          provider_reference?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           subtotal_mwk?: number | null
           total_mwk: number
@@ -1797,6 +1812,7 @@ export type Database = {
         }
         Update: {
           brand_id?: string
+          charge_id?: string | null
           created_at?: string
           customer_location?: string | null
           customer_name?: string
@@ -1808,10 +1824,15 @@ export type Database = {
           delivery_zone_id?: string | null
           discount_mwk?: number | null
           id?: string
+          inventory_committed_at?: string | null
           notes?: string | null
+          paid_at?: string | null
+          payment_channel?: string | null
           payment_method?: string | null
           payment_reference?: string | null
+          payment_status?: string
           promo_code?: string | null
+          provider_reference?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           subtotal_mwk?: number | null
           total_mwk?: number
@@ -1839,6 +1860,88 @@ export type Database = {
             columns: ["delivery_zone_id"]
             isOneToOne: false
             referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_events: {
+        Row: {
+          amount: number | null
+          brand_id: string | null
+          channel: string | null
+          charge_id: string | null
+          created_at: string
+          currency: string | null
+          gift_id: string | null
+          id: string
+          message: string | null
+          order_id: string | null
+          outcome: string
+          payload: Json
+          provider: string
+          provider_mode: string | null
+          provider_reference: string | null
+          provider_status: string | null
+          tx_ref: string
+        }
+        Insert: {
+          amount?: number | null
+          brand_id?: string | null
+          channel?: string | null
+          charge_id?: string | null
+          created_at?: string
+          currency?: string | null
+          gift_id?: string | null
+          id?: string
+          message?: string | null
+          order_id?: string | null
+          outcome?: string
+          payload?: Json
+          provider?: string
+          provider_mode?: string | null
+          provider_reference?: string | null
+          provider_status?: string | null
+          tx_ref: string
+        }
+        Update: {
+          amount?: number | null
+          brand_id?: string | null
+          channel?: string | null
+          charge_id?: string | null
+          created_at?: string
+          currency?: string | null
+          gift_id?: string | null
+          id?: string
+          message?: string | null
+          order_id?: string | null
+          outcome?: string
+          payload?: Json
+          provider?: string
+          provider_mode?: string | null
+          provider_reference?: string | null
+          provider_status?: string | null
+          tx_ref?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_events_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_events_gift_id_fkey"
+            columns: ["gift_id"]
+            isOneToOne: false
+            referencedRelation: "gifts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
             referencedColumns: ["id"]
           },
         ]
@@ -2973,6 +3076,30 @@ export type Database = {
         }[]
       }
       lf_public_config: { Args: never; Returns: Json }
+      mark_order_paid: { Args: { p_order_id: string }; Returns: Json }
+      process_order_paid: {
+        Args: {
+          p_channel?: string
+          p_charge_id?: string
+          p_order_id: string
+          p_provider_reference?: string
+        }
+        Returns: Json
+      }
+      process_payment_event: {
+        Args: {
+          p_amount?: number
+          p_channel?: string
+          p_charge_id?: string
+          p_currency?: string
+          p_mode?: string
+          p_payload?: Json
+          p_provider_reference?: string
+          p_status: string
+          p_tx_ref: string
+        }
+        Returns: Json
+      }
       record_scan: {
         Args: {
           p_approximate_location?: string
