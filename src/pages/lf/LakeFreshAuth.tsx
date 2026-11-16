@@ -95,7 +95,7 @@ const LakeFreshAuth = () => {
       <div className="container flex min-h-[70vh] max-w-md flex-col justify-center py-14">
         <div className="mb-6 text-center">
           <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-white">
-            <img src="/brand/lake-fresh/icon.png" alt="Lake Fresh" className="h-10 w-10 object-contain" />
+            <img src="/brand/lake-fresh/icon.png" alt="Lake Fresh" className="h-12 w-12 object-contain" />
           </span>
           <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-[#073B78]">
             {mode === "signin" ? "Welcome back" : "Join Lake Fresh"}

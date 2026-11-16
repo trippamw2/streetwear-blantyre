@@ -55,7 +55,7 @@ const LakeFreshHome = () => {
         <div className="container relative py-20 sm:py-28 lg:py-32">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 border border-white/25 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80">
-              <img src="/brand/lake-fresh/icon.png" alt="Lake Fresh" className="h-4 w-4 object-contain" /> Lake Fresh Fish Mart
+              <img src="/brand/lake-fresh/icon.png" alt="Lake Fresh" className="h-6 w-6 object-contain" /> Lake Fresh Fish Mart
             </span>
             <h1 className="mt-6 font-display text-4xl font-extrabold leading-[0.95] tracking-tight sm:text-5xl lg:text-6xl">
               FRESH FROM THE
