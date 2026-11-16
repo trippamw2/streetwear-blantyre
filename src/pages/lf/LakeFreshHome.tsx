@@ -112,7 +112,7 @@ const LakeFreshHome = () => {
       <section className="border-b border-gray-200 bg-[#EAF6FB]/50">
         <div className="container grid gap-8 py-12 sm:py-16 md:grid-cols-3">
           <div className="flex items-start gap-4">
-            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#073B78] text-[#08A9E8]">
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#073B78] text-[#7ED321]">
               <Truck className="h-5 w-5" />
             </span>
             <div>
@@ -121,7 +121,7 @@ const LakeFreshHome = () => {
             </div>
           </div>
           <div className="flex items-start gap-4">
-            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#073B78] text-[#08A9E8]">
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#073B78] text-[#7ED321]">
               <Snowflake className="h-5 w-5" />
             </span>
             <div>
@@ -130,7 +130,7 @@ const LakeFreshHome = () => {
             </div>
           </div>
           <div className="flex items-start gap-4">
-            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#073B78] text-[#08A9E8]">
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#073B78] text-[#7ED321]">
               <ShieldCheck className="h-5 w-5" />
             </span>
             <div>
@@ -175,7 +175,7 @@ const LakeFreshHome = () => {
                     </span>
                     <span
                       className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${
-                        soldOut ? "bg-gray-100 text-gray-500" : "bg-emerald-50 text-emerald-700"
+                        soldOut ? "bg-gray-100 text-gray-500" : "bg-[#39B54A]/10 text-[#39B54A]"
                       }`}
                     >
                       {soldOut ? "Sold out" : "Available"}

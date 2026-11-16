@@ -719,7 +719,7 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => toggleProductActive(p.id, !p.is_active)}
-                        className={`text-xs font-bold ${p.is_active ? "text-emerald-600" : "text-gray-400"}`}
+                        className={`text-xs font-bold ${p.is_active ? "text-[#39B54A]" : "text-gray-400"}`}
                       >
                         {p.is_active ? "Active" : "Inactive"}
                       </button>
@@ -790,7 +790,7 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3 text-right">{formatMWK(s.price_mwk)}</td>
                     <td className="px-4 py-3 text-right">{s.stock_qty}</td>
                     <td className="px-4 py-3">
-                      <button onClick={() => toggleSpiceActive(s.id, !s.is_active)} className={`text-xs font-bold ${s.is_active ? "text-emerald-600" : "text-gray-400"}`}>
+                      <button onClick={() => toggleSpiceActive(s.id, !s.is_active)} className={`text-xs font-bold ${s.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
                         {s.is_active ? "Active" : "Inactive"}
                       </button>
                     </td>
@@ -854,7 +854,7 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3 text-right">{formatMWK(k.price_mwk)}</td>
                     <td className="px-4 py-3 text-right">{k.discount_percent}%</td>
                     <td className="px-4 py-3">
-                      <button onClick={() => toggleKitActive(k.id, !k.is_active)} className={`text-xs font-bold ${k.is_active ? "text-emerald-600" : "text-gray-400"}`}>
+                      <button onClick={() => toggleKitActive(k.id, !k.is_active)} className={`text-xs font-bold ${k.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
                         {k.is_active ? "Active" : "Inactive"}
                       </button>
                     </td>
@@ -953,7 +953,7 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3 text-right">{r.cook_time_min ?? "—"}</td>
                     <td className="px-4 py-3">{r.cooking_method || "—"}</td>
                     <td className="px-4 py-3">
-                      <button onClick={() => toggleRecipeActive(r.id, !r.is_active)} className={`text-xs font-bold ${r.is_active ? "text-emerald-600" : "text-gray-400"}`}>
+                      <button onClick={() => toggleRecipeActive(r.id, !r.is_active)} className={`text-xs font-bold ${r.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
                         {r.is_active ? "Active" : "Inactive"}
                       </button>
                     </td>
@@ -993,13 +993,13 @@ const AdminLakeFresh = () => {
                       <td className="px-4 py-3">{b.contact_name || "—"}</td>
                       <td className="px-4 py-3">{b.phone}</td>
                       <td className="px-4 py-3">
-                        <span className={`text-xs font-bold ${b.approval_status === "approved" ? "text-emerald-600" : b.approval_status === "rejected" ? "text-red-600" : "text-amber-600"}`}>
+                        <span className={`text-xs font-bold ${b.approval_status === "approved" ? "text-[#39B54A]" : b.approval_status === "rejected" ? "text-red-600" : "text-amber-600"}`}>
                           {b.approval_status}
                         </span>
                       </td>
                       <td className="px-4 py-3 flex gap-2">
                         {b.approval_status !== "approved" && (
-                          <button onClick={() => approveBusiness(b.id, "approved")} className="text-xs font-bold text-emerald-600">Approve</button>
+                          <button onClick={() => approveBusiness(b.id, "approved")} className="text-xs font-bold text-[#39B54A]">Approve</button>
                         )}
                         {b.approval_status !== "rejected" && (
                           <button onClick={() => approveBusiness(b.id, "rejected")} className="text-xs font-bold text-red-600">Reject</button>
@@ -1140,7 +1140,7 @@ const AdminLakeFresh = () => {
                   <td className="px-4 py-3 text-right">{s.quantity_kg}</td>
                   <td className="px-4 py-3">{s.preparation}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs font-bold ${s.consent_given ? "text-emerald-600" : "text-red-600"}`}>
+                    <span className={`text-xs font-bold ${s.consent_given ? "text-[#39B54A]" : "text-red-600"}`}>
                       {s.consent_given ? "Yes" : "No"}
                     </span>
                   </td>
@@ -1295,7 +1295,7 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => toggleSlotOpen(s.id, !s.is_open)}
-                        className={`text-xs font-bold ${s.is_open ? "text-emerald-600" : "text-gray-400"}`}
+                        className={`text-xs font-bold ${s.is_open ? "text-[#39B54A]" : "text-gray-400"}`}
                       >
                         {s.is_open ? "Open" : "Closed"}
                       </button>
@@ -1352,7 +1352,7 @@ const AdminLakeFresh = () => {
                         </select>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`text-xs font-bold ${o.payment_status === "paid" ? "text-emerald-600" : "text-amber-600"}`}>
+                        <span className={`text-xs font-bold ${o.payment_status === "paid" ? "text-[#39B54A]" : "text-amber-600"}`}>
                           {o.payment_status}
                         </span>
                       </td>
@@ -1369,7 +1369,7 @@ const AdminLakeFresh = () => {
                         {o.payment_status !== "paid" && (
                           <button
                             onClick={() => markOrderPaid(o.id)}
-                            className="text-xs font-bold text-emerald-600"
+                            className="text-xs font-bold text-[#39B54A]"
                           >
                             Mark paid
                           </button>
@@ -1480,7 +1480,7 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => toggleZoneActive(z.id, !z.is_active)}
-                        className={`text-xs font-bold ${z.is_active ? "text-emerald-600" : "text-gray-400"}`}
+                        className={`text-xs font-bold ${z.is_active ? "text-[#39B54A]" : "text-gray-400"}`}
                       >
                         {z.is_active ? "Active" : "Inactive"}
                       </button>
@@ -1516,7 +1516,7 @@ const PreparationRow = ({ prep, onSave }: { prep: any; onSave: (id: string, pack
       </td>
       <td className="px-4 py-3 text-xs">
         {prep.reconciled_at ? (
-          <span className="inline-flex items-center gap-1 text-emerald-600">
+          <span className="inline-flex items-center gap-1 text-[#39B54A]">
             <CheckCircle2 className="h-3.5 w-3.5" /> Done
           </span>
         ) : (

@@ -27,7 +27,7 @@ const LakeFreshRecipe = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center gap-3 text-sm text-gray-500">
-        <Loader2 className="h-5 w-5 animate-spin text-[#0a2540]" /> Loading recipe…
+        <Loader2 className="h-5 w-5 animate-spin text-[#073B78]" /> Loading recipe…
       </div>
     );
   }
@@ -36,9 +36,9 @@ const LakeFreshRecipe = () => {
     return (
       <div className="container max-w-lg py-20 text-center">
         <BookOpen className="mx-auto h-10 w-10 text-gray-300" />
-        <h1 className="mt-4 font-display text-2xl font-extrabold text-[#0a2540]">Recipe not available</h1>
+        <h1 className="mt-4 font-display text-2xl font-extrabold text-[#073B78]">Recipe not available</h1>
         <p className="mt-2 text-sm text-gray-500">{error instanceof Error ? error.message : "We could not load this recipe."}</p>
-        <Link to="/lf/recipes" className="mt-6 inline-flex rounded-lg bg-[#0a2540] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white">
+        <Link to="/lf/recipes" className="mt-6 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white">
           All recipes
         </Link>
       </div>
@@ -52,38 +52,38 @@ const LakeFreshRecipe = () => {
     <div className="bg-white">
       <SEO brand="lake-fresh" title={`${data.title} — Lake Fresh Fish Mart`} description="Lake Fresh fish recipe." />
       <div className="container max-w-3xl py-10 sm:py-14">
-        <Link to="/lf/recipes" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#0a2540]">
+        <Link to="/lf/recipes" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]">
           <ArrowLeft className="h-3.5 w-3.5" /> All recipes
         </Link>
 
-        <div className="mt-4 flex h-56 items-center justify-center rounded-2xl bg-[#0a2540]">
+        <div className="mt-4 flex h-56 items-center justify-center rounded-2xl bg-[#073B78]">
           {data.image ? (
             <img src={data.image} alt={data.title} className="h-full w-full rounded-2xl object-cover" />
           ) : (
-            <BookOpen className="h-16 w-16 text-[#22d3ee]" />
+            <BookOpen className="h-16 w-16 text-[#08A9E8]" />
           )}
         </div>
 
-        <h1 className="mt-6 font-display text-4xl font-extrabold tracking-tight text-[#0a2540]">{data.title}</h1>
+        <h1 className="mt-6 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">{data.title}</h1>
         <p className="mt-2 text-sm text-gray-500">{data.fish_species?.name || "Fish recipe"}</p>
 
         <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-600">
           {data.prep_time_min ? <span className="inline-flex items-center gap-1.5"><Clock className="h-4 w-4" /> Prep {data.prep_time_min} min</span> : null}
           {data.cook_time_min ? <span className="inline-flex items-center gap-1.5"><Clock className="h-4 w-4" /> Cook {data.cook_time_min} min</span> : null}
           {data.servings ? <span className="inline-flex items-center gap-1.5"><Users className="h-4 w-4" /> Serves {data.servings}</span> : null}
-          {data.cooking_method ? <span className="rounded-full bg-[#ecfeff] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#0a2540]">{data.cooking_method}</span> : null}
+          {data.cooking_method ? <span className="rounded-full bg-[#EAF6FB] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#073B78]">{data.cooking_method}</span> : null}
         </div>
 
         {data.recommended_spice || data.recommended_marinade ? (
-          <div className="mt-6 rounded-xl border border-[#22d3ee]/30 bg-[#ecfeff]/60 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-[#0a2540]/60">Complete the meal</p>
-            {data.recommended_spice ? <p className="mt-1 text-sm text-[#0a2540]">Spice: {data.recommended_spice}</p> : null}
-            {data.recommended_marinade ? <p className="mt-1 text-sm text-[#0a2540]">Marinade: {data.recommended_marinade}</p> : null}
+          <div className="mt-6 rounded-xl border border-[#08A9E8]/30 bg-[#EAF6FB]/60 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Complete the meal</p>
+            {data.recommended_spice ? <p className="mt-1 text-sm text-[#073B78]">Spice: {data.recommended_spice}</p> : null}
+            {data.recommended_marinade ? <p className="mt-1 text-sm text-[#073B78]">Marinade: {data.recommended_marinade}</p> : null}
           </div>
         ) : null}
 
         <section className="mt-8">
-          <h2 className="font-display text-2xl font-extrabold text-[#0a2540]">Ingredients</h2>
+          <h2 className="font-display text-2xl font-extrabold text-[#073B78]">Ingredients</h2>
           <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-gray-700">
             {ingredients.map((ing: string, idx: number) => (
               <li key={idx}>{ing}</li>
@@ -93,7 +93,7 @@ const LakeFreshRecipe = () => {
         </section>
 
         <section className="mt-8">
-          <h2 className="font-display text-2xl font-extrabold text-[#0a2540]">Steps</h2>
+          <h2 className="font-display text-2xl font-extrabold text-[#073B78]">Steps</h2>
           <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-700">
             {steps.map((step: string, idx: number) => (
               <li key={idx}>{step}</li>

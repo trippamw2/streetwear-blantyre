@@ -69,10 +69,10 @@ const LakeFreshSubscribe = () => {
     <div className="bg-white">
       <SEO brand="lake-fresh" title="Subscribe — Lake Fresh Fish Mart" description="Lake Fresh fish subscription plans." />
       <div className="container max-w-2xl py-10 sm:py-14">
-        <Link to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#0a2540]">
+        <Link to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]">
           <Repeat className="h-3.5 w-3.5" /> Lake Fresh
         </Link>
-        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#0a2540]">SUBSCRIBE</h1>
+        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">SUBSCRIBE</h1>
         <p className="mt-2 text-sm text-gray-500">
           Get fresh fish delivered on a recurring schedule. No automatic charges without your consent.
         </p>
@@ -137,7 +137,7 @@ const LakeFreshSubscribe = () => {
           <button
             type="submit"
             disabled={submitting || !consent}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#0a2540] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarDays className="h-4 w-4" />}
             Request subscription

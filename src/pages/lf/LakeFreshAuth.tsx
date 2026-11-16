@@ -86,7 +86,7 @@ const LakeFreshAuth = () => {
   };
 
   return (
-    <div className="bg-[#ecfeff]/40">
+    <div className="bg-[#EAF6FB]/40">
       <SEO
         brand="lake-fresh"
         title="Sign in — Lake Fresh Fish Mart"
@@ -94,10 +94,10 @@ const LakeFreshAuth = () => {
       />
       <div className="container flex min-h-[70vh] max-w-md flex-col justify-center py-14">
         <div className="mb-6 text-center">
-          <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#0a2540] text-[#22d3ee]">
+          <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#073B78] text-[#08A9E8]">
             <Fish className="h-7 w-7" />
           </span>
-          <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-[#0a2540]">
+          <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-[#073B78]">
             {mode === "signin" ? "Welcome back" : "Join Lake Fresh"}
           </h1>
           <p className="mt-2 text-sm text-gray-500">
@@ -161,7 +161,7 @@ const LakeFreshAuth = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#0a2540] py-3 text-sm font-bold uppercase tracking-widest text-white hover:bg-[#0a2540]/90"
+              className="w-full bg-[#073B78] py-3 text-sm font-bold uppercase tracking-widest text-white hover:bg-[#073B78]/90"
             >
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {mode === "signin" ? "Sign in" : "Create account"}
@@ -172,7 +172,7 @@ const LakeFreshAuth = () => {
             {mode === "signin" ? "New to Lake Fresh?" : "Already have an account?"}{" "}
             <button
               type="button"
-              className="font-semibold text-[#0a2540] underline-offset-2 hover:underline"
+              className="font-semibold text-[#073B78] underline-offset-2 hover:underline"
               onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
             >
               {mode === "signin" ? "Create one" : "Sign in"}
@@ -181,7 +181,7 @@ const LakeFreshAuth = () => {
         </div>
 
         <p className="mt-5 text-center text-xs text-gray-400">
-          <Link to="/lf" className="hover:text-[#0a2540]">← Back to Lake Fresh</Link>
+          <Link to="/lf" className="hover:text-[#073B78]">← Back to Lake Fresh</Link>
         </p>
       </div>
     </div>

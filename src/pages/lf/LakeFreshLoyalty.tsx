@@ -91,9 +91,9 @@ const LakeFreshLoyalty = () => {
       <div className="bg-white min-h-screen">
         <div className="container py-12 text-center">
           <Gift className="mx-auto h-12 w-12 text-gray-400" />
-          <h1 className="mt-4 font-display text-3xl font-extrabold text-[#0a2540]">LakeFresh Rewards</h1>
+          <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">LakeFresh Rewards</h1>
           <p className="mt-2 text-sm text-gray-500">Sign in to earn points on every order and refer friends.</p>
-          <Link to="/lf/auth" className="mt-6 inline-flex rounded-lg bg-[#0a2540] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white">
+          <Link to="/lf/auth" className="mt-6 inline-flex rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white">
             Sign in
           </Link>
         </div>
@@ -115,7 +115,7 @@ const LakeFreshLoyalty = () => {
     <div className="bg-white">
       <SEO brand="lake-fresh" title="Rewards — Lake Fresh Fish Mart" description="Lake Fresh loyalty rewards." />
       <div className="container max-w-3xl py-10 sm:py-14">
-        <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#0a2540]">REWARDS</h1>
+        <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#073B78]">REWARDS</h1>
         <p className="mt-2 text-sm text-gray-500">Earn points on every Lake Fresh order.</p>
 
         {loyaltyLoading ? (
@@ -126,21 +126,21 @@ const LakeFreshLoyalty = () => {
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-gray-200 bg-white p-5">
               <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Available points</p>
-              <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{loyalty?.available_points ?? 0}</p>
+              <p className="mt-2 text-3xl font-extrabold text-[#073B78]">{loyalty?.available_points ?? 0}</p>
               <p className="mt-1 text-xs text-gray-500">Tier: {loyalty?.tier ?? "bronze"}</p>
             </div>
             <div className="rounded-2xl border border-gray-200 bg-white p-5">
               <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Lifetime spent</p>
-              <p className="mt-2 text-3xl font-extrabold text-[#0a2540]">{loyalty?.lifetime_spent_mwk ?? 0} MWK</p>
+              <p className="mt-2 text-3xl font-extrabold text-[#073B78]">{loyalty?.lifetime_spent_mwk ?? 0} MWK</p>
               <p className="mt-1 text-xs text-gray-500">Total points: {loyalty?.total_points ?? 0}</p>
             </div>
           </div>
         )}
 
         {program ? (
-          <div className="mt-6 rounded-2xl border border-[#22d3ee]/30 bg-[#ecfeff]/60 p-5">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-[#0a2540]/60">Active program</p>
-            <p className="mt-2 font-display text-lg font-extrabold text-[#0a2540]">{program.name}</p>
+          <div className="mt-6 rounded-2xl border border-[#08A9E8]/30 bg-[#EAF6FB]/60 p-5">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Active program</p>
+            <p className="mt-2 font-display text-lg font-extrabold text-[#073B78]">{program.name}</p>
             <p className="mt-1 text-sm text-gray-600">{program.description}</p>
             <p className="mt-2 text-xs text-gray-500">
               {program.points_per_mwk} points per MWK · redeem {program.points_to_redeem} points for {program.reward_value_mwk} MWK
@@ -150,18 +150,18 @@ const LakeFreshLoyalty = () => {
 
         <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-5">
           <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-[#0a2540]" />
-            <p className="font-display text-lg font-extrabold text-[#0a2540]">Refer a friend</p>
+            <Users className="h-5 w-5 text-[#073B78]" />
+            <p className="font-display text-lg font-extrabold text-[#073B78]">Refer a friend</p>
           </div>
           <p className="mt-2 text-sm text-gray-500">Share your code and earn rewards when friends order.</p>
           <div className="mt-3 flex items-center gap-2">
-            <code className="flex-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-bold text-[#0a2540]">
+            <code className="flex-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-bold text-[#073B78]">
               {referral?.code || "—"}
             </code>
             <button
               type="button"
               onClick={copyCode}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#0a2540] px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#073B78] px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white"
             >
               <Copy className="h-3.5 w-3.5" /> Copy
             </button>

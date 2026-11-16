@@ -68,7 +68,7 @@ const LakeFreshProduct = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center gap-3 text-sm text-gray-500">
-        <Loader2 className="h-5 w-5 animate-spin text-[#0a2540]" /> Loading fish…
+        <Loader2 className="h-5 w-5 animate-spin text-[#073B78]" /> Loading fish…
       </div>
     );
   }
@@ -81,7 +81,7 @@ const LakeFreshProduct = () => {
         <button
           type="button"
           onClick={() => refetch()}
-          className="mt-4 rounded-lg bg-[#0a2540] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white"
+          className="mt-4 rounded-lg bg-[#073B78] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white"
         >
           Try again
         </button>
@@ -93,11 +93,11 @@ const LakeFreshProduct = () => {
     return (
       <div className="container py-16 text-center">
         <Fish className="mx-auto h-10 w-10 text-gray-300" />
-        <h1 className="mt-4 font-display text-2xl font-extrabold text-[#0a2540]">Fish not found</h1>
+        <h1 className="mt-4 font-display text-2xl font-extrabold text-[#073B78]">Fish not found</h1>
         <p className="mt-2 text-sm text-gray-500">This fish is no longer on the catch list.</p>
         <Link
           to="/lf/fish"
-          className="mt-6 inline-flex rounded-lg bg-[#0a2540] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white"
+          className="mt-6 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white"
         >
           Back to the catch
         </Link>
@@ -156,17 +156,17 @@ const LakeFreshProduct = () => {
         description={`${product.description || product.name} Priced ${formatMWK(product.pricePerKgMwk)} per kilogram with next-day delivery in Blantyre.`}
       />
 
-      <section className="border-b border-gray-200 bg-[#ecfeff]/50">
+      <section className="border-b border-gray-200 bg-[#EAF6FB]/50">
         <div className="container py-10 sm:py-14">
           <Link
             to="/lf/fish"
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#0a2540]"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back to the catch
           </Link>
 
           <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
-            <div className="flex h-72 w-full items-center justify-center rounded-2xl bg-[#0a2540] lg:w-96">
+            <div className="flex h-72 w-full items-center justify-center rounded-2xl bg-[#073B78] lg:w-96">
               {product.image ? (
                 <img
                   src={product.image}
@@ -174,31 +174,31 @@ const LakeFreshProduct = () => {
                   className="h-full w-full rounded-2xl object-cover"
                 />
               ) : (
-                <Fish className="h-20 w-20 text-[#22d3ee]" />
+                <Fish className="h-20 w-20 text-[#08A9E8]" />
               )}
             </div>
 
             <div className="max-w-2xl flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-2 border border-[#0a2540]/15 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#0a2540]">
+                <span className="inline-flex items-center gap-2 border border-[#073B78]/15 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#073B78]">
                   <Fish className="h-3.5 w-3.5" /> {product.speciesName || "Fresh Fish"}
                 </span>
                 <span
                   className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest ${
-                    soldOut ? "bg-gray-100 text-gray-500" : "bg-emerald-50 text-emerald-700"
+                    soldOut ? "bg-gray-100 text-gray-500" : "bg-[#39B54A]/10 text-[#39B54A]"
                   }`}
                 >
                   {soldOut ? "Sold out" : `${product.availableKg.toFixed(1)} kg available`}
                 </span>
               </div>
 
-              <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#0a2540] sm:text-5xl">
+              <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">
                 {product.speciesName || product.name}
               </h1>
               <p className="mt-3 leading-relaxed text-gray-600">{product.description}</p>
 
               <p className="mt-4 text-sm text-gray-600">
-                <span className="font-bold uppercase tracking-wide text-[#0a2540]">Price:</span>{" "}
+                <span className="font-bold uppercase tracking-wide text-[#073B78]">Price:</span>{" "}
                 {formatMWK(product.pricePerKgMwk)} per kilogram · minimum {minWeight} kg
               </p>
 
@@ -211,7 +211,7 @@ const LakeFreshProduct = () => {
                         type="button"
                         onClick={() => adjustWeight(-0.5)}
                         disabled={weightKg <= minWeight}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 text-[#0a2540] disabled:opacity-40"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 text-[#073B78] disabled:opacity-40"
                         aria-label="Reduce weight"
                       >
                         <Minus className="h-4 w-4" />
@@ -226,7 +226,7 @@ const LakeFreshProduct = () => {
                             const value = Number(e.target.value);
                             setWeightKg(Number.isFinite(value) ? Math.max(minWeight, value) : minWeight);
                           }}
-                          className="w-20 rounded-lg border border-gray-300 px-2 py-2 text-center text-lg font-bold text-[#0a2540]"
+                          className="w-20 rounded-lg border border-gray-300 px-2 py-2 text-center text-lg font-bold text-[#073B78]"
                           aria-label="Weight in kilograms"
                         />
                         <span className="text-sm font-semibold text-gray-500">kg</span>
@@ -234,7 +234,7 @@ const LakeFreshProduct = () => {
                       <button
                         type="button"
                         onClick={() => adjustWeight(0.5)}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 text-[#0a2540]"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 text-[#073B78]"
                         aria-label="Increase weight"
                       >
                         <Plus className="h-4 w-4" />
@@ -258,8 +258,8 @@ const LakeFreshProduct = () => {
                             onClick={() => setPreparation(option)}
                             className={`rounded-xl border p-3 text-left transition-colors ${
                               selected
-                                ? "border-[#0a2540] bg-[#0a2540] text-white"
-                                : "border-gray-200 bg-white text-[#0a2540] hover:border-[#0a2540]/40"
+                                ? "border-[#073B78] bg-[#073B78] text-white"
+                                : "border-gray-200 bg-white text-[#073B78] hover:border-[#073B78]/40"
                             }`}
                           >
                             <span className="block text-sm font-bold">{copy.label}</span>
@@ -275,7 +275,7 @@ const LakeFreshProduct = () => {
                   <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-4">
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Estimated total</p>
-                      <p className="text-2xl font-extrabold text-[#0a2540]">{formatMWK(lineTotal)}</p>
+                      <p className="text-2xl font-extrabold text-[#073B78]">{formatMWK(lineTotal)}</p>
                       <p className="text-xs text-gray-500">
                         {effectiveWeight} kg × {formatMWK(product.pricePerKgMwk)}/kg
                       </p>
@@ -284,7 +284,7 @@ const LakeFreshProduct = () => {
                       type="button"
                       onClick={handleAdd}
                       disabled={overStock}
-                      className="inline-flex items-center justify-center rounded-lg bg-[#0a2540] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#0a2540]/90 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="inline-flex items-center justify-center rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#073B78]/90 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {overStock ? "Not enough stock" : "Add to basket"}
                     </button>
@@ -300,9 +300,9 @@ const LakeFreshProduct = () => {
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <div className="flex gap-3 rounded-xl border border-gray-200 p-4">
-                  <Truck className="h-5 w-5 shrink-0 text-[#0a2540]" />
+                  <Truck className="h-5 w-5 shrink-0 text-[#073B78]" />
                   <div>
-                    <p className="text-sm font-bold text-[#0a2540]">Next-day delivery</p>
+                    <p className="text-sm font-bold text-[#073B78]">Next-day delivery</p>
                     <p className="mt-1 text-xs text-gray-500">
                       {earliestDate ? (
                         <>
@@ -316,9 +316,9 @@ const LakeFreshProduct = () => {
                   </div>
                 </div>
                 <div className="flex gap-3 rounded-xl border border-gray-200 p-4">
-                  <Snowflake className="h-5 w-5 shrink-0 text-[#0a2540]" />
+                  <Snowflake className="h-5 w-5 shrink-0 text-[#073B78]" />
                   <div>
-                    <p className="text-sm font-bold text-[#0a2540]">Storage &amp; handling</p>
+                    <p className="text-sm font-bold text-[#073B78]">Storage &amp; handling</p>
                     <p className="mt-1 text-xs text-gray-500">
                       {product.storageInfo || "Keep refrigerated at 0–4°C and consume within 2 days."}
                     </p>
@@ -328,7 +328,7 @@ const LakeFreshProduct = () => {
 
               {product.handlingInfo && (
                 <p className="mt-4 flex items-start gap-2 text-xs text-gray-500">
-                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#0a2540]/60" />
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#073B78]/60" />
                   {product.handlingInfo}
                 </p>
               )}
@@ -337,9 +337,9 @@ const LakeFreshProduct = () => {
         </div>
       </section>
 
-      <section className="border-t border-gray-200 bg-[#ecfeff]/40">
+      <section className="border-t border-gray-200 bg-[#EAF6FB]/40">
         <div className="container py-12 sm:py-16">
-          <h2 className="font-display text-2xl font-extrabold text-[#0a2540]">COMPLETE YOUR MEAL</h2>
+          <h2 className="font-display text-2xl font-extrabold text-[#073B78]">COMPLETE YOUR MEAL</h2>
           <p className="mt-2 text-sm text-gray-500">Seasonings and recipes to go with your fish.</p>
 
           {spices && spices.length > 0 ? (
@@ -352,9 +352,9 @@ const LakeFreshProduct = () => {
                     to="/lf/spices"
                     className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
                   >
-                    <p className="font-display text-base font-extrabold text-[#0a2540]">{s.name}</p>
+                    <p className="font-display text-base font-extrabold text-[#073B78]">{s.name}</p>
                     <p className="mt-1 text-xs text-gray-500">{s.size_label || "Seasoning"}</p>
-                    <p className="mt-2 text-sm font-bold text-[#0a2540]">{formatMWK(s.price_mwk)}</p>
+                    <p className="mt-2 text-sm font-bold text-[#073B78]">{formatMWK(s.price_mwk)}</p>
                   </Link>
                 ))}
               </div>
@@ -371,7 +371,7 @@ const LakeFreshProduct = () => {
                     to={`/lf/recipes/${r.slug}`}
                     className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
                   >
-                    <p className="font-display text-base font-extrabold text-[#0a2540]">{r.title}</p>
+                    <p className="font-display text-base font-extrabold text-[#073B78]">{r.title}</p>
                     <p className="mt-1 text-xs text-gray-500">
                       {r.prep_time_min ? `Prep ${r.prep_time_min}m` : ""}
                       {r.prep_time_min && r.cook_time_min ? " · " : ""}

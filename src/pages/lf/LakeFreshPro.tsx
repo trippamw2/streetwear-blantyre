@@ -111,10 +111,10 @@ const LakeFreshPro = () => {
     <div className="bg-white">
       <SEO brand="lake-fresh" title="LakeFresh PRO — Wholesale & Business Supply" description="Lake Fresh PRO for restaurants, hotels and food businesses." />
       <div className="container max-w-3xl py-10 sm:py-14">
-        <Link to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#0a2540]">
+        <Link to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]">
           <Building2 className="h-3.5 w-3.5" /> Lake Fresh
         </Link>
-        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#0a2540]">LAKEFRESH PRO</h1>
+        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">LAKEFRESH PRO</h1>
         <p className="mt-2 text-sm text-gray-500">
           Wholesale fish supply for restaurants, hotels, lodges, caterers and food businesses.
         </p>
@@ -122,13 +122,13 @@ const LakeFreshPro = () => {
         <div className="mt-6 flex gap-2 border-b border-gray-200">
           <button
             onClick={() => setTab("register")}
-            className={`px-4 py-2 text-sm font-bold ${tab === "register" ? "border-b-2 border-[#0a2540] text-[#0a2540]" : "text-gray-500"}`}
+            className={`px-4 py-2 text-sm font-bold ${tab === "register" ? "border-b-2 border-[#073B78] text-[#073B78]" : "text-gray-500"}`}
           >
             Business registration
           </button>
           <button
             onClick={() => setTab("quote")}
-            className={`px-4 py-2 text-sm font-bold ${tab === "quote" ? "border-b-2 border-[#0a2540] text-[#0a2540]" : "text-gray-500"}`}
+            className={`px-4 py-2 text-sm font-bold ${tab === "quote" ? "border-b-2 border-[#073B78] text-[#073B78]" : "text-gray-500"}`}
           >
             Request a quote
           </button>
@@ -171,7 +171,7 @@ const LakeFreshPro = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#0a2540] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
             >
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Building2 className="h-4 w-4" />}
               Submit registration
@@ -204,7 +204,7 @@ const LakeFreshPro = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#0a2540] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
             >
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               Request quote

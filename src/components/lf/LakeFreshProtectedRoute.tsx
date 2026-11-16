@@ -10,7 +10,7 @@ export const LakeFreshProtectedRoute = ({ children }: { children: ReactNode }) =
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center bg-white">
-        <Loader2 className="h-8 w-8 animate-spin text-[#0a2540]" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#073B78]" />
       </div>
     );
   }

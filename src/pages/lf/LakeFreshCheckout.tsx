@@ -110,11 +110,11 @@ const LakeFreshCheckout = () => {
       <div className="container py-20 text-center">
         <SEO brand="lake-fresh" title="Checkout — Lake Fresh Fish Mart" description="Lake Fresh fish checkout." />
         <Fish className="mx-auto h-12 w-12 text-gray-300" />
-        <h1 className="mt-4 font-display text-3xl font-extrabold text-[#0a2540]">Your basket is empty</h1>
+        <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">Your basket is empty</h1>
         <p className="mt-2 text-sm text-gray-500">Choose fresh fish before checking out.</p>
         <Link
           to="/lf/fish"
-          className="mt-6 inline-flex rounded-lg bg-[#0a2540] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white"
+          className="mt-6 inline-flex rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white"
         >
           Browse the catch
         </Link>
@@ -233,7 +233,7 @@ const LakeFreshCheckout = () => {
   };
 
   return (
-    <div className="bg-[#ecfeff]/30">
+    <div className="bg-[#EAF6FB]/30">
       <SEO
         brand="lake-fresh"
         title="Checkout — Lake Fresh Fish Mart"
@@ -243,13 +243,13 @@ const LakeFreshCheckout = () => {
         <button
           type="button"
           onClick={() => navigate("/lf/cart")}
-          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#0a2540]"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to basket
         </button>
 
         <div className="mt-4">
-          <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#0a2540]">CHECKOUT</h1>
+          <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#073B78]">CHECKOUT</h1>
           <p className="mt-2 text-sm text-gray-500">
             Next-day delivery · signed in as {user?.email}
           </p>
@@ -258,7 +258,7 @@ const LakeFreshCheckout = () => {
         <form onSubmit={handleSubmit} className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]">
           <div className="space-y-5">
             <section className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="font-display text-lg font-extrabold text-[#0a2540]">Your details</h2>
+              <h2 className="font-display text-lg font-extrabold text-[#073B78]">Your details</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <label className="block">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Full name *</span>
@@ -267,7 +267,7 @@ const LakeFreshCheckout = () => {
                     onChange={(e) => setName(e.target.value)}
                     required
                     maxLength={100}
-                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#0a2540] outline-none focus:border-[#0a2540]"
+                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
                     placeholder="Your name"
                   />
                 </label>
@@ -279,7 +279,7 @@ const LakeFreshCheckout = () => {
                     required
                     type="tel"
                     maxLength={20}
-                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#0a2540] outline-none focus:border-[#0a2540]"
+                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
                     placeholder="e.g. 0888 000 000"
                   />
                 </label>
@@ -291,15 +291,15 @@ const LakeFreshCheckout = () => {
                   onChange={(e) => setNotes(e.target.value)}
                   maxLength={500}
                   rows={2}
-                  className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#0a2540] outline-none focus:border-[#0a2540]"
+                  className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
                   placeholder="Landmark, gate colour, or any delivery instructions"
                 />
               </label>
             </section>
 
             <section className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#0a2540]">
-                <MapPin className="h-4 w-4 text-[#22d3ee]" /> Delivery area
+              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                <MapPin className="h-4 w-4 text-[#08A9E8]" /> Delivery area
               </h2>
 
               {zonesLoading && (
@@ -328,8 +328,8 @@ const LakeFreshCheckout = () => {
                         onClick={() => setZoneId(zone.id)}
                         className={`rounded-xl border p-3 text-left transition-colors ${
                           selected
-                            ? "border-[#0a2540] bg-[#0a2540] text-white"
-                            : "border-gray-200 bg-white text-[#0a2540] hover:border-[#0a2540]/40"
+                            ? "border-[#073B78] bg-[#073B78] text-white"
+                            : "border-gray-200 bg-white text-[#073B78] hover:border-[#073B78]/40"
                         }`}
                       >
                         <span className="block text-sm font-bold">{zone.name}</span>
@@ -345,8 +345,8 @@ const LakeFreshCheckout = () => {
             </section>
 
             <section className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#0a2540]">
-                <CalendarDays className="h-4 w-4 text-[#22d3ee]" /> Delivery date
+              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                <CalendarDays className="h-4 w-4 text-[#08A9E8]" /> Delivery date
               </h2>
               <p className="mt-1 text-xs text-gray-500">
                 Orders placed before {formatCutoff(deliveryConfig.cutoff)} qualify for next-day delivery.
@@ -386,8 +386,8 @@ const LakeFreshCheckout = () => {
                         onClick={() => setDeliveryDate(date)}
                         className={`rounded-xl border p-3 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                           selected
-                            ? "border-[#0a2540] bg-[#0a2540] text-white"
-                            : "border-gray-200 bg-white text-[#0a2540] hover:border-[#0a2540]/40"
+                            ? "border-[#073B78] bg-[#073B78] text-white"
+                            : "border-gray-200 bg-white text-[#073B78] hover:border-[#073B78]/40"
                         }`}
                       >
                         <span className="block text-sm font-bold">{formatDeliveryDate(date)}</span>
@@ -411,11 +411,11 @@ const LakeFreshCheckout = () => {
             </section>
 
             <section className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#0a2540]">
-                <CreditCard className="h-4 w-4 text-[#22d3ee]" /> Payment
+              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                <CreditCard className="h-4 w-4 text-[#08A9E8]" /> Payment
               </h2>
               <div className="mt-3 rounded-xl bg-gray-50 p-4">
-                <p className="text-sm font-bold text-[#0a2540]">Pay online via PayChangu</p>
+                <p className="text-sm font-bold text-[#073B78]">Pay online via PayChangu</p>
                 <p className="mt-1 text-xs text-gray-500">Airtel Money · TNM Mpamba · Visa · Mastercard</p>
                 <p className="mt-2 text-xs text-gray-500">
                   You will be redirected to PayChangu after placing the order. Your order is only marked paid after
@@ -427,7 +427,7 @@ const LakeFreshCheckout = () => {
                   type="checkbox"
                   checked={marketingConsent}
                   onChange={(e) => setMarketingConsent(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#0a2540]"
+                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#073B78]"
                 />
                 Send me occasional Lake Fresh offers. This consent is separate from SB Streetwear.
               </label>
@@ -436,20 +436,20 @@ const LakeFreshCheckout = () => {
 
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="font-display text-lg font-extrabold text-[#0a2540]">Order summary</h2>
+              <h2 className="font-display text-lg font-extrabold text-[#073B78]">Order summary</h2>
               <div className="mt-3 space-y-3">
                 {items.map((item) => {
                   const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
                   return (
                     <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                       <div>
-                        <p className="font-semibold text-[#0a2540]">{item.speciesName || item.name}</p>
+                        <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
                         <p className="text-xs text-gray-500">
                           {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg ·{" "}
                           {prepLabel(item.preparation)}
                         </p>
                       </div>
-                      <span className="font-semibold text-[#0a2540]">{formatMWK(lineTotal)}</span>
+                      <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
                     </div>
                   );
                 })}
@@ -464,7 +464,7 @@ const LakeFreshCheckout = () => {
                   <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
                   <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                 </div>
-                <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#0a2540]">
+                <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
                   <span>Estimated total</span>
                   <span>{formatMWK(estimatedTotal)}</span>
                 </div>
@@ -481,19 +481,19 @@ const LakeFreshCheckout = () => {
               <button
                 type="submit"
                 disabled={submitting || !selectedSlot || minOrderBlocked}
-                className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#0a2540] py-3.5 text-[10px] font-extrabold uppercase tracking-[0.25em] text-white hover:bg-[#0a2540]/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#073B78] py-3.5 text-[10px] font-extrabold uppercase tracking-[0.25em] text-white hover:bg-[#073B78]/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
                 {submitting ? "Placing order…" : `Pay ${formatMWK(estimatedTotal)}`}
               </button>
 
               <p className="mt-3 flex items-start gap-2 text-[11px] text-gray-500">
-                <Snowflake className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#0a2540]/60" />
+                <Snowflake className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
                 You authorize the estimated total. We confirm packed weight before final settlement and will never
                 silently charge more than you authorized.
               </p>
               <p className="mt-2 flex items-start gap-2 text-[11px] text-gray-500">
-                <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#0a2540]/60" />
+                <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
                 Stock is reserved when the order is created. If capacity changed, you will be asked to pick another
                 slot.
               </p>
