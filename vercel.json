@@ -12,5 +12,9 @@
       "destination": "/lf/$1"
     },
     { "source": "/(.*)", "destination": "/" }
+  ],
+  "crons": [
+    { "path": "/api/cron/charge-subscriptions", "schedule": "0 6 * * *" }
   ]
 }
+
