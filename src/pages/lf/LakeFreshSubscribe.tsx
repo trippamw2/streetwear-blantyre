@@ -10,7 +10,7 @@ import { toast } from "@/hooks/use-toast";
 
 const LakeFreshSubscribe = () => {
   const { user } = useAuth();
-  const { data: zones } = useLakeFreshZones();
+  const { data: zones, isLoading: zonesLoading, error: zonesError, refetch: refetchZones } = useLakeFreshZones();
   const [submitting, setSubmitting] = useState(false);
   const [consent, setConsent] = useState(false);
 
@@ -102,11 +102,20 @@ const LakeFreshSubscribe = () => {
           </div>
           <div>
             <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Delivery zone</label>
-            <select className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.zone_id} onChange={(e) => setForm({ ...form, zone_id: e.target.value })}>
-              {(zones || []).map((z) => (
-                <option key={z.id} value={z.id}>{z.name}</option>
-              ))}
-            </select>
+            {zonesLoading && <p className="mt-1 text-xs text-gray-500">Loading delivery areas…</p>}
+            {zonesError && (
+              <div className="mt-1 text-xs text-red-600">
+                Could not load delivery areas.{" "}
+                <button type="button" onClick={() => refetchZones()} className="font-bold underline">Retry</button>
+              </div>
+            )}
+            {!zonesLoading && !zonesError && (
+              <select className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.zone_id} onChange={(e) => setForm({ ...form, zone_id: e.target.value })}>
+                {(zones || []).map((z) => (
+                  <option key={z.id} value={z.id}>{z.name}</option>
+                ))}
+              </select>
+            )}
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
