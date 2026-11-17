@@ -7,7 +7,15 @@ import { calculateFinalPrice, getEffectiveWeightKg } from "@/lib/lfDelivery";
 import { formatMWK } from "@/data/products";
 
 const prepLabel = (value: string) =>
-  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cut in pieces" : value;
+  value === "whole"
+    ? "Whole"
+    : value === "cleaned"
+      ? "Cleaned"
+      : value === "portioned"
+        ? "Cleaned and cut"
+        : value === "seasoned"
+          ? "Seasoned"
+          : value;
 
 const LakeFreshCart = () => {
   const { items, setWeight, setQuantity, setPreparation, setRecipe, remove, subtotal, totalWeight } = useLakeFreshCart();

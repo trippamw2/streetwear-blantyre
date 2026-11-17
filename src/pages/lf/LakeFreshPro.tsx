@@ -6,8 +6,8 @@ import {
   CheckCircle2,
   FileText,
   Loader2,
+  PackageCheck,
   Send,
-  Snowflake,
   Truck,
   Users,
 } from "lucide-react";
@@ -33,9 +33,9 @@ const benefits = [
     tint: "#EAF6FB",
   },
   {
-    title: "Packed cold",
-    copy: "We clean, weigh and pack your fish cold before it leaves us.",
-    icon: Snowflake,
+    title: "Cleaned and packed",
+    copy: "We clean, weigh and pack your fish before it leaves us.",
+    icon: PackageCheck,
     accent: "#073B78",
     tint: "#EAF6FB",
   },
@@ -183,7 +183,7 @@ const LakeFreshPro = () => {
             with care. Register your business or ask for a price, and we will guide you from there.
           </p>
           <p className="mt-3 max-w-2xl text-xs font-bold text-[#073B78]/70">
-            We supply restaurants, hotels, lodges, caterers and food shops across Blantyre.
+            We supply restaurants, hotels, lodges, caterers and food shops in Blantyre.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#39B54A]/30 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]">
@@ -193,7 +193,7 @@ const LakeFreshPro = () => {
               <Truck className="h-3.5 w-3.5 text-[#08A9E8]" /> Delivery on your day
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#7ED321]/40 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]">
-              <Snowflake className="h-3.5 w-3.5 text-[#7ED321]" /> Packed cold
+              <PackageCheck className="h-3.5 w-3.5 text-[#7ED321]" /> Cleaned and packed
             </span>
           </div>
         </div>

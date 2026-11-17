@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { LFLink, LFNavLink, useLFNavigate } from "@/components/lf/lfRouter";
-import { Menu, ShoppingBasket, X, LogOut, User, Snowflake, ShieldCheck, MapPin, MessageCircle } from "lucide-react";
+import { Menu, ShoppingBasket, X, LogOut, User, ShieldCheck, MapPin, MessageCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLakeFreshCart, LakeFreshCartProvider } from "@/contexts/LakeFreshCartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDS } from "@/lib/brands";
 import { formatMWK } from "@/data/products";
+import { LF_PILOT_DELIVERY_PROMISE, LF_PILOT_ZONE_NAMES } from "@/lib/lfPilot";
 
 const brand = BRANDS["lake-fresh"];
 
@@ -34,9 +35,8 @@ const LakeFreshHeader = () => {
         </div>
       </div>
       <div className="border-b border-[#39B54A]/20 bg-[#F4FBF7]">
-        <div className="container flex h-8 items-center justify-center gap-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[#073B78]">
-          <Snowflake className="h-3.5 w-3.5 text-[#39B54A]" />
-          Fresh from Lake Malawi. Packed cold. At your door tomorrow.
+        <div className="container flex min-h-8 items-center justify-center px-3 text-center text-[10px] font-bold uppercase tracking-[0.14em] text-[#073B78]">
+          {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
         </div>
       </div>
       <div className="container flex h-16 items-center justify-between gap-4">
@@ -126,7 +126,7 @@ const LakeFreshFooter = () => (
         <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-10 w-auto max-w-[200px] object-contain" />
         <p className="mt-3 max-w-xs text-sm text-[#073B78]/70">{brand.tagline}</p>
         <p className="mt-2 max-w-xs text-xs leading-relaxed text-[#073B78]/60">
-          We help families and kitchens cook fresh lake fish with clear weights, cold packing and simple recipes.
+          We help families cook fresh lake fish with clear weights, clean packing and simple recipes.
         </p>
       </div>
       <div>
@@ -151,9 +151,9 @@ const LakeFreshFooter = () => (
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Delivery</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
-          <span>Next day delivery</span>
-          <span>Blantyre, Malawi</span>
-          <span>Packed cold</span>
+          <span>{LF_PILOT_DELIVERY_PROMISE}</span>
+          <span>{LF_PILOT_ZONE_NAMES}</span>
+          <span>Five fish options</span>
         </div>
         <p className="mt-6 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Policies</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
@@ -181,7 +181,7 @@ const LakeFreshFooter = () => (
           <div>
             <p className="text-xs font-extrabold text-[#073B78]">Clean and careful</p>
             <p className="mt-1 text-xs leading-relaxed text-[#073B78]/70">
-              We use cold boxes and clean seals. Every order is packed cold and weighed again before it leaves us.
+              We use clean boxes and clear labels. Every order is weighed again before it leaves us.
             </p>
           </div>
         </div>

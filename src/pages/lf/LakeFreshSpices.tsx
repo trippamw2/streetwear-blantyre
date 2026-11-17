@@ -48,8 +48,8 @@ const LakeFreshSpices = () => {
     <div className="bg-white">
       <SEO
         brand="lake-fresh"
-        title="Spice Blends | Lake Fresh Fish Mart"
-        description="Five spice blends made for lake fish. Pick the one that suits your Chambo, Ncheni or Usipa."
+        title="Seasonings | Lake Fresh Fish Mart"
+        description="Five seasonings made for lake fish. Pick one for Chambo, Usipa or Chisense."
       />
 
       <section className="relative overflow-hidden border-b border-[#F2FBEE] bg-gradient-to-br from-[#F4FBF7] via-white to-[#F7FCEB]">
@@ -58,18 +58,18 @@ const LakeFreshSpices = () => {
             <Leaf className="h-3.5 w-3.5" /> Made for lake fish
           </span>
           <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">
-            SPICE BLENDS
+            SEASONINGS
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#073B78]/70 sm:text-base">
-            Pick a blend that suits your fish. We make five blends for lake fish and show which ones go with each catch,
-            so your meal is easy to plan.
+            Pick a seasoning that suits your fish. We make five seasonings for lake fish and show which ones go with
+            each catch, so your meal is easy to plan.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <LFLink
               to="/lf/fish"
               className="inline-flex items-center gap-2 rounded-full border border-[#073B78]/15 bg-white px-3.5 py-2 text-[10px] font-bold uppercase tracking-wide text-[#073B78]"
             >
-              <Fish className="h-3.5 w-3.5 text-[#08A9E8]" /> Shop the catch
+              <Fish className="h-3.5 w-3.5 text-[#08A9E8]" /> See the five options
             </LFLink>
             <LFLink
               to="/lf/recipes"
@@ -78,7 +78,7 @@ const LakeFreshSpices = () => {
               Free recipes <ArrowRight className="h-3.5 w-3.5" />
             </LFLink>
             <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#073B78] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-white">
-              <Fish className="h-3.5 w-3.5 text-[#7ED321]" /> We know which blend works with each fish
+              <Fish className="h-3.5 w-3.5 text-[#7ED321]" /> We know which seasoning works with each fish
             </p>
           </div>
         </div>

@@ -10,6 +10,7 @@ import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
 import { lfDisplayCopy } from "@/lib/lfCopy";
+import { isPilotSpeciesSlug } from "@/lib/lfPilot";
 
 type ShopItem = {
   id: string;
@@ -52,13 +53,14 @@ const LakeFreshRecipe = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("lf_recipes")
-        .select("*, fish_species(name)")
+        .select("*, fish_species(name, slug)")
         .eq("brand_id", LF_BRAND_ID)
         .eq("slug", slug as string)
         .eq("is_active", true)
         .maybeSingle();
       if (error) throw new Error(error.message);
       if (!data) throw new Error("Recipe not found");
+      if (!isPilotSpeciesSlug((data as any).fish_species?.slug)) throw new Error("Recipe not found");
       return data;
     },
   });

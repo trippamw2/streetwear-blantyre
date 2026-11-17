@@ -15,7 +15,6 @@ import {
 import { useLoyalty } from "@/hooks/useLoyalty";
 import {
   DEFAULT_LF_DELIVERY_CONFIG,
-  formatCutoff,
   formatDeliveryDate,
   getDeliveryFee,
   getEffectiveWeightKg,
@@ -28,9 +27,18 @@ import { sendOrderConfirmationEmail } from "@/lib/brevo";
 import { formatMWK } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { LF_PILOT_DELIVERY_PROMISE, LF_PILOT_ZONE_NAMES } from "@/lib/lfPilot";
 
 const prepLabel = (value: string) =>
-  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cut in pieces" : value;
+  value === "whole"
+    ? "Whole"
+    : value === "cleaned"
+      ? "Cleaned"
+      : value === "portioned"
+        ? "Cleaned and cut"
+        : value === "seasoned"
+          ? "Seasoned"
+          : value;
 
 const itemLine = (item: LakeFreshCartItem) => {
   if (item.kind === "unit") {
@@ -408,7 +416,7 @@ const LakeFreshCheckout = () => {
       <SEO
         brand="lake-fresh"
         title="Checkout | Lake Fresh Fish Mart"
-        description="Place your Lake Fresh fish order for next day delivery in Blantyre."
+        description={`${LF_PILOT_DELIVERY_PROMISE} in ${LF_PILOT_ZONE_NAMES}. Pay with PayChangu.`}
       />
       <div className="container max-w-5xl py-8 sm:py-12">
         <button
@@ -462,7 +470,7 @@ const LakeFreshCheckout = () => {
               <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
                 <Fish className="h-4 w-4 text-[#39B54A]" /> Your basket
               </h2>
-              <p className="mt-1 text-xs text-[#073B78]/60">Fresh fish, spice blends and one free recipe. Delivery is next day.</p>
+              <p className="mt-1 text-xs text-[#073B78]/60">Fresh fish, seasonings and one free recipe. {LF_PILOT_DELIVERY_PROMISE}.</p>
 
               <div className="mt-4 space-y-3">
                 {items.map((item) => {
@@ -606,7 +614,7 @@ const LakeFreshCheckout = () => {
                     onChange={(e) => setStreetName(e.target.value)}
                     maxLength={120}
                     className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
-                    placeholder="e.g. Mandala Road"
+                    placeholder="e.g. Chitawira Road"
                   />
                 </label>
                 <div className="mt-4">
@@ -671,6 +679,9 @@ const LakeFreshCheckout = () => {
                 <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
                   <MapPin className="h-4 w-4 text-[#08A9E8]" /> Delivery area
                 </h2>
+                <p className="mt-1 text-xs text-[#073B78]/60">
+                  For this pilot we deliver to {LF_PILOT_ZONE_NAMES} only.
+                </p>
 
                 {zonesLoading && (
                   <p className="mt-3 flex items-center gap-2 text-sm text-[#073B78]/60">
@@ -719,7 +730,7 @@ const LakeFreshCheckout = () => {
                   <CalendarDays className="h-4 w-4 text-[#08A9E8]" /> Delivery date
                 </h2>
                 <p className="mt-1 text-xs text-[#073B78]/60">
-                  Order before {formatCutoff(deliveryConfig.cutoff)} and we bring your fish the next day.
+                  {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}, when a next day slot is open.
                 </p>
 
                 {!zoneId && <p className="mt-3 text-sm text-[#073B78]/60">Choose a delivery area first.</p>}
@@ -946,7 +957,7 @@ const LakeFreshCheckout = () => {
                     ))}
                   </div>
                   <p className="mt-3 text-xs font-semibold text-[#39B54A]">
-                    PayChangu confirms payments quickly. If your fish is not fresh, we replace it or refund you.
+                    PayChangu confirms payments quickly. If your fish is not right, message us and we will help.
                   </p>
                 </div>
               </section>

@@ -8,10 +8,10 @@ import {
   Leaf,
   Loader2,
   MapPin,
+  PackageCheck,
   Scale,
   ShieldCheck,
   ShoppingBasket,
-  Snowflake,
   Sparkles,
   Truck,
 } from "lucide-react";
@@ -19,32 +19,36 @@ import { SEO } from "@/components/SEO";
 import { useLakeFreshCatalog, useLakeFreshDeliveryConfig, useLakeFreshZones } from "@/hooks/useLakeFresh";
 import {
   DEFAULT_LF_DELIVERY_CONFIG,
-  formatCutoff,
   formatDeliveryDate,
   getEarliestDeliveryDate,
 } from "@/lib/lfDelivery";
 import { formatMWK } from "@/data/products";
 import { lfDisplayCopy } from "@/lib/lfCopy";
+import {
+  LF_PILOT_DELIVERY_PROMISE,
+  LF_PILOT_OFFER,
+  LF_PILOT_ZONE_NAMES,
+} from "@/lib/lfPilot";
 
 const steps = [
-  { title: "Pick your fish", copy: "Choose Chambo, Ncheni or Usipa. You set the weight you need.", accent: "#08A9E8" },
-  { title: "Choose your cut", copy: "Whole, cleaned, fillets or steaks. We cut it the way you like.", accent: "#39B54A" },
-  { title: "Add a spice and a recipe", copy: "Pick a spice blend and a free recipe. We pack them with your fish.", accent: "#7ED321" },
+  { title: "Pick your fish", copy: "Choose from five pilot options, from whole fish to a family box.", accent: "#08A9E8" },
+  { title: "Choose your cut", copy: "Whole, cleaned, cleaned and cut, or seasoned with your spice.", accent: "#39B54A" },
+  { title: "Add one free recipe", copy: "Pick one free recipe. We pack it with your fish.", accent: "#7ED321" },
 ];
 
 const categories = [
   {
     to: "/lf/fish",
     label: "The Catch",
-    copy: "Chambo, Ncheni and Usipa. You choose the weight.",
+    copy: "Five fish options for our three pilot areas.",
     icon: Fish,
     accent: "#073B78",
     tint: "#EAF6FB",
   },
   {
     to: "/lf/spices",
-    label: "Spice Blends",
-    copy: "Five blends made for lake fish.",
+    label: "Seasonings",
+    copy: "Five seasonings made for lake fish.",
     icon: Leaf,
     accent: "#39B54A",
     tint: "#F2FBEE",
@@ -52,7 +56,7 @@ const categories = [
   {
     to: "/lf/recipes",
     label: "Free Recipes",
-    copy: "Simple steps that come with your fish.",
+    copy: "One free recipe comes with every order.",
     icon: BookOpen,
     accent: "#7ED321",
     tint: "#F7FCEB",
@@ -68,16 +72,16 @@ const categories = [
 ];
 
 const trustPoints = [
-  { title: "At your door tomorrow", copy: "Order today. We deliver chilled tomorrow.", icon: Truck, accent: "#08A9E8" },
-  { title: "You choose the weight", copy: "You see the price for each kilogram before you pay.", icon: Scale, accent: "#39B54A" },
-  { title: "Kept cold from the lake", copy: "We pack your fish cold and keep it cold to your door.", icon: Snowflake, accent: "#7ED321" },
+  { title: "At your door tomorrow", copy: `${LF_PILOT_DELIVERY_PROMISE} in our three areas.`, icon: Truck, accent: "#08A9E8" },
+  { title: "Cleaned and cut", copy: "We clean your fish and cut it the way you like.", icon: PackageCheck, accent: "#39B54A" },
+  { title: "You choose the weight", copy: "You see the price for each kilogram before you pay.", icon: Scale, accent: "#7ED321" },
 ];
 
 const whyPoints = [
   { title: "We know fresh fish", copy: "We clean, weigh and pack every fish ourselves.", icon: Fish, accent: "#073B78" },
   { title: "An honest price", copy: "You pay for each kilogram. No hidden charges.", icon: Scale, accent: "#39B54A" },
-  { title: "The right blend", copy: "Five spice blends made for our fish.", icon: Leaf, accent: "#7ED321" },
-  { title: "A free recipe", copy: "Pick a recipe. It comes with your fish.", icon: BookOpen, accent: "#08A9E8" },
+  { title: "The right seasoning", copy: "Five seasonings made for our fish.", icon: Leaf, accent: "#7ED321" },
+  { title: "A free recipe", copy: "One free recipe comes with every order.", icon: BookOpen, accent: "#08A9E8" },
   { title: "For your business", copy: "Fresh fish for shops, hotels and caterers.", icon: Building2, accent: "#073B78" },
   { title: "Reward for you", copy: "Earn points on every order. Share with friends.", icon: Sparkles, accent: "#39B54A" },
 ];
@@ -88,8 +92,7 @@ const LakeFreshHome = () => {
   const { data: zones, isLoading: zonesLoading } = useLakeFreshZones();
   const deliveryConfig = config || DEFAULT_LF_DELIVERY_CONFIG;
   const earliest = getEarliestDeliveryDate(new Date(), deliveryConfig);
-  const allProducts = products || [];
-  const featured = allProducts.slice(0, 3);
+  const featured = products || [];
   const heroImage =
     "https://images.unsplash.com/photo-1543353071-10c8ba85a904?auto=format&fit=crop&fm=webp&w=1200&q=80";
 
@@ -98,7 +101,7 @@ const LakeFreshHome = () => {
       <SEO
         brand="lake-fresh"
         title="Lake Fresh Fish Mart | Fresh Fish for Your Table"
-        description="Pick fresh fish, your cut and a spice blend. Lake Fresh delivers chilled to your door tomorrow across Blantyre, with a free recipe for every meal."
+        description="Fresh fish, cleaned and cut, with a choice of seasoning and one free recipe. Order by 8 PM for delivery tomorrow in Nkolokosa, Soche East and Chitawira."
       />
 
       {/* HERO: the customer is the hero, Lake Fresh is the guide */}
@@ -117,37 +120,36 @@ const LakeFreshHome = () => {
               Lake Fresh Fish Mart
             </span>
             <h1 className="mt-6 font-display text-[2.35rem] font-extrabold leading-[0.96] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              A FRESH FISH MEAL,
+              LAKE FRESH FISH BOX,
               <br />
-              <span className="bg-gradient-to-r from-[#7ED321] to-[#08A9E8] bg-clip-text text-transparent">MADE YOUR WAY.</span>
+              <span className="bg-gradient-to-r from-[#7ED321] to-[#08A9E8] bg-clip-text text-transparent">DELIVERED TO YOUR DOOR.</span>
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/75 sm:text-base">
-              You pick the fish, the cut and the spice. We clean it, weigh it and bring it to your door tomorrow. Open
-              the free recipe and cook a meal your family will love.
+              Fresh fish, cleaned and cut, your choice of seasoning, properly packed and delivered home. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <LFLink
                 to="/lf/fish"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#7ED321] px-6 py-3.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#073B78] transition-transform hover:-translate-y-0.5"
               >
-                See today's catch <ArrowRight className="h-3.5 w-3.5" />
+                See the five options <ArrowRight className="h-3.5 w-3.5" />
               </LFLink>
               <LFLink
                 to="/lf/spices"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/5 px-6 py-3.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white backdrop-blur transition-colors hover:bg-white/10"
               >
-                <Leaf className="h-4 w-4 text-[#7ED321]" /> Explore spice blends
+                <Leaf className="h-4 w-4 text-[#7ED321]" /> Explore seasonings
               </LFLink>
             </div>
             <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[11px] text-white/70">
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#7ED321]" /> Delivered tomorrow
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#7ED321]" /> {LF_PILOT_DELIVERY_PROMISE}
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#08A9E8]" /> You choose the weight
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#08A9E8]" /> Five fish options
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#39B54A]" /> Kept cold to your door
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#39B54A]" /> One free recipe
               </span>
             </div>
           </div>
@@ -168,7 +170,7 @@ const LakeFreshHome = () => {
                   From the lake
                 </span>
                 <span className="rounded-full bg-[#39B54A] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-white">
-                  Packed cold
+                  Properly packed
                 </span>
               </div>
             </div>
@@ -189,6 +191,30 @@ const LakeFreshHome = () => {
                   <p className="text-xs font-extrabold uppercase tracking-wide text-white">{point.title}</p>
                   <p className="mt-0.5 text-[11px] leading-relaxed text-white/55">{point.copy}</p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ACTUAL PILOT OFFER */}
+      <section className="border-b border-[#39B54A]/20 bg-[#7ED321]/10">
+        <div className="container py-10 sm:py-14">
+          <div className="max-w-2xl">
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#2c6e12]">Our pilot offer</span>
+            <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+              LAKE FRESH FISH BOX
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-[#073B78]/70">
+              {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
+            </p>
+          </div>
+          <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {LF_PILOT_OFFER.map((item) => (
+              <div key={item.label} className="rounded-2xl border border-[#39B54A]/25 bg-white p-4">
+                <CheckCircle2 className="h-5 w-5 text-[#39B54A]" />
+                <p className="mt-2 text-sm font-extrabold text-[#073B78]">{item.label}</p>
+                <p className="mt-1 text-xs leading-relaxed text-[#073B78]/65">{item.detail}</p>
               </div>
             ))}
           </div>
@@ -218,7 +244,7 @@ const LakeFreshHome = () => {
               </p>
             </div>
             <ul className="mt-4 space-y-2.5 text-sm text-[#073B78]/70">
-              {["A clear weight and a clear price", "Fish cleaned and packed cold", "A free recipe with every fish", "Delivery to your door tomorrow"].map(
+              {["A clear weight and a clear price", "Fish cleaned and cut", "One free recipe with every order", "Delivery to your home tomorrow"].map(
                 (item) => (
                   <li key={item} className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-[#39B54A]" /> {item}
@@ -242,7 +268,7 @@ const LakeFreshHome = () => {
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[#073B78]/70">
               Lake Fresh is Blantyre's fresh fish shop. We have served homes, restaurants and caterers. We clean, weigh
-              and pack every fish ourselves. When it leaves our shop it is cold and ready for your kitchen.
+              and pack every fish ourselves. When it leaves our shop it is clean and ready for your kitchen.
             </p>
           </div>
           <div>
@@ -251,8 +277,8 @@ const LakeFreshHome = () => {
               YOU DO THE COOKING. WE DO THE REST.
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[#073B78]/70">
-              Choose a whole fish or fillets. Rub in a spice blend. Open the free recipe. In a few short steps your
-              kitchen smells like the lake and dinner is on the table.
+              Choose a whole fish or cleaned and cut pieces. Add a seasoning. Open the free recipe. In a few short
+              steps your kitchen smells like the lake and dinner is on the table.
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <div className="flex items-start gap-2 rounded-xl border border-gray-200 p-3">
@@ -269,7 +295,7 @@ const LakeFreshHome = () => {
               </div>
               <div className="flex items-start gap-2 rounded-xl border border-gray-200 p-3">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#39B54A]" />
-                <p className="text-xs text-[#073B78]/70">Delivery while it is still cold.</p>
+                <p className="text-xs text-[#073B78]/70">Delivered to your home tomorrow.</p>
               </div>
             </div>
           </div>
@@ -281,23 +307,23 @@ const LakeFreshHome = () => {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-[#08A9E8]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#39B54A]" /> Ready today
+              <span className="h-1.5 w-1.5 rounded-full bg-[#39B54A]" /> Pilot options
             </span>
             <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
-              TODAY'S CATCH
+              FIVE FISH OPTIONS
             </h2>
           </div>
           <LFLink
             to="/lf/fish"
             className="inline-flex items-center gap-2 rounded-full border border-[#073B78]/15 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78] transition-colors hover:border-[#39B54A] hover:text-[#39B54A]"
           >
-            View all fish <ArrowRight className="h-3.5 w-3.5" />
+            See all five <ArrowRight className="h-3.5 w-3.5" />
           </LFLink>
         </div>
 
         {productsLoading ? (
           <p className="mt-8 flex items-center gap-2 text-sm text-[#073B78]/60">
-            <Loader2 className="h-4 w-4 animate-spin" /> Loading today's catch…
+            <Loader2 className="h-4 w-4 animate-spin" /> Loading the five options…
           </p>
         ) : (
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -336,7 +362,7 @@ const LakeFreshHome = () => {
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="font-display text-lg font-extrabold uppercase tracking-wide text-[#073B78]">
-                        {product.speciesName || product.name}
+                        {product.name}
                       </h3>
                       <Leaf className="h-4 w-4 shrink-0" style={{ color: accent }} />
                     </div>
@@ -423,8 +449,7 @@ const LakeFreshHome = () => {
             ))}
           </div>
           <p className="mt-6 text-xs text-[#073B78]/60">
-            Last order time: {formatCutoff(deliveryConfig.cutoff)}. Free delivery over{" "}
-            {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)}.
+            {LF_PILOT_DELIVERY_PROMISE}. Free delivery over {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)}.
             {earliest ? ` Next delivery day: ${formatDeliveryDate(earliest)}.` : ""}
           </p>
           <LFLink
@@ -444,7 +469,7 @@ const LakeFreshHome = () => {
               <Sparkles className="h-3.5 w-3.5" /> What you get
             </span>
             <h2 className="mt-3 font-display text-2xl font-extrabold text-[#073B78]">
-              FRESH FISH, COOKED YOUR WAY, ON YOUR TABLE TOMORROW.
+              FRESH FISH, CLEANED AND CUT, ON YOUR TABLE TOMORROW.
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[#073B78]/70">
               You know the weight. You know the price. You have a recipe in hand. All you do is cook and enjoy the meal
@@ -474,10 +499,10 @@ const LakeFreshHome = () => {
               <MapPin className="h-3.5 w-3.5" /> Delivery coverage
             </span>
             <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
-              WE DELIVER ACROSS BLANTYRE
+              WE DELIVER TO THREE AREAS
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[#073B78]/70">
-              Choose your area at checkout to see the delivery fee and available days. Delivery starts at{" "}
+              Choose Nkolokosa, Soche East or Chitawira at checkout to see the delivery fee and available days. Delivery starts at{" "}
               {formatMWK(deliveryConfig.deliveryFeeMwk)}, and orders over{" "}
               {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)} deliver free.
             </p>
@@ -588,7 +613,7 @@ const LakeFreshHome = () => {
             START YOUR FISH MEAL TODAY.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
-            Choose your fish, add a spice blend and a free recipe. We deliver it to your door tomorrow.
+            Choose your fish, add a seasoning and one free recipe. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <LFLink

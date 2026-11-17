@@ -60,8 +60,8 @@ describe("Lake Fresh delivery engine (Stage 5 core)", () => {
     expect(dates).toEqual(["2026-11-17", "2026-11-18", "2026-11-19"]);
   });
 
-  it("uses default cutoff of 14:00 when unparseable", () => {
-    expect(parseCutoff("bogus").hour).toBe(14);
+  it("uses default cutoff of 8 PM when unparseable", () => {
+    expect(parseCutoff("bogus").hour).toBe(20);
     expect(getCutoffMinutes(parseCutoff("08:30"))).toBe(8 * 60 + 30);
   });
 
@@ -78,7 +78,7 @@ describe("Lake Fresh delivery engine (Stage 5 core)", () => {
     expect(config.freeDeliveryThresholdMwk).toBe(20000);
     expect(config.deliveryDays).toBe(2);
     expect(config.maxAdvanceDays).toBe(7);
-    expect(parseDeliveryConfig(null).cutoff).toEqual({ hour: 14, minute: 0 });
+    expect(parseDeliveryConfig(null).cutoff).toEqual({ hour: 20, minute: 0 });
   });
 
   it("checks slot availability for capacity", () => {

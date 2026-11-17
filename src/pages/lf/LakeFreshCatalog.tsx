@@ -1,12 +1,13 @@
 import { LFLink } from "@/components/lf/lfRouter";
-import { Fish, ArrowRight, Leaf, BookOpen, Snowflake, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
+import { Fish, ArrowRight, Leaf, BookOpen, PackageCheck, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useLakeFreshCatalog } from "@/hooks/useLakeFresh";
 import { formatMWK } from "@/data/products";
 import { lfDisplayCopy } from "@/lib/lfCopy";
+import { LF_PILOT_DELIVERY_PROMISE, LF_PILOT_ZONE_NAMES } from "@/lib/lfPilot";
 
 const prepLabel = (value: string) =>
-  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cut in pieces" : value;
+  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cleaned and cut" : value === "seasoned" ? "Seasoned" : value;
 
 const accents = ["#39B54A", "#08A9E8", "#7ED321"];
 
@@ -18,27 +19,27 @@ const LakeFreshCatalog = () => {
       <SEO
         brand="lake-fresh"
         title="The Catch | Lake Fresh Fish Mart"
-        description="Choose fresh Chambo, Ncheni and Usipa. See the price per kilogram, add a spice blend and a free recipe, and get next day delivery in Blantyre."
+        description="Five fresh fish options for Nkolokosa, Soche East and Chitawira. Choose cleaned, cut or seasoned fish, one free recipe and delivery tomorrow."
       />
 
       <section className="relative overflow-hidden border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
         <div className="container py-12 sm:py-16">
           <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#39B54A] shadow-sm">
-            <Fish className="h-3.5 w-3.5" /> Today&apos;s catch
+            <Fish className="h-3.5 w-3.5" /> Pilot options
           </span>
           <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">
-            THE CATCH
+            FIVE FISH OPTIONS
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#073B78]/70 sm:text-base">
-            You pick the fish, the weight and the cut. We clean it, weigh it and pack it cold. Add a spice blend and a
-            free recipe, then cook a meal your way at home.
+            Fresh Chambo, Usipa, Chisense, cuts and a family box. We clean it, weigh it and pack it with care. Add one
+            of five seasonings and one free recipe. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <LFLink
               to="/lf/spices"
               className="inline-flex items-center gap-2 rounded-full border border-[#39B54A]/30 bg-white px-3.5 py-2 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]"
             >
-              <Leaf className="h-3.5 w-3.5 text-[#39B54A]" /> Spice blends
+              <Leaf className="h-3.5 w-3.5 text-[#39B54A]" /> Seasonings
             </LFLink>
             <LFLink
               to="/lf/recipes"
@@ -121,7 +122,7 @@ const LakeFreshCatalog = () => {
 
                       <div className="flex flex-1 flex-col p-5">
                         <h2 className="font-display text-lg font-extrabold uppercase tracking-wide text-[#073B78]">
-                          {product.speciesName || product.name}
+                          {product.name}
                         </h2>
                         <p className="mt-2 flex-1 text-sm leading-relaxed text-[#073B78]/60">{lfDisplayCopy(product.description)}</p>
 
@@ -134,7 +135,7 @@ const LakeFreshCatalog = () => {
                             At least {product.minOrderQtyKg} kg. {product.preparationOptions.map(prepLabel).join(", ")}
                           </p>
                           <div className="mt-3 flex items-center gap-2 text-[11px] text-[#073B78]/60">
-                            <Snowflake className="h-3.5 w-3.5 text-[#08A9E8]" /> Packed cold. Free recipe included.
+                            <PackageCheck className="h-3.5 w-3.5 text-[#08A9E8]" /> Cleaned and cut. One free recipe.
                           </div>
                         </div>
 

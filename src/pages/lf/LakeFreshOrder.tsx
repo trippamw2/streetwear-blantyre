@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { LFLink } from "@/components/lf/lfRouter";
 import { lfUrl } from "@/lib/brandSite";
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, ArrowLeft, CalendarDays, CheckCircle2, CreditCard, Fish, Loader2, MapPin, Snowflake } from "lucide-react";
+import { AlertCircle, ArrowLeft, CalendarDays, CheckCircle2, CreditCard, Fish, Loader2, MapPin, PackageCheck } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -196,9 +196,9 @@ const LakeFreshOrder = () => {
           <ol className="mt-3 space-y-3">
             {[
               { key: "confirmed", label: "Order paid and confirmed" },
-              { key: "processing", label: "Cleaned, weighed and packed cold" },
-              { key: "dispatched", label: "On the way in a cold box" },
-              { key: "delivered", label: "Delivered cold" },
+              { key: "processing", label: "Cleaned, weighed and packed" },
+              { key: "dispatched", label: "On the way" },
+              { key: "delivered", label: "Delivered" },
             ].map((stage, idx) => {
               const orderRank = { new: 0, confirmed: 1, processing: 2, dispatched: 3, delivered: 4, cancelled: -1 }[order.status] ?? 0;
               const done = orderRank >= idx + 1;
@@ -297,7 +297,7 @@ const LakeFreshOrder = () => {
           </div>
           <div className="rounded-2xl border border-gray-200 p-4">
             <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">
-              <Snowflake className="h-3.5 w-3.5 text-[#08A9E8]" /> Packed cold
+              <PackageCheck className="h-3.5 w-3.5 text-[#08A9E8]" /> Cleaned and packed
             </p>
             <p className="mt-2 text-sm font-bold text-[#073B78]">Kept at 0 to 4°C</p>
             <p className="mt-1 text-xs text-[#073B78]/60">Eat within 2 days of delivery. Rinse before you cook.</p>

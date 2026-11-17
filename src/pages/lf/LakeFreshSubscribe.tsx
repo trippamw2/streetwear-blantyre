@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { lfUrl } from "@/lib/brandSite";
 import { lfDisplayCopy } from "@/lib/lfCopy";
+import { LF_PILOT_DELIVERY_PROMISE, LF_PILOT_ZONE_NAMES } from "@/lib/lfPilot";
 import {
   useLakeFreshCatalog,
   useLakeFreshZones,
@@ -205,11 +206,12 @@ const LakeFreshSubscribe = () => {
         </LFLink>
         <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">FISH ON YOUR DAYS</h1>
         <p className="mt-2 text-sm text-[#073B78]/60">
-          Choose weekly, every 2 weeks or monthly. We pack your fish cold and bring it on the days you choose. You pay
-          each time. We never charge you on our own.
+          Choose weekly, every 2 weeks or monthly. We clean and pack your fish, then bring it on the days you choose.
+          You pay each time. We never charge you on our own.
         </p>
         <div className="mt-4 rounded-xl border border-[#39B54A]/30 bg-[#F4FBF7] p-3 text-xs text-[#073B78]/80">
-          Pick your fish, cut and area. We will remind you before each delivery. PayChangu keeps each payment safe.
+          Pick your fish, cut and area. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}. We will remind you before
+          each delivery. PayChangu keeps each payment safe.
         </div>
 
         {paymentReturn && (

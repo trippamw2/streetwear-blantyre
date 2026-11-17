@@ -81,13 +81,9 @@ export interface DeliveryZone {
 }
 
 export const DELIVERY_ZONES: DeliveryZone[] = [
-  { id: "lf-zone-chimwankhunda", name: "Chimwankhunda", slug: "chimwankhunda", baseFeeMwk: 2000, minOrderMwk: 0 },
-  { id: "lf-zone-chilobwe", name: "Chilobwe", slug: "chilobwe", baseFeeMwk: 2000, minOrderMwk: 0 },
-  { id: "lf-zone-zingwangwa", name: "Zingwangwa", slug: "zingwangwa", baseFeeMwk: 2000, minOrderMwk: 0 },
-  { id: "lf-zone-mkolokosa", name: "Mkolokosa", slug: "mkolokosa", baseFeeMwk: 2500, minOrderMwk: 0 },
-  { id: "lf-zone-naperi", name: "Naperi", slug: "naperi", baseFeeMwk: 2000, minOrderMwk: 0 },
+  { id: "lf-zone-nkolokosa", name: "Nkolokosa", slug: "nkolokosa", baseFeeMwk: 2000, minOrderMwk: 0 },
+  { id: "lf-zone-soche-east", name: "Soche East", slug: "soche-east", baseFeeMwk: 2000, minOrderMwk: 0 },
   { id: "lf-zone-chitawira", name: "Chitawira", slug: "chitawira", baseFeeMwk: 2000, minOrderMwk: 0 },
-  { id: "lf-zone-surrounding", name: "Surrounding areas", slug: "surrounding-areas", baseFeeMwk: 3000, minOrderMwk: 0 },
 ];
 
 export const DEFAULT_LF_DELIVERY_FEE_MWK = 2000;

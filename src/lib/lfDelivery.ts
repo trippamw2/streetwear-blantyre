@@ -10,7 +10,7 @@
  * Blantyre calendar, never as browser-local dates.
  */
 
-export const DEFAULT_LF_CUTOFF = { hour: 14, minute: 0 };
+export const DEFAULT_LF_CUTOFF = { hour: 20, minute: 0 };
 export const DEFAULT_LF_DELIVERY_FEE_MWK = 2000;
 export const DEFAULT_LF_FREE_DELIVERY_THRESHOLD_MWK = 15000;
 export const DEFAULT_LF_DELIVERY_DAYS = 1;
@@ -43,7 +43,7 @@ export const LF_TIMEZONE_OFFSET_MINUTES = 120;
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export const parseCutoff = (cutoffTime: string | null | undefined): LFCutoffConfig => {
-  const [hourStr = "14", minuteStr = "0"] = (cutoffTime || "14:00").split(":");
+  const [hourStr = "20", minuteStr = "0"] = (cutoffTime || "20:00").split(":");
   const hour = parseInt(hourStr, 10);
   const minute = parseInt(minuteStr, 10);
   return {
@@ -63,7 +63,7 @@ const readNumber = (value: unknown, fallback: number): number => {
 export const parseDeliveryConfig = (settings: Record<string, unknown> | null | undefined): LFDeliveryConfig => {
   const s = settings || {};
   return {
-    cutoff: parseCutoff(typeof s["delivery.cutoff"] === "string" ? (s["delivery.cutoff"] as string) : "14:00"),
+    cutoff: parseCutoff(typeof s["delivery.cutoff"] === "string" ? (s["delivery.cutoff"] as string) : "20:00"),
     deliveryFeeMwk: readNumber(s["delivery.fee_mwk"], DEFAULT_LF_DELIVERY_FEE_MWK),
     freeDeliveryThresholdMwk: readNumber(
       s["delivery.free_threshold_mwk"],
@@ -155,6 +155,13 @@ export const formatDeliveryDate = (isoDate: string): string => {
 
 export const formatCutoff = (cutoff: LFCutoffConfig): string =>
   `${pad(cutoff.hour)}:${pad(cutoff.minute)}`;
+
+/** Customer facing cutoff, for example "8 PM". */
+export const formatCutoffLabel = (cutoff: LFCutoffConfig): string => {
+  const hour = cutoff.hour % 12 || 12;
+  const suffix = cutoff.hour >= 12 ? "PM" : "AM";
+  return cutoff.minute > 0 ? `${hour}:${pad(cutoff.minute)} ${suffix}` : `${hour} ${suffix}`;
+};
 
 export const isSlotAvailable = (
   slot: {

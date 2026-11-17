@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { lfDisplayCopy } from "@/lib/lfCopy";
+import { isPilotSpeciesSlug } from "@/lib/lfPilot";
 
 const accents = ["#39B54A", "#08A9E8", "#7ED321"];
 
@@ -14,12 +15,12 @@ const LakeFreshRecipes = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("lf_recipes")
-        .select("id, title, slug, image, prep_time_min, cook_time_min, servings, cooking_method, fish_species(name)")
+        .select("id, title, slug, image, prep_time_min, cook_time_min, servings, cooking_method, fish_species(name, slug)")
         .eq("brand_id", LF_BRAND_ID)
         .eq("is_active", true)
         .order("sort_order");
       if (error) throw new Error(error.message);
-      return data || [];
+      return (data || []).filter((recipe: any) => isPilotSpeciesSlug(recipe.fish_species?.slug));
     },
   });
 

@@ -2,6 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDS } from "@/lib/brands";
 import { parseDeliveryConfig, type LFDeliveryConfig } from "@/lib/lfDelivery";
+import {
+  isPilotZoneSlug,
+  sortPilotProducts,
+  sortPilotZones,
+} from "@/lib/lfPilot";
 
 export const LF_BRAND_ID = BRANDS["lake-fresh"].id;
 
@@ -21,6 +26,7 @@ export interface LFCatalogProduct {
   handlingInfo: string | null;
   availableKg: number;
   sortOrder: number;
+  pilotOption: string | null;
 }
 
 export interface LFDeliveryZone {
@@ -59,7 +65,7 @@ export const useLakeFreshCatalog = () =>
       const { data, error } = await supabase.rpc("lf_public_catalog");
       if (error) throw new Error(error.message);
 
-      return ((data || []) as Record<string, unknown>[]).map((row) => ({
+      const products: LFCatalogProduct[] = ((data || []) as Record<string, unknown>[]).map((row) => ({
         id: String(row.id),
         speciesId: row.species_id ? String(row.species_id) : null,
         speciesName: row.species_name ? String(row.species_name) : null,
@@ -75,7 +81,11 @@ export const useLakeFreshCatalog = () =>
         handlingInfo: row.handling_info ? String(row.handling_info) : null,
         availableKg: toNumber(row.available_kg),
         sortOrder: toNumber(row.sort_order),
+        pilotOption: row.pilot_option ? String(row.pilot_option) : null,
       }));
+
+      const pilotProducts = sortPilotProducts(products.filter((product) => product.pilotOption));
+      return pilotProducts.length > 0 ? pilotProducts : products;
     },
   });
 
@@ -102,7 +112,7 @@ export const useLakeFreshZones = () =>
 
       if (error) throw new Error(error.message);
 
-      return (data || []).map((zone) => ({
+      const zones = (data || []).map((zone) => ({
         id: zone.id,
         name: zone.name,
         slug: zone.slug,
@@ -110,6 +120,8 @@ export const useLakeFreshZones = () =>
         baseFeeMwk: toNumber(zone.base_fee_mwk),
         minOrderMwk: toNumber(zone.min_order_mwk),
       }));
+
+      return sortPilotZones(zones.filter((zone) => isPilotZoneSlug(zone.slug)));
     },
   });
 

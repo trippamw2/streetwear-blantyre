@@ -30,8 +30,8 @@ const LakeFreshTerms = () => (
         order for you.
       </p>
       <p>
-        We currently deliver in Nkolokosa, Soche East, Naperi, Chitawira, Nyambadwe, Namiwawa,
-        Mandala and Sunny Side. We may add more areas as we grow.
+        For this pilot we deliver in Nkolokosa, Soche East and Chitawira only. Order by 8 PM and we
+        deliver the next day when a slot is open. We may add more areas as we grow.
       </p>
     </LakeFreshPolicySection>
 
