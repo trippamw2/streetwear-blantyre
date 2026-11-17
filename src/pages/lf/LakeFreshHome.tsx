@@ -26,10 +26,10 @@ import {
 import { formatMWK } from "@/data/products";
 
 const steps = [
-  { title: "Choose your fish", copy: "Pick from today's catch and set the weight you need.", accent: "#08A9E8" },
-  { title: "Choose preparation", copy: "Whole, cleaned or portioned, prepared before dispatch.", accent: "#39B54A" },
+  { title: "Choose your fish", copy: "See today's catch, pick what your family loves, set the weight you need.", accent: "#08A9E8" },
+  { title: "Choose preparation", copy: "Whole, cleaned or portioned — prepared just the way you cook.", accent: "#39B54A" },
   { title: "Add a seasoning", copy: "Five signature spice blends, paired to your fish.", accent: "#7ED321" },
-  { title: "Pick delivery day", copy: "Order before cutoff for next day delivery across Blantyre.", accent: "#08A9E8" },
+  { title: "Pick delivery day", copy: "Order before cutoff, delivered fresh to your door next day.", accent: "#08A9E8" },
 ];
 
 const categories = [
@@ -68,9 +68,9 @@ const categories = [
 ];
 
 const trustPoints = [
-  { title: "Next day delivery", copy: "Order before cutoff, delivered the next eligible day.", icon: Truck, accent: "#08A9E8" },
-  { title: "Freshness first", copy: "Short windows and cold chain handling from lake to door.", icon: Snowflake, accent: "#39B54A" },
-  { title: "Honest weights", copy: "Priced per kilogram with clear packed weights.", icon: Scale, accent: "#7ED321" },
+  { title: "Next day delivery", copy: "Order before cutoff, on your table tomorrow morning.", icon: Truck, accent: "#08A9E8" },
+  { title: "Fresh from the lake", copy: "Short freshness windows, cold-chain from lake to door.", icon: Snowflake, accent: "#39B54A" },
+  { title: "Honest weights", copy: "Priced per kilogram. You choose the weight, you see the price.", icon: Scale, accent: "#7ED321" },
 ];
 
 const whyPoints = [
@@ -124,8 +124,8 @@ const LakeFreshHome = () => {
               READY FOR YOUR TABLE.
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/75 sm:text-base">
-              Real fish, honest weights and next day delivery across Blantyre. Add signature spices and a free recipe, 
-              everything you need for a proper fish meal.
+              Wild-caught this morning, cold-chain handled, at your door tomorrow. Pick your fish, choose your
+              weight, add a signature spice and a free recipe — your meal, planned by you.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <LFLink
@@ -377,7 +377,7 @@ const LakeFreshHome = () => {
             ))}
           </div>
           <p className="mt-6 text-xs text-gray-500">
-            Daily cutoff: {formatCutoff(deliveryConfig.cutoff)} · Free delivery over{" "}
+            Daily cutoff: {formatCutoff(deliveryConfig.cutoff)} � Free delivery over{" "}
             {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)}
             {earliest ? ` · Next available: ${formatDeliveryDate(earliest)}` : ""}.
           </p>
