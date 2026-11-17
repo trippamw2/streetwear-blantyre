@@ -159,6 +159,17 @@ const AdminLakeFresh = () => {
     image: "",
     description: "",
   });
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
+  const [editProductForm, setEditProductForm] = useState({
+    species_id: "",
+    name: "",
+    price_per_kg_mwk: "",
+    min_order_qty_kg: "0.5",
+    preparation_options: "whole",
+    availability_status: "available",
+    image: "",
+    description: "",
+  });
 
   // ---- Batches state ----
   const [batches, setBatches] = useState<any[]>([]);
@@ -193,10 +204,27 @@ const AdminLakeFresh = () => {
     base_fee_mwk: "2000",
     min_order_mwk: "0",
   });
+  const [editingZoneId, setEditingZoneId] = useState<string | null>(null);
+  const [editZoneForm, setEditZoneForm] = useState({
+    name: "",
+    slug: "",
+    base_fee_mwk: "0",
+    min_order_mwk: "0",
+  });
 
   // ---- Spices state ----
   const [spices, setSpices] = useState<any[]>([]);
   const [spiceForm, setSpiceForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "", image: "" });
+  const [editingSpiceId, setEditingSpiceId] = useState<string | null>(null);
+  const [editSpiceForm, setEditSpiceForm] = useState({
+    name: "",
+    price_mwk: "",
+    size_label: "",
+    stock_qty: "",
+    ingredients: "",
+    description: "",
+    recommended_species: "",
+  });
 
   // ---- Recipes state ----
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -501,6 +529,46 @@ const AdminLakeFresh = () => {
     await loadProducts();
   };
 
+  const startEditProduct = (product: any) => {
+    setEditingProductId(product.id);
+    setEditProductForm({
+      species_id: product.fish_species?.id || product.species_id || "",
+      name: product.name || "",
+      price_per_kg_mwk: String(product.price_per_kg_mwk ?? ""),
+      min_order_qty_kg: String(product.min_order_qty_kg ?? "0.5"),
+      preparation_options: Array.isArray(product.preparation_options) ? product.preparation_options.join(", ") : "whole",
+      availability_status: product.availability_status || "available",
+      image: product.image || "",
+      description: product.description || "",
+    });
+  };
+
+  const saveEditedProduct = async () => {
+    if (!editingProductId) return;
+    if (!editProductForm.name || !editProductForm.price_per_kg_mwk) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.from("fish_products").update({
+      brand_id: LF_BRAND_ID,
+      species_id: editProductForm.species_id || undefined,
+      name: editProductForm.name,
+      price_per_kg_mwk: Number(editProductForm.price_per_kg_mwk),
+      min_order_qty_kg: Number(editProductForm.min_order_qty_kg),
+      preparation_options: editProductForm.preparation_options.split(",").map((s) => s.trim()).filter(Boolean),
+      availability_status: editProductForm.availability_status,
+      image: editProductForm.image || null,
+      description: editProductForm.description || null,
+    });
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Product updated" });
+    setEditingProductId(null);
+    await loadProducts();
+  };
+
   const handleCreateSpice = async () => {
     if (!spiceForm.name || !spiceForm.price_mwk) {
       toast({ title: "Missing fields", variant: "destructive" });
@@ -583,10 +651,79 @@ const AdminLakeFresh = () => {
     else await loadSpices();
   };
 
+  const startEditSpice = (spice: any) => {
+    setEditingSpiceId(spice.id);
+    setEditSpiceForm({
+      name: spice.name || "",
+      price_mwk: String(spice.price_mwk ?? ""),
+      size_label: spice.size_label || "",
+      stock_qty: String(spice.stock_qty ?? "0"),
+      ingredients: spice.ingredients || "",
+      description: spice.description || "",
+      recommended_species: (spice.recommended_species || []).join(", "),
+    });
+  };
+
+  const saveEditedSpice = async () => {
+    if (!editingSpiceId) return;
+    if (!editSpiceForm.name || !editSpiceForm.price_mwk) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.from("lf_spices").update({
+      name: editSpiceForm.name,
+      price_mwk: Number(editSpiceForm.price_mwk),
+      size_label: editSpiceForm.size_label || null,
+      stock_qty: Number(editSpiceForm.stock_qty || 0),
+      ingredients: editSpiceForm.ingredients || null,
+      description: editSpiceForm.description || null,
+      recommended_species: editSpiceForm.recommended_species.split(",").map((s) => s.trim()).filter(Boolean),
+    });
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Spice updated" });
+    setEditingSpiceId(null);
+    await loadSpices();
+  };
+
   const toggleProductActive = async (id: string, next: boolean) => {
     const { error } = await supabase.from("fish_products").update({ is_active: next }).eq("id", id);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else await loadProducts();
+  };
+
+  // ---- Delivery zone actions ----
+  const startEditZone = (zone: any) => {
+    setEditingZoneId(zone.id);
+    setEditZoneForm({
+      name: zone.name || "",
+      slug: zone.slug || "",
+      base_fee_mwk: String(zone.base_fee_mwk ?? "0"),
+      min_order_mwk: String(zone.min_order_mwk ?? "0"),
+    });
+  };
+
+  const saveEditedZone = async () => {
+    if (!editingZoneId) return;
+    if (!editZoneForm.name || !editZoneForm.slug) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.from("delivery_zones").update({
+      name: editZoneForm.name,
+      slug: editZoneForm.slug,
+      base_fee_mwk: Number(editZoneForm.base_fee_mwk),
+      min_order_mwk: Number(editZoneForm.min_order_mwk),
+    }).eq("id", editingZoneId);
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Zone updated" });
+    setEditingZoneId(null);
+    await loadZones();
   };
 
   // ---- Batch actions ----
@@ -803,6 +940,67 @@ const AdminLakeFresh = () => {
             </Button>
           </div>
 
+          {editingProductId ? (
+            <div className="rounded-xl border bg-white p-5">
+              <h2 className="font-display text-lg font-bold mb-4">Edit fish product</h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <Label>Species</Label>
+                  <select
+                    value={editProductForm.species_id}
+                    onChange={(e) => setEditProductForm({ ...editProductForm, species_id: e.target.value })}
+                    className="mt-1 w-full h-10 rounded-md border border-gray-300 px-3 text-sm"
+                  >
+                    <option value="">Select...</option>
+                    {species.map((s) => (
+                      <option key={s.id} value={s.id}>{s.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <Label>Name</Label>
+                  <Input value={editProductForm.name} onChange={(e) => setEditProductForm({ ...editProductForm, name: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Price / kg (MWK)</Label>
+                  <Input type="number" value={editProductForm.price_per_kg_mwk} onChange={(e) => setEditProductForm({ ...editProductForm, price_per_kg_mwk: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Min order (kg)</Label>
+                  <Input type="number" step="0.1" value={editProductForm.min_order_qty_kg} onChange={(e) => setEditProductForm({ ...editProductForm, min_order_qty_kg: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Preparation (comma separated)</Label>
+                  <Input value={editProductForm.preparation_options} onChange={(e) => setEditProductForm({ ...editProductForm, preparation_options: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Availability</Label>
+                  <select
+                    value={editProductForm.availability_status}
+                    onChange={(e) => setEditProductForm({ ...editProductForm, availability_status: e.target.value })}
+                    className="mt-1 w-full h-10 rounded-md border border-gray-300 px-3 text-sm"
+                  >
+                    <option value="available">Available</option>
+                    <option value="limited">Limited</option>
+                    <option value="sold_out">Sold out</option>
+                  </select>
+                </div>
+                <div className="sm:col-span-2">
+                  <Label>Short description</Label>
+                  <Textarea
+                    value={editProductForm.description}
+                    onChange={(e) => setEditProductForm({ ...editProductForm, description: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button onClick={() => void saveEditedProduct()}>Save changes</Button>
+                <Button variant="outline" onClick={() => setEditingProductId(null)}>Cancel</Button>
+              </div>
+            </div>
+          ) : null}
+
           <div className="rounded-xl border bg-white overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-xs uppercase text-gray-500">
@@ -826,12 +1024,20 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3">{(p.preparation_options || []).join(", ")}</td>
                     <td className="px-4 py-3">{p.availability_status}</td>
                     <td className="px-4 py-3">
-                      <button
-                        onClick={() => toggleProductActive(p.id, !p.is_active)}
-                        className={`text-xs font-bold ${p.is_active ? "text-[#39B54A]" : "text-gray-400"}`}
-                      >
-                        {p.is_active ? "Active" : "Inactive"}
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => startEditProduct(p)}
+                          className="text-xs font-bold text-[#073B78] underline"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => toggleProductActive(p.id, !p.is_active)}
+                          className={`text-xs font-bold ${p.is_active ? "text-[#39B54A]" : "text-gray-400"}`}
+                        >
+                          {p.is_active ? "Active" : "Inactive"}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -942,9 +1148,14 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3 text-right">{s.stock_qty}</td>
                     <td className="px-4 py-3 text-xs">{(s.recommended_species || []).map((id: string) => species.find((sp: any) => sp.id === id)?.name).filter(Boolean).join(", ") || "N/A"}</td>
                     <td className="px-4 py-3">
-                      <button onClick={() => toggleSpiceActive(s.id, !s.is_active)} className={`text-xs font-bold ${s.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
-                        {s.is_active ? "Active" : "Inactive"}
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button onClick={() => startEditSpice(s)} className="text-xs font-bold text-[#073B78] underline">
+                          Edit
+                        </button>
+                        <button onClick={() => toggleSpiceActive(s.id, !s.is_active)} className={`text-xs font-bold ${s.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
+                          {s.is_active ? "Active" : "Inactive"}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -1661,6 +1872,34 @@ const AdminLakeFresh = () => {
             </Button>
           </div>
 
+          {editingZoneId ? (
+            <div className="rounded-xl border bg-white p-5">
+              <h2 className="font-display text-lg font-bold mb-4">Edit delivery zone</h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <Label>Name</Label>
+                  <Input value={editZoneForm.name} onChange={(e) => setEditZoneForm({ ...editZoneForm, name: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Slug</Label>
+                  <Input value={editZoneForm.slug} onChange={(e) => setEditZoneForm({ ...editZoneForm, slug: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Base fee (MWK)</Label>
+                  <Input type="number" value={editZoneForm.base_fee_mwk} onChange={(e) => setEditZoneForm({ ...editZoneForm, base_fee_mwk: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Min order (MWK)</Label>
+                  <Input type="number" value={editZoneForm.min_order_mwk} onChange={(e) => setEditZoneForm({ ...editZoneForm, min_order_mwk: e.target.value })} />
+                </div>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button onClick={() => void saveEditedZone()}>Save changes</Button>
+                <Button variant="outline" onClick={() => setEditingZoneId(null)}>Cancel</Button>
+              </div>
+            </div>
+          ) : null}
+
           <div className="rounded-xl border bg-white overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-xs uppercase text-gray-500">
@@ -1680,12 +1919,20 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3 text-right">{formatMWK(z.base_fee_mwk)}</td>
                     <td className="px-4 py-3 text-right">{formatMWK(z.min_order_mwk)}</td>
                     <td className="px-4 py-3">
-                      <button
-                        onClick={() => toggleZoneActive(z.id, !z.is_active)}
-                        className={`text-xs font-bold ${z.is_active ? "text-[#39B54A]" : "text-gray-400"}`}
-                      >
-                        {z.is_active ? "Active" : "Inactive"}
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => startEditZone(z)}
+                          className="text-xs font-bold text-[#073B78] underline"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => toggleZoneActive(z.id, !z.is_active)}
+                          className={`text-xs font-bold ${z.is_active ? "text-[#39B54A]" : "text-gray-400"}`}
+                        >
+                          {z.is_active ? "Active" : "Inactive"}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
