@@ -2,7 +2,7 @@
 // Falls back to a hand written template when no AI key is configured, so the
 // screen still works in every environment.
 
-const GEMINI_KEY = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_FALLBACK;
+const GEMINI_KEY = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY || process.env.GEMINI_API_KEY_FALLBACK;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash";
 
 const SUPABASE_URL =
