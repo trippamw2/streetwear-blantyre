@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { LFLink, LFNavLink, useLFNavigate } from "@/components/lf/lfRouter";
-import { Menu, ShoppingBasket, X, LogOut, User } from "lucide-react";
+import { Menu, ShoppingBasket, X, LogOut, User, Snowflake } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLakeFreshCart, LakeFreshCartProvider } from "@/contexts/LakeFreshCartContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,6 +31,12 @@ const LakeFreshHeader = () => {
       <div className="border-b border-gray-100 bg-[#F7FBFC]">
         <div className="container flex h-7 items-center justify-center text-[10px] font-semibold uppercase tracking-[0.25em] text-[#073B78]/70">
           Fresh from the Lake. Ready for Your Table.
+        </div>
+      </div>
+      <div className="border-b border-[#39B54A]/20 bg-[#F4FBF7]">
+        <div className="container flex h-8 items-center justify-center gap-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[#073B78]">
+          <Snowflake className="h-3.5 w-3.5 text-[#39B54A]" />
+          Fresh from Lake Malawi · Ice-packed next-day delivery · 100% freshness replacement guarantee
         </div>
       </div>
       <div className="container flex h-16 items-center justify-between gap-4">

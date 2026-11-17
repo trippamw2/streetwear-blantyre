@@ -498,6 +498,10 @@ const LakeFreshCheckout = () => {
                     <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
                     <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                   </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Insulated ice-box packaging</span>
+                    <span className="text-[#39B54A] font-bold">Free</span>
+                  </div>
                   <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
                     <span>Total to pay</span>
                     <span>{formatMWK(estimatedTotal)}</span>
@@ -747,6 +751,10 @@ const LakeFreshCheckout = () => {
                     <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
                     <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                   </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Insulated ice-box packaging</span>
+                    <span className="text-[#39B54A] font-bold">Free</span>
+                  </div>
                   <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
                     <span>Total to pay</span>
                     <span>{formatMWK(estimatedTotal)}</span>
@@ -834,6 +842,16 @@ const LakeFreshCheckout = () => {
                     You will be redirected to PayChangu after placing the order. Your order is only marked paid after
                     the payment provider confirms it.
                   </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {["Airtel Money", "TNM Mpamba", "Visa", "Mastercard", "Bank transfer"].map((m) => (
+                      <span key={m} className="rounded-full border border-gray-200 bg-white px-2.5 py-1 text-[10px] font-bold text-[#073B78]">
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs font-semibold text-[#39B54A]">
+                    Instant payment confirmation · Protected by our 100% freshness or full refund guarantee.
+                  </p>
                 </div>
               </section>
             </div>
@@ -866,6 +884,10 @@ const LakeFreshCheckout = () => {
                   <div className="flex justify-between text-gray-600">
                     <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
                     <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Insulated ice-box packaging</span>
+                    <span className="text-[#39B54A] font-bold">Free</span>
                   </div>
                   {loyaltyPreview > 0 && (
                     <div className="flex justify-between text-[#39B54A]">

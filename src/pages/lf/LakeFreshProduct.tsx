@@ -21,7 +21,10 @@ import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { toast } from "@/hooks/use-toast";
 
 const prepCopy: Record<string, { label: string; description: string }> = {
-  whole: { label: "Whole", description: "Whole fish, cleaned and ready to cook." },
+  whole: { label: "Whole scaled & gutted", description: "Whole fish, scaled, gutted and cleaned." },
+  filleted: { label: "Filleted", description: "Boneless fillets, ready to cook." },
+  steak: { label: "Steak cuts", description: "Thick steaks for grilling or frying." },
+  uncleaned: { label: "Whole uncleaned", description: "Whole fish as caught, for your own prep." },
   cleaned: { label: "Cleaned", description: "Gutted, scaled and cleaned." },
   portioned: { label: "Portioned", description: "Cut into evenly sized portions." },
 };
@@ -139,7 +142,7 @@ const LakeFreshProduct = () => {
   const effectiveWeight = Math.max(weightKg || 0, minWeight);
   const lineTotal = calculateFinalPrice(product.pricePerKgMwk, weightKg, minWeight);
   const overStock = !soldOut && product.availableKg > 0 && effectiveWeight > product.availableKg;
-  const options = product.preparationOptions.length > 0 ? product.preparationOptions : ["whole"];
+  const options = product.preparationOptions.length > 0 ? product.preparationOptions : ["whole", "filleted", "steak", "uncleaned"];
   const selectedPreparation = options.includes(preparation) ? preparation : options[0];
   const deliveryConfig = config;
   const earliestDate = deliveryConfig
@@ -330,6 +333,15 @@ const LakeFreshProduct = () => {
                     </div>
                   </div>
 
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#39B54A]/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-[#39B54A]">
+                      <Snowflake className="h-3.5 w-3.5" /> Order by 8 PM today, delivered chilled tomorrow
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#08A9E8]/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-[#073B78]">
+                      100% freshness guarantee
+                    </span>
+                  </div>
+
                   <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-4">
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Estimated total</p>
@@ -348,6 +360,10 @@ const LakeFreshProduct = () => {
                     >
                       {overStock ? "Not enough stock" : extrasCount > 0 ? `Add fish + ${extrasCount} extras` : "Add to basket"}
                     </button>
+                  </div>
+                  <div className="mt-4 rounded-xl border border-[#39B54A]/25 bg-[#F4FBF7] p-3 text-xs text-[#073B78]">
+                    <span className="font-extrabold">100% Freshness Guarantee:</span> If your fish arrives warm, spoiled or
+                    underweight, we replace it same day or refund you in full.
                   </div>
                 </div>
               )}

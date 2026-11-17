@@ -190,6 +190,45 @@ const LakeFreshOrder = () => {
           </span>
         </div>
 
+        {/* 4-stage cold-chain tracker */}
+        <div className="mt-6 rounded-xl border border-gray-200 bg-white p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Cold-chain tracker</p>
+          <ol className="mt-3 space-y-3">
+            {[
+              { key: "confirmed", label: "Order confirmed & paid" },
+              { key: "processing", label: "Cleaned, weighed & ice-packed" },
+              { key: "dispatched", label: "Out for delivery in cooler box" },
+              { key: "delivered", label: "Delivered chilled" },
+            ].map((stage, idx) => {
+              const orderRank = { new: 0, confirmed: 1, processing: 2, dispatched: 3, delivered: 4, cancelled: -1 }[order.status] ?? 0;
+              const done = orderRank >= idx + 1;
+              const active = orderRank === idx + 1;
+              return (
+                <li key={stage.key} className="flex items-center gap-3">
+                  <span
+                    className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
+                      done ? "bg-[#39B54A] text-white" : active ? "bg-[#08A9E8] text-white" : "bg-gray-100 text-gray-400"
+                    }`}
+                  >
+                    {done ? "✓" : idx + 1}
+                  </span>
+                  <span className={`text-sm ${done ? "font-bold text-[#073B78]" : "text-gray-500"}`}>{stage.label}</span>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+
+        {/* WhatsApp tracking button */}
+        <a
+          href={`https://wa.me/?text=${encodeURIComponent(`Hi Lake Fresh, my order ID is ${order.payment_reference || id}. Please help me track it.`)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
+        >
+          Track / chat on WhatsApp
+        </a>
+
         {verifyState === "paid" || (paymentParam && isPaid) ? (
           <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#39B54A]/30 bg-[#39B54A]/10 p-4 text-sm text-emerald-900">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
