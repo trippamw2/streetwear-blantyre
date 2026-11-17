@@ -1,8 +1,21 @@
-import logo from "@/assets/streetwear-blantyre-logo.png";
+import logoSb from "@/assets/streetwear-blantyre-logo.png";
 import { Link } from "react-router-dom";
 
-export const Logo = ({ className = "h-20 sm:h-24 md:h-32 lg:h-40 w-auto" }: { className?: string }) => (
-  <Link to="/" className="flex items-center gap-2 shrink-0" aria-label="Streetwear Blantyre home">
-    <img src={logo} alt="Streetwear Blantyre" className={`${className} object-contain`} />
-  </Link>
-);
+interface LogoProps {
+  className?: string;
+  /** Brand the mark belongs to. Defaults to SB for backwards compatibility. */
+  brand?: "sb" | "lf";
+}
+
+export const Logo = ({ className = "h-20 sm:h-24 md:h-32 lg:h-40 w-auto", brand = "sb" }: LogoProps) => {
+  const isLf = brand === "lf";
+  const src = isLf ? "/brand/lake-fresh/logo.png" : logoSb;
+  const alt = isLf ? "Lake Fresh Fish Mart" : "Streetwear Blantyre";
+  const home = isLf ? "/lf" : "/";
+
+  return (
+    <Link to={home} className="flex items-center gap-2 shrink-0" aria-label={`${alt} home`}>
+      <img src={src} alt={alt} className={`${className} object-contain`} />
+    </Link>
+  );
+};
