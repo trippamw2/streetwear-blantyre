@@ -18,16 +18,19 @@ import {
   RefreshCw,
   CheckCircle2,
   AlertCircle,
+  Image as ImageIcon,
+  FileText,
 } from "lucide-react";
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "spices" | "recipes" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery";
+type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
   { key: "spices", label: "Spices", icon: Package },
   { key: "recipes", label: "Recipes", icon: Package },
+  { key: "media", label: "Photos & Files", icon: ImageIcon },
   { key: "pro", label: "PRO", icon: Package },
   { key: "subscriptions", label: "Subs", icon: Package },
   { key: "analytics", label: "Analytics", icon: Package },
@@ -38,11 +41,109 @@ const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "delivery", label: "Delivery", icon: Truck },
 ];
 
+const uploadLfAsset = async (file: File, folder: string): Promise<string> => {
+  const extension = file.name.split(".").pop()?.toLowerCase() || (file.type === "application/pdf" ? "pdf" : "jpg");
+  const path = `lf/${folder}/${crypto.randomUUID()}.${extension}`;
+  const { error } = await supabase.storage
+    .from("product-images")
+    .upload(path, file, { upsert: false, contentType: file.type || undefined });
+  if (error) throw new Error(error.message);
+  const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+  return data.publicUrl;
+};
+
+const AssetField = ({
+  label,
+  value,
+  onChange,
+  folder,
+  accept = "image/*",
+  kind = "image",
+}: {
+  label: string;
+  value: string | null | undefined;
+  onChange: (next: string) => void | Promise<void>;
+  folder: string;
+  accept?: string;
+  kind?: "image" | "pdf";
+}) => {
+  const [draft, setDraft] = useState(value || "");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setDraft(value || "");
+  }, [value]);
+
+  const upload = async (file: File | undefined) => {
+    if (!file) return;
+    setBusy(true);
+    try {
+      const url = await uploadLfAsset(file, folder);
+      setDraft(url);
+      await onChange(url);
+      toast({ title: kind === "pdf" ? "PDF attached" : "Photo updated" });
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="rounded-lg border border-gray-200 bg-white p-2.5">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{label}</p>
+      <div className="mt-1.5 flex items-center gap-2">
+        <input
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+          placeholder={kind === "pdf" ? "PDF link" : "Image link"}
+          className="h-8 min-w-0 flex-1 rounded border border-gray-300 px-2 text-xs"
+        />
+        <button
+          type="button"
+          onClick={() => void onChange(draft)}
+          className="h-8 shrink-0 rounded border border-gray-300 px-2 text-[10px] font-bold uppercase"
+        >
+          Save
+        </button>
+        <label className="inline-flex h-8 shrink-0 cursor-pointer items-center rounded bg-[#073B78] px-2 text-[10px] font-bold uppercase text-white">
+          {busy ? "..." : "Upload"}
+          <input
+            type="file"
+            accept={accept}
+            className="hidden"
+            onChange={(event) => void upload(event.target.files?.[0])}
+          />
+        </label>
+      </div>
+      {kind === "image" && draft ? (
+        <img src={draft} alt={label} className="mt-2 h-16 w-full rounded object-cover" />
+      ) : null}
+      {kind === "pdf" && draft ? (
+        <a href={draft} target="_blank" rel="noreferrer" className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-[#073B78] underline">
+          <FileText className="h-3.5 w-3.5" /> Open PDF
+        </a>
+      ) : null}
+    </div>
+  );
+};
+
+const VALID_TABS: Tab[] = ["catalog", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery"];
+
 const AdminLakeFresh = () => {
   const { user } = useAuth();
-  const [searchParams] = useSearchParams();
-  const brand = searchParams.get("brand") || "lake-fresh";
-  const [tab, setTab] = useState<Tab>("catalog");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get("tab") as Tab | null;
+  const tab: Tab = tabParam && VALID_TABS.includes(tabParam) ? tabParam : "catalog";
+  const setTab = (next: Tab) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("tab", next);
+    setSearchParams(params, { replace: true });
+  };
 
   // ---- Catalog state ----
   const [species, setSpecies] = useState<any[]>([]);
@@ -55,6 +156,8 @@ const AdminLakeFresh = () => {
     preparation_options: "whole",
     availability_status: "available",
     is_active: true,
+    image: "",
+    description: "",
   });
 
   // ---- Batches state ----
@@ -93,14 +196,14 @@ const AdminLakeFresh = () => {
 
   // ---- Spices state ----
   const [spices, setSpices] = useState<any[]>([]);
-  const [spiceForm, setSpiceForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "" });
+  const [spiceForm, setSpiceForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "", image: "" });
 
   // ---- Recipes state ----
   const [recipes, setRecipes] = useState<any[]>([]);
   const [recipeForm, setRecipeForm] = useState({
     title: "", slug: "", species_id: "", prep_time_min: "", cook_time_min: "", servings: "",
     cooking_method: "", recommended_spice: "", safety_notes: "",
-    ingredients: "", steps: "",
+    ingredients: "", steps: "", image: "", pdf_url: "",
   });
 
   // ---- PRO state ----
@@ -118,10 +221,46 @@ const AdminLakeFresh = () => {
   const loadSpecies = async () => {
     const { data } = await supabase
       .from("fish_species")
-      .select("id, name")
+      .select("id, name, slug, image")
       .eq("brand_id", LF_BRAND_ID)
       .order("sort_order");
     setSpecies(data || []);
+  };
+
+  const updateSpeciesImage = async (id: string, image: string) => {
+    const { error } = await supabase.from("fish_species").update({ image }).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else {
+      setSpecies((prev) => prev.map((s: any) => (s.id === id ? { ...s, image } : s)));
+      toast({ title: "Species photo saved" });
+    }
+  };
+
+  const updateProductImage = async (id: string, image: string) => {
+    const { error } = await supabase.from("fish_products").update({ image }).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else {
+      setProducts((prev) => prev.map((p: any) => (p.id === id ? { ...p, image } : p)));
+      toast({ title: "Product photo saved" });
+    }
+  };
+
+  const updateSpiceImage = async (id: string, image: string) => {
+    const { error } = await supabase.from("lf_spices").update({ image }).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else {
+      setSpices((prev) => prev.map((s: any) => (s.id === id ? { ...s, image } : s)));
+      toast({ title: "Spice photo saved" });
+    }
+  };
+
+  const updateRecipeMedia = async (id: string, patch: { image?: string; pdf_url?: string }) => {
+    const { error } = await supabase.from("lf_recipes").update(patch).eq("id", id);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else {
+      setRecipes((prev) => prev.map((r: any) => (r.id === id ? { ...r, ...patch } : r)));
+      toast({ title: "Recipe updated" });
+    }
   };
 
   const toggleRecommendedSpecies = (value: string, id: string, onChange: (next: string) => void) => {
@@ -350,13 +489,15 @@ const AdminLakeFresh = () => {
       preparation_options: productForm.preparation_options.split(",").map((s) => s.trim()),
       availability_status: productForm.availability_status,
       is_active: productForm.is_active,
+      image: productForm.image || null,
+      description: productForm.description || null,
     });
     if (error) {
       toast({ title: "Create failed", description: error.message, variant: "destructive" });
       return;
     }
     toast({ title: "Product created" });
-    setProductForm({ ...productForm, name: "", price_per_kg_mwk: "" });
+    setProductForm({ ...productForm, name: "", price_per_kg_mwk: "", image: "", description: "" });
     await loadProducts();
   };
 
@@ -375,11 +516,12 @@ const AdminLakeFresh = () => {
       ingredients: spiceForm.ingredients || null,
       is_active: true,
       recommended_species: spiceForm.recommended_species.split(",").map((s) => s.trim()).filter(Boolean),
+      image: spiceForm.image || null,
     });
     if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Spice created" });
-      setSpiceForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "" });
+      setSpiceForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "", image: "" });
       await loadSpices();
     }
   };
@@ -403,11 +545,13 @@ const AdminLakeFresh = () => {
       ingredients: recipeForm.ingredients.split("\n").map((s) => s.trim()).filter(Boolean),
       steps: recipeForm.steps.split("\n").map((s) => s.trim()).filter(Boolean),
       is_active: true,
+      image: recipeForm.image || null,
+      pdf_url: recipeForm.pdf_url || null,
     });
     if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Recipe created" });
-      setRecipeForm({ title: "", slug: "", species_id: "", prep_time_min: "", cook_time_min: "", servings: "", cooking_method: "", recommended_spice: "", safety_notes: "", ingredients: "", steps: "" });
+      setRecipeForm({ title: "", slug: "", species_id: "", prep_time_min: "", cook_time_min: "", servings: "", cooking_method: "", recommended_spice: "", safety_notes: "", ingredients: "", steps: "", image: "", pdf_url: "" });
       await loadRecipes();
     }
   };
@@ -568,7 +712,7 @@ const AdminLakeFresh = () => {
         <div>
           <h1 className="font-display text-2xl font-bold">Lake Fresh Admin</h1>
           <p className="text-sm text-muted-foreground">
-            Brand: {brand} · Manage catalog, batches, slots, orders, preparation and delivery.
+            Fish mart only. Manage catalog, photos, recipes, slots, orders, preparation and delivery.
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={refreshAll} disabled={loading}>
@@ -636,6 +780,22 @@ const AdminLakeFresh = () => {
                   <option value="limited">Limited</option>
                   <option value="sold_out">Sold out</option>
                 </select>
+              </div>
+              <div className="sm:col-span-2">
+                <AssetField
+                  label="Product photo"
+                  value={productForm.image}
+                  folder="fish"
+                  onChange={(next) => setProductForm((prev) => ({ ...prev, image: next }))}
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Short description</Label>
+                <Textarea
+                  value={productForm.description}
+                  onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
+                  rows={2}
+                />
               </div>
             </div>
             <Button className="mt-4" onClick={handleCreateProduct}>
@@ -746,6 +906,14 @@ const AdminLakeFresh = () => {
               <div className="sm:col-span-3">
                 <Label>Description</Label>
                 <Textarea value={spiceForm.description} onChange={(e) => setSpiceForm({ ...spiceForm, description: e.target.value })} />
+              </div>
+              <div className="sm:col-span-3">
+                <AssetField
+                  label="Spice photo"
+                  value={spiceForm.image}
+                  folder="spices"
+                  onChange={(next) => setSpiceForm((prev) => ({ ...prev, image: next }))}
+                />
               </div>
             </div>
             <Button className="mt-4" onClick={handleCreateSpice}>
@@ -859,6 +1027,24 @@ const AdminLakeFresh = () => {
                 <Label>Safety notes</Label>
                 <Textarea value={recipeForm.safety_notes} onChange={(e) => setRecipeForm({ ...recipeForm, safety_notes: e.target.value })} />
               </div>
+              <div className="sm:col-span-2">
+                <AssetField
+                  label="Recipe photo"
+                  value={recipeForm.image}
+                  folder="recipes"
+                  onChange={(next) => setRecipeForm((prev) => ({ ...prev, image: next }))}
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <AssetField
+                  label="Recipe PDF"
+                  value={recipeForm.pdf_url}
+                  folder="recipes"
+                  accept="application/pdf"
+                  kind="pdf"
+                  onChange={(next) => setRecipeForm((prev) => ({ ...prev, pdf_url: next }))}
+                />
+              </div>
             </div>
             <Button className="mt-4" onClick={handleCreateRecipe}>
               <Plus className="h-4 w-4 mr-2" /> Add recipe
@@ -899,6 +1085,93 @@ const AdminLakeFresh = () => {
                 )}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* MEDIA */}
+      {tab === "media" && (
+        <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold">Fish species photos</h2>
+            <p className="mb-4 text-sm text-gray-500">
+              These photos appear on the Lake Fresh home page and filter chips.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {species.map((s) => (
+                <AssetField
+                  key={s.id}
+                  label={s.name}
+                  value={s.image}
+                  folder="species"
+                  onChange={(next) => updateSpeciesImage(s.id, next)}
+                />
+              ))}
+              {species.length === 0 && <p className="text-sm text-gray-500">No species yet.</p>}
+            </div>
+          </div>
+
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold">Fish product photos</h2>
+            <p className="mb-4 text-sm text-gray-500">Used on catalog cards and the product page.</p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {products.map((p) => (
+                <AssetField
+                  key={p.id}
+                  label={p.name}
+                  value={p.image}
+                  folder="fish"
+                  onChange={(next) => updateProductImage(p.id, next)}
+                />
+              ))}
+              {products.length === 0 && <p className="text-sm text-gray-500">No fish products yet.</p>}
+            </div>
+          </div>
+
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold">Spice photos</h2>
+            <p className="mb-4 text-sm text-gray-500">Each spice gets a clean pack photo.</p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {spices.map((s) => (
+                <AssetField
+                  key={s.id}
+                  label={s.name}
+                  value={s.image}
+                  folder="spices"
+                  onChange={(next) => updateSpiceImage(s.id, next)}
+                />
+              ))}
+              {spices.length === 0 && <p className="text-sm text-gray-500">No spices yet.</p>}
+            </div>
+          </div>
+
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold">Recipe photos and PDFs</h2>
+            <p className="mb-4 text-sm text-gray-500">
+              The PDF attached to a recipe is emailed to the customer when their order is confirmed.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {recipes.map((r) => (
+                <div key={r.id} className="space-y-2 rounded-lg border border-gray-200 p-3">
+                  <p className="text-sm font-bold">{r.title}</p>
+                  <AssetField
+                    label="Photo"
+                    value={r.image}
+                    folder="recipes"
+                    onChange={(next) => updateRecipeMedia(r.id, { image: next })}
+                  />
+                  <AssetField
+                    label="PDF"
+                    value={r.pdf_url}
+                    folder="recipes"
+                    accept="application/pdf"
+                    kind="pdf"
+                    onChange={(next) => updateRecipeMedia(r.id, { pdf_url: next })}
+                  />
+                </div>
+              ))}
+              {recipes.length === 0 && <p className="text-sm text-gray-500">No recipes yet.</p>}
+            </div>
           </div>
         </div>
       )}

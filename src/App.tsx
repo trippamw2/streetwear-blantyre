@@ -56,6 +56,7 @@ import AdminGifts from "./pages/admin/Gifts";
 import AdminCultureStories from "./pages/admin/CultureStories";
 import AdminLakeFresh from "./pages/admin/LakeFresh";
 import AdminLookbooks from "./pages/admin/Lookbooks";
+import AdminCommunications from "./pages/admin/Communications";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GiftTrack from "./pages/GiftTrack";
 import Editorial from "./pages/Editorial";
@@ -78,9 +79,10 @@ import LakeFreshSpices from "./pages/lf/LakeFreshSpices";
 import LakeFreshPro from "./pages/lf/LakeFreshPro";
 import LakeFreshLoyalty from "./pages/lf/LakeFreshLoyalty";
 import LakeFreshSubscribe from "./pages/lf/LakeFreshSubscribe";
+import LakeFreshTrack from "./pages/lf/LakeFreshTrack";
 import { LakeFreshLayout } from "./components/lf/LakeFreshLayout";
 import { LakeFreshProtectedRoute } from "./components/lf/LakeFreshProtectedRoute";
-import { IS_DUAL_SITE, IS_LF_SITE, SHOWS_SB } from "./lib/brandSite";
+import { IS_DUAL_SITE, IS_LF_SITE, SHOWS_LF, SHOWS_SB } from "./lib/brandSite";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -151,6 +153,7 @@ const lakeFreshRouteChildren = (
     <Route path="pro" element={<LakeFreshPro />} />
     <Route path="loyalty" element={<LakeFreshLoyalty />} />
     <Route path="subscribe" element={<LakeFreshSubscribe />} />
+    <Route path="track" element={<LakeFreshTrack />} />
   </>
 );
 
@@ -230,32 +233,50 @@ const App = () => {
                     <Route path="/passport/:token" element={<Passport />} />
                     <Route path="/scan/:barcode" element={<Scan />} />
 
-                    {/* Shared admin panel, operates both brands as parallel systems */}
-                    <Route path="/admin" element={<AdminLayout />}>
-                      <Route index element={<AdminDashboard />} />
-                      <Route path="products" element={<AdminProducts />} />
-                      <Route path="categories" element={<AdminCategories />} />
-                      <Route path="combos" element={<AdminCombos />} />
-                      <Route path="orders" element={<AdminOrders />} />
-                      <Route path="promotions" element={<AdminPromotions />} />
-                      <Route path="promos" element={<AdminPromos />} />
-                      <Route path="crm" element={<AdminCRM />} />
-                      <Route path="testimonials" element={<AdminTestimonials />} />
-                      <Route path="business" element={<AdminBusiness />} />
-                      <Route path="inventory" element={<AdminInventory />} />
-                      <Route path="settings" element={<AdminSettings />} />
-                      <Route path="delivery" element={<AdminDelivery />} />
-                      <Route path="suppliers" element={<AdminSuppliers />} />
-                      <Route path="loyalty" element={<AdminLoyalty />} />
-                      <Route path="referrals" element={<AdminReferrals />} />
-                      <Route path="authentication" element={<AdminAuthentication />} />
-                      <Route path="customers" element={<Navigate to="/admin/orders" replace />} />
-                      <Route path="analytics" element={<Navigate to="/admin" replace />} />
-                      <Route path="gifts" element={<AdminGifts />} />
-                      <Route path="lake-fresh" element={<AdminLakeFresh />} />
-                      <Route path="culture-stories" element={<AdminCultureStories />} />
-                      <Route path="lookbooks" element={<AdminLookbooks />} />
-                    </Route>
+                    {/* SB Streetwear admin. Lake Fresh data is never shown here. */}
+                    {SHOWS_SB && (
+                      <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<AdminDashboard />} />
+                        <Route path="products" element={<AdminProducts />} />
+                        <Route path="categories" element={<AdminCategories />} />
+                        <Route path="combos" element={<AdminCombos />} />
+                        <Route path="orders" element={<AdminOrders />} />
+                        <Route path="promotions" element={<AdminPromotions />} />
+                        <Route path="promos" element={<AdminPromos />} />
+                        <Route path="crm" element={<AdminCRM />} />
+                        <Route path="testimonials" element={<AdminTestimonials />} />
+                        <Route path="business" element={<AdminBusiness />} />
+                        <Route path="inventory" element={<AdminInventory />} />
+                        <Route path="settings" element={<AdminSettings />} />
+                        <Route path="delivery" element={<AdminDelivery />} />
+                        <Route path="suppliers" element={<AdminSuppliers />} />
+                        <Route path="loyalty" element={<AdminLoyalty />} />
+                        <Route path="referrals" element={<AdminReferrals />} />
+                        <Route path="communications" element={<AdminCommunications />} />
+                        <Route path="authentication" element={<AdminAuthentication />} />
+                        <Route path="customers" element={<Navigate to="/admin/orders" replace />} />
+                        <Route path="analytics" element={<Navigate to="/admin" replace />} />
+                        <Route path="gifts" element={<AdminGifts />} />
+                        <Route path="lake-fresh" element={<Navigate to="/admin" replace />} />
+                        <Route path="culture-stories" element={<AdminCultureStories />} />
+                        <Route path="lookbooks" element={<AdminLookbooks />} />
+                      </Route>
+                    )}
+
+                    {/* Lake Fresh admin. Its own deployment keeps `/admin`; on a
+                        dual host it lives at `/lf/admin`. No SB modules or data. */}
+                    {SHOWS_LF && (
+                      <Route
+                        path={IS_LF_SITE ? "/admin" : "/lf/admin"}
+                        element={<AdminLayout />}
+                      >
+                        <Route index element={<AdminLakeFresh />} />
+                        <Route path="promos" element={<AdminPromos />} />
+                        <Route path="loyalty" element={<AdminLoyalty />} />
+                        <Route path="referrals" element={<AdminReferrals />} />
+                        <Route path="communications" element={<AdminCommunications />} />
+                      </Route>
+                    )}
 
                     {/* 404 catch-all, must be LAST so it doesn't swallow /admin */}
                     <Route path="*" element={<NotFound />} />

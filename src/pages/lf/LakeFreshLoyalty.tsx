@@ -1,90 +1,27 @@
-import { useState } from "react";
 import { LFLink } from "@/components/lf/lfRouter";
-import { ArrowRight, Copy, Gift, Loader2, Sparkles, Star, Users } from "lucide-react";
+import { ArrowRight, Copy, Gift, Loader2, Share2, Sparkles, Star, Users } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
 import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
-import { toast } from "@/hooks/use-toast";
+import { useLoyalty } from "@/hooks/useLoyalty";
+import { useReferral } from "@/hooks/useReferral";
+import { formatMWK } from "@/data/products";
 
 const LakeFreshLoyalty = () => {
   const { user } = useAuth();
-
-  const { data: loyalty, isLoading: loyaltyLoading } = useQuery({
-    queryKey: ["lf", "loyalty", user?.id],
-    enabled: Boolean(user?.id),
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("customer_loyalty")
-        .select("*")
-        .eq("user_id", user!.id)
-        .eq("brand_id", LF_BRAND_ID)
-        .maybeSingle();
-      if (error) throw new Error(error.message);
-      if (data) return data;
-      const { data: created, error: createError } = await supabase
-        .from("customer_loyalty")
-        .insert({
-          user_id: user!.id,
-          email: user!.email || null,
-          brand_id: LF_BRAND_ID,
-          total_points: 0,
-          available_points: 0,
-          redeemed_points: 0,
-          lifetime_spent_mwk: 0,
-          tier: "bronze",
-        })
-        .select()
-        .single();
-      if (createError) throw new Error(createError.message);
-      return created;
-    },
-  });
-
-  const { data: program } = useQuery({
-    queryKey: ["lf", "loyalty-program"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("loyalty_programs")
-        .select("*")
-        .eq("brand_id", LF_BRAND_ID)
-        .eq("is_active", true)
-        .maybeSingle();
-      if (error) throw new Error(error.message);
-      return data;
-    },
-  });
-
-  const { data: referral } = useQuery({
-    queryKey: ["lf", "referral", user?.id],
-    enabled: Boolean(user?.id),
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("user_referral_codes")
-        .select("*")
-        .eq("user_id", user!.id)
-        .eq("brand_id", LF_BRAND_ID)
-        .maybeSingle();
-      if (error) throw new Error(error.message);
-      if (data) return data;
-      const code = `LF-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-      const { data: created, error: createError } = await supabase
-        .from("user_referral_codes")
-        .insert({
-          user_id: user!.id,
-          code,
-          brand_id: LF_BRAND_ID,
-          rewards_points: 0,
-          rewards_redeemed: 0,
-          max_referrals: 50,
-        })
-        .select()
-        .single();
-      if (createError) throw new Error(createError.message);
-      return created;
-    },
-  });
+  const { loyalty, program, tiers, loading: loyaltyLoading } = useLoyalty(
+    user?.id,
+    user?.email,
+    LF_BRAND_ID,
+  );
+  const {
+    referralCode,
+    stats,
+    loading: referralLoading,
+    copied,
+    copyCode,
+    shareReferral,
+  } = useReferral(LF_BRAND_ID);
 
   if (!user) {
     return (
@@ -113,15 +50,10 @@ const LakeFreshLoyalty = () => {
     );
   }
 
-  const copyCode = async () => {
-    if (!referral?.code) return;
-    try {
-      await navigator.clipboard.writeText(referral.code);
-      toast({ title: "Copied", description: referral.code });
-    } catch {
-      toast({ title: "Copy failed", variant: "destructive" });
-    }
-  };
+  const availablePoints = loyalty?.available_points ?? 0;
+  const lifetimeSpent = loyalty?.lifetime_spent_mwk ?? 0;
+  const tier = loyalty?.tier ?? "bronze";
+  const nextTier = tiers.find((t) => t.min_lifetime_points > (loyalty?.total_points ?? 0));
 
   return (
     <div className="bg-white">
@@ -142,7 +74,7 @@ const LakeFreshLoyalty = () => {
       <div className="container max-w-4xl py-10 sm:py-14">
         {loyaltyLoading ? (
           <p className="flex items-center gap-2 text-sm text-gray-500">
-            <Loader2 className="h-4 w-4 animate-spin text-[#39B54A]" /> Loading…
+            <Loader2 className="h-4 w-4 animate-spin text-[#39B54A]" /> Loading
           </p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
@@ -154,8 +86,8 @@ const LakeFreshLoyalty = () => {
                 </span>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[#2c6e12]">Available points</p>
               </div>
-              <p className="mt-3 text-3xl font-extrabold text-[#073B78]">{loyalty?.available_points ?? 0}</p>
-              <p className="mt-1 text-xs capitalize text-gray-500">Tier: {loyalty?.tier ?? "bronze"}</p>
+              <p className="mt-3 text-3xl font-extrabold text-[#073B78]">{availablePoints}</p>
+              <p className="mt-1 text-xs capitalize text-gray-500">Tier: {tier}</p>
             </div>
 
             <div className="relative overflow-hidden rounded-2xl border border-[#08A9E8]/25 bg-[#EAF6FB] p-5">
@@ -166,7 +98,7 @@ const LakeFreshLoyalty = () => {
                 </span>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/70">Lifetime spent</p>
               </div>
-              <p className="mt-3 text-3xl font-extrabold text-[#073B78]">{loyalty?.lifetime_spent_mwk ?? 0} MWK</p>
+              <p className="mt-3 text-3xl font-extrabold text-[#073B78]">{formatMWK(lifetimeSpent)}</p>
               <p className="mt-1 text-xs text-gray-500">Total points: {loyalty?.total_points ?? 0}</p>
             </div>
           </div>
@@ -179,12 +111,44 @@ const LakeFreshLoyalty = () => {
             <p className="mt-1 text-sm leading-relaxed text-gray-600">{program.description}</p>
             <p className="mt-3 inline-flex flex-wrap gap-2 text-[11px] text-[#2c6e12]">
               <span className="rounded-full bg-white px-2.5 py-1 font-semibold shadow-sm">
-                {program.points_per_mwk} points per MWK
+                1 point per {formatMWK(program.points_per_mwk)}
               </span>
               <span className="rounded-full bg-white px-2.5 py-1 font-semibold shadow-sm">
-                Redeem {program.points_to_redeem} points for {program.reward_value_mwk} MWK
+                {program.points_to_redeem} points = {formatMWK(program.reward_value_mwk)} off
               </span>
             </p>
+            {nextTier ? (
+              <p className="mt-3 text-xs text-gray-500">
+                Next tier: <span className="font-bold capitalize text-[#073B78]">{nextTier.name}</span> at{" "}
+                {nextTier.min_lifetime_points.toLocaleString()} lifetime points.
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {tiers.length > 0 ? (
+          <div className="mt-5 rounded-2xl border border-gray-200 bg-white p-5">
+            <p className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+              <Sparkles className="h-4 w-4 text-[#7ED321]" /> Tier benefits
+            </p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {tiers.map((t) => (
+                <div
+                  key={t.name}
+                  className={`rounded-xl border p-3 ${
+                    t.name === tier ? "border-[#39B54A] bg-[#F4FBF7]" : "border-gray-200 bg-gray-50"
+                  }`}
+                >
+                  <p className="text-sm font-extrabold capitalize text-[#073B78]">{t.name}</p>
+                  <p className="mt-0.5 text-[11px] text-gray-500">{t.min_lifetime_points.toLocaleString()}+ points</p>
+                  <p className="mt-2 text-[11px] text-gray-600">{t.points_multiplier}x points</p>
+                  {t.discount_percent > 0 && (
+                    <p className="text-[11px] font-semibold text-[#2c6e12]">{t.discount_percent}% off orders</p>
+                  )}
+                  {t.free_delivery && <p className="text-[11px] font-semibold text-[#2c6e12]">Free delivery</p>}
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
 
@@ -195,22 +159,34 @@ const LakeFreshLoyalty = () => {
             </span>
             <p className="font-display text-lg font-extrabold text-[#073B78]">Refer a friend</p>
           </div>
-          <p className="mt-2 text-sm leading-relaxed text-gray-500">Share your code and earn rewards when friends order.</p>
+          <p className="mt-2 text-sm leading-relaxed text-gray-500">
+            Share your code and you both earn points when their first order is paid.
+          </p>
           <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
             <code className="flex-1 rounded-xl border border-dashed border-[#08A9E8]/40 bg-[#EAF6FB]/50 px-3 py-2.5 text-sm font-bold tracking-wide text-[#073B78]">
-              {referral?.code || "N/A"}
+              {referralLoading ? "Loading" : referralCode?.code || "Sign in to get your code"}
             </code>
             <button
               type="button"
               onClick={copyCode}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#08A9E8] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
+              disabled={!referralCode}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#08A9E8] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
             >
-              <Copy className="h-3.5 w-3.5" /> Copy code
+              <Copy className="h-3.5 w-3.5" /> {copied ? "Copied" : "Copy link"}
+            </button>
+            <button
+              type="button"
+              onClick={shareReferral}
+              disabled={!referralCode}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#073B78]/20 px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78] disabled:opacity-50"
+            >
+              <Share2 className="h-3.5 w-3.5" /> Share
             </button>
           </div>
-          {referral ? (
+          {referralCode ? (
             <p className="mt-2 text-xs text-gray-500">
-              Referrals: {referral.rewards_redeemed ?? 0} / {referral.max_referrals ?? 50}
+              {stats.successfulReferrals} successful of {stats.totalReferrals} referrals ·{" "}
+              {stats.totalEarned.toLocaleString()} points earned
             </p>
           ) : null}
         </div>
@@ -218,7 +194,9 @@ const LakeFreshLoyalty = () => {
         <div className="mt-6 flex flex-col justify-between gap-3 rounded-2xl bg-[#073B78] p-5 sm:flex-row sm:items-center">
           <div>
             <p className="font-display text-base font-extrabold text-white">Ready for more points?</p>
-            <p className="mt-1 text-xs text-white/60">Fresh fish, signature spices and a free recipe, all in one order.</p>
+            <p className="mt-1 text-xs text-white/60">
+              Fresh fish, signature spices and your choice of one free recipe in every order.
+            </p>
           </div>
           <LFLink
             to="/lf/fish"

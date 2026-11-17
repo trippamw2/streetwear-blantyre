@@ -82,6 +82,32 @@
               head.appendChild(theme);
             }
             theme.setAttribute("content", "#073B78");
+
+            // Open Graph and Twitter cards must match Lake Fresh before share
+            // crawlers see the default SB tags.
+            var setMeta = function (attr, key, value) {
+              var el = document.querySelector("meta[" + attr + "='" + key + "']");
+              if (!el) {
+                el = document.createElement("meta");
+                el.setAttribute(attr, key);
+                head.appendChild(el);
+              }
+              el.setAttribute("content", value);
+              el.setAttribute("data-brand-og", "lf");
+            };
+            var lfTitle = "Lake Fresh Fish Mart | Fresh from the Lake";
+            var lfDesc =
+              "Order fresh chambo, ncheni and usipa with signature spices and free recipes. Next day delivery in Blantyre, Malawi.";
+            var lfImage = "/brand/lake-fresh/logo.png";
+            setMeta("property", "og:title", lfTitle);
+            setMeta("property", "og:description", lfDesc);
+            setMeta("property", "og:site_name", "Lake Fresh Fish Mart");
+            setMeta("property", "og:image", lfImage);
+            setMeta("property", "og:type", "website");
+            setMeta("name", "twitter:title", lfTitle);
+            setMeta("name", "twitter:description", lfDesc);
+            setMeta("name", "twitter:image", lfImage);
+            setMeta("name", "author", "Lake Fresh Fish Mart");
           }
         } catch (e) {
           /* Never block rendering on brand bootstrap. */

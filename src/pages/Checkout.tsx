@@ -15,12 +15,13 @@ import { DeliveryOptions } from "@/components/DeliveryOptions";
 import { type DeliveryOption, FREE_DELIVERY_THRESHOLD } from "@/lib/deliveryRules";
 import { buildSbPaymentRef } from "@/lib/paymentRefs";
 import { ArrowLeft, Check, Loader2, CreditCard, Zap, Gift } from "lucide-react";
+import { SB_BRAND_ID } from "@/lib/adminBrand";
 
 const Checkout = () => {
   const { user } = useAuth();
   const { items, subtotal, clear } = useCart();
   const navigate = useNavigate();
-  const { loyalty, program, getRewardValue, redeemPoints, earnPoints } = useLoyalty(user?.id, user?.email);
+  const { loyalty, program, getRewardValue, redeemPoints } = useLoyalty(user?.id, user?.email);
   const { stats: referralStats } = useReferral();
 
   const [formData, setFormData] = useState(() => {
@@ -39,7 +40,6 @@ const Checkout = () => {
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState<{ code: string; discount: number } | null>(null);
   const [usePoints, setUsePoints] = useState(false);
-  const [redeeming, setRedeeming] = useState(false);
   const [stockMap, setStockMap] = useState<Map<string, number>>(new Map());
 
   // Fetch inventory for cart items
@@ -59,40 +59,25 @@ const Checkout = () => {
   const deliveryFee = selectedDelivery?.fee ?? 0;
   const promoDiscount = promoApplied?.discount || 0;
   
-  // Calculate loyalty discount
+  // Calculate loyalty discount. Points are only deducted when the order is
+  // submitted, so this is a preview capped the same way the server caps it.
   const availablePoints = loyalty?.available_points || 0;
-  const maxPointsToUse = Math.min(availablePoints, program?.points_to_redeem || 100);
-  const loyaltyDiscount = usePoints && loyalty && program 
-    ? Math.floor(maxPointsToUse / program.points_to_redeem) * program.reward_value_mwk 
+  const pointsStep = program?.points_to_redeem || 100;
+  const rewardValue = program?.reward_value_mwk || 1000;
+  const maxRedeemPercent = program?.max_redeem_percent || 50;
+  const maxPreviewDiscount = program ? Math.floor((subtotal * maxRedeemPercent) / 100) : 0;
+  const maxPreviewPoints = program
+    ? Math.floor(maxPreviewDiscount / Math.max(rewardValue, 1)) * pointsStep
     : 0;
-  
+  const loyaltyPreviewPoints = usePoints
+    ? Math.min(Math.floor(availablePoints / pointsStep) * pointsStep, maxPreviewPoints)
+    : 0;
+  const loyaltyDiscount = program
+    ? Math.floor(loyaltyPreviewPoints / pointsStep) * rewardValue
+    : 0;
+   
   const totalDiscount = promoDiscount + loyaltyDiscount;
   const total = subtotal - totalDiscount + deliveryFee;
-
-  const handleRedeemPoints = async () => {
-    if (!user || !loyalty || !program) return;
-    
-    const maxPoints = Math.min(availablePoints, program.points_to_redeem);
-    if (maxPoints < program.points_to_redeem) {
-      toast({ title: `Need ${program.points_to_redeem} points to redeem`, variant: "destructive" });
-      return;
-    }
-    
-    setRedeeming(true);
-    try {
-      const result = await redeemPoints(maxPoints, subtotal);
-      if (result.success) {
-        setUsePoints(true);
-        toast({ title: "Points applied!", description: `-${formatMWK(result.discount)} discount` });
-      } else {
-        toast({ title: "Could not redeem", description: result.error, variant: "destructive" });
-      }
-    } catch {
-      toast({ title: "Error redeeming points", variant: "destructive" });
-    } finally {
-      setRedeeming(false);
-    }
-  };
 
   const applyPromo = async (code?: string) => {
     const promoToApply = code || promoCode;
@@ -160,16 +145,40 @@ const Checkout = () => {
         }
       }
 
+      // Redeem points on the server right before the order is created. The
+      // returned discount is authoritative; the preview above only mirrors the
+      // same caps so the customer knows what to expect.
+      let redeemedDiscount = 0;
+      if (usePoints && loyaltyPreviewPoints > 0) {
+        const redemption = await redeemPoints(loyaltyPreviewPoints, subtotal);
+        if (!redemption.success) {
+          toast({
+            title: "Could not apply rewards",
+            description: redemption.error || "Try again without points.",
+            variant: "destructive",
+          });
+          setSubmitting(false);
+          return;
+        }
+        redeemedDiscount = redemption.discount;
+      }
+
+      const finalDiscount = Math.min(subtotal, promoDiscount + redeemedDiscount);
+      const finalTotal = Math.max(0, subtotal - finalDiscount + deliveryFee);
+
       // Create order
       const { data: order, error } = await supabase.from("orders").insert({
         user_id: user?.id,
+        brand_id: SB_BRAND_ID,
         customer_name: formData.name,
         customer_phone: formData.phone,
         customer_location: formData.location,
         notes: formData.deliveryNote,
         subtotal_mwk: subtotal,
         delivery_fee_mwk: deliveryFee,
-        total_mwk: total,
+        discount_mwk: finalDiscount,
+        promo_code: promoApplied?.code || null,
+        total_mwk: finalTotal,
         payment_method: paymentMethod,
         status: "new",
       }).select().single();
@@ -185,7 +194,7 @@ const Checkout = () => {
           toName: formData.name,
           orderId,
           items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
-          total,
+          total: finalTotal,
           location: formData.location,
           deliveryMethod: selectedDelivery?.label || "Standard",
           eta: selectedDelivery?.estimatedDays,
@@ -200,6 +209,7 @@ const Checkout = () => {
       // Add order items
       const orderItems = items.map(item => ({
         order_id: orderId,
+        brand_id: SB_BRAND_ID,
         product_key: item.productKey,
         product_name: item.name,
         unit_price_mwk: item.price,
@@ -207,15 +217,8 @@ const Checkout = () => {
       }));
       await supabase.from("order_items").insert(orderItems);
 
-      // Award loyalty points for purchase (1 point per 1000 MWK)
-      if (user?.id && subtotal >= 1000) {
-        const pointsToEarn = Math.floor(subtotal / 1000);
-        try {
-          await earnPoints(orderId, subtotal);
-        } catch (e) {
-          console.error("Failed to award points:", e);
-        }
-      }
+      // Points are awarded by the admin payment transition (award_loyalty_for_order),
+      // never at order creation, so unpaid orders earn nothing.
 
       // Save shipping info for next time
       try {
@@ -233,7 +236,7 @@ const Checkout = () => {
       clear();
       const { redirectToPayChangu } = await import("@/lib/paychangu");
       redirectToPayChangu({
-        amount: total,
+        amount: finalTotal,
         currency: "MWK",
         email: `${cleanPhone}@wearsb.com`,
         firstName: formData.name.split(" ")[0],
@@ -370,19 +373,20 @@ const Checkout = () => {
               </div>
               <button
                 type="button"
-                onClick={handleRedeemPoints}
-                disabled={redeeming || usePoints}
+                onClick={() => setUsePoints((prev) => !prev)}
                 className={`py-1.5 px-3 rounded-lg text-sm font-medium ${
                   usePoints 
                     ? "bg-green-500 text-gray-900"
                     : "bg-amber-500 text-gray-900 hover:bg-amber-600"
                 }`}
               >
-                {redeeming ? "Applying..." : usePoints ? "Applied!" : "Use Points"}
+                {usePoints ? "Points on" : "Use Points"}
               </button>
             </div>
             {loyaltyDiscount > 0 && (
-              <p className="text-xs text-green-600 mt-2">-{formatMWK(loyaltyDiscount)} discount applied</p>
+              <p className="text-xs text-green-600 mt-2">
+                {loyaltyPreviewPoints} points will save {formatMWK(loyaltyDiscount)} on this order.
+              </p>
             )}
           </div>
         )}

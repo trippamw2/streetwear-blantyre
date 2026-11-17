@@ -22,7 +22,7 @@ const BRAND_META: Record<BrandSlug, { siteName: string; siteUrl: string; image: 
   "lake-fresh": {
     siteName: BRANDS["lake-fresh"].name,
     siteUrl: `https://${BRANDS["lake-fresh"].domain}`,
-    image: "https://placehold.co/600x600/073B78/08A9E8?text=Lake+Fresh+Fish+Mart",
+    image: "/brand/lake-fresh/logo.png",
   },
 };
 

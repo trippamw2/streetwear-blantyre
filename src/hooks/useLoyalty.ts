@@ -1,5 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { IS_LF_SITE } from "@/lib/brandSite";
+import { LF_BRAND_ID, SB_BRAND_ID } from "@/lib/adminBrand";
 
 interface LoyaltyProgram {
   id: string;
@@ -8,6 +10,7 @@ interface LoyaltyProgram {
   points_per_mwk: number;
   points_to_redeem: number;
   reward_value_mwk: number;
+  max_redeem_percent: number;
 }
 
 interface LoyaltyTier {
@@ -37,7 +40,14 @@ interface LoyaltyTransaction {
   created_at: string;
 }
 
-export function useLoyalty(userId?: string, userEmail?: string) {
+export const defaultLoyaltyBrandId = (): string => (IS_LF_SITE ? LF_BRAND_ID : SB_BRAND_ID);
+
+/**
+ * Loyalty is per brand. The active storefront decides the default brand, and a
+ * caller can override it for admin screens.
+ */
+export function useLoyalty(userId?: string, userEmail?: string, brandIdOverride?: string) {
+  const brandId = brandIdOverride || defaultLoyaltyBrandId();
   const [loyalty, setLoyalty] = useState<CustomerLoyalty | null>(null);
   const [program, setProgram] = useState<LoyaltyProgram | null>(null);
   const [tiers, setTiers] = useState<LoyaltyTier[]>([]);
@@ -47,6 +57,7 @@ export function useLoyalty(userId?: string, userEmail?: string) {
 
   const fetchLoyaltyData = useCallback(async () => {
     if (!userId) {
+      setLoyalty(null);
       setLoading(false);
       return;
     }
@@ -55,25 +66,25 @@ export function useLoyalty(userId?: string, userEmail?: string) {
       setLoading(true);
       setError(null);
 
-      // Fetch customer loyalty
       const { data: loyaltyData, error: loyaltyError } = await supabase
         .from("customer_loyalty")
         .select("*")
         .eq("user_id", userId)
-        .single();
+        .eq("brand_id", brandId)
+        .maybeSingle();
 
-      if (loyaltyError && loyaltyError.code !== "PGRST116") {
-        throw loyaltyError;
-      }
+      if (loyaltyError) throw loyaltyError;
 
       if (loyaltyData) {
         setLoyalty(loyaltyData);
       } else {
-        // Create loyalty record if not exists
-        const { data: newLoyalty, error: createError } = await supabase
+        // Create the zero balance row so this brand can reach the customer.
+        // The database only allows a client to insert a zero balance row.
+        const { data: created } = await supabase
           .from("customer_loyalty")
           .insert({
             user_id: userId,
+            brand_id: brandId,
             email: userEmail || null,
             total_points: 0,
             available_points: 0,
@@ -82,43 +93,48 @@ export function useLoyalty(userId?: string, userEmail?: string) {
             tier: "bronze",
           })
           .select()
-          .single();
+          .maybeSingle();
 
-        if (createError) throw createError;
-        setLoyalty(newLoyalty);
+        if (created) {
+          setLoyalty(created);
+        } else {
+          const { data: existing } = await supabase
+            .from("customer_loyalty")
+            .select("*")
+            .eq("user_id", userId)
+            .eq("brand_id", brandId)
+            .maybeSingle();
+          setLoyalty(existing || null);
+        }
       }
 
-      // Fetch active program
       const { data: programData, error: programError } = await supabase
         .from("loyalty_programs")
         .select("*")
+        .eq("brand_id", brandId)
         .eq("is_active", true)
-        .single();
-      if (programError) {
-        console.error("Program fetch error:", programError);
-      }
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (programError) console.warn("Loyalty program fetch failed", programError.message);
       setProgram(programData);
 
-      // Fetch tiers
       const { data: tiersData, error: tiersError } = await supabase
         .from("loyalty_tiers")
         .select("*")
+        .eq("brand_id", brandId)
         .order("min_lifetime_points", { ascending: true });
-      if (tiersError) {
-        console.error("Tiers fetch error:", tiersError);
-      }
+      if (tiersError) console.warn("Loyalty tiers fetch failed", tiersError.message);
       setTiers(tiersData || []);
 
-      // Fetch recent transactions
       const { data: txData, error: txError } = await supabase
         .from("loyalty_transactions")
         .select("*")
         .eq("user_id", userId)
+        .eq("brand_id", brandId)
         .order("created_at", { ascending: false })
         .limit(10);
-      if (txError) {
-        console.error("Transactions fetch error:", txError);
-      }
+      if (txError) console.warn("Loyalty transactions fetch failed", txError.message);
       setTransactions(txData || []);
     } catch (err) {
       console.error("Loyalty fetch error:", err);
@@ -126,113 +142,79 @@ export function useLoyalty(userId?: string, userEmail?: string) {
     } finally {
       setLoading(false);
     }
-  }, [userId, userEmail]);
+  }, [userId, userEmail, brandId]);
 
   useEffect(() => {
     fetchLoyaltyData();
   }, [fetchLoyaltyData]);
 
-  // Earn points after purchase
-  const earnPoints = useCallback(async (orderId: string, orderTotal: number) => {
-    if (!userId || !program) return null;
-
-    const points = Math.floor(orderTotal / program.points_per_mwk);
-    if (points <= 0) return null;
-
+  /**
+   * Points are only credited once an order is actually paid. The database
+   * function is idempotent, so calling it twice never double credits.
+   */
+  const earnPoints = useCallback(async (orderId: string) => {
+    if (!userId) return null;
     try {
-      // Get current loyalty
-      const { data: current } = await supabase
-        .from("customer_loyalty")
-        .select("*")
-        .eq("user_id", userId)
-        .single();
-
-      const newTotal = (current?.total_points || 0) + points;
-      const newAvailable = (current?.available_points || 0) + points;
-      const tier = calculateTier(newTotal);
-
-      // Update loyalty
-      await supabase
-        .from("customer_loyalty")
-        .upsert({
-          user_id: userId,
-          email: userEmail || current?.email,
-          total_points: newTotal,
-          available_points: newAvailable,
-          tier,
-          lifetime_spent_mwk: (current?.lifetime_spent_mwk || 0) + orderTotal,
-          last_activity_at: new Date().toISOString(),
-        }, { onConflict: "user_id" });
-
-      // Record transaction
-      await supabase
-        .from("loyalty_transactions")
-        .insert({
-          user_id: userId,
-          order_id: orderId,
-          points,
-          type: "earned",
-          description: `Earned from order`,
-        });
-
-      return points;
+      const { data, error: rpcError } = await supabase.rpc("award_loyalty_for_order", {
+        p_order_id: orderId,
+      });
+      if (rpcError) throw rpcError;
+      await fetchLoyaltyData();
+      const points = (data as { points?: number } | null)?.points;
+      return typeof points === "number" ? points : null;
     } catch (err) {
       console.error("Earn points error:", err);
       return null;
     }
-  }, [userId, userEmail, program]);
+  }, [userId, fetchLoyaltyData]);
 
-  // Redeem points for discount
+  /**
+   * Redeems points on the server. The database validates the balance and the
+   * per order cap, then deducts the points and returns the real discount.
+   */
   const redeemPoints = useCallback(async (pointsToRedeem: number, orderTotal: number) => {
-    if (!userId || !program || !loyalty) return { success: false, discount: 0 };
-
-    if (loyalty.available_points < pointsToRedeem) {
-      return { success: false, error: "Not enough points", discount: 0 };
-    }
-
-    const maxRedeem = Math.floor(orderTotal / program.reward_value_mwk) * program.points_to_redeem;
-    const allowedRedeem = Math.min(pointsToRedeem, maxRedeem);
-
-    const redemptions = Math.floor(allowedRedeem / program.points_to_redeem);
-    const discount = redemptions * program.reward_value_mwk;
-
-    if (discount <= 0) {
-      return { success: false, error: "Minimum points required", discount: 0 };
-    }
+    if (!userId) return { success: false, error: "Sign in required", discount: 0, pointsUsed: 0 };
 
     try {
-      const newAvailable = loyalty.available_points - allowedRedeem;
-      const newRedeemed = loyalty.redeemed_points + allowedRedeem;
+      const { data, error: rpcError } = await supabase.rpc("redeem_loyalty_points", {
+        p_brand_id: brandId,
+        p_points: Math.max(0, Math.floor(pointsToRedeem)),
+        p_order_total: Math.max(0, orderTotal),
+      });
 
-      // Update loyalty
-      await supabase
-        .from("customer_loyalty")
-        .update({
-          available_points: newAvailable,
-          redeemed_points: newRedeemed,
-          last_activity_at: new Date().toISOString(),
-        })
-        .eq("user_id", userId);
+      if (rpcError) throw rpcError;
 
-      // Record transaction
-      await supabase
-        .from("loyalty_transactions")
-        .insert({
-          user_id: userId,
-          points: -allowedRedeem,
-          type: "redeemed",
-          description: `Redeemed for ${discount} MWK discount`,
-        });
+      const result = (data || {}) as {
+        ok?: boolean;
+        reason?: string;
+        points_used?: number;
+        discount?: number;
+        available?: number;
+      };
 
-      // Refresh data
-      fetchLoyaltyData();
+      if (!result.ok) {
+        const reason =
+          result.reason === "not_enough_points"
+            ? `Not enough points${typeof result.available === "number" ? ` (${result.available} available)` : ""}`
+            : result.reason === "no_loyalty"
+              ? "No rewards yet. Earn points with your first paid order."
+              : result.reason === "no_program"
+                ? "Rewards are not active right now."
+                : "Could not redeem points";
+        return { success: false, error: reason, discount: 0, pointsUsed: 0 };
+      }
 
-      return { success: true, discount, pointsUsed: allowedRedeem };
+      await fetchLoyaltyData();
+      return {
+        success: true,
+        discount: result.discount || 0,
+        pointsUsed: result.points_used || 0,
+      };
     } catch (err) {
       console.error("Redeem error:", err);
-      return { success: false, error: "Failed to redeem", discount: 0 };
+      return { success: false, error: "Failed to redeem", discount: 0, pointsUsed: 0 };
     }
-  }, [userId, program, loyalty, fetchLoyaltyData]);
+  }, [userId, brandId, fetchLoyaltyData]);
 
   const calculatePoints = useCallback((orderTotal: number): number => {
     if (!program || orderTotal <= 0) return 0;
@@ -241,15 +223,13 @@ export function useLoyalty(userId?: string, userEmail?: string) {
 
   const calculateTier = useCallback((lifetimePoints: number): string => {
     for (const tier of tiers) {
-      if (lifetimePoints >= tier.min_lifetime_points) {
-        return tier.name;
-      }
+      if (lifetimePoints >= tier.min_lifetime_points) return tier.name;
     }
     return "bronze";
   }, [tiers]);
 
   const getTierBenefits = useCallback((tierName: string): LoyaltyTier | undefined => {
-    return tiers.find(t => t.name === tierName);
+    return tiers.find((t) => t.name === tierName);
   }, [tiers]);
 
   const canRedeem = useCallback((points: number): boolean => {
@@ -270,6 +250,7 @@ export function useLoyalty(userId?: string, userEmail?: string) {
     transactions,
     loading,
     error,
+    brandId,
     refresh: fetchLoyaltyData,
     earnPoints,
     redeemPoints,

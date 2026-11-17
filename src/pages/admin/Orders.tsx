@@ -14,48 +14,19 @@ import {
   orderCancelled,
   buildWhatsAppLink 
 } from "@/lib/ai-messages";
+import { adminBrandId, useAdminBrand } from "@/lib/adminBrand";
 
-// Auto-reward referrer when order is delivered
-const rewardReferrer = async (userId: string) => {
+// Complete a pending referral and award both sides once the order is paid.
+const completeReferral = async (userId: string, orderId: string) => {
   try {
-    // Find referral transaction for this user
-    const { data: referral } = await supabase
-      .from("referral_transactions")
-      .select("*")
-      .eq("referee_id", userId)
-      .eq("status", "pending")
-      .single();
-    
-    if (!referral) return;
-    
-    // Update referral status
-    await supabase
-      .from("referral_transactions")
-      .update({ status: "completed", order_id: referral.order_id })
-      .eq("id", referral.id);
-    
-    // Award points to referrer
-    const { data: referrerLoyalty } = await supabase
-      .from("customer_loyalty")
-      .select("*")
-      .eq("user_id", referral.referrer_id)
-      .single();
-    
-    const newPoints = (referrerLoyalty?.available_points || 0) + (referral.referrer_reward || 500);
-    await supabase
-      .from("customer_loyalty")
-      .update({ available_points: newPoints })
-      .eq("user_id", referral.referrer_id);
-    
-    // Record transaction
-    await supabase.from("loyalty_transactions").insert({
-      user_id: referral.referrer_id,
-      points: referral.referrer_reward || 500,
-      type: "referral_bonus",
-      description: "Referral bonus: friend made first order",
+    const { data, error } = await supabase.rpc("complete_referral", {
+      p_referee_id: userId,
+      p_order_id: orderId,
     });
-  } catch (e) {
-    console.error("Referral reward error:", e);
+    if (error) console.warn("Referral completion failed", error.message);
+    return data;
+  } catch (error) {
+    console.warn("Referral completion failed", error);
   }
 };
 
@@ -106,6 +77,8 @@ const statusColors: Record<string, string> = {
 };
 
 const AdminOrders = () => {
+  const brand = useAdminBrand();
+  const brandId = adminBrandId(brand);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -114,11 +87,17 @@ const AdminOrders = () => {
   const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
+    setLoading(true);
     fetchOrders();
-  }, [filter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, brandId]);
 
   const fetchOrders = () => {
-    let query = supabase.from("orders").select("*").order("created_at", { ascending: false });
+    let query = supabase
+      .from("orders")
+      .select("*")
+      .eq("brand_id", brandId)
+      .order("created_at", { ascending: false });
     if (filter !== "all") {
       query = query.eq("status", filter);
     }
@@ -229,11 +208,6 @@ Track: https://www.wearsb.com/track/${order.id}`;
       
       sendWhatsAppNotification(order, newStatus);
       
-      // Auto-reward referrer when order is delivered
-      if (newStatus === "delivered" && order.user_id) {
-        await rewardReferrer(order.user_id);
-      }
-      
       // Send email notification based on status
       try {
         const { sendPaymentReceivedEmail, sendDispatchedEmail, sendDeliveredEmail } = await import("@/lib/brevo");
@@ -288,6 +262,11 @@ Track: https://www.wearsb.com/track/${order.id}`;
       console.error("mark_order_paid failed:", error);
       return;
     }
+
+    // Award loyalty and complete a pending referral exactly once.
+    await supabase.rpc("award_loyalty_for_order", { p_order_id: orderId });
+    const paidOrder = orders.find((order) => order.id === orderId);
+    if (paidOrder?.user_id) await completeReferral(paidOrder.user_id, orderId);
 
     await updateStatus(orderId, "confirmed", true);
   };

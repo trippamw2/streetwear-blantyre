@@ -100,6 +100,7 @@ const LakeFreshHeader = () => {
             <LFNavLink to="/lf/recipes" className={navLinkClass}>Recipes</LFNavLink>
             <LFNavLink to="/lf/cart" className={navLinkClass}>Basket</LFNavLink>
             <LFNavLink to="/lf/orders" className={navLinkClass}>My orders</LFNavLink>
+            <LFNavLink to="/lf/track" className={navLinkClass}>Track order</LFNavLink>
             <LFNavLink to="/lf/loyalty" className={navLinkClass}>Rewards</LFNavLink>
             <LFNavLink to="/lf/subscribe" className={navLinkClass}>Subscribe</LFNavLink>
             <LFNavLink to="/lf/pro" className={navLinkClass}>PRO</LFNavLink>
@@ -131,6 +132,7 @@ const LakeFreshFooter = () => (
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
           <LFLink to="/lf/cart" className="hover:text-[#073B78]">Basket</LFLink>
           <LFLink to="/lf/orders" className="hover:text-[#073B78]">My Orders</LFLink>
+          <LFLink to="/lf/track" className="hover:text-[#073B78]">Track Order</LFLink>
           <LFLink to="/lf/loyalty" className="hover:text-[#073B78]">Rewards</LFLink>
           <LFLink to="/lf/subscribe" className="hover:text-[#073B78]">Subscribe</LFLink>
           <LFLink to="/lf/pro" className="hover:text-[#073B78]">LakeFresh PRO</LFLink>

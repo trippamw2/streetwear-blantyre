@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AIWritingButton } from "@/components/admin/AIWritingButton";
+import { adminBrandId, useAdminBrand } from "@/lib/adminBrand";
 import { Plus, Edit, Trash2, Loader2, Tag, Calendar, Users, Percent, DollarSign, ToggleLeft, ToggleRight } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -25,6 +26,8 @@ interface PromoCode {
 }
 
 const AdminPromos = () => {
+  const brand = useAdminBrand();
+  const brandId = adminBrandId(brand);
   const [promos, setPromos] = useState<PromoCode[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -44,10 +47,14 @@ const AdminPromos = () => {
 
   useEffect(() => {
     fetchPromos();
-  }, []);
+  }, [brandId]);
 
   const fetchPromos = async () => {
-    const { data } = await supabase.from("promo_codes").select("*").order("created_at", { ascending: false });
+    const { data } = await supabase
+      .from("promo_codes")
+      .select("*")
+      .eq("brand_id", brandId)
+      .order("created_at", { ascending: false });
     setPromos(data || []);
     setLoading(false);
   };
@@ -66,10 +73,15 @@ const AdminPromos = () => {
         start_date: formData.start_date,
         end_date: formData.end_date || null,
         is_active: formData.is_active,
+        brand_id: brandId,
       };
 
       if (editingPromo) {
-        await supabase.from("promo_codes").update(promoData).eq("id", editingPromo.id);
+        await supabase
+          .from("promo_codes")
+          .update(promoData)
+          .eq("id", editingPromo.id)
+          .eq("brand_id", brandId);
         toast({ title: "Promo code updated!" });
       } else {
         await supabase.from("promo_codes").insert(promoData);
@@ -87,7 +99,7 @@ const AdminPromos = () => {
 
   const handleDelete = async (id: string) => {
     if (confirm("Delete this promo code?")) {
-      await supabase.from("promo_codes").delete().eq("id", id);
+      await supabase.from("promo_codes").delete().eq("id", id).eq("brand_id", brandId);
       fetchPromos();
       toast({ title: "Promo code deleted" });
     }
@@ -126,7 +138,11 @@ const AdminPromos = () => {
   };
 
   const toggleActive = async (promo: PromoCode) => {
-    await supabase.from("promo_codes").update({ is_active: !promo.is_active }).eq("id", promo.id);
+    await supabase
+      .from("promo_codes")
+      .update({ is_active: !promo.is_active })
+      .eq("id", promo.id)
+      .eq("brand_id", brandId);
     fetchPromos();
   };
 
@@ -143,7 +159,9 @@ const AdminPromos = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display font-bold text-3xl">Promo Codes</h1>
-          <p className="text-gray-500">Manage discount codes</p>
+          <p className="text-gray-500">
+            {brand === "lf" ? "Lake Fresh" : "Streetwear Blantyre"} discount codes
+          </p>
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={(open) => {

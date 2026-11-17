@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { IS_LF_SITE, lfUrl } from "@/lib/brandSite";
+import { LF_BRAND_ID, SB_BRAND_ID } from "@/lib/adminBrand";
 
 interface ReferralCode {
   id: string;
@@ -18,88 +20,106 @@ interface ReferralStats {
   totalEarned: number;
 }
 
-export const useReferral = () => {
+const PENDING_KEY = "brand_pending_referral";
+
+/** The brand a referral belongs to on this storefront. */
+export const currentReferralBrandId = (): string => (IS_LF_SITE ? LF_BRAND_ID : SB_BRAND_ID);
+
+const brandPrefix = (isLf: boolean) => (isLf ? "LF" : "SB");
+
+const referralLinkFor = (code: string, isLf: boolean) => {
+  const base = isLf ? lfUrl("/") : window.location.origin + "/";
+  return `${base}${base.includes("?") ? "&" : "?"}ref=${code}`;
+};
+
+export const useReferral = (brandIdOverride?: string) => {
   const { user } = useAuth();
   const [referralCode, setReferralCode] = useState<ReferralCode | null>(null);
   const [stats, setStats] = useState<ReferralStats>({ totalReferrals: 0, successfulReferrals: 0, totalEarned: 0 });
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const brandId = brandIdOverride || currentReferralBrandId();
+  const isLf = brandId === LF_BRAND_ID;
 
-  useEffect(() => {
+  const loadReferralCode = useCallback(async () => {
     if (!user) {
+      setReferralCode(null);
       setLoading(false);
       return;
     }
-    loadReferralCode();
-  }, [user]);
 
-  const loadReferralCode = async () => {
-    if (!user) return;
-    
-try {
-      const shortCode = user.id.slice(0, 8).toUpperCase();
-      const code = `SB${shortCode}`;
-      
-      // Try insert first, if dup then upsert
-      const { data: newCode, error: insertErr } = await supabase
+    const shortCode = user.id.replace(/-/g, "").slice(0, 8).toUpperCase();
+    const code = `${brandPrefix(isLf)}${shortCode}`;
+
+    const { data, error } = await supabase
+      .from("user_referral_codes")
+      .upsert(
+        { user_id: user.id, brand_id: brandId, code },
+        { onConflict: "user_id,brand_id" },
+      )
+      .select()
+      .maybeSingle();
+
+    if (data) {
+      setReferralCode(data as ReferralCode);
+      await loadStats(data.code);
+    } else if (error) {
+      // A code already exists but could not be upserted. Read it instead.
+      const { data: existing } = await supabase
         .from("user_referral_codes")
-        .upsert({ user_id: user.id, code }, { onConflict: "user_id" })
-        .select()
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("brand_id", brandId)
         .maybeSingle();
-      
-      if (newCode) {
-        setReferralCode(newCode as any);
-        loadStats(code);
-      } else if (insertErr) {
-        // Fallback: just use local code
-        setReferralCode({ id: "", user_id: user.id, code, rewards_points: 0, rewards_redeemed: 0, max_referrals: 5, created_at: "" } as any);
+      if (existing) {
+        setReferralCode(existing as ReferralCode);
+        await loadStats(existing.code);
       }
-    } catch (e) {
-      const shortCode = user.id.slice(0, 8).toUpperCase();
-      const code = `SB${shortCode}`;
-      const { data: newCode } = await supabase
-        .from("user_referral_codes")
-        .upsert({ user_id: user.id, code }, { onConflict: "user_id" })
-        .select()
-        .maybeSingle();
-      if (newCode) setReferralCode(newCode as any);
     }
+
     setLoading(false);
-  };
+  }, [user, brandId, isLf]);
 
   const loadStats = async (code: string) => {
     const { data: referrals } = await supabase
       .from("referral_transactions")
-      .select("*")
-      .eq("referral_code", code);
+      .select("status, referrer_reward")
+      .eq("referral_code", code)
+      .eq("brand_id", brandId);
 
     if (referrals) {
-      const successful = referrals.filter((r: any) => r.status === "completed").length;
+      const completed = referrals.filter((r: any) => r.status === "completed");
       setStats({
         totalReferrals: referrals.length,
-        successfulReferrals: successful,
-        totalEarned: successful * 500,
+        successfulReferrals: completed.length,
+        totalEarned: completed.reduce((sum: number, r: any) => sum + (r.referrer_reward || 0), 0),
       });
     }
   };
 
+  useEffect(() => {
+    loadReferralCode();
+  }, [loadReferralCode]);
+
   const copyCode = async () => {
     if (!referralCode) return;
-    const referralLink = `${window.location.origin}?ref=${referralCode.code}`;
-    await navigator.clipboard.writeText(referralLink);
+    await navigator.clipboard.writeText(referralLinkFor(referralCode.code, isLf));
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const shareReferral = async () => {
     if (!referralCode) return;
-    const referralLink = `${window.location.origin}?ref=${referralCode.code}`;
-    const text = `Get K200 off your first Streetwear Blantyre order! Use my referral code: ${referralCode.code} - ${referralLink}`;
-    
+    const link = referralLinkFor(referralCode.code, isLf);
+    const brand = isLf ? "Lake Fresh Fish Mart" : "Streetwear Blantyre";
+    const text = `Order from ${brand} and use my referral code: ${referralCode.code}. ${link}`;
+
     if (navigator.share) {
       try {
         await navigator.share({ text });
-      } catch { copyCode(); }
+      } catch {
+        copyCode();
+      }
     } else {
       copyCode();
     }
@@ -109,53 +129,63 @@ try {
 };
 
 export const useReferralSignup = () => {
+  const { user } = useAuth();
   const [applying, setApplying] = useState(false);
 
-  const applyReferralCode = async (code: string, newUserId: string) => {
+  const applyReferralCode = async (code: string) => {
     if (!code) return { success: false, error: "No code provided" };
-    
+
     setApplying(true);
     try {
-      const { data: referral } = await supabase
-        .from("user_referral_codes")
-        .select("*, user:user_id(email)")
-        .eq("code", code.toUpperCase())
-        .single();
+      const { data, error } = await supabase.rpc("apply_referral_code", { p_code: code.trim() });
 
-      if (!referral) {
-        return { success: false, error: "Invalid referral code" };
+      if (error) return { success: false, error: error.message };
+
+      const result = (data || {}) as { ok?: boolean; reason?: string };
+      if (result.ok) {
+        try {
+          localStorage.removeItem(PENDING_KEY);
+        } catch {}
+        return { success: true };
       }
 
-      const { data: transaction } = await supabase
-        .from("referral_transactions")
-        .insert({
-          referrer_id: referral.user_id,
-          referee_id: newUserId,
-          referral_code: code.toUpperCase(),
-          status: "pending",
-        })
-        .select()
-        .single();
-
-      if (transaction) {
-        return { success: true, transaction };
+      if (result.reason === "sign_in_required") {
+        // New accounts without a session yet: keep the code and apply after sign in.
+        try {
+          localStorage.setItem(PENDING_KEY, code.trim().toUpperCase());
+        } catch {}
+        return { success: true, pending: true };
       }
-      return { success: false, error: "Could not create referral" };
-    } catch (e: any) {
-      return { success: false, error: e.message };
+
+      return { success: false, error: result.reason || "Could not apply referral code" };
+    } catch (err) {
+      return { success: false, error: err instanceof Error ? err.message : "Could not apply referral code" };
     } finally {
       setApplying(false);
     }
   };
 
-  const markReferralComplete = async (transactionId: string, orderId: string) => {
-    await supabase
-      .from("referral_transactions")
-      .update({ status: "completed", order_id: orderId })
-      .eq("id", transactionId);
+  // Apply a code that was saved before the account had a session.
+  useEffect(() => {
+    if (!user) return;
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(PENDING_KEY);
+    } catch {}
+    if (!stored) return;
 
-    await supabase.rpc("add_referral_rewards", { transaction_id: transactionId });
-  };
+    supabase
+      .rpc("apply_referral_code", { p_code: stored })
+      .then(({ data }) => {
+        const result = (data || {}) as { ok?: boolean };
+        if (result.ok) {
+          try {
+            localStorage.removeItem(PENDING_KEY);
+          } catch {}
+        }
+      })
+      .catch(() => {});
+  }, [user]);
 
-  return { applyReferralCode, markReferralComplete, applying };
+  return { applyReferralCode, applying };
 };

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Edit, Trash2, Loader2, Gift, Users, TrendingUp, Award } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { adminBrandId, useAdminBrand } from "@/lib/adminBrand";
 
 interface LoyaltyProgram {
   id: string;
@@ -27,42 +28,62 @@ interface LoyaltyTier {
 }
 
 const AdminLoyalty = () => {
+  const brand = useAdminBrand();
+  const brandId = adminBrandId(brand);
   const [programs, setPrograms] = useState<LoyaltyProgram[]>([]);
   const [tiers, setTiers] = useState<LoyaltyTier[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [stats, setStats] = useState({ total_members: 0, total_points: 0, redeemed_points: 0 });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [progRes, tierRes, statsRes] = await Promise.all([
-        supabase.from("loyalty_programs").select("*").order("created_at", { ascending: false }),
-        supabase.from("loyalty_tiers").select("*").order("min_lifetime_points", { ascending: true }),
-        supabase.from("customer_loyalty").select("count, sum(available_points), sum(redeemed_points)"),
+      const [progRes, tierRes, loyaltyRes] = await Promise.all([
+        supabase
+          .from("loyalty_programs")
+          .select("*")
+          .eq("brand_id", brandId)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("loyalty_tiers")
+          .select("*")
+          .eq("brand_id", brandId)
+          .order("min_lifetime_points", { ascending: true }),
+        supabase
+          .from("customer_loyalty")
+          .select("available_points, redeemed_points")
+          .eq("brand_id", brandId),
       ]);
 
       setPrograms(progRes.data || []);
       setTiers(tierRes.data || []);
+
+      const rows = loyaltyRes.data || [];
+      setStats({
+        total_members: rows.length,
+        total_points: rows.reduce((sum: number, row: any) => sum + (row.available_points || 0), 0),
+        redeemed_points: rows.reduce((sum: number, row: any) => sum + (row.redeemed_points || 0), 0),
+      });
     } catch (err) {
       console.error("Fetch error:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [brandId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const saveProgram = async (program: Partial<LoyaltyProgram>) => {
     setSaving(true);
     try {
       if (program.id) {
-        await supabase.from("loyalty_programs").update(program).eq("id", program.id);
+        await supabase.from("loyalty_programs").update(program).eq("id", program.id).eq("brand_id", brandId);
         toast({ title: "Program updated!" });
       } else {
-        await supabase.from("loyalty_programs").insert(program);
+        await supabase.from("loyalty_programs").insert({ ...program, brand_id: brandId });
         toast({ title: "Program created!" });
       }
       fetchData();
@@ -77,10 +98,10 @@ const AdminLoyalty = () => {
     setSaving(true);
     try {
       if (tier.id) {
-        await supabase.from("loyalty_tiers").update(tier).eq("id", tier.id);
+        await supabase.from("loyalty_tiers").update(tier).eq("id", tier.id).eq("brand_id", brandId);
         toast({ title: "Tier updated!" });
       } else {
-        await supabase.from("loyalty_tiers").insert(tier);
+        await supabase.from("loyalty_tiers").insert({ ...tier, brand_id: brandId });
         toast({ title: "Tier created!" });
       }
       fetchData();
@@ -92,13 +113,17 @@ const AdminLoyalty = () => {
   };
 
   const toggleActive = async (program: LoyaltyProgram) => {
-    await supabase.from("loyalty_programs").update({ is_active: !program.is_active }).eq("id", program.id);
+    await supabase
+      .from("loyalty_programs")
+      .update({ is_active: !program.is_active })
+      .eq("id", program.id)
+      .eq("brand_id", brandId);
     fetchData();
   };
 
   const deleteProgram = async (id: string) => {
     if (confirm("Delete this program?")) {
-      await supabase.from("loyalty_programs").delete().eq("id", id);
+      await supabase.from("loyalty_programs").delete().eq("id", id).eq("brand_id", brandId);
       fetchData();
       toast({ title: "Program deleted" });
     }
@@ -112,7 +137,9 @@ const AdminLoyalty = () => {
     <div className="space-y-8">
       <div>
         <h1 className="font-display font-bold text-3xl">Loyalty & Rewards</h1>
-        <p className="text-gray-500">Manage rewards programs and tiers</p>
+        <p className="text-gray-500">
+          {brand === "lf" ? "Lake Fresh" : "Streetwear Blantyre"} rewards programs and tiers
+        </p>
       </div>
 
       {/* Stats */}

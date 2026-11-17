@@ -379,6 +379,12 @@ const LakeFreshHome = () => {
             {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)}
             {earliest ? ` · Next available: ${formatDeliveryDate(earliest)}` : ""}.
           </p>
+          <LFLink
+            to="/lf/track"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#073B78]/20 bg-[#EAF6FB] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
+          >
+            <Truck className="h-3.5 w-3.5" /> Track an order
+          </LFLink>
         </div>
       </section>
 

@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "jsr:@supabase/functions-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -98,6 +99,46 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Admins only. The browser sends the signed in user's Supabase JWT in the
+    // Authorization header, which we forward to the auth server for validation.
+    const authHeader = req.headers.get("Authorization") || "";
+    const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") || "",
+      Deno.env.get("SUPABASE_SERVICE_KEY") || "",
+      { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+    );
+
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    const userId = userData?.user?.id;
+    if (userError || !userId) {
+      return new Response(
+        JSON.stringify({ error: "unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+    const role = Array.isArray(roles) ? roles[0]?.role : undefined;
+    const isAdmin = ["admin", "super_admin", "owner"].includes(String(role || "").toLowerCase());
+
+    let hasStaffAccess = false;
+    if (!isAdmin) {
+      const { data: perms } = await supabase
+        .from("staff_permissions")
+        .select("brand_id")
+        .eq("user_id", userId)
+        .limit(1);
+      hasStaffAccess = Array.isArray(perms) && perms.length > 0;
+    }
+
+    if (!isAdmin && !hasStaffAccess) {
+      return new Response(
+        JSON.stringify({ error: "Admin access required" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const { prompt } = await req.json();
 
     if (!prompt) {

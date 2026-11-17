@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { LFLink } from "@/components/lf/lfRouter";
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Fish, Leaf, Loader2, Sparkles, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Download, Fish, Leaf, Loader2, Sparkles, Users } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -108,6 +108,17 @@ const LakeFreshRecipe = () => {
                   </span>
                 ) : null}
               </div>
+
+              {data.pdf_url ? (
+                <a
+                  href={data.pdf_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 rounded-xl border border-[#073B78]/20 bg-white px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78] shadow-sm transition-colors hover:border-[#073B78]"
+                >
+                  <Download className="h-3.5 w-3.5" /> Download recipe PDF
+                </a>
+              ) : null}
             </div>
           </div>
         </div>

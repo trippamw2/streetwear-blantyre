@@ -1,8 +1,9 @@
-﻿import { useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { adminBrandId, adminPath, useAdminBrand } from "@/lib/adminBrand";
 
 interface ReferralWithUser {
   id: string;
@@ -30,27 +31,27 @@ interface ReferralCodeWithUser {
 }
 
 export default function AdminReferrals() {
+  const brand = useAdminBrand();
+  const brandId = adminBrandId(brand);
   const [referrals, setReferrals] = useState<ReferralWithUser[]>([]);
   const [codes, setCodes] = useState<ReferralCodeWithUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const { data: refs } = await supabase
         .from("referral_transactions")
         .select("*, referrer:user_id(email), referee:referee_id(email)")
+        .eq("brand_id", brandId)
         .order("created_at", { ascending: false })
         .limit(50);
 
       const { data: codes } = await supabase
         .from("user_referral_codes")
         .select("*, user:user_id(email)")
+        .eq("brand_id", brandId)
         .order("created_at", { ascending: false })
         .limit(50);
 
@@ -60,41 +61,29 @@ export default function AdminReferrals() {
       console.error(e);
     }
     setLoading(false);
-  };
+  }, [brandId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const updateStatus = async (id: string, status: string) => {
     await supabase
       .from("referral_transactions")
       .update({ status })
-      .eq("id", id);
+      .eq("id", id)
+      .eq("brand_id", brandId);
     loadData();
   };
 
   const addRewardPoints = async (userId: string, points: number) => {
-    const { data: existing } = await supabase
-      .from("customer_loyalty")
-      .select("available_points")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (existing) {
-      await supabase
-        .from("customer_loyalty")
-        .update({ available_points: existing.available_points + points })
-        .eq("user_id", userId);
-    } else {
-      await supabase
-        .from("customer_loyalty")
-        .insert({ user_id: userId, available_points: points, total_points: points });
-    }
-
-    await supabase.from("loyalty_transactions").insert({
-      user_id: userId,
-      points,
-      type: "referral_bonus",
-      description: "Referral bonus reward",
+    const { error } = await supabase.rpc("admin_credit_loyalty_points", {
+      p_user_id: userId,
+      p_brand_id: brandId,
+      p_points: points,
+      p_description: "Referral bonus reward",
     });
-
+    if (error) console.error("Could not credit referral bonus", error.message);
     loadData();
   };
 
@@ -118,7 +107,9 @@ export default function AdminReferrals() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Referral Management</h1>
-            <p className="text-muted-foreground">Track referrals and reward referrers</p>
+            <p className="text-muted-foreground">
+              {brand === "lf" ? "Lake Fresh" : "Streetwear Blantyre"} referrals, rewards and codes
+            </p>
           </div>
           <Button onClick={loadData} variant="outline">Refresh</Button>
         </div>
@@ -188,7 +179,7 @@ export default function AdminReferrals() {
                     </td>
                     <td className="p-3 text-sm">
                       {ref.order_id ? (
-                        <a href={`/admin/orders/${ref.order_id}`} className="text-gray-900 hover:underline">
+                        <a href={adminPath(brand, `/orders/${ref.order_id}`)} className="text-gray-900 hover:underline">
                           {ref.order_id.slice(0, 8)}
                         </a>
                       ) : (

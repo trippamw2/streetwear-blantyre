@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
 import { lfUrl } from "@/lib/brandSite";
-import { AlertCircle, ArrowLeft, CalendarDays, CreditCard, Fish, Loader2, MapPin, Snowflake, Truck } from "lucide-react";
+import { AlertCircle, ArrowLeft, CalendarDays, CreditCard, Fish, Gift, Loader2, MapPin, Snowflake, Truck } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
@@ -9,7 +9,9 @@ import {
   useLakeFreshDeliveryConfig,
   useLakeFreshSlots,
   useLakeFreshZones,
+  LF_BRAND_ID,
 } from "@/hooks/useLakeFresh";
+import { useLoyalty } from "@/hooks/useLoyalty";
 import {
   DEFAULT_LF_DELIVERY_CONFIG,
   formatCutoff,
@@ -53,6 +55,25 @@ const LakeFreshCheckout = () => {
   const [notes, setNotes] = useState("");
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
+  const [promoPreview, setPromoPreview] = useState<{ code: string; discount: number } | null>(null);
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [usePoints, setUsePoints] = useState(false);
+
+  const { loyalty, program } = useLoyalty(user?.id, user?.email, LF_BRAND_ID);
+  const availablePoints = loyalty?.available_points || 0;
+  const redeemStep = program?.points_to_redeem || 100;
+  const rewardValue = program?.reward_value_mwk || 1000;
+  const maxRedeemPercent = program?.max_redeem_percent || 50;
+
+  const pointsToUse = useMemo(() => {
+    if (!usePoints || !program || availablePoints < redeemStep) return 0;
+    const maxDiscount = Math.floor((subtotal * maxRedeemPercent) / 100);
+    const cap = Math.floor(maxDiscount / rewardValue) * redeemStep;
+    return Math.min(Math.floor(availablePoints / redeemStep) * redeemStep, cap);
+  }, [usePoints, program, availablePoints, subtotal, redeemStep, rewardValue, maxRedeemPercent]);
+
+  const loyaltyPreview = pointsToUse > 0 ? (pointsToUse / redeemStep) * rewardValue : 0;
 
   const selectedZone = zones?.find((zone) => zone.id === zoneId) || null;
   const { data: slots, isLoading: slotsLoading } = useLakeFreshSlots(zoneId, dates);
@@ -103,8 +124,37 @@ const LakeFreshCheckout = () => {
 
   const zoneFee = selectedZone?.baseFeeMwk ?? null;
   const deliveryFee = getDeliveryFee(zoneFee, subtotal, deliveryConfig);
-  const estimatedTotal = subtotal + deliveryFee;
+  const promoDiscount = promoPreview?.discount || 0;
+  const totalDiscount = Math.min(subtotal, loyaltyPreview + promoDiscount);
+  const estimatedTotal = Math.max(0, subtotal + deliveryFee - totalDiscount);
   const minOrderBlocked = Boolean(selectedZone && selectedZone.minOrderMwk > 0 && subtotal < selectedZone.minOrderMwk);
+
+  const applyPromo = async () => {
+    const code = promoCode.trim();
+    setPromoError(null);
+    if (!code) return;
+
+    // The server checks the code and its limits. The browser only learns
+    // whether it is valid, never the whole promo table.
+    const { data, error } = await supabase.rpc("lf_preview_promo", { p_code: code });
+
+    if (error || !data?.ok) {
+      setPromoError("That code is not valid or has expired.");
+      setPromoPreview(null);
+      return;
+    }
+    if (subtotal < Number(data.min_order || 0)) {
+      setPromoError(`That code needs a minimum order of ${formatMWK(Number(data.min_order || 0))}.`);
+      setPromoPreview(null);
+      return;
+    }
+
+    const discount =
+      data.type === "percentage" || data.type === "percent"
+        ? Math.floor((subtotal * Number(data.value)) / 100)
+        : Math.floor(Number(data.value));
+    setPromoPreview({ code: data.code as string, discount });
+  };
 
   if (items.length === 0) {
     return (
@@ -175,6 +225,8 @@ const LakeFreshCheckout = () => {
         p_items: payload,
         p_notes: notes.trim() || undefined,
         p_marketing_consent: marketingConsent,
+        p_redeem_points: pointsToUse,
+        p_promo_code: promoPreview?.code || (promoCode.trim() || null),
       });
 
       if (error) throw new Error(error.message);
@@ -184,6 +236,31 @@ const LakeFreshCheckout = () => {
       const txRef = buildLakeFreshPaymentRef(orderId);
       const cleanPhone = phone.replace(/[^0-9]/g, "");
       const [firstName, ...rest] = name.trim().split(/\s+/);
+
+      // The server calculates the real total (promo and loyalty are validated
+      // there), so read it back before charging.
+      const { data: savedOrder } = await supabase
+        .from("orders")
+        .select("total_mwk, subtotal_mwk, delivery_fee_mwk, discount_mwk, payment_reference")
+        .eq("id", orderId)
+        .maybeSingle();
+      const payableTotal = savedOrder?.total_mwk || estimatedTotal;
+      const reference = savedOrder?.payment_reference || txRef;
+
+      // Recipe PDFs attached to this order are emailed as downloadable links.
+      let recipePdfs: Array<{ title: string; url: string }> = [];
+      const recipeIds = items
+        .filter((item) => item.kind === "fish" && item.recipeId)
+        .map((item) => item.recipeId as string);
+      if (recipeIds.length > 0) {
+        const { data: recipeRows } = await supabase
+          .from("lf_recipes")
+          .select("title, pdf_url")
+          .in("id", recipeIds);
+        recipePdfs = (recipeRows || [])
+          .filter((row: any) => row.pdf_url)
+          .map((row: any) => ({ title: row.title, url: row.pdf_url }));
+      }
 
       // Send order confirmation email (Lake Fresh branded)
       try {
@@ -203,11 +280,13 @@ const LakeFreshCheckout = () => {
           toName: name.trim(),
           orderId,
           items: emailItems,
-          total: estimatedTotal,
+          total: payableTotal,
           location: selectedZone?.name || "",
           deliveryMethod: selectedSlot ? `Next day · ${selectedSlot.deliveryDate}` : "Next day delivery",
           type: "confirmation",
           brand: "lake-fresh",
+          recipes: recipePdfs,
+          trackingUrl: `${lfUrl("/track")}?phone=${encodeURIComponent(phone.trim())}&reference=${encodeURIComponent(reference)}`,
         });
       } catch (emailErr) {
         console.warn("LF order confirmation email failed", emailErr);
@@ -217,16 +296,16 @@ const LakeFreshCheckout = () => {
 
       const { redirectToPayChangu } = await import("@/lib/paychangu");
       redirectToPayChangu({
-        amount: estimatedTotal,
+        amount: payableTotal,
         currency: "MWK",
         email: user?.email || `${cleanPhone}@lakefreshmw.com`,
         firstName: firstName || "Lake",
         lastName: rest.join(" ") || "Fresh",
-        txRef,
+        txRef: reference,
         callbackUrl: `${lfUrl(`/orders/${orderId}`)}?payment=callback`,
         returnUrl: `${lfUrl(`/orders/${orderId}`)}?payment=complete`,
         title: "Lake Fresh Fish Mart Order",
-        description: `Order ${txRef}`,
+        description: `Order ${reference}`,
       });
     } catch (error) {
       toast({
@@ -255,9 +334,11 @@ const LakeFreshCheckout = () => {
         </button>
 
         <div className="mt-4">
-          <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#073B78]">CHECKOUT</h1>
-          <p className="mt-2 text-sm text-gray-500">
-            Next day delivery · signed in as {user?.email}
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+            Finish your order
+          </h1>
+          <p className="mt-2 text-sm text-gray-600">
+            Three short steps. Delivery area and date are already picked for you.
           </p>
         </div>
 
@@ -418,7 +499,70 @@ const LakeFreshCheckout = () => {
 
             <section className="rounded-2xl border border-gray-200 bg-white p-5">
               <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
-                <CreditCard className="h-4 w-4 text-[#08A9E8]" /> Payment
+                <Gift className="h-4 w-4 text-[#39B54A]" /> Rewards and promo code
+              </h2>
+
+              <div className="mt-3 space-y-3">
+                <div className="flex items-center justify-between gap-3 rounded-xl bg-[#F6FBFD] p-3">
+                  <div>
+                    <p className="text-sm font-bold text-[#073B78]">Your points</p>
+                    <p className="text-xs text-gray-600">
+                      {availablePoints} points available
+                      {program ? ` · ${program.points_to_redeem} points = ${formatMWK(program.reward_value_mwk)} off` : ""}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setUsePoints((prev) => !prev)}
+                    disabled={availablePoints < redeemStep}
+                    className={`shrink-0 rounded-lg px-3 py-2 text-[10px] font-extrabold uppercase tracking-widest disabled:opacity-40 ${
+                      usePoints ? "bg-[#39B54A] text-white" : "bg-[#073B78] text-white"
+                    }`}
+                  >
+                    {availablePoints < redeemStep ? "Not enough" : usePoints ? "Points on" : "Use points"}
+                  </button>
+                </div>
+                {usePoints && loyaltyPreview > 0 && (
+                  <p className="text-xs font-bold text-[#39B54A]">
+                    Using {pointsToUse} points saves {formatMWK(loyaltyPreview)}.
+                  </p>
+                )}
+
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                    Promo code
+                  </label>
+                  <div className="mt-1.5 flex gap-2">
+                    <input
+                      value={promoCode}
+                      onChange={(event) => {
+                        setPromoCode(event.target.value);
+                        setPromoError(null);
+                      }}
+                      placeholder="Enter code"
+                      className="h-11 min-w-0 flex-1 rounded-xl border border-gray-300 px-3 text-sm uppercase text-[#073B78] outline-none focus:border-[#08A9E8]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => void applyPromo()}
+                      className="shrink-0 rounded-xl bg-[#073B78] px-4 text-[10px] font-extrabold uppercase tracking-widest text-white"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                  {promoError && <p className="mt-1.5 text-xs font-semibold text-red-600">{promoError}</p>}
+                  {promoPreview && (
+                    <p className="mt-1.5 text-xs font-bold text-[#39B54A]">
+                      {promoPreview.code} saves {formatMWK(promoPreview.discount)}.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-gray-200 bg-white p-5">
+              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                <CreditCard className="h-4 w-4 text-[#08A9E8]" /> Pay securely
               </h2>
               <div className="mt-3 rounded-xl bg-gray-50 p-4">
                 <p className="text-sm font-bold text-[#073B78]">Pay online via PayChangu</p>
@@ -470,8 +614,20 @@ const LakeFreshCheckout = () => {
                   <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
                   <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                 </div>
+                {loyaltyPreview > 0 && (
+                  <div className="flex justify-between text-[#39B54A]">
+                    <span>Rewards ({pointsToUse} points)</span>
+                    <span>-{formatMWK(loyaltyPreview)}</span>
+                  </div>
+                )}
+                {promoDiscount > 0 && (
+                  <div className="flex justify-between text-[#39B54A]">
+                    <span>Promo ({promoPreview?.code})</span>
+                    <span>-{formatMWK(promoDiscount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
-                  <span>Estimated total</span>
+                  <span>Total to pay</span>
                   <span>{formatMWK(estimatedTotal)}</span>
                 </div>
               </div>
@@ -502,6 +658,12 @@ const LakeFreshCheckout = () => {
                 <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
                 Stock is reserved when the order is created. If capacity changed, you will be asked to pick another
                 slot.
+              </p>
+              <p className="mt-3 text-center text-[11px] text-gray-500">
+                Already ordered?{" "}
+                <LFLink to="/lf/track" className="font-bold text-[#073B78] underline">
+                  Track your order
+                </LFLink>
               </p>
             </div>
           </aside>

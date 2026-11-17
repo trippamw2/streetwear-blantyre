@@ -72,8 +72,11 @@ const Auth = () => {
         if (error) throw error;
         
         if (referredBy && data?.user) {
-          await applyReferralCode(referredBy, data.user.id);
-          toast({ title: "Account created!", description: "You got K200 off with referral!" });
+          await applyReferralCode(referredBy);
+          toast({
+            title: "Account created!",
+            description: "Your referral code is saved and applies after you sign in.",
+          });
         } else {
           toast({ title: "Account created!", description: "Start your culture journey to earn points!" });
         }

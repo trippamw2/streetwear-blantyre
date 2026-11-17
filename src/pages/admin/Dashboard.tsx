@@ -1,9 +1,9 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
-import { BRANDS, type BrandSlug } from "@/lib/brands";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Package, DollarSign, TrendingUp, Users, ArrowUpRight, ArrowDownRight, Wallet, Banknote, Receipt } from "lucide-react";
+import { adminBrandId, useAdminBrand } from "@/lib/adminBrand";
 
 interface Stats {
   totalOrders: number;
@@ -28,8 +28,8 @@ const TRANSPORT_COST = 4000;
 const PAYCHANGU_FEE_PERCENT = 4;
 
 const AdminDashboard = () => {
-  const [searchParams] = useSearchParams();
-  const brand = searchParams.get("brand") || "sb";
+  const brand = useAdminBrand();
+  const brandId = adminBrandId(brand);
   const [stats, setStats] = useState<Stats>({
     totalOrders: 0,
     grossOrders: 0,
@@ -44,18 +44,13 @@ const AdminDashboard = () => {
   useEffect(() => {
     fetchStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brand]);
+  }, [brandId]);
 
   const fetchStats = async () => {
-    const brandFilter =
-      brand === "all" ? undefined : BRANDS[brand as BrandSlug]?.id ?? BRANDS.sb.id;
     let ordersQuery = supabase
       .from("orders")
-      .select("id, total_mwk, delivery_fee_mwk, payment_method, status, payment_status, customer_phone");
-
-    if (brandFilter) {
-      ordersQuery = ordersQuery.eq("brand_id", brandFilter);
-    }
+      .select("id, total_mwk, delivery_fee_mwk, payment_method, status, payment_status, customer_phone")
+      .eq("brand_id", brandId);
 
     const { data: allOrders } = await ordersQuery;
     
@@ -219,28 +214,23 @@ const AdminDashboard = () => {
       </div>
 
       {/* Recent Orders Preview */}
-      <RecentOrders brand={brand} />
+      <RecentOrders brandId={brandId} />
     </div>
   );
 };
 
-const RecentOrders = ({ brand }: { brand: string }) => {
+const RecentOrders = ({ brandId }: { brandId: string }) => {
   const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
-    const brandFilter =
-      brand === "all" ? undefined : BRANDS[brand as BrandSlug]?.id ?? BRANDS.sb.id;
-
-    let query = supabase
+    supabase
       .from("orders")
       .select("id, status, total_mwk, created_at, customer_name")
+      .eq("brand_id", brandId)
       .order("created_at", { ascending: false })
-      .limit(5);
-
-    if (brandFilter) query = query.eq("brand_id", brandFilter);
-
-    query.then(({ data }) => setOrders(data || []));
-  }, [brand]);
+      .limit(5)
+      .then(({ data }) => setOrders(data || []));
+  }, [brandId]);
 
   const statusColors: Record<string, string> = {
     new: "bg-accent",

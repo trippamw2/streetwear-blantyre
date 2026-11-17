@@ -178,7 +178,45 @@ interface OrderEmailParams {
   eta?: string;
   type: 'confirmation' | 'payment' | 'dispatched' | 'delivered';
   brand?: EmailBrand;
+  /** Recipe PDF links emailed with a Lake Fresh order. */
+  recipes?: Array<{ title: string; url: string }>;
+  /** Public tracking link for this order. */
+  trackingUrl?: string;
 }
+
+// ============================================
+// BRAND BROADCAST (admin communications)
+// ============================================
+export const sendBrandBroadcast = async (params: {
+  to: string;
+  toName?: string;
+  subject: string;
+  body: string;
+  brand?: EmailBrand;
+}) => {
+  const B = getBrand(params.brand);
+  const paragraphs = params.body
+    .split(/\n{2,}/)
+    .map((block) => `<p style="margin: 0 0 14px 0; line-height: 1.65;">${block.replace(/\n/g, "<br />")}</p>`)
+    .join("");
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #073B78; margin-top: 0;">${params.subject}</h2>
+      ${paragraphs}
+      <p style="margin-top: 24px; color: #6b7280; font-size: 13px;">Thanks, ${B.name}</p>
+    </div>
+  `;
+
+  return sendViaProxy("send-email", {
+    to: params.to,
+    toName: params.toName || params.to,
+    subject: params.subject,
+    htmlContent: wrapEmail(html, params.subject, params.brand),
+    senderName: B.businessName,
+    senderEmail: B.email,
+  });
+};
 
 // ============================================
 // ORDER CONFIRMATION EMAIL
@@ -210,12 +248,31 @@ export const sendOrderConfirmationEmail = async (order: OrderEmailParams) => {
         </tr>
       </table>
       
+      ${
+        order.recipes && order.recipes.length > 0
+          ? `<div style="background: #f0f9ff; border: 1px solid #bae6fd; padding: 16px; margin: 16px 0; border-radius: 8px;">
+        <p style="margin: 0 0 8px 0; font-weight: bold; color: #073B78;">Your free recipe${order.recipes.length > 1 ? "s" : ""}</p>
+        ${order.recipes
+          .map(
+            (recipe) =>
+              `<p style="margin: 4px 0;"><a href="${recipe.url}" style="color: #073B78; font-weight: bold;">${recipe.title} (PDF)</a></p>`,
+          )
+          .join("")}
+      </div>`
+          : ""
+      }
+      
       <div style="background: #f8f9fa; padding: 16px; margin: 16px 0; border-radius: 8px;">
         <p style="margin: 4px 0;"><strong>Delivery:</strong> ${order.location}</p>
         <p style="margin: 4px 0;"><strong>Method:</strong> ${order.deliveryMethod}</p>
         ${order.eta ? `<p style="margin: 4px 0;"><strong>ETA:</strong> ${order.eta}</p>` : ""}
       </div>
       
+      ${
+        order.trackingUrl
+          ? `<p style="margin: 16px 0;"><a href="${order.trackingUrl}" style="display: inline-block; background: #073B78; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: bold;">Track your order</a></p>`
+          : ""
+      }
       <p>Order #${order.orderId.slice(0, 8).toUpperCase()}</p>
       <p style="color: #6b7280; font-size: 14px;">We will WhatsApp you with updates.</p>
       <p style="margin-top: 24px;">Thanks, ${B.name} Team</p>
@@ -278,7 +335,11 @@ export const sendDispatchedEmail = async (order: OrderEmailParams) => {
       <ul>${itemsHtml}</ul>
       
       <p>Est. delivery: ${order.eta || "later today"}</p>
-      <p style="margin-top: 16px;">Track: <a href="https://www.wearsb.com/track/${order.orderId}" style="color: #0f172a;">www.wearsb.com/track/${order.orderId.slice(0, 8)}</a></p>
+      ${
+        order.trackingUrl
+          ? `<p style="margin-top: 16px;">Track: <a href="${order.trackingUrl}" style="color: #0f172a;">${order.trackingUrl}</a></p>`
+          : ""
+      }
       <p style="margin-top: 24px;">Thanks, ${B.name} Team</p>
     </div>
   `;

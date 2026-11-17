@@ -1,34 +1,83 @@
 import { Outlet, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect, useState } from "react";
-import { LayoutDashboard, Package, ShoppingCart, Settings, LogOut, Menu, X, Building2, Warehouse, ChevronLeft, Zap, MessageCircle, Truck, Users, Tag, LayoutGrid, Shield, Gift, BookOpen, Camera, Fish } from "lucide-react";
+import { useEffect, useState, type ElementType } from "react";
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  Building2,
+  Warehouse,
+  ChevronLeft,
+  Zap,
+  MessageCircle,
+  Truck,
+  Users,
+  Tag,
+  LayoutGrid,
+  Shield,
+  Gift,
+  BookOpen,
+  Camera,
+  Fish,
+  Send,
+  Star,
+} from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { lfPath, storefrontHome } from "@/lib/brandSite";
 import { supabase } from "@/integrations/supabase/client";
+import { adminBrandId, adminPath, useAdminBrand, type AdminBrand } from "@/lib/adminBrand";
 
-const adminLinks = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/admin/products", label: "Products", icon: Package },
-  { to: "/admin/categories", label: "Categories", icon: LayoutGrid },
-  { to: "/admin/combos", label: "Combos", icon: Package },
-  { to: "/admin/lake-fresh", label: "Lake Fresh", icon: Fish },
-  { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
-  { to: "/admin/gifts", label: "Gifts", icon: Gift },
-  { to: "/admin/suppliers", label: "Suppliers", icon: Truck },
-  { to: "/admin/promotions", label: "Promotions", icon: Zap },
-  { to: "/admin/promos", label: "Promo Codes", icon: Tag },
-  { to: "/admin/crm", label: "CRM", icon: Users },
-  { to: "/admin/testimonials", label: "Testimonials", icon: MessageCircle },
-  { to: "/admin/business", label: "Business", icon: Building2 },
-  { to: "/admin/inventory", label: "Inventory", icon: Warehouse },
-  { to: "/admin/authentication", label: "Authentication", icon: Shield },
-  { to: "/admin/culture-stories", label: "Culture Stories", icon: BookOpen },
-  { to: "/admin/lookbooks", label: "Lookbooks", icon: Camera },
-  { to: "/admin/delivery", label: "Delivery", icon: Zap },
-  { to: "/admin/loyalty", label: "Loyalty", icon: Zap },
-  { to: "/admin/referrals", label: "Referrals", icon: Users },
-  { to: "/admin/settings", label: "Settings", icon: Settings },
+interface AdminLink {
+  to: string;
+  label: string;
+  icon: ElementType;
+  end?: boolean;
+  tab?: string;
+}
+
+const SB_LINKS: AdminLink[] = [
+  { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
+  { to: "/products", label: "Products", icon: Package },
+  { to: "/categories", label: "Categories", icon: LayoutGrid },
+  { to: "/combos", label: "Combos", icon: Package },
+  { to: "/orders", label: "Orders", icon: ShoppingCart },
+  { to: "/gifts", label: "Gifts", icon: Gift },
+  { to: "/suppliers", label: "Suppliers", icon: Truck },
+  { to: "/promotions", label: "Promotions", icon: Zap },
+  { to: "/promos", label: "Promo Codes", icon: Tag },
+  { to: "/crm", label: "CRM", icon: Users },
+  { to: "/testimonials", label: "Testimonials", icon: MessageCircle },
+  { to: "/business", label: "Business", icon: Building2 },
+  { to: "/inventory", label: "Inventory", icon: Warehouse },
+  { to: "/authentication", label: "Authentication", icon: Shield },
+  { to: "/culture-stories", label: "Culture Stories", icon: BookOpen },
+  { to: "/lookbooks", label: "Lookbooks", icon: Camera },
+  { to: "/delivery", label: "Delivery", icon: Truck },
+  { to: "/loyalty", label: "Rewards", icon: Star },
+  { to: "/referrals", label: "Referrals", icon: Users },
+  { to: "/communications", label: "Communications", icon: Send },
+  { to: "/settings", label: "Settings", icon: Settings },
+];
+
+const LF_LINKS: AdminLink[] = [
+  { to: "/", label: "Operations", icon: Fish, end: true },
+  { to: "?tab=orders", label: "Orders", icon: ShoppingCart, tab: "orders" },
+  { to: "?tab=catalog", label: "Fish & Prices", icon: Fish, tab: "catalog" },
+  { to: "?tab=spices", label: "Spices", icon: Package, tab: "spices" },
+  { to: "?tab=recipes", label: "Recipes & PDFs", icon: BookOpen, tab: "recipes" },
+  { to: "?tab=media", label: "Media", icon: Camera, tab: "media" },
+  { to: "?tab=delivery", label: "Delivery", icon: Truck, tab: "delivery" },
+  { to: "?tab=preparation", label: "Preparation", icon: Package, tab: "preparation" },
+  { to: "?tab=analytics", label: "Analytics", icon: Zap, tab: "analytics" },
+  { to: "/promos", label: "Promo Codes", icon: Tag },
+  { to: "/loyalty", label: "Rewards", icon: Star },
+  { to: "/referrals", label: "Referrals", icon: Users },
+  { to: "/communications", label: "Communications", icon: Send },
 ];
 
 export const AdminLayout = () => {
@@ -36,97 +85,101 @@ export const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const brand = useAdminBrand();
+  const isLfAdmin = brand === "lf";
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isGlobalAdmin, setIsGlobalAdmin] = useState(false);
-  const [checkingRole, setCheckingRole] = useState(true);
-  const [staffBrands, setStaffBrands] = useState<{ brand_id: string; role: string }[]>([]);
-  const brandParam = searchParams.get("brand") || "sb";
-  const isLfAdmin = brandParam === "lake-fresh";
-  const storeHome = storefrontHome(isLfAdmin);
+  const [access, setAccess] = useState<"checking" | "allowed" | "denied">("checking");
+  const brandId = adminBrandId(brand);
+  const links = isLfAdmin ? LF_LINKS : SB_LINKS;
+  const base = adminPath(brand);
+  const storeHome = isLfAdmin ? storefrontHome(true) : "/";
   const authPath = isLfAdmin ? lfPath("/auth") : "/auth";
+  const brandName = isLfAdmin ? "Lake Fresh Admin" : "SB Admin";
+  const activeTab = searchParams.get("tab") || "";
 
-  // Check if user has admin access for any brand (user_roles admin OR staff_permissions)
+  const PageIcon = isLfAdmin ? Fish : LayoutDashboard;
+
+  // A user may enter an admin panel only when they are a global admin or have
+  // an explicit staff permission for this exact brand.
   useEffect(() => {
     if (authLoading) return;
-
-    if (user) {
-      Promise.all([
-        supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", user.id)
-          .eq("role", "admin")
-          .maybeSingle(),
-        supabase
-          .from("staff_permissions")
-          .select("brand_id, role")
-          .eq("user_id", user.id)
-          .limit(10),
-      ])
-        .then(async ([adminRes, staffRes]) => {
-          const isAdminUser = !!adminRes.data;
-          const rows = (staffRes.data || []) as { brand_id: string; role: string }[];
-          setStaffBrands(rows);
-          setIsAdmin(isAdminUser || rows.length > 0);
-          setIsGlobalAdmin(isAdminUser);
-          setCheckingRole(false);
-        })
-        .catch(() => {
-          setIsAdmin(false);
-          setCheckingRole(false);
-        });
-    } else {
-      setCheckingRole(false);
+    if (!user) {
+      setAccess("checking");
+      return;
     }
-  }, [user, authLoading]);
 
-  // Keep admin panel on its brand base when the brand query param changes
-  useEffect(() => {
-    if (location.pathname === "/admin") {
-      navigate(`/admin?brand=${brandParam}`, { replace: true });
-    }
-  }, [brandParam, location.pathname, navigate]);
+    let cancelled = false;
+    setAccess("checking");
+
+    Promise.all([
+      supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle(),
+      supabase
+        .from("staff_permissions")
+        .select("brand_id")
+        .eq("user_id", user.id)
+        .eq("brand_id", brandId)
+        .limit(1),
+    ])
+      .then(([roleRes, staffRes]) => {
+        if (cancelled) return;
+        const allowed = Boolean(roleRes.data) || (staffRes.data || []).length > 0;
+        setAccess(allowed ? "allowed" : "denied");
+      })
+      .catch(() => {
+        if (!cancelled) setAccess("denied");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, authLoading, brandId]);
 
   useEffect(() => {
     if (!authLoading && !user) {
-      const redirect = encodeURIComponent(`/admin?brand=${brandParam}`);
+      const redirect = encodeURIComponent(location.pathname + location.search);
       navigate(`${authPath}?redirect=${redirect}`, { replace: true });
     }
-  }, [user, authLoading, navigate, authPath, brandParam]);
+  }, [user, authLoading, navigate, authPath, location.pathname, location.search]);
 
-  // Redirect non-admins
   useEffect(() => {
-    if (!checkingRole && user && !isAdmin) {
+    if (access === "denied") {
       navigate(storeHome, { replace: true });
     }
-  }, [checkingRole, user, isAdmin, navigate, storeHome]);
+  }, [access, navigate, storeHome]);
 
-  // Enforce staff brand scoping: non-global admins may only view brands they
-  // have an explicit staff_permissions row for.
-  useEffect(() => {
-    if (checkingRole || isGlobalAdmin || staffBrands.length === 0) return;
-    const allowed = staffBrands.map((row) =>
-      row.brand_id === "22222222-2222-2222-2222-222222222222" ? "lake-fresh" : "sb",
-    );
-    if (!allowed.includes(brandParam as any) && brandParam !== "all") {
-      navigate(`/admin?brand=${allowed[0]}`, { replace: true });
-    }
-  }, [checkingRole, isGlobalAdmin, staffBrands, brandParam, navigate]);
-
-  if (authLoading || checkingRole || !user) {
-    return (      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+  if (authLoading || access === "checking" || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin h-10 w-10 border-4 border-navy border-t-transparent rounded-full mx-auto" />
+          <div
+            className={cn(
+              "mx-auto h-10 w-10 animate-spin rounded-full border-4 border-t-transparent",
+              isLfAdmin ? "border-[#073B78]" : "border-navy",
+            )}
+          />
           <p className="mt-4 text-gray-500">Loading...</p>
         </div>
       </div>
     );
   }
 
+  const linkTarget = (link: AdminLink) => adminPath(brand, link.to);
+  const isActive = (link: AdminLink) => {
+    if (link.tab) {
+      return location.pathname === base && activeTab === link.tab;
+    }
+    if (link.end) return location.pathname === base && !activeTab;
+    return location.pathname === adminPath(brand, link.to) ||
+      location.pathname.startsWith(`${adminPath(brand, link.to)}/`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -134,44 +187,38 @@ export const AdminLayout = () => {
         />
       )}
 
-      {/* Sidebar */}
-      <aside className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform lg:relative lg:translate-x-0",
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform lg:relative lg:translate-x-0",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
         <div className="flex flex-col h-full">
-          <div className="p-4 border-b border-gray-100 bg-navy">
+          <div className={cn("p-4 border-b border-gray-100", isLfAdmin ? "bg-[#073B78]" : "bg-navy")}>
             {isLfAdmin ? (
               <img
                 src="/brand/lake-fresh/icon.png"
                 alt="Lake Fresh Fish Mart"
-                className="h-8 w-auto max-w-[160px] object-contain"
+                className="h-8 w-auto max-w-[170px] object-contain"
               />
             ) : (
               <Logo className="h-8" />
             )}
-            <p className="text-xs text-white/60 mt-1">{isLfAdmin ? "Lake Fresh Admin" : "Admin Panel"}</p>
-            <select
-              value={brandParam}
-              onChange={(e) => navigate(`/admin?brand=${e.target.value}`, { replace: true })}
-              className="mt-3 w-full h-9 rounded-lg bg-white/10 border border-white/20 text-white text-sm px-3"
-              aria-label="Admin brand"
-            >
-              <option value="sb">SB Streetwear</option>
-              <option value="lake-fresh">Lake Fresh Fish Mart</option>
-              <option value="all">All Businesses</option>
-            </select>
+            <p className="text-xs text-white/60 mt-1">{brandName}</p>
+            <div className="mt-3 flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-[11px] font-bold uppercase tracking-widest text-white">
+              <PageIcon className="h-3.5 w-3.5" />
+              {isLfAdmin ? "Fish Mart" : "Streetwear"}
+            </div>
           </div>
 
-          <nav className="flex-1 p-4 space-y-1">
-            {adminLinks.map((link) => {
-              const isActive = location.pathname === link.to ||
-                (link.to !== "/admin" && location.pathname.startsWith(link.to));
-              const target = `${link.to}?brand=${brandParam}`;
+          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+            {links.map((link) => {
+              const active = isActive(link);
+              const target = linkTarget(link);
 
               return (
                 <a
-                  key={link.to}
+                  key={`${link.to}-${link.label}`}
                   href={target}
                   onClick={(e) => {
                     e.preventDefault();
@@ -180,9 +227,11 @@ export const AdminLayout = () => {
                   }}
                   className={cn(
                     "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-navy text-white"
-                        : "text-gray-600 hover:bg-gray-100"
+                    active
+                      ? isLfAdmin
+                        ? "bg-[#073B78] text-white"
+                        : "bg-navy text-white"
+                      : "text-gray-600 hover:bg-gray-100",
                   )}
                 >
                   <link.icon className="h-5 w-5" />
@@ -218,10 +267,8 @@ export const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
-        {/* Mobile Header */}
-        <header className="lg:hidden flex items-center justify-between p-4 bg-navy border-b border-white/10">
+        <header className={cn("lg:hidden flex items-center justify-between p-4 border-b border-white/10", isLfAdmin ? "bg-[#073B78]" : "bg-navy")}>
           {isLfAdmin ? (
             <img
               src="/brand/lake-fresh/icon.png"
@@ -234,6 +281,7 @@ export const AdminLayout = () => {
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 rounded-lg hover:bg-white/10"
+            aria-label="Admin menu"
           >
             {sidebarOpen ? <X className="h-5 w-5 text-white" /> : <Menu className="h-5 w-5 text-white" />}
           </button>
