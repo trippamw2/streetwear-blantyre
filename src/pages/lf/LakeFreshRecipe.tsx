@@ -147,6 +147,17 @@ const LakeFreshRecipe = () => {
 
   const toggle = (id: string) => setSelected((prev) => (prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]));
 
+  const linkedForIngredient = (ingredient: string): ShopItem | undefined => {
+    const exact = shopItems.find((item) => item.match === ingredient);
+    if (exact) return exact;
+    const key = normalise(ingredient);
+    if (!key) return undefined;
+    return shopItems.find((item) => {
+      const nameKey = normalise(item.name);
+      return nameKey && (key.includes(nameKey) || nameKey.includes(key));
+    });
+  };
+
   const addSelected = () => {
     const chosen = shopItems.filter((item) => selected.includes(item.id));
     if (chosen.length === 0) {
@@ -379,7 +390,7 @@ const LakeFreshRecipe = () => {
             </h2>
             <ul className="mt-4 space-y-2 text-sm text-gray-700">
               {ingredients.map((ing: string, idx: number) => {
-                const linked = shopItems.find((item) => item.match === ing);
+                const linked = linkedForIngredient(ing);
                 return (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#39B54A]" />
