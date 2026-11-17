@@ -90,10 +90,11 @@ const LakeFreshHome = () => {
   const earliest = getEarliestDeliveryDate(new Date(), deliveryConfig);
   const allProducts = products || [];
   const featured = allProducts.slice(0, 3);
-  const heroImage = allProducts.find((product) => product.image)?.image || "/brand/lake-fresh/fish-chambo.jpg";
+  const heroImage =
+    "https://images.unsplash.com/photo-1543353071-10c8ba85a904?auto=format&fit=crop&w=1200&q=80";
 
   return (
-    <div className="bg-white text-gray-900">
+    <div className="bg-white text-[#073B78]">
       <SEO
         brand="lake-fresh"
         title="Lake Fresh Fish Mart | Fresh from the Lake. Ready for Your Table."
@@ -159,8 +160,9 @@ const LakeFreshHome = () => {
             <div className="relative overflow-hidden rounded-[1.75rem] border border-white/15 bg-white/5 p-2 shadow-2xl shadow-black/20">
               <img
                 src={heroImage}
-                alt="Fresh fish from Lake Malawi"
-                className="h-64 w-full rounded-[1.4rem] object-cover sm:h-80 lg:h-[26rem]"
+                alt="An African family enjoying a fish meal"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/brand/lake-fresh/fish-chambo.jpg"; }}
+                className="h-80 w-full rounded-[1.4rem] object-cover sm:h-96 lg:h-[34rem]"
               />
               <div className="absolute bottom-5 left-5 right-5 flex flex-wrap gap-2">
                 <span className="rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-[#073B78]">
