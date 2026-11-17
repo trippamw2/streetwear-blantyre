@@ -7,7 +7,8 @@ import { createClient } from "@supabase/supabase-js";
  * (`?payment=callback` / `?payment=complete`). Webhooks can be delayed or
  * dropped, and the docs explicitly recommend re-querying. This endpoint:
  *
- *  - authenticates the caller (order owner JWT, or gift tracking token),
+ *  - authenticates the caller (order owner JWT, gift tracking token, or
+ *    subscription id and reference created at checkout),
  *  - re-queries PayChangu with the merchant secret key,
  *  - runs the same idempotent `process_payment_event` used by the webhook.
  */
@@ -120,11 +121,44 @@ export default async function handler(req: any, res: any) {
   });
 
   let txRef = "";
-  let kind: "order" | "gift" = "order";
+  let kind: "order" | "gift" | "subscription" = "order";
   let recordId = "";
   let expectedTotal = 0;
 
-  if (body?.giftId) {
+  if (body?.subscriptionId) {
+    kind = "subscription";
+    recordId = String(body.subscriptionId);
+    txRef = String(body?.txRef ?? "").trim();
+    if (!txRef.startsWith("LF-SUB-")) {
+      return res.status(400).json({ error: "Invalid subscription reference" });
+    }
+
+    const { data: subscription, error } = await supabase
+      .from("lf_subscriptions")
+      .select("id, status, payment_reference, quantity_kg, price_per_kg_mwk, delivery_zone_id")
+      .eq("id", recordId)
+      .eq("brand_id", LF_ID)
+      .maybeSingle();
+
+    if (error || !subscription || subscription.payment_reference !== txRef) {
+      return res.status(404).json({ error: "Subscription not found" });
+    }
+    if (subscription.status === "active") {
+      return res.status(200).json({ status: "paid", subscriptionId: subscription.id });
+    }
+
+    const { data: zone } = await supabase
+      .from("delivery_zones")
+      .select("base_fee_mwk")
+      .eq("id", subscription.delivery_zone_id)
+      .eq("brand_id", LF_ID)
+      .maybeSingle();
+
+    expectedTotal = Math.round(
+      Number(subscription.quantity_kg || 0) * Number(subscription.price_per_kg_mwk || 0) +
+        Number((zone as any)?.base_fee_mwk || 0)
+    );
+  } else if (body?.giftId) {
     kind = "gift";
     recordId = String(body.giftId);
     const token = String(body.trackingToken ?? "");
@@ -214,6 +248,7 @@ export default async function handler(req: any, res: any) {
     kind,
     orderId: kind === "order" ? recordId : undefined,
     giftId: kind === "gift" ? recordId : undefined,
+    subscriptionId: kind === "subscription" ? recordId : undefined,
     expectedTotal,
   });
 }

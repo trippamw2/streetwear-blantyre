@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { LFLink } from "@/components/lf/lfRouter";
 import { CalendarDays, Loader2, Repeat } from "lucide-react";
@@ -29,6 +29,8 @@ const LakeFreshSubscribe = () => {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const paymentReturn = searchParams.get("status");
+  const [verification, setVerification] = useState<"checking" | "paid" | "failed" | "pending">("pending");
+  const verificationStarted = useRef(false);
   const { data: zones, isLoading: zonesLoading, error: zonesError, refetch: refetchZones } = useLakeFreshZones();
   const {
     data: catalog,
@@ -75,6 +77,35 @@ const LakeFreshSubscribe = () => {
       preparation: first.preparationOptions[0] || "whole",
     }));
   }, [catchOptions.length, form.fish_product_id]);
+
+  useEffect(() => {
+    if (!paymentReturn || verificationStarted.current) return;
+    const saved = sessionStorage.getItem("lfSubscriptionPayment");
+    if (!saved) return;
+    verificationStarted.current = true;
+
+    let parsed: { id?: string; txRef?: string };
+    try {
+      parsed = JSON.parse(saved);
+    } catch {
+      return;
+    }
+    if (!parsed.id || !parsed.txRef) return;
+
+    setVerification("checking");
+    void fetch("/api/payment/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subscriptionId: parsed.id, txRef: parsed.txRef }),
+    })
+      .then((response) => response.json())
+      .then((result: { status?: string }) => {
+        if (result.status === "paid") setVerification("paid");
+        else if (result.status === "failed") setVerification("failed");
+        else setVerification("pending");
+      })
+      .catch(() => setVerification("pending"));
+  }, [paymentReturn]);
 
   const chooseCatch = (productId: string) => {
     const nextCatch = catchOptions.find((product) => product.id === productId);
@@ -136,6 +167,11 @@ const LakeFreshSubscribe = () => {
       });
       if (error) throw error;
 
+      sessionStorage.setItem(
+        "lfSubscriptionPayment",
+        JSON.stringify({ id: subscriptionId, txRef })
+      );
+
       const [firstName, ...rest] = form.customer_name.trim().split(/\s+/);
       const { redirectToPayChangu } = await import("@/lib/paychangu");
       redirectToPayChangu({
@@ -178,7 +214,10 @@ const LakeFreshSubscribe = () => {
 
         {paymentReturn && (
           <div className="mt-4 rounded-xl border border-[#08A9E8]/30 bg-[#F7FBFC] p-3 text-sm text-[#073B78]">
-            Payment sent. We will confirm it soon. If you paid, your plan will show as active after PayChangu reaches us.
+            {verification === "checking" && "We are checking your payment. Please wait."}
+            {verification === "paid" && "Payment confirmed. Your plan is active."}
+            {verification === "failed" && "PayChangu did not confirm this payment. Please try again or contact us."}
+            {verification === "pending" && "Payment sent. We will confirm it soon. If you paid, your plan will show as active after PayChangu reaches us."}
           </div>
         )}
 
