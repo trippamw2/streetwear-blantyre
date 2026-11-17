@@ -12,7 +12,6 @@ const LakeFreshSubscribe = () => {
   const { user } = useAuth();
   const { data: zones, isLoading: zonesLoading, error: zonesError, refetch: refetchZones } = useLakeFreshZones();
   const [submitting, setSubmitting] = useState(false);
-  const [consent, setConsent] = useState(false);
 
   const [form, setForm] = useState({
     plan: "weekly",
@@ -31,10 +30,6 @@ const LakeFreshSubscribe = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!consent) {
-      toast({ title: "Consent required", description: "You must consent to recurring charges.", variant: "destructive" });
-      return;
-    }
     if (!form.customer_name.trim() || !form.customer_phone.trim()) {
       toast({ title: "Missing fields", variant: "destructive" });
       return;
@@ -51,7 +46,7 @@ const LakeFreshSubscribe = () => {
         delivery_zone_id: form.zone_id || null,
         quantity_kg: Number(form.quantity_kg),
         preparation: form.preparation,
-        status: "pending_consent",
+        status: "pending_payment",
         consent_given: true,
         consent_given_at: new Date().toISOString(),
         notes: form.notes.trim() || null,
@@ -73,7 +68,7 @@ const LakeFreshSubscribe = () => {
         callbackUrl: `${window.location.origin}/lf/subscribe?status=callback`,
         returnUrl: `${window.location.origin}/lf/subscribe?status=return`,
         title: "Lake Fresh Subscription",
-        description: `${form.plan} subscription · ${form.quantity_kg} kg`,
+        description: `${form.plan} subscription · ${form.quantity_kg} kg · first payment`,
       });
     } catch (err) {
       toast({ title: "Request failed", description: err instanceof Error ? err.message : "Please try again.", variant: "destructive" });
@@ -90,7 +85,7 @@ const LakeFreshSubscribe = () => {
         </LFLink>
         <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">SUBSCRIBE</h1>
         <p className="mt-2 text-sm text-gray-500">
-          Get fresh fish delivered on a recurring schedule. No automatic charges without your consent.
+          Get fresh fish delivered on a recurring schedule. You pay for each delivery manually — no automatic charges.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -152,20 +147,13 @@ const LakeFreshSubscribe = () => {
             <textarea className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" rows={3} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
           </div>
 
-          <label className="flex items-start gap-2 text-sm text-gray-700">
-            <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1" />
-            <span>
-              I consent to recurring charges for this subscription plan. I understand I can pause or cancel at any time.
-            </span>
-          </label>
-
           <button
             type="submit"
-            disabled={submitting || !consent}
+            disabled={submitting}
             className="inline-flex items-center gap-2 rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarDays className="h-4 w-4" />}
-            Request subscription
+            Subscribe & pay
           </button>
         </form>
       </div>
