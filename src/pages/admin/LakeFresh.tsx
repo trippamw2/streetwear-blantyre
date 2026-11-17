@@ -201,6 +201,9 @@ const AdminLakeFresh = () => {
   const [routeOrders, setRouteOrders] = useState<any[]>([]);
   const [routeLoading, setRouteLoading] = useState(false);
   const [customers, setCustomers] = useState<any[]>([]);
+  const [centerZoneId, setCenterZoneId] = useState("");
+  const [centerLat, setCenterLat] = useState<number | null>(null);
+  const [centerLng, setCenterLng] = useState<number | null>(null);
 
   // ---- Preparation state ----
   const [preparations, setPreparations] = useState<any[]>([]);
@@ -432,6 +435,22 @@ const AdminLakeFresh = () => {
       .order("updated_at", { ascending: false })
       .limit(200);
     setCustomers(data || []);
+  };
+
+  const saveZoneCenter = async () => {
+    if (!centerZoneId || centerLat == null || centerLng == null) {
+      toast({ title: "Pick a zone and tap the map", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("delivery_zones")
+      .update({ center_lat: centerLat, center_lng: centerLng })
+      .eq("id", centerZoneId);
+    if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
+    else {
+      toast({ title: "Zone center saved" });
+      await loadZones();
+    }
   };
 
   const loadRouteOrders = async () => {
@@ -2139,6 +2158,47 @@ const AdminLakeFresh = () => {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+
+      {/* ZONE CENTERS (map) */}
+      {tab === "delivery" && (
+        <div className="rounded-xl border bg-white p-5">
+          <h2 className="font-display text-lg font-bold mb-4">Set zone center on map</h2>
+          <p className="text-xs text-gray-500 mb-3">Choose a zone, then tap the map to set its center. Used as a fallback pin for orders without a precise location.</p>
+          <div className="flex flex-wrap items-end gap-3 mb-3">
+            <div>
+              <Label>Zone</Label>
+              <select
+                value={centerZoneId}
+                onChange={(e) => {
+                  setCenterZoneId(e.target.value);
+                  const z = (zones || []).find((x: any) => x.id === e.target.value);
+                  if (z) { setCenterLat(z.center_lat ?? null); setCenterLng(z.center_lng ?? null); }
+                }}
+                className="mt-1 w-full h-10 rounded-md border border-gray-300 px-3 text-sm"
+              >
+                <option value="">Select zone...</option>
+                {(zones || []).map((z: any) => (
+                  <option key={z.id} value={z.id}>{z.name}</option>
+                ))}
+              </select>
+            </div>
+            <Button onClick={() => void saveZoneCenter()} disabled={!centerZoneId || centerLat == null || centerLng == null}>
+              Save center
+            </Button>
+            {centerLat != null && centerLng != null && (
+              <span className="text-xs text-gray-600">{centerLat.toFixed(5)}, {centerLng.toFixed(5)}</span>
+            )}
+          </div>
+          <LeafletMap
+            center={centerLat != null && centerLng != null ? [centerLat, centerLng] : [-15.7861, 35.0058]}
+            zoom={centerLat != null ? 14 : 12}
+            marker={centerLat != null && centerLng != null ? { lat: centerLat, lng: centerLng } : null}
+            onClick={(lat, lng) => { setCenterLat(lat); setCenterLng(lng); }}
+            height={320}
+          />
         </div>
       )}
 
