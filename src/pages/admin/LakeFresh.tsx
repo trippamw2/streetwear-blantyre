@@ -423,6 +423,22 @@ const AdminLakeFresh = () => {
 
   const loadRouteOrders = async () => {
     setRouteLoading(true);
+    // If the selected date has no orders, jump to the next date that does.
+    const { data: dateRows } = await supabase
+      .from("orders")
+      .select("delivery_date")
+      .eq("brand_id", LF_BRAND_ID)
+      .not("status", "in", "(cancelled)")
+      .gte("delivery_date", routeDate)
+      .order("delivery_date", { ascending: true })
+      .limit(1);
+    if (dateRows && dateRows.length > 0 && dateRows[0].delivery_date && dateRows[0].delivery_date !== routeDate) {
+      setRouteDate(dateRows[0].delivery_date);
+      setRouteLoading(false);
+      setTimeout(() => void loadRouteOrders(), 0);
+      return;
+    }
+
     const { data } = await supabase
       .from("orders")
       .select("*")
@@ -431,7 +447,6 @@ const AdminLakeFresh = () => {
       .not("status", "in", "(cancelled)")
       .order("created_at", { ascending: true });
     const ords = data || [];
-    // fetch items for each
     const ids = ords.map((o: any) => o.id);
     let itemsByOrder: Record<string, any[]> = {};
     if (ids.length) {
@@ -444,7 +459,19 @@ const AdminLakeFresh = () => {
         itemsByOrder[it.order_id].push(it);
       }
     }
-    const enriched = ords.map((o: any) => ({ ...o, items: itemsByOrder[o.id] || [] }));
+    const zoneMap = new Map((zones || []).map((z: any) => [z.id, z]));
+    const enriched = ords.map((o: any) => {
+      let lat = o.delivery_lat;
+      let lng = o.delivery_lng;
+      if (lat == null || lng == null) {
+        const z = zoneMap.get(o.delivery_zone_id);
+        if (z && z.center_lat != null && z.center_lng != null) {
+          lat = z.center_lat;
+          lng = z.center_lng;
+        }
+      }
+      return { ...o, delivery_lat: lat, delivery_lng: lng, items: itemsByOrder[o.id] || [] };
+    });
     setRouteOrders(enriched);
     setRouteLoading(false);
   };
@@ -600,6 +627,10 @@ const AdminLakeFresh = () => {
     loadPreparations();
     loadZones();
   }, []);
+
+  useEffect(() => {
+    if (tab === "route") void loadRouteOrders();
+  }, [tab, routeDate]);
 
   const refreshAll = async () => {
     setLoading(true);
@@ -2132,6 +2163,8 @@ const AdminLakeFresh = () => {
                       <th className="px-4 py-3 text-left">Area</th>
                       <th className="px-4 py-3 text-left">Items</th>
                       <th className="px-4 py-3 text-left">Window</th>
+                      <th className="px-4 py-3 text-left">Payment</th>
+                      <th className="px-4 py-3 text-left">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -2140,13 +2173,31 @@ const AdminLakeFresh = () => {
                         <td className="px-4 py-3 font-bold">{i + 1}</td>
                         <td className="px-4 py-3 font-medium">{o.customer_name}</td>
                         <td className="px-4 py-3">{o.customer_phone}</td>
-                        <td className="px-4 py-3">{o.house_number || "—"}</td>
-                        <td className="px-4 py-3">{o.street_name || "—"}</td>
-                        <td className="px-4 py-3">{o.customer_location || "—"}</td>
+                        <td className="px-4 py-3">{o.house_number || "-"}</td>
+                        <td className="px-4 py-3">{o.street_name || "-"}</td>
+                        <td className="px-4 py-3">{o.customer_location || "-"}</td>
                         <td className="px-4 py-3 text-xs">
-                          {(o.items || []).map((it: any) => `${it.product_name} x ${it.quantity}`).join(", ") || "—"}
+                          {(o.items || []).map((it: any) => `${it.product_name} x ${it.quantity}`).join(", ") || "-"}
                         </td>
-                        <td className="px-4 py-3">{o.delivery_window || "—"}</td>
+                        <td className="px-4 py-3">{o.delivery_window || "-"}</td>
+                        <td className="px-4 py-3">
+                          <span className={`text-xs font-bold ${o.payment_status === "paid" ? "text-[#39B54A]" : "text-amber-600"}`}>
+                            {o.payment_status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">
+                          {o.status !== "delivered" && o.status !== "cancelled" && (
+                            <button
+                              onClick={() => { updateOrderStatus(o.id, "delivered"); void loadRouteOrders(); }}
+                              className="text-xs font-bold text-[#39B54A] underline"
+                            >
+                              Mark delivered
+                            </button>
+                          )}
+                          {o.status === "delivered" && (
+                            <span className="text-xs font-bold text-[#39B54A]">Delivered</span>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
