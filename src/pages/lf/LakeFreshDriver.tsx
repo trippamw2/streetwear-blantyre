@@ -3,7 +3,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
 import { LeafletMap } from "@/components/lf/LeafletMap";
-import { Truck, CheckCircle2, Phone, MapPin } from "lucide-react";
+import { CheckCircle2, Phone, MapPin, Camera } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
@@ -43,9 +44,21 @@ export default function LakeFreshDriver() {
     if (user) void load();
   }, [user, date]);
 
-  const markDelivered = async (id: string) => {
-    await supabase.from("orders").update({ status: "delivered" }).eq("id", id);
+  const markDelivered = async (id: string, proofUrl?: string) => {
+    await supabase.from("orders").update({ status: "delivered", delivery_proof_url: proofUrl || null }).eq("id", id);
     void load();
+  };
+
+  const uploadProof = async (id: string, file: File) => {
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+    const uuid = (typeof crypto !== "undefined" && typeof (crypto as any).randomUUID === "function")
+      ? (crypto as any).randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const path = `lf/delivery-proof/${uuid}.${ext}`;
+    const { error } = await supabase.storage.from("product-images").upload(path, file, { contentType: file.type || undefined });
+    if (error) { toast({ title: "Upload failed", description: error.message, variant: "destructive" }); return; }
+    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+    await markDelivered(id, data.publicUrl);
   };
 
   const withCoords = orders.filter((o) => o.delivery_lat != null && o.delivery_lng != null);
@@ -104,12 +117,27 @@ export default function LakeFreshDriver() {
                     <p className="mt-1 text-xs text-gray-500">Window: {o.delivery_window}</p>
                   )}
                 </div>
-                <button
-                  onClick={() => void markDelivered(o.id)}
-                  className="shrink-0 rounded-lg bg-[#39B54A] px-3 py-2 text-xs font-bold text-white"
-                >
-                  <CheckCircle2 className="inline h-3.5 w-3.5 mr-1" /> Delivered
-                </button>
+                <div className="flex shrink-0 flex-col items-end gap-2">
+                  <label className="cursor-pointer rounded-lg bg-[#073B78] px-3 py-2 text-xs font-bold text-white">
+                    <Camera className="inline h-3.5 w-3.5 mr-1" /> Proof + Delivered
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) void uploadProof(o.id, f);
+                      }}
+                    />
+                  </label>
+                  <button
+                    onClick={() => void markDelivered(o.id)}
+                    className="rounded-lg bg-[#39B54A] px-3 py-2 text-xs font-bold text-white"
+                  >
+                    <CheckCircle2 className="inline h-3.5 w-3.5 mr-1" /> Delivered
+                  </button>
+                </div>
               </div>
             </div>
           ))}

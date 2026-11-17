@@ -259,6 +259,8 @@ const AdminLakeFresh = () => {
 
   // ---- Analytics state ----
   const [analytics, setAnalytics] = useState<any>(null);
+  const [analyticsFrom, setAnalyticsFrom] = useState("");
+  const [analyticsTo, setAnalyticsTo] = useState("");
 
   // ---- Subscriptions state ----
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
@@ -345,11 +347,11 @@ const AdminLakeFresh = () => {
     setQuotes(data || []);
   };
 
-  const loadAnalytics = async () => {
-    const { data: orders } = await supabase
-      .from("orders")
-      .select("id, total_mwk, payment_status, status")
-      .eq("brand_id", LF_BRAND_ID);
+  const loadAnalytics = async (from?: string, to?: string) => {
+    let query = supabase.from("orders").select("id, total_mwk, payment_status, status, created_at").eq("brand_id", LF_BRAND_ID);
+    if (from) query = query.gte("created_at", from);
+    if (to) query = query.lte("created_at", to + "T23:59:59");
+    const { data: orders } = await query;
     const paidOrders = (orders || []).filter((o: any) => o.payment_status === "paid");
     const revenue = paidOrders.reduce((s: number, o: any) => s + (o.total_mwk || 0), 0);
     const aov = paidOrders.length > 0 ? Math.round(revenue / paidOrders.length) : 0;
@@ -358,13 +360,14 @@ const AdminLakeFresh = () => {
     const { data: items } = orderIds.length
       ? await supabase
           .from("order_items")
-          .select("order_id, product_key, unit_price_mwk, quantity, recipe_title")
+          .select("order_id, product_key, product_name, unit_price_mwk, quantity, recipe_title")
           .in("order_id", orderIds)
       : { data: [] };
 
     const ordersWithRecipes = new Set<string>();
     const ordersWithSpices = new Set<string>();
     const revenueByCategory: Record<string, number> = {};
+    const bestsellers: Record<string, { name: string; qty: number; revenue: number }> = {};
 
     (items || []).forEach((it: any) => {
       const key = String(it.product_key || "");
@@ -372,13 +375,17 @@ const AdminLakeFresh = () => {
       revenueByCategory[cat] = (revenueByCategory[cat] || 0) + (it.unit_price_mwk || 0) * (Number(it.quantity) || 1);
       if (it.recipe_title) ordersWithRecipes.add(it.order_id);
       if (cat === "spice") ordersWithSpices.add(it.order_id);
+
+      const name = it.product_name || key;
+      if (!bestsellers[name]) bestsellers[name] = { name, qty: 0, revenue: 0 };
+      bestsellers[name].qty += Number(it.quantity) || 1;
+      bestsellers[name].revenue += (it.unit_price_mwk || 0) * (Number(it.quantity) || 1);
     });
 
     const eligible = paidOrders.length || 1;
     const recipeAttachment = Math.round((ordersWithRecipes.size / eligible) * 100);
     const spiceAttachment = Math.round((ordersWithSpices.size / eligible) * 100);
 
-    // stock levels
     const { data: spices } = await supabase.from("lf_spices").select("stock_qty").eq("brand_id", LF_BRAND_ID);
     const { data: batches } = await supabase.from("fish_inventory_batches").select("weight_kg_available").eq("brand_id", LF_BRAND_ID);
 
@@ -386,6 +393,10 @@ const AdminLakeFresh = () => {
       spices: (spices || []).reduce((s: number, r: any) => s + (r.stock_qty || 0), 0),
       fishKg: (batches || []).reduce((s: number, r: any) => s + Number(r.weight_kg_available || 0), 0),
     };
+
+    const topBestsellers = Object.values(bestsellers)
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 8);
 
     setAnalytics({
       totalOrders: orders?.length || 0,
@@ -396,6 +407,9 @@ const AdminLakeFresh = () => {
       spiceAttachment,
       revenueByCategory,
       stock,
+      bestsellers: topBestsellers,
+      from: from || null,
+      to: to || null,
     });
   };
 
@@ -1028,6 +1042,23 @@ const AdminLakeFresh = () => {
     if (error) toast({ title: "Refund failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Order cancelled and refunded" });
+      await loadOrders();
+      if (tab === "route") void loadRouteOrders();
+    }
+  };
+
+  const dispatchOrder = async (orderId: string) => {
+    const { error: aErr } = await supabase.from("delivery_assignments").insert({
+      brand_id: LF_BRAND_ID,
+      order_id: orderId,
+      driver_name: "Unassigned",
+      status: "assigned",
+    });
+    if (aErr) toast({ title: "Dispatch failed", description: aErr.message, variant: "destructive" });
+    const { error } = await supabase.from("orders").update({ status: "dispatched" }).eq("id", orderId);
+    if (error) toast({ title: "Status update failed", description: error.message, variant: "destructive" });
+    else {
+      toast({ title: "Order dispatched" });
       await loadOrders();
       if (tab === "route") void loadRouteOrders();
     }
@@ -1723,6 +1754,20 @@ const AdminLakeFresh = () => {
       {/* ANALYTICS */}
       {tab === "analytics" && (
         <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <div className="flex flex-wrap items-end gap-3">
+              <div>
+                <Label>From</Label>
+                <Input type="date" value={analyticsFrom} onChange={(e) => setAnalyticsFrom(e.target.value)} className="mt-1" />
+              </div>
+              <div>
+                <Label>To</Label>
+                <Input type="date" value={analyticsTo} onChange={(e) => setAnalyticsTo(e.target.value)} className="mt-1" />
+              </div>
+              <Button onClick={() => void loadAnalytics(analyticsFrom || undefined, analyticsTo || undefined)}>Apply</Button>
+              <Button variant="outline" onClick={() => { setAnalyticsFrom(""); setAnalyticsTo(""); void loadAnalytics(); }}>Reset</Button>
+            </div>
+          </div>
           {!analytics ? (
             <p className="text-sm text-gray-500">Loading analytics...</p>
           ) : (
@@ -1758,6 +1803,21 @@ const AdminLakeFresh = () => {
                     </div>
                   ))}
                   {Object.keys(analytics.revenueByCategory).length === 0 && (
+                    <p className="text-sm text-gray-500">No paid orders yet.</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-xl border bg-white p-5">
+                <h2 className="font-display text-lg font-bold mb-4">Bestsellers</h2>
+                <div className="space-y-2">
+                  {(analytics.bestsellers || []).map((b: any) => (
+                    <div key={b.name} className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">{b.name}</span>
+                      <span className="font-semibold text-[#073B78]">{b.qty} sold · {Number(b.revenue).toLocaleString()} MWK</span>
+                    </div>
+                  ))}
+                  {(!analytics.bestsellers || analytics.bestsellers.length === 0) && (
                     <p className="text-sm text-gray-500">No paid orders yet.</p>
                   )}
                 </div>
@@ -2340,6 +2400,14 @@ const AdminLakeFresh = () => {
                           </span>
                         </td>
                         <td className="px-4 py-3">
+                          {o.status !== "delivered" && o.status !== "cancelled" && o.status !== "dispatched" && (
+                            <button
+                              onClick={() => dispatchOrder(o.id)}
+                              className="text-xs font-bold text-[#08A9E8] underline mr-2"
+                            >
+                              Dispatch
+                            </button>
+                          )}
                           {o.status !== "delivered" && o.status !== "cancelled" && (
                             <button
                               onClick={() => { updateOrderStatus(o.id, "delivered"); void loadRouteOrders(); }}
@@ -2350,6 +2418,9 @@ const AdminLakeFresh = () => {
                           )}
                           {o.status === "delivered" && (
                             <span className="text-xs font-bold text-[#39B54A]">Delivered</span>
+                          )}
+                          {o.status === "dispatched" && (
+                            <span className="text-xs font-bold text-[#08A9E8]">Dispatched</span>
                           )}
                         </td>
                       </tr>
