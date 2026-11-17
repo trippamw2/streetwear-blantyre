@@ -115,7 +115,7 @@ const LakeFreshHome = () => {
               <img src="/brand/lake-fresh/icon.png" alt="" className="h-5 w-5 object-contain" />
               Lake Fresh Fish Mart
             </span>
-            <h1 className="mt-6 font-display text-[2.35rem] font-extrabold leading-[0.96] tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 font-display text-[2.35rem] font-extrabold leading-[0.96] tracking-tight text-white sm:text-5xl lg:text-6xl">
               FRESH FROM THE{" "}
               <br />
               <span className="bg-gradient-to-r from-[#7ED321] to-[#08A9E8] bg-clip-text text-transparent">LAKE.</span>{" "}
