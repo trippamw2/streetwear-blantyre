@@ -148,7 +148,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const apiKey = Deno.env.get("GEMINI_API_KEY");
+    const apiKey = Deno.env.get("GEMINI_API_KEY") || Deno.env.get("GEMINI_KEY");
     if (!apiKey) {
       return new Response(
         JSON.stringify({ error: "GEMINI_API_KEY not configured. Add it in Supabase Dashboard → Settings → Edge Functions → Secrets, or run: supabase secrets set GEMINI_API_KEY=your-key" }),
