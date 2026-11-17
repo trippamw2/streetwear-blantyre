@@ -54,9 +54,9 @@ import Passport from "./pages/Passport";
 import AdminAuthentication from "./pages/admin/Authentication";
 import AdminGifts from "./pages/admin/Gifts";
 import AdminCultureStories from "./pages/admin/CultureStories";
+import AdminCommunications from "./pages/admin/Communications";
 import AdminLakeFresh from "./pages/admin/LakeFresh";
 import AdminLookbooks from "./pages/admin/Lookbooks";
-import AdminCommunications from "./pages/admin/Communications";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GiftTrack from "./pages/GiftTrack";
 import Editorial from "./pages/Editorial";
@@ -257,7 +257,6 @@ const App = () => {
                         <Route path="customers" element={<Navigate to="/admin/orders" replace />} />
                         <Route path="analytics" element={<Navigate to="/admin" replace />} />
                         <Route path="gifts" element={<AdminGifts />} />
-                        <Route path="lake-fresh" element={<Navigate to="/admin" replace />} />
                         <Route path="culture-stories" element={<AdminCultureStories />} />
                         <Route path="lookbooks" element={<AdminLookbooks />} />
                       </Route>
