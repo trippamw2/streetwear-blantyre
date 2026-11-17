@@ -231,6 +231,7 @@ const LakeFreshCheckout = () => {
         p_marketing_consent: marketingConsent,
         p_redeem_points: pointsToUse,
         p_promo_code: promoPreview?.code || (promoCode.trim() || null),
+        p_customer_email: user?.email || undefined,
         p_house_number: houseNumber.trim() || undefined,
         p_street_name: streetName.trim() || undefined,
         p_delivery_lat: deliveryLat ?? undefined,

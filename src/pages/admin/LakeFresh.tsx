@@ -16,6 +16,7 @@ import {
   ClipboardList,
   Truck,
   MapPin,
+  Users,
   Plus,
   RefreshCw,
   CheckCircle2,
@@ -26,7 +27,7 @@ import {
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery" | "route";
+type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery" | "route" | "customers";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
@@ -42,6 +43,7 @@ const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "preparation", label: "Preparation", icon: Package },
   { key: "delivery", label: "Delivery", icon: Truck },
   { key: "route", label: "Route Map", icon: MapPin },
+  { key: "customers", label: "Customers", icon: Users },
 ];
 
 const uploadLfAsset = async (file: File, folder: string): Promise<string> => {
@@ -135,7 +137,7 @@ const AssetField = ({
   );
 };
 
-const VALID_TABS: Tab[] = ["catalog", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery", "route"];
+const VALID_TABS: Tab[] = ["catalog", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery", "route", "customers"];
 
 const AdminLakeFresh = () => {
   const { user } = useAuth();
@@ -198,6 +200,7 @@ const AdminLakeFresh = () => {
   const [routeDate, setRouteDate] = useState(new Date().toISOString().slice(0, 10));
   const [routeOrders, setRouteOrders] = useState<any[]>([]);
   const [routeLoading, setRouteLoading] = useState(false);
+  const [customers, setCustomers] = useState<any[]>([]);
 
   // ---- Preparation state ----
   const [preparations, setPreparations] = useState<any[]>([]);
@@ -421,6 +424,16 @@ const AdminLakeFresh = () => {
     setOrders(data || []);
   };
 
+  const loadCustomers = async () => {
+    const { data } = await supabase
+      .from("customer_profiles")
+      .select("*")
+      .eq("brand_id", LF_BRAND_ID)
+      .order("updated_at", { ascending: false })
+      .limit(200);
+    setCustomers(data || []);
+  };
+
   const loadRouteOrders = async () => {
     setRouteLoading(true);
     // If the selected date has no orders, jump to the next date that does.
@@ -626,6 +639,7 @@ const AdminLakeFresh = () => {
     loadOrders();
     loadPreparations();
     loadZones();
+    loadCustomers();
   }, []);
 
   useEffect(() => {
@@ -648,6 +662,7 @@ const AdminLakeFresh = () => {
       loadOrders(),
       loadPreparations(),
       loadZones(),
+      loadCustomers(),
     ]);
     setLoading(false);
     toast({ title: "Refreshed" });
@@ -930,7 +945,38 @@ const AdminLakeFresh = () => {
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Status updated" });
+      // Send customer email on dispatched / delivered (best effort)
+      if (newStatus === "dispatched" || newStatus === "delivered") {
+        try {
+          const { data: ord } = await supabase
+            .from("orders")
+            .select("customer_name, customer_email, customer_phone, total_mwk, customer_location, delivery_date, delivery_window, payment_reference")
+            .eq("id", orderId)
+            .maybeSingle();
+          if (ord?.customer_email) {
+            const { sendDispatchedEmail, sendDeliveredEmail } = await import("@/lib/brevo");
+            const emailOrder = {
+              to: ord.customer_email,
+              toName: ord.customer_name || "Customer",
+              orderId,
+              brand: "lake-fresh" as const,
+              total: Number(ord.total_mwk || 0),
+              location: ord.customer_location || "",
+              items: [],
+              deliveryMethod: "Next day delivery",
+              type: (newStatus === "dispatched" ? "dispatched" : "delivered") as "dispatched" | "delivered",
+              eta: ord.delivery_window || undefined,
+              trackingUrl: `${window.location.origin}/lf/track?ref=${ord.payment_reference || orderId}`,
+            };
+            if (newStatus === "dispatched") await sendDispatchedEmail(emailOrder);
+            else await sendDeliveredEmail(emailOrder);
+          }
+        } catch (e) {
+          console.warn("status email failed", e);
+        }
+      }
       await loadOrders();
+      if (tab === "route") void loadRouteOrders();
     }
   };
 
@@ -2211,6 +2257,37 @@ const AdminLakeFresh = () => {
               No orders loaded. Choose a date and click "Load orders".
             </div>
           )}
+        </div>
+      )}
+
+      {/* CUSTOMERS */}
+      {tab === "customers" && (
+        <div className="rounded-xl border bg-white overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+              <tr>
+                <th className="px-4 py-3 text-left">Name</th>
+                <th className="px-4 py-3 text-left">Phone</th>
+                <th className="px-4 py-3 text-left">Location</th>
+                <th className="px-4 py-3 text-left">Consent</th>
+                <th className="px-4 py-3 text-left">Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              {customers.map((c) => (
+                <tr key={c.id} className="border-t">
+                  <td className="px-4 py-3 font-medium">{c.full_name || "—"}</td>
+                  <td className="px-4 py-3">{c.phone || "—"}</td>
+                  <td className="px-4 py-3">{c.location || "—"}</td>
+                  <td className="px-4 py-3">{c.marketing_consent ? "Yes" : "No"}</td>
+                  <td className="px-4 py-3 text-xs">{c.updated_at ? new Date(c.updated_at).toLocaleDateString() : "—"}</td>
+                </tr>
+              ))}
+              {customers.length === 0 && (
+                <tr><td colSpan={5} className="px-4 py-6 text-center text-gray-500">No customers yet.</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
