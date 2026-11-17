@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
 import { lfUrl } from "@/lib/brandSite";
 import { AlertCircle, ArrowLeft, CalendarDays, CreditCard, Fish, Gift, Loader2, MapPin, Snowflake, Truck } from "lucide-react";
@@ -43,7 +43,7 @@ const LakeFreshCheckout = () => {
   const [now] = useState(() => new Date());
   const dates = useMemo(
     () => getEligibleDeliveryDates(now, deliveryConfig),
-    [now, deliveryConfig]
+    [now, deliveryConfig],
   );
 
   const [zoneId, setZoneId] = useState("");
@@ -55,6 +55,7 @@ const LakeFreshCheckout = () => {
   const [notes, setNotes] = useState("");
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [step, setStep] = useState(0);
   const [promoCode, setPromoCode] = useState("");
   const [promoPreview, setPromoPreview] = useState<{ code: string; discount: number } | null>(null);
   const [promoError, setPromoError] = useState<string | null>(null);
@@ -155,23 +156,6 @@ const LakeFreshCheckout = () => {
         : Math.floor(Number(data.value));
     setPromoPreview({ code: data.code as string, discount });
   };
-
-  if (items.length === 0) {
-    return (
-      <div className="container py-20 text-center">
-        <SEO brand="lake-fresh" title="Checkout | Lake Fresh Fish Mart" description="Lake Fresh fish checkout." />
-        <Fish className="mx-auto h-12 w-12 text-gray-300" />
-        <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">Your basket is empty</h1>
-        <p className="mt-2 text-sm text-gray-500">Choose fresh fish before checking out.</p>
-        <LFLink
-          to="/lf/fish"
-          className="mt-6 inline-flex rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white"
-        >
-          Browse the catch
-        </LFLink>
-      </div>
-    );
-  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -302,8 +286,8 @@ const LakeFreshCheckout = () => {
         firstName: firstName || "Lake",
         lastName: rest.join(" ") || "Fresh",
         txRef: reference,
-        callbackUrl: `${lfUrl(`/orders/${orderId}`)}?payment=callback`,
-        returnUrl: `${lfUrl(`/orders/${orderId}`)}?payment=complete`,
+        callbackUrl: `${lfUrl("/orders/" + orderId)}?payment=callback`,
+        returnUrl: `${lfUrl("/orders/" + orderId)}?payment=complete`,
         title: "Lake Fresh Fish Mart Order",
         description: `Order ${reference}`,
       });
@@ -315,6 +299,41 @@ const LakeFreshCheckout = () => {
       });
       setSubmitting(false);
     }
+  };
+
+  const steps = [
+    { key: "basket", label: "Basket", icon: Fish },
+    { key: "delivery", label: "Delivery", icon: MapPin },
+    { key: "pay", label: "Pay", icon: CreditCard },
+  ];
+  const stepMeta = steps[Math.min(Math.max(step, 0), steps.length - 1)];
+
+  const continueToDelivery = () => {
+    if (minOrderBlocked && selectedZone) {
+      toast({
+        title: "Minimum order not reached",
+        description: `${selectedZone.name} requires at least ${formatMWK(selectedZone.minOrderMwk)}.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    setStep(1);
+  };
+
+  const continueToPay = () => {
+    if (!name.trim() || phone.replace(/[^0-9]/g, "").length < 7) {
+      toast({ title: "Enter your name and a valid phone number", variant: "destructive" });
+      return;
+    }
+    if (!selectedZone) {
+      toast({ title: "Choose your delivery area", variant: "destructive" });
+      return;
+    }
+    if (!selectedSlot || !isDateUsable(selectedSlot.deliveryDate)) {
+      toast({ title: "Choose an available delivery date", variant: "destructive" });
+      return;
+    }
+    setStep(2);
   };
 
   return (
@@ -333,261 +352,50 @@ const LakeFreshCheckout = () => {
           <ArrowLeft className="h-3.5 w-3.5" /> Back to basket
         </button>
 
-        <div className="mt-4">
-          <h1 className="font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
-            Finish your order
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Three short steps. Delivery area and date are already picked for you.
-          </p>
+        <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+              Finish your order
+            </h1>
+            <p className="mt-2 text-sm text-gray-600">Three short steps. Delivery area and date are already picked for you.</p>
+          </div>
+          <div className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-sm">
+            {steps.map((s, index) => (
+              <Fragment key={s.key}>
+                {index > 0 && (
+                  <span className={`hidden h-0.5 w-6 sm:block ${index <= step ? "bg-[#39B54A]" : "bg-gray-200"}`} />
+                )}
+                <span
+                  className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-widest ${
+                    index === step
+                      ? "bg-[#073B78] text-white"
+                      : index < step
+                        ? "bg-[#7ED321]/15 text-[#2c6e12]"
+                        : "bg-gray-50 text-gray-500"
+                  }`}
+                >
+                  <s.icon className="h-3 w-3" /> {s.label}
+                </span>
+              </Fragment>
+            ))}
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]">
-          <div className="space-y-5">
-            <section className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="font-display text-lg font-extrabold text-[#073B78]">Your details</h2>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <label className="block">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Full name *</span>
-                  <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    maxLength={100}
-                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
-                    placeholder="Your name"
-                  />
-                </label>
-                <label className="block">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Phone / WhatsApp *</span>
-                  <input
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                    type="tel"
-                    maxLength={20}
-                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
-                    placeholder="e.g. 0888 000 000"
-                  />
-                </label>
-              </div>
-              <label className="mt-4 block">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Delivery notes</span>
-                <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  maxLength={500}
-                  rows={2}
-                  className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
-                  placeholder="Landmark, gate colour, or any delivery instructions"
-                />
-              </label>
-            </section>
-
+        {step === 0 && (
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              continueToDelivery();
+            }}
+            className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]"
+          >
             <section className="rounded-2xl border border-gray-200 bg-white p-5">
               <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
-                <MapPin className="h-4 w-4 text-[#08A9E8]" /> Delivery area
+                <Fish className="h-4 w-4 text-[#39B54A]" /> Your basket
               </h2>
+              <p className="mt-1 text-xs text-gray-500">Fresh fish, signature spices and one free recipe. Delivery is next day.</p>
 
-              {zonesLoading && (
-                <p className="mt-3 flex items-center gap-2 text-sm text-gray-500">
-                  <Loader2 className="h-4 w-4 animate-spin" /> Loading delivery areas…
-                </p>
-              )}
-
-              {zonesError && (
-                <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-                  Could not load delivery areas.{" "}
-                  <button type="button" onClick={() => refetchZones()} className="font-bold underline">
-                    Try again
-                  </button>
-                </div>
-              )}
-
-              {!zonesLoading && !zonesError && (
-                <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {(zones || []).map((zone) => {
-                    const selected = zoneId === zone.id;
-                    return (
-                      <button
-                        key={zone.id}
-                        type="button"
-                        onClick={() => setZoneId(zone.id)}
-                        className={`rounded-xl border p-3 text-left transition-colors ${
-                          selected
-                            ? "border-[#073B78] bg-[#073B78] text-white"
-                            : "border-gray-200 bg-white text-[#073B78] hover:border-[#073B78]/40"
-                        }`}
-                      >
-                        <span className="block text-sm font-bold">{zone.name}</span>
-                        <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
-                          Delivery {zone.baseFeeMwk > 0 ? formatMWK(zone.baseFeeMwk) : "free"}
-                          {zone.minOrderMwk > 0 ? ` · min ${formatMWK(zone.minOrderMwk)}` : ""}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </section>
-
-            <section className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
-                <CalendarDays className="h-4 w-4 text-[#08A9E8]" /> Delivery date
-              </h2>
-              <p className="mt-1 text-xs text-gray-500">
-                Orders placed before {formatCutoff(deliveryConfig.cutoff)} qualify for next day delivery.
-              </p>
-
-              {!zoneId && <p className="mt-3 text-sm text-gray-500">Choose a delivery area first.</p>}
-
-              {zoneId && slotsLoading && (
-                <p className="mt-3 flex items-center gap-2 text-sm text-gray-500">
-                  <Loader2 className="h-4 w-4 animate-spin" /> Loading delivery calendar…
-                </p>
-              )}
-
-              {zoneId && !slotsLoading && (
-                <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {dates.map((date) => {
-                    const slot = slotForDate(date);
-                    const cutoffPassed = slot ? new Date(slot.cutoffAt).getTime() <= Date.now() : false;
-                    const full = slot ? !isSlotUsable(slot) : false;
-                    const usable = isDateUsable(date);
-                    const selected = deliveryDate === date;
-                    const status = !slot
-                      ? "Unavailable"
-                      : cutoffPassed
-                      ? "Cutoff passed"
-                      : full
-                      ? "Full"
-                      : slot.bookedOrders >= slot.capacityOrders
-                      ? "Full"
-                      : "Available";
-
-                    return (
-                      <button
-                        key={date}
-                        type="button"
-                        disabled={!usable}
-                        onClick={() => setDeliveryDate(date)}
-                        className={`rounded-xl border p-3 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                          selected
-                            ? "border-[#073B78] bg-[#073B78] text-white"
-                            : "border-gray-200 bg-white text-[#073B78] hover:border-[#073B78]/40"
-                        }`}
-                      >
-                        <span className="block text-sm font-bold">{formatDeliveryDate(date)}</span>
-                        <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
-                          {status}
-                          {slot && status === "Available"
-                            ? ` · ${Math.max(0, slot.capacityOrders - slot.bookedOrders)} orders left`
-                            : ""}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
-              {zoneId && !slotsLoading && slots && slots.length === 0 && (
-                <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                  No delivery slots are open for this area. Please try another area or check back shortly.
-                </p>
-              )}
-            </section>
-
-            <section className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
-                <Gift className="h-4 w-4 text-[#39B54A]" /> Rewards and promo code
-              </h2>
-
-              <div className="mt-3 space-y-3">
-                <div className="flex items-center justify-between gap-3 rounded-xl bg-[#F6FBFD] p-3">
-                  <div>
-                    <p className="text-sm font-bold text-[#073B78]">Your points</p>
-                    <p className="text-xs text-gray-600">
-                      {availablePoints} points available
-                      {program ? ` · ${program.points_to_redeem} points = ${formatMWK(program.reward_value_mwk)} off` : ""}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setUsePoints((prev) => !prev)}
-                    disabled={availablePoints < redeemStep}
-                    className={`shrink-0 rounded-lg px-3 py-2 text-[10px] font-extrabold uppercase tracking-widest disabled:opacity-40 ${
-                      usePoints ? "bg-[#39B54A] text-white" : "bg-[#073B78] text-white"
-                    }`}
-                  >
-                    {availablePoints < redeemStep ? "Not enough" : usePoints ? "Points on" : "Use points"}
-                  </button>
-                </div>
-                {usePoints && loyaltyPreview > 0 && (
-                  <p className="text-xs font-bold text-[#39B54A]">
-                    Using {pointsToUse} points saves {formatMWK(loyaltyPreview)}.
-                  </p>
-                )}
-
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                    Promo code
-                  </label>
-                  <div className="mt-1.5 flex gap-2">
-                    <input
-                      value={promoCode}
-                      onChange={(event) => {
-                        setPromoCode(event.target.value);
-                        setPromoError(null);
-                      }}
-                      placeholder="Enter code"
-                      className="h-11 min-w-0 flex-1 rounded-xl border border-gray-300 px-3 text-sm uppercase text-[#073B78] outline-none focus:border-[#08A9E8]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => void applyPromo()}
-                      className="shrink-0 rounded-xl bg-[#073B78] px-4 text-[10px] font-extrabold uppercase tracking-widest text-white"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                  {promoError && <p className="mt-1.5 text-xs font-semibold text-red-600">{promoError}</p>}
-                  {promoPreview && (
-                    <p className="mt-1.5 text-xs font-bold text-[#39B54A]">
-                      {promoPreview.code} saves {formatMWK(promoPreview.discount)}.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </section>
-
-            <section className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
-                <CreditCard className="h-4 w-4 text-[#08A9E8]" /> Pay securely
-              </h2>
-              <div className="mt-3 rounded-xl bg-gray-50 p-4">
-                <p className="text-sm font-bold text-[#073B78]">Pay online via PayChangu</p>
-                <p className="mt-1 text-xs text-gray-500">Airtel Money · TNM Mpamba · Visa · Mastercard</p>
-                <p className="mt-2 text-xs text-gray-500">
-                  You will be redirected to PayChangu after placing the order. Your order is only marked paid after
-                  the payment provider confirms it.
-                </p>
-              </div>
-              <label className="mt-4 flex items-start gap-2 text-xs text-gray-600">
-                <input
-                  type="checkbox"
-                  checked={marketingConsent}
-                  onChange={(e) => setMarketingConsent(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#073B78]"
-                />
-                Send me occasional Lake Fresh offers. This consent is separate from SB Streetwear.
-              </label>
-            </section>
-          </div>
-
-          <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-2xl border border-gray-200 bg-white p-5">
-              <h2 className="font-display text-lg font-extrabold text-[#073B78]">Order summary</h2>
-              <div className="mt-3 space-y-3">
+              <div className="mt-4 space-y-3">
                 {items.map((item) => {
                   const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
                   return (
@@ -595,8 +403,8 @@ const LakeFreshCheckout = () => {
                       <div>
                         <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
                         <p className="text-xs text-gray-500">
-                          {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg ·{" "}
-                          {prepLabel(item.preparation)}
+                          {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg · {prepLabel(item.preparation)}
+                          {item.recipeTitle ? ` · free recipe: ${item.recipeTitle}` : ""}
                         </p>
                       </div>
                       <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
@@ -611,23 +419,11 @@ const LakeFreshCheckout = () => {
                   <span>{formatMWK(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
+                  <span>Delivery</span>
                   <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                 </div>
-                {loyaltyPreview > 0 && (
-                  <div className="flex justify-between text-[#39B54A]">
-                    <span>Rewards ({pointsToUse} points)</span>
-                    <span>-{formatMWK(loyaltyPreview)}</span>
-                  </div>
-                )}
-                {promoDiscount > 0 && (
-                  <div className="flex justify-between text-[#39B54A]">
-                    <span>Promo ({promoPreview?.code})</span>
-                    <span>-{formatMWK(promoDiscount)}</span>
-                  </div>
-                )}
                 <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
-                  <span>Total to pay</span>
+                  <span>Estimated total</span>
                   <span>{formatMWK(estimatedTotal)}</span>
                 </div>
               </div>
@@ -635,39 +431,431 @@ const LakeFreshCheckout = () => {
               {minOrderBlocked && selectedZone && (
                 <p className="mt-3 flex items-start gap-2 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
                   <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  Add {formatMWK(selectedZone.minOrderMwk - subtotal)} more to meet the {selectedZone.name} minimum
-                  order.
+                  Add {formatMWK(selectedZone.minOrderMwk - subtotal)} more to meet the {selectedZone.name} minimum order.
                 </p>
               )}
 
               <button
                 type="submit"
-                disabled={submitting || !selectedSlot || minOrderBlocked}
+                disabled={Boolean(minOrderBlocked && selectedZone)}
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#073B78] py-3.5 text-[10px] font-extrabold uppercase tracking-[0.25em] text-white hover:bg-[#073B78]/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
-                {submitting ? "Placing order…" : `Pay ${formatMWK(estimatedTotal)}`}
+                Continue to delivery
               </button>
+            </section>
 
-              <p className="mt-3 flex items-start gap-2 text-[11px] text-gray-500">
-                <Snowflake className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
-                You authorize the estimated total. We confirm packed weight before final settlement and will never
-                silently charge more than you authorized.
-              </p>
-              <p className="mt-2 flex items-start gap-2 text-[11px] text-gray-500">
-                <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
-                Stock is reserved when the order is created. If capacity changed, you will be asked to pick another
-                slot.
-              </p>
-              <p className="mt-3 text-center text-[11px] text-gray-500">
-                Already ordered?{" "}
-                <LFLink to="/lf/track" className="font-bold text-[#073B78] underline">
-                  Track your order
-                </LFLink>
-              </p>
+            <aside className="lg:sticky lg:top-24 lg:self-start">
+              <div className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="font-display text-lg font-extrabold text-[#073B78]">Order summary</h2>
+                <div className="mt-3 space-y-3">
+                  {items.map((item) => {
+                    const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
+                    return (
+                      <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
+                        <div>
+                          <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
+                          <p className="text-xs text-gray-500">
+                            {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg · {prepLabel(item.preparation)}
+                          </p>
+                        </div>
+                        <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-4 space-y-2 border-t border-gray-100 pt-4 text-sm">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Subtotal · {totalWeight.toFixed(1)} kg</span>
+                    <span>{formatMWK(subtotal)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
+                    <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
+                  </div>
+                  <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
+                    <span>Total to pay</span>
+                    <span>{formatMWK(estimatedTotal)}</span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </form>
+        )}
+
+        {step === 1 && (
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              continueToPay();
+            }}
+            className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]"
+          >
+            <div className="space-y-5">
+              <section className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="font-display text-lg font-extrabold text-[#073B78]">Your details</h2>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Full name *</span>
+                    <input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      maxLength={100}
+                      className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
+                      placeholder="Your name"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Phone / WhatsApp *</span>
+                    <input
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                      type="tel"
+                      maxLength={20}
+                      className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
+                      placeholder="e.g. 0888 000 000"
+                    />
+                  </label>
+                </div>
+                <label className="mt-4 block">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Delivery notes</span>
+                  <textarea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    maxLength={500}
+                    rows={2}
+                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
+                    placeholder="Landmark, gate colour, or any delivery instructions"
+                  />
+                </label>
+                <label className="mt-4 flex items-start gap-2 text-xs text-gray-600">
+                  <input
+                    type="checkbox"
+                    checked={marketingConsent}
+                    onChange={(e) => setMarketingConsent(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#073B78]"
+                  />
+                  Send me occasional Lake Fresh offers. This consent is separate from SB Streetwear.
+                </label>
+              </section>
+
+              <section className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                  <MapPin className="h-4 w-4 text-[#08A9E8]" /> Delivery area
+                </h2>
+
+                {zonesLoading && (
+                  <p className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Loading delivery areas…
+                  </p>
+                )}
+
+                {zonesError && (
+                  <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                    Could not load delivery areas.{" "}
+                    <button type="button" onClick={() => refetchZones()} className="font-bold underline">
+                      Try again
+                    </button>
+                  </div>
+                )}
+
+                {!zonesLoading && !zonesError && (
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {(zones || []).map((zone) => {
+                      const selected = zoneId === zone.id;
+                      return (
+                        <button
+                          key={zone.id}
+                          type="button"
+                          onClick={() => setZoneId(zone.id)}
+                          className={`rounded-xl border p-3 text-left transition-colors ${
+                            selected
+                              ? "border-[#073B78] bg-[#073B78] text-white"
+                              : "border-gray-200 bg-white text-[#073B78] hover:border-[#073B78]/40"
+                          }`}
+                        >
+                          <span className="block text-sm font-bold">{zone.name}</span>
+                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
+                            Delivery {zone.baseFeeMwk > 0 ? formatMWK(zone.baseFeeMwk) : "free"}
+                            {zone.minOrderMwk > 0 ? ` · min ${formatMWK(zone.minOrderMwk)}` : ""}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+
+              <section className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                  <CalendarDays className="h-4 w-4 text-[#08A9E8]" /> Delivery date
+                </h2>
+                <p className="mt-1 text-xs text-gray-500">
+                  Orders placed before {formatCutoff(deliveryConfig.cutoff)} qualify for next day delivery.
+                </p>
+
+                {!zoneId && <p className="mt-3 text-sm text-gray-500">Choose a delivery area first.</p>}
+
+                {zoneId && slotsLoading && (
+                  <p className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Loading delivery calendar…
+                  </p>
+                )}
+
+                {zoneId && !slotsLoading && (
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {dates.map((date) => {
+                      const slot = slotForDate(date);
+                      const cutoffPassed = slot ? new Date(slot.cutoffAt).getTime() <= Date.now() : false;
+                      const full = slot ? !isSlotUsable(slot) : false;
+                      const usable = isDateUsable(date);
+                      const selected = deliveryDate === date;
+                      const status = !slot
+                        ? "Unavailable"
+                        : cutoffPassed
+                          ? "Cutoff passed"
+                          : full
+                            ? "Full"
+                            : slot.bookedOrders >= slot.capacityOrders
+                              ? "Full"
+                              : "Available";
+
+                      return (
+                        <button
+                          key={date}
+                          type="button"
+                          disabled={!usable}
+                          onClick={() => setDeliveryDate(date)}
+                          className={`rounded-xl border p-3 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                            selected
+                              ? "border-[#073B78] bg-[#073B78] text-white"
+                              : "border-gray-200 bg-white text-[#073B78] hover:border-[#073B78]/40"
+                          }`}
+                        >
+                          <span className="block text-sm font-bold">{formatDeliveryDate(date)}</span>
+                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
+                            {status}
+                            {slot && status === "Available"
+                              ? ` · ${Math.max(0, slot.capacityOrders - slot.bookedOrders)} orders left`
+                              : ""}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {zoneId && !slotsLoading && slots && slots.length === 0 && (
+                  <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                    No delivery slots are open for this area. Please try another area or check back shortly.
+                  </p>
+                )}
+              </section>
             </div>
-          </aside>
-        </form>
+
+            <aside className="lg:sticky lg:top-24 lg:self-start">
+              <div className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="font-display text-lg font-extrabold text-[#073B78]">Order summary</h2>
+                <div className="mt-3 space-y-3">
+                  {items.map((item) => {
+                    const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
+                    return (
+                      <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
+                        <div>
+                          <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
+                          <p className="text-xs text-gray-500">
+                            {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg · {prepLabel(item.preparation)}
+                          </p>
+                        </div>
+                        <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-4 space-y-2 border-t border-gray-100 pt-4 text-sm">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Subtotal · {totalWeight.toFixed(1)} kg</span>
+                    <span>{formatMWK(subtotal)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
+                    <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
+                  </div>
+                  <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
+                    <span>Total to pay</span>
+                    <span>{formatMWK(estimatedTotal)}</span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </form>
+        )}
+
+        {step === 2 && (
+          <form onSubmit={handleSubmit} className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]">
+            <div className="space-y-5">
+              <section className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                  <Gift className="h-4 w-4 text-[#39B54A]" /> Rewards and promo code
+                </h2>
+
+                <div className="mt-3 space-y-3">
+                  <div className="flex items-center justify-between gap-3 rounded-xl bg-[#F6FBFD] p-3">
+                    <div>
+                      <p className="text-sm font-bold text-[#073B78]">Your points</p>
+                      <p className="text-xs text-gray-600">
+                        {availablePoints} points available
+                        {program ? ` · ${program.points_to_redeem} points = ${formatMWK(program.reward_value_mwk)} off` : ""}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setUsePoints((prev) => !prev)}
+                      disabled={availablePoints < redeemStep}
+                      className={`shrink-0 rounded-lg px-3 py-2 text-[10px] font-extrabold uppercase tracking-widest disabled:opacity-40 ${
+                        usePoints ? "bg-[#39B54A] text-white" : "bg-[#073B78] text-white"
+                      }`}
+                    >
+                      {availablePoints < redeemStep ? "Not enough" : usePoints ? "Points on" : "Use points"}
+                    </button>
+                  </div>
+                  {usePoints && loyaltyPreview > 0 && (
+                    <p className="text-xs font-bold text-[#39B54A]">
+                      Using {pointsToUse} points saves {formatMWK(loyaltyPreview)}.
+                    </p>
+                  )}
+
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                      Promo code
+                    </label>
+                    <div className="mt-1.5 flex gap-2">
+                      <input
+                        value={promoCode}
+                        onChange={(event) => {
+                          setPromoCode(event.target.value);
+                          setPromoError(null);
+                        }}
+                        placeholder="Enter code"
+                        className="h-11 min-w-0 flex-1 rounded-xl border border-gray-300 px-3 text-sm uppercase text-[#073B78] outline-none focus:border-[#08A9E8]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => void applyPromo()}
+                        className="shrink-0 rounded-xl bg-[#073B78] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                    {promoError && <p className="mt-1.5 text-xs font-semibold text-red-600">{promoError}</p>}
+                    {promoPreview && (
+                      <p className="mt-1.5 text-xs font-bold text-[#39B54A]">
+                        {promoPreview.code} saves {formatMWK(promoPreview.discount)}.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </section>
+
+              <section className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                  <CreditCard className="h-4 w-4 text-[#08A9E8]" /> Pay securely
+                </h2>
+                <div className="mt-3 rounded-xl bg-gray-50 p-4">
+                  <p className="text-sm font-bold text-[#073B78]">Pay online via PayChangu</p>
+                  <p className="mt-1 text-xs text-gray-500">Airtel Money · TNM Mpamba · Visa · Mastercard</p>
+                  <p className="mt-2 text-xs text-gray-500">
+                    You will be redirected to PayChangu after placing the order. Your order is only marked paid after
+                    the payment provider confirms it.
+                  </p>
+                </div>
+              </section>
+            </div>
+
+            <aside className="lg:sticky lg:top-24 lg:self-start">
+              <div className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="font-display text-lg font-extrabold text-[#073B78]">Order summary</h2>
+                <div className="mt-3 space-y-3">
+                  {items.map((item) => {
+                    const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
+                    return (
+                      <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
+                        <div>
+                          <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
+                          <p className="text-xs text-gray-500">
+                            {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg · {prepLabel(item.preparation)}
+                          </p>
+                        </div>
+                        <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 space-y-2 border-t border-gray-100 pt-4 text-sm">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Subtotal · {totalWeight.toFixed(1)} kg</span>
+                    <span>{formatMWK(subtotal)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
+                    <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
+                  </div>
+                  {loyaltyPreview > 0 && (
+                    <div className="flex justify-between text-[#39B54A]">
+                      <span>Rewards ({pointsToUse} points)</span>
+                      <span>-{formatMWK(loyaltyPreview)}</span>
+                    </div>
+                  )}
+                  {promoDiscount > 0 && (
+                    <div className="flex justify-between text-[#39B54A]">
+                      <span>Promo ({promoPreview?.code})</span>
+                      <span>-{formatMWK(promoDiscount)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
+                    <span>Total to pay</span>
+                    <span>{formatMWK(estimatedTotal)}</span>
+                  </div>
+                </div>
+
+                {minOrderBlocked && selectedZone && (
+                  <p className="mt-3 flex items-start gap-2 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                    Add {formatMWK(selectedZone.minOrderMwk - subtotal)} more to meet the {selectedZone.name} minimum order.
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={submitting || !selectedSlot || minOrderBlocked}
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#073B78] py-3.5 text-[10px] font-extrabold uppercase tracking-[0.25em] text-white hover:bg-[#073B78]/90 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
+                  {submitting ? "Placing order…" : `Pay ${formatMWK(estimatedTotal)}`}
+                </button>
+
+                <p className="mt-3 flex items-start gap-2 text-[11px] text-gray-500">
+                  <Snowflake className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
+                  You authorize the estimated total. We confirm packed weight before final settlement and will never
+                  silently charge more than you authorized.
+                </p>
+                <p className="mt-2 flex items-start gap-2 text-[11px] text-gray-500">
+                  <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
+                  Stock is reserved when the order is created. If capacity changed, you will be asked to pick another
+                  slot.
+                </p>
+                <p className="mt-3 text-center text-[11px] text-gray-500">
+                  Already ordered?{" "}
+                  <LFLink to="/lf/track" className="font-bold text-[#073B78] underline">
+                    Track your order
+                  </LFLink>
+                </p>
+              </div>
+            </aside>
+          </form>
+        )}
       </div>
     </div>
   );
