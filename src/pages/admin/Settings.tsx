@@ -74,16 +74,21 @@ const AdminSettings = () => {
       ];
 
       for (const setting of settingsToSave) {
-        await supabase
+        const { error } = await supabase
           .from("site_settings")
           .upsert({ key: setting.key, value: setting.value }, { onConflict: "key" });
+        if (error) {
+          toast({ title: "Error", description: error.message, variant: "destructive" });
+          return;
+        }
       }
 
       toast({ title: "Settings saved!", description: "Your changes have been saved successfully." });
-    } catch (error) {
+    } catch {
       toast({ title: "Error", description: "Failed to save settings.", variant: "destructive" });
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   if (loading) {

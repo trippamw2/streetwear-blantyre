@@ -57,10 +57,18 @@ export const AdminTestimonials = () => {
       };
 
       if (editingTestimonial) {
-        await supabase.from("testimonials").update(payload).eq("id", editingTestimonial.id);
+        const { error } = await supabase.from("testimonials").update(payload).eq("id", editingTestimonial.id);
+        if (error) {
+          toast({ title: "Error saving testimonial", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Testimonial updated!" });
       } else {
-        await supabase.from("testimonials").insert(payload);
+        const { error } = await supabase.from("testimonials").insert(payload);
+        if (error) {
+          toast({ title: "Error saving testimonial", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Testimonial added!" });
       }
 
@@ -77,7 +85,11 @@ export const AdminTestimonials = () => {
 
   const handleDelete = async (id: string) => {
     if (confirm("Delete this testimonial?")) {
-      await supabase.from("testimonials").delete().eq("id", id);
+      const { error } = await supabase.from("testimonials").delete().eq("id", id);
+      if (error) {
+        toast({ title: "Error deleting testimonial", description: error.message, variant: "destructive" });
+        return;
+      }
       fetchTestimonials();
       toast({ title: "Testimonial deleted" });
     }

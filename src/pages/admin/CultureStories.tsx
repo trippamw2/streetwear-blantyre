@@ -94,11 +94,17 @@ const AdminCultureStories = () => {
 
       if (editingStory) {
         const { error } = await supabase.from("culture_stories").update(storyData).eq("id", editingStory.id);
-        if (error) throw error;
+        if (error) {
+          toast({ title: "Error saving story", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Story updated!" });
       } else {
         const { error } = await supabase.from("culture_stories").insert(storyData);
-        if (error) throw error;
+        if (error) {
+          toast({ title: "Error saving story", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Story created!" });
       }
       setIsDialogOpen(false);
@@ -114,7 +120,11 @@ const AdminCultureStories = () => {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this story?")) return;
-    await supabase.from("culture_stories").delete().eq("id", id);
+    const { error } = await supabase.from("culture_stories").delete().eq("id", id);
+    if (error) {
+      toast({ title: "Error deleting story", description: error.message, variant: "destructive" });
+      return;
+    }
     fetchStories();
     toast({ title: "Story deleted" });
   };
@@ -145,15 +155,23 @@ const AdminCultureStories = () => {
   };
 
   const togglePublish = async (story: CultureStory) => {
-    await supabase.from("culture_stories").update({
+    const { error } = await supabase.from("culture_stories").update({
       is_published: !story.is_published,
       published_at: !story.is_published ? new Date().toISOString() : null,
     }).eq("id", story.id);
+    if (error) {
+      toast({ title: "Error updating story", description: error.message, variant: "destructive" });
+      return;
+    }
     fetchStories();
   };
 
   const toggleFeatured = async (story: CultureStory) => {
-    await supabase.from("culture_stories").update({ is_featured: !story.is_featured }).eq("id", story.id);
+    const { error } = await supabase.from("culture_stories").update({ is_featured: !story.is_featured }).eq("id", story.id);
+    if (error) {
+      toast({ title: "Error updating story", description: error.message, variant: "destructive" });
+      return;
+    }
     fetchStories();
   };
 

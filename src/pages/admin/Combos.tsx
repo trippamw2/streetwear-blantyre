@@ -198,22 +198,33 @@ const AdminCombos = () => {
           .from("combos")
           .update(comboData)
           .eq("id", editingCombo.id);
-        if (error) throw error;
+        if (error) {
+          toast({ title: "Error saving combo", description: error.message, variant: "destructive" });
+          return;
+        }
 
         // Delete old items
-        await supabase
+        const { error: deleteError } = await supabase
           .from("combo_items")
           .delete()
           .eq("combo_id", editingCombo.id);
+        if (deleteError) {
+          toast({ title: "Error saving combo", description: deleteError.message, variant: "destructive" });
+          return;
+        }
 
         // Insert new items
         for (const productId of formData.selectedProductIds) {
           const product = products.find((p) => p.id === productId);
-          await supabase.from("combo_items").insert({
+          const { error: itemError } = await supabase.from("combo_items").insert({
             combo_id: editingCombo.id,
             product_id: productId,
             product_name: product?.name || "",
           });
+          if (itemError) {
+            toast({ title: "Error saving combo", description: itemError.message, variant: "destructive" });
+            return;
+          }
         }
 
         toast({ title: "Combo updated!" });
@@ -225,16 +236,23 @@ const AdminCombos = () => {
           .select()
           .single();
 
-        if (insertError) throw insertError;
+        if (insertError) {
+          toast({ title: "Error saving combo", description: insertError.message, variant: "destructive" });
+          return;
+        }
 
         if (newCombo) {
           for (const productId of formData.selectedProductIds) {
             const product = products.find((p) => p.id === productId);
-            await supabase.from("combo_items").insert({
+            const { error: itemError } = await supabase.from("combo_items").insert({
               combo_id: newCombo.id,
               product_id: productId,
               product_name: product?.name || "",
             });
+            if (itemError) {
+              toast({ title: "Error saving combo", description: itemError.message, variant: "destructive" });
+              return;
+            }
           }
         }
 
@@ -259,7 +277,11 @@ const AdminCombos = () => {
 
   const handleDelete = async (id: string) => {
     if (confirm("Delete this combo?")) {
-      await supabase.from("combos").delete().eq("id", id);
+      const { error } = await supabase.from("combos").delete().eq("id", id);
+      if (error) {
+        toast({ title: "Error deleting combo", description: error.message, variant: "destructive" });
+        return;
+      }
       fetchCombos();
       toast({ title: "Combo deleted" });
     }

@@ -224,7 +224,11 @@ const AdminProducts = () => {
 
   const handleDelete = async (id: string) => {
     if (confirm("Delete this product?")) {
-      await supabase.from("products").delete().eq("id", id);
+      const { error } = await supabase.from("products").delete().eq("id", id);
+      if (error) {
+        toast({ title: "Error deleting product", description: error.message, variant: "destructive" });
+        return;
+      }
       fetchProducts();
       toast({ title: "Product deleted" });
     }

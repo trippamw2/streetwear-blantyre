@@ -126,11 +126,15 @@ const AdminCRM = () => {
       );
 
       // Save campaign
-      await supabase.from("whatsapp_campaigns").insert({
+      const { error: campaignError } = await supabase.from("whatsapp_campaigns").insert({
         name: campaignForm.name || `Campaign ${Date.now()}`,
         message: campaignForm.message,
         sent_count: validTargets.length,
       });
+      if (campaignError) {
+        toast({ title: "Error sending campaign", description: campaignError.message, variant: "destructive" });
+        return;
+      }
 
       if (campaignType === "email") {
         // Send email campaign via Brevo

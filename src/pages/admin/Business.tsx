@@ -133,10 +133,14 @@ const AdminBusiness = () => {
   };
 
   const toggleActive = async (account: BusinessAccount) => {
-    await supabase
+    const { error } = await supabase
       .from("business_accounts")
       .update({ is_active: !account.is_active })
       .eq("id", account.id);
+    if (error) {
+      toast({ title: "Error updating account", description: error.message, variant: "destructive" });
+      return;
+    }
     fetchAccounts();
   };
 

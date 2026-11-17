@@ -174,6 +174,21 @@ export const defaultSEO = {
     description:
       "Our 30 day quality cover on clothing faults. We repair, replace or refund faulty items.",
   },
+  lfPrivacy: {
+    title: "Privacy Policy | Lake Fresh Fish Mart",
+    description:
+      "How Lake Fresh collects, uses and protects your information when you order fresh fish in Blantyre, Malawi.",
+  },
+  lfTerms: {
+    title: "Terms and Conditions | Lake Fresh Fish Mart",
+    description:
+      "The terms for ordering fresh fish, seasonings and delivery from Lake Fresh in Blantyre, Malawi.",
+  },
+  lfRefund: {
+    title: "Refund Policy | Lake Fresh Fish Mart",
+    description:
+      "How Lake Fresh handles refunds, replacements and delivery problems for fresh fish orders in Blantyre, Malawi.",
+  },
   giftPacks: {
     title: "Gift Packs | SB Streetwear",
     description:

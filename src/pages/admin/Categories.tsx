@@ -85,10 +85,18 @@ const AdminCategories = () => {
         is_active: catForm.is_active,
       };
       if (editingCat) {
-        await supabase.from("wearable_categories").update(data).eq("id", editingCat.id);
+        const { error } = await supabase.from("wearable_categories").update(data).eq("id", editingCat.id);
+        if (error) {
+          toast({ title: "Error saving category", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Category updated!" });
       } else {
-        await supabase.from("wearable_categories").insert(data);
+        const { error } = await supabase.from("wearable_categories").insert(data);
+        if (error) {
+          toast({ title: "Error saving category", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Category created!" });
       }
       setCatDialog(false);
@@ -104,7 +112,11 @@ const AdminCategories = () => {
 
   const deleteCategory = async (id: string) => {
     if (!confirm("Delete this category?")) return;
-    await supabase.from("wearable_categories").delete().eq("id", id);
+    const { error } = await supabase.from("wearable_categories").delete().eq("id", id);
+    if (error) {
+      toast({ title: "Error deleting category", description: error.message, variant: "destructive" });
+      return;
+    }
     toast({ title: "Category deleted" });
     fetchAll();
   };
@@ -124,10 +136,18 @@ const AdminCategories = () => {
         is_active: pillarForm.is_active,
       };
       if (editingPillar) {
-        await supabase.from("culture_pillars").update(data).eq("id", editingPillar.id);
+        const { error } = await supabase.from("culture_pillars").update(data).eq("id", editingPillar.id);
+        if (error) {
+          toast({ title: "Error saving pillar", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Pillar updated!" });
       } else {
-        await supabase.from("culture_pillars").insert(data);
+        const { error } = await supabase.from("culture_pillars").insert(data);
+        if (error) {
+          toast({ title: "Error saving pillar", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Pillar created!" });
       }
       setPillarDialog(false);
@@ -143,7 +163,11 @@ const AdminCategories = () => {
 
   const deletePillar = async (id: string) => {
     if (!confirm("Delete this pillar?")) return;
-    await supabase.from("culture_pillars").delete().eq("id", id);
+    const { error } = await supabase.from("culture_pillars").delete().eq("id", id);
+    if (error) {
+      toast({ title: "Error deleting pillar", description: error.message, variant: "destructive" });
+      return;
+    }
     toast({ title: "Pillar deleted" });
     fetchAll();
   };

@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 import { formatMWK } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -16,17 +17,18 @@ import {
 } from "@/lib/ai-messages";
 import { adminBrandId, useAdminBrand } from "@/lib/adminBrand";
 
+const rpcErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error);
+
 // Complete a pending referral and award both sides once the order is paid.
 const completeReferral = async (userId: string, orderId: string) => {
   try {
-    const { data, error } = await supabase.rpc("complete_referral", {
+    return await supabase.rpc("complete_referral", {
       p_referee_id: userId,
       p_order_id: orderId,
     });
-    if (error) console.warn("Referral completion failed", error.message);
-    return data;
   } catch (error) {
-    console.warn("Referral completion failed", error);
+    return { data: null, error };
   }
 };
 
@@ -198,7 +200,15 @@ Track: https://www.wearsb.com/track/${order.id}`;
     if (markPaid) {
       updates.payment_status = "paid";
     }
-    await supabase.from("orders").update(updates).eq("id", orderId);
+    const { error } = await supabase
+      .from("orders")
+      .update(updates)
+      .eq("id", orderId)
+      .eq("brand_id", brandId);
+    if (error) {
+      toast({ title: "Error updating order", description: error.message, variant: "destructive" });
+      return;
+    }
     setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, ...updates } : o)));
     
     if (order && STATUS_MESSAGES[newStatus] && !markPaid) {
@@ -259,14 +269,33 @@ Track: https://www.wearsb.com/track/${order.id}`;
     const { error } = await supabase.rpc("mark_order_paid", { p_order_id: orderId });
 
     if (error) {
-      console.error("mark_order_paid failed:", error);
+      toast({
+        title: "Could not mark order paid",
+        description: error.message,
+        variant: "destructive",
+      });
       return;
     }
 
     // Award loyalty and complete a pending referral exactly once.
-    await supabase.rpc("award_loyalty_for_order", { p_order_id: orderId });
+    const { error: loyaltyError } = await supabase.rpc("award_loyalty_for_order", { p_order_id: orderId });
+    if (loyaltyError) {
+      toast({
+        title: "Payment saved, reward not added",
+        description: loyaltyError.message,
+      });
+    }
+
     const paidOrder = orders.find((order) => order.id === orderId);
-    if (paidOrder?.user_id) await completeReferral(paidOrder.user_id, orderId);
+    if (paidOrder?.user_id) {
+      const { error: referralError } = await completeReferral(paidOrder.user_id, orderId);
+      if (referralError) {
+        toast({
+          title: "Payment saved, referral not updated",
+          description: rpcErrorMessage(referralError),
+        });
+      }
+    }
 
     await updateStatus(orderId, "confirmed", true);
   };

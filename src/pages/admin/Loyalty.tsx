@@ -80,15 +80,21 @@ const AdminLoyalty = () => {
     setSaving(true);
     try {
       if (program.id) {
-        await supabase.from("loyalty_programs").update(program).eq("id", program.id).eq("brand_id", brandId);
+        const { error } = await supabase.from("loyalty_programs").update(program).eq("id", program.id).eq("brand_id", brandId);
+        if (error) throw error;
         toast({ title: "Program updated!" });
       } else {
-        await supabase.from("loyalty_programs").insert({ ...program, brand_id: brandId });
+        const { error } = await supabase.from("loyalty_programs").insert({ ...program, brand_id: brandId });
+        if (error) throw error;
         toast({ title: "Program created!" });
       }
       fetchData();
-    } catch (err) {
-      toast({ title: "Error saving", variant: "destructive" });
+    } catch (error) {
+      toast({
+        title: "Could not save program",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setSaving(false);
     }
@@ -98,32 +104,46 @@ const AdminLoyalty = () => {
     setSaving(true);
     try {
       if (tier.id) {
-        await supabase.from("loyalty_tiers").update(tier).eq("id", tier.id).eq("brand_id", brandId);
+        const { error } = await supabase.from("loyalty_tiers").update(tier).eq("id", tier.id).eq("brand_id", brandId);
+        if (error) throw error;
         toast({ title: "Tier updated!" });
       } else {
-        await supabase.from("loyalty_tiers").insert({ ...tier, brand_id: brandId });
+        const { error } = await supabase.from("loyalty_tiers").insert({ ...tier, brand_id: brandId });
+        if (error) throw error;
         toast({ title: "Tier created!" });
       }
       fetchData();
-    } catch (err) {
-      toast({ title: "Error saving", variant: "destructive" });
+    } catch (error) {
+      toast({
+        title: "Could not save tier",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setSaving(false);
     }
   };
 
   const toggleActive = async (program: LoyaltyProgram) => {
-    await supabase
+    const { error } = await supabase
       .from("loyalty_programs")
       .update({ is_active: !program.is_active })
       .eq("id", program.id)
       .eq("brand_id", brandId);
+    if (error) {
+      toast({ title: "Could not update program", description: error.message, variant: "destructive" });
+      return;
+    }
     fetchData();
   };
 
   const deleteProgram = async (id: string) => {
     if (confirm("Delete this program?")) {
-      await supabase.from("loyalty_programs").delete().eq("id", id).eq("brand_id", brandId);
+      const { error } = await supabase.from("loyalty_programs").delete().eq("id", id).eq("brand_id", brandId);
+      if (error) {
+        toast({ title: "Could not delete program", description: error.message, variant: "destructive" });
+        return;
+      }
       fetchData();
       toast({ title: "Program deleted" });
     }

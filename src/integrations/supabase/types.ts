@@ -1787,13 +1787,16 @@ export type Database = {
           customer_name: string
           customer_phone: string
           delivery_zone_id: string | null
+          fish_product_id: string | null
           id: string
           last_charged_at: string | null
           mandate_ref: string | null
           next_charge_date: string | null
           notes: string | null
+          payment_reference: string | null
           plan: string
           preparation: string
+          price_per_kg_mwk: number
           quantity_kg: number
           status: string
           updated_at: string
@@ -1808,13 +1811,16 @@ export type Database = {
           customer_name: string
           customer_phone: string
           delivery_zone_id?: string | null
+          fish_product_id?: string | null
           id?: string
           last_charged_at?: string | null
           mandate_ref?: string | null
           next_charge_date?: string | null
           notes?: string | null
+          payment_reference?: string | null
           plan: string
           preparation?: string
+          price_per_kg_mwk?: number
           quantity_kg?: number
           status?: string
           updated_at?: string
@@ -1829,13 +1835,16 @@ export type Database = {
           customer_name?: string
           customer_phone?: string
           delivery_zone_id?: string | null
+          fish_product_id?: string | null
           id?: string
           last_charged_at?: string | null
           mandate_ref?: string | null
           next_charge_date?: string | null
           notes?: string | null
+          payment_reference?: string | null
           plan?: string
           preparation?: string
+          price_per_kg_mwk?: number
           quantity_kg?: number
           status?: string
           updated_at?: string
@@ -2401,6 +2410,7 @@ export type Database = {
           provider_mode: string | null
           provider_reference: string | null
           provider_status: string | null
+          subscription_id: string | null
           tx_ref: string
         }
         Insert: {
@@ -2420,6 +2430,7 @@ export type Database = {
           provider_mode?: string | null
           provider_reference?: string | null
           provider_status?: string | null
+          subscription_id?: string | null
           tx_ref: string
         }
         Update: {
@@ -2439,6 +2450,7 @@ export type Database = {
           provider_mode?: string | null
           provider_reference?: string | null
           provider_status?: string | null
+          subscription_id?: string | null
           tx_ref?: string
         }
         Relationships: [
@@ -3566,11 +3578,19 @@ export type Database = {
         Args: {
           p_customer_name: string
           p_customer_phone: string
-          p_items: Json
-          p_marketing_consent?: boolean
-          p_notes?: string
-          p_slot_id: string
           p_zone_id: string
+          p_slot_id: string
+          p_items: Json
+          p_notes?: string
+          p_marketing_consent?: boolean
+          p_redeem_points?: number
+          p_promo_code?: string
+          p_customer_email?: string
+          p_house_number?: string
+          p_street_name?: string
+          p_delivery_lat?: number
+          p_delivery_lng?: number
+          p_delivery_place?: string
         }
         Returns: string
       }

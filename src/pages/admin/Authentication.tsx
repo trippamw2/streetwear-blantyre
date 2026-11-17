@@ -502,7 +502,11 @@ const AdminAuthentication = () => {
 
   const handleDeleteRecord = async (record: ProductAuthRecord) => {
     if (!confirm(`Delete authentication for ${record.product_name}? This cannot be undone.`)) return;
-    await supabase.from("product_auth").delete().eq("id", record.id);
+    const { error } = await supabase.from("product_auth").delete().eq("id", record.id);
+    if (error) {
+      toast({ title: "Error deleting record", description: error.message, variant: "destructive" });
+      return;
+    }
     toast({ title: "Record deleted" });
     fetchData();
   };

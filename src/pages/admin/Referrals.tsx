@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import { adminBrandId, adminPath, useAdminBrand } from "@/lib/adminBrand";
 
 interface ReferralWithUser {
@@ -67,23 +68,42 @@ export default function AdminReferrals() {
     loadData();
   }, [loadData]);
 
+  const toast = useToast();
+
   const updateStatus = async (id: string, status: string) => {
-    await supabase
+    const { error } = await supabase
       .from("referral_transactions")
       .update({ status })
       .eq("id", id)
       .eq("brand_id", brandId);
+    if (error) {
+      toast({ title: "Could not update referral", description: error.message, variant: "destructive" });
+      return;
+    }
     loadData();
   };
 
   const addRewardPoints = async (userId: string, points: number) => {
-    const { error } = await supabase.rpc("admin_credit_loyalty_points", {
+    const { data, error } = await supabase.rpc("admin_credit_loyalty_points", {
       p_user_id: userId,
       p_brand_id: brandId,
       p_points: points,
       p_description: "Referral bonus reward",
     });
-    if (error) console.error("Could not credit referral bonus", error.message);
+    if (error) {
+      toast({ title: "Could not credit reward", description: error.message, variant: "destructive" });
+      return;
+    }
+    const result = data as { ok?: boolean; reason?: string } | null;
+    if (result && result.ok === false) {
+      toast({
+        title: "Reward not credited",
+        description: result.reason || "This reward could not be added.",
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({ title: "Reward added" });
     loadData();
   };
 

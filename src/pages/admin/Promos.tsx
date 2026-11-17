@@ -77,14 +77,16 @@ const AdminPromos = () => {
       };
 
       if (editingPromo) {
-        await supabase
+        const { error } = await supabase
           .from("promo_codes")
           .update(promoData)
           .eq("id", editingPromo.id)
           .eq("brand_id", brandId);
+        if (error) throw error;
         toast({ title: "Promo code updated!" });
       } else {
-        await supabase.from("promo_codes").insert(promoData);
+        const { error } = await supabase.from("promo_codes").insert(promoData);
+        if (error) throw error;
         toast({ title: "Promo code created!" });
       }
 
@@ -92,14 +94,22 @@ const AdminPromos = () => {
       setEditingPromo(null);
       resetForm();
       fetchPromos();
-    } catch {
-      toast({ title: "Error saving promo code", variant: "destructive" });
+    } catch (error) {
+      toast({
+        title: "Could not save promo code",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
   const handleDelete = async (id: string) => {
     if (confirm("Delete this promo code?")) {
-      await supabase.from("promo_codes").delete().eq("id", id).eq("brand_id", brandId);
+      const { error } = await supabase.from("promo_codes").delete().eq("id", id).eq("brand_id", brandId);
+      if (error) {
+        toast({ title: "Could not delete promo code", description: error.message, variant: "destructive" });
+        return;
+      }
       fetchPromos();
       toast({ title: "Promo code deleted" });
     }

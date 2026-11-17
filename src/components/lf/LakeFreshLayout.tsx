@@ -155,6 +155,12 @@ const LakeFreshFooter = () => (
           <span>Blantyre, Malawi</span>
           <span>Packed cold</span>
         </div>
+        <p className="mt-6 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Policies</p>
+        <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
+          <LFLink to="/lf/privacy" className="hover:text-[#073B78]">Privacy Policy</LFLink>
+          <LFLink to="/lf/terms" className="hover:text-[#073B78]">Terms and Conditions</LFLink>
+          <LFLink to="/lf/refund" className="hover:text-[#073B78]">Refund Policy</LFLink>
+        </div>
       </div>
     </div>
 

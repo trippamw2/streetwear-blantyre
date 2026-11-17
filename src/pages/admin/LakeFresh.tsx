@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -120,7 +121,7 @@ const AssetField = ({
           onClick={() => void onChange(draft)}
           className="h-8 shrink-0 rounded border border-gray-300 px-2 text-[10px] font-bold uppercase"
         >
-          Save
+          Use link
         </button>
         <label className="inline-flex h-8 shrink-0 cursor-pointer items-center rounded bg-[#073B78] px-2 text-[10px] font-bold uppercase text-white">
           {busy ? "..." : "Upload"}
@@ -128,7 +129,11 @@ const AssetField = ({
             type="file"
             accept={accept}
             className="hidden"
-            onChange={(event) => void upload(event.target.files?.[0])}
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              event.target.value = "";
+              void upload(file);
+            }}
           />
         </label>
       </div>
@@ -148,6 +153,7 @@ const VALID_TABS: Tab[] = ["catalog", "spices", "recipes", "media", "pro", "subs
 
 const AdminLakeFresh = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get("tab") as Tab | null;
   const tab: Tab = tabParam && VALID_TABS.includes(tabParam) ? tabParam : "catalog";
@@ -267,17 +273,40 @@ const AdminLakeFresh = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const loadFailed = (label: string, error: any) => {
+    console.error(`${label} load failed`, error);
+    toast({
+      title: `${label} did not load`,
+      description: error?.message || "Please refresh and try again.",
+      variant: "destructive",
+    });
+  };
+
+  const invalidateStorefront = () => {
+    void queryClient.invalidateQueries({ queryKey: ["lf"] });
+  };
+
+  const finishWrite = async (reload: () => Promise<unknown>) => {
+    invalidateStorefront();
+    await reload();
+  };
+
   const loadSpecies = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("fish_species")
       .select("id, name, slug, image")
       .eq("brand_id", LF_BRAND_ID)
       .order("sort_order");
+    if (error) {
+      loadFailed("Species", error);
+      return false;
+    }
     setSpecies(data || []);
+    return true;
   };
 
   const updateSpeciesImage = async (id: string, image: string) => {
-    const { error } = await supabase.from("fish_species").update({ image }).eq("id", id);
+    const { error } = await supabase.from("fish_species").update({ image }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else {
       setSpecies((prev) => prev.map((s: any) => (s.id === id ? { ...s, image } : s)));
@@ -286,7 +315,7 @@ const AdminLakeFresh = () => {
   };
 
   const updateProductImage = async (id: string, image: string) => {
-    const { error } = await supabase.from("fish_products").update({ image }).eq("id", id);
+    const { error } = await supabase.from("fish_products").update({ image }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else {
       setProducts((prev) => prev.map((p: any) => (p.id === id ? { ...p, image } : p)));
@@ -295,7 +324,7 @@ const AdminLakeFresh = () => {
   };
 
   const updateSpiceImage = async (id: string, image: string) => {
-    const { error } = await supabase.from("lf_spices").update({ image }).eq("id", id);
+    const { error } = await supabase.from("lf_spices").update({ image }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else {
       setSpices((prev) => prev.map((s: any) => (s.id === id ? { ...s, image } : s)));
@@ -304,7 +333,7 @@ const AdminLakeFresh = () => {
   };
 
   const updateRecipeMedia = async (id: string, patch: { image?: string; pdf_url?: string }) => {
-    const { error } = await supabase.from("lf_recipes").update(patch).eq("id", id);
+    const { error } = await supabase.from("lf_recipes").update(patch).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else {
       setRecipes((prev) => prev.map((r: any) => (r.id === id ? { ...r, ...patch } : r)));
@@ -319,50 +348,80 @@ const AdminLakeFresh = () => {
   };
 
   const loadProducts = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("fish_products")
       .select("*, fish_species(name)")
       .eq("brand_id", LF_BRAND_ID)
       .order("sort_order");
+    if (error) {
+      loadFailed("Products", error);
+      return false;
+    }
     setProducts(data || []);
+    return true;
   };
 
   const loadSpices = async () => {
-    const { data } = await supabase.from("lf_spices").select("*").eq("brand_id", LF_BRAND_ID).order("sort_order");
+    const { data, error } = await supabase.from("lf_spices").select("*").eq("brand_id", LF_BRAND_ID).order("sort_order");
+    if (error) {
+      loadFailed("Spices", error);
+      return false;
+    }
     setSpices(data || []);
+    return true;
   };
 
   const loadRecipes = async () => {
-    const { data } = await supabase.from("lf_recipes").select("*, fish_species(name)").eq("brand_id", LF_BRAND_ID).order("sort_order");
+    const { data, error } = await supabase.from("lf_recipes").select("*, fish_species(name)").eq("brand_id", LF_BRAND_ID).order("sort_order");
+    if (error) {
+      loadFailed("Recipes", error);
+      return false;
+    }
     setRecipes(data || []);
+    return true;
   };
 
   const loadBusinessAccounts = async () => {
-    const { data } = await supabase.from("business_accounts").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("business_accounts").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    if (error) {
+      loadFailed("Business accounts", error);
+      return false;
+    }
     setBusinessAccounts(data || []);
+    return true;
   };
 
   const loadQuotes = async () => {
-    const { data } = await supabase.from("lf_quotes").select("*, lf_quote_items(*)").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("lf_quotes").select("*, lf_quote_items(*)").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    if (error) {
+      loadFailed("Quotes", error);
+      return false;
+    }
     setQuotes(data || []);
+    return true;
   };
 
   const loadAnalytics = async (from?: string, to?: string) => {
     let query = supabase.from("orders").select("id, total_mwk, payment_status, status, created_at").eq("brand_id", LF_BRAND_ID);
     if (from) query = query.gte("created_at", from);
     if (to) query = query.lte("created_at", to + "T23:59:59");
-    const { data: orders } = await query;
+    const { data: orders, error: ordersError } = await query;
+    if (ordersError) {
+      loadFailed("Analytics", ordersError);
+      return false;
+    }
     const paidOrders = (orders || []).filter((o: any) => o.payment_status === "paid");
     const revenue = paidOrders.reduce((s: number, o: any) => s + (o.total_mwk || 0), 0);
     const aov = paidOrders.length > 0 ? Math.round(revenue / paidOrders.length) : 0;
 
     const orderIds = paidOrders.map((o: any) => o.id);
-    const { data: items } = orderIds.length
+    const { data: items, error: itemsError } = orderIds.length
       ? await supabase
           .from("order_items")
           .select("order_id, product_key, product_name, unit_price_mwk, quantity, recipe_title")
           .in("order_id", orderIds)
-      : { data: [] };
+      : { data: [], error: null };
+    if (itemsError) loadFailed("Analytics items", itemsError);
 
     const ordersWithRecipes = new Set<string>();
     const ordersWithSpices = new Set<string>();
@@ -386,8 +445,10 @@ const AdminLakeFresh = () => {
     const recipeAttachment = Math.round((ordersWithRecipes.size / eligible) * 100);
     const spiceAttachment = Math.round((ordersWithSpices.size / eligible) * 100);
 
-    const { data: spices } = await supabase.from("lf_spices").select("stock_qty").eq("brand_id", LF_BRAND_ID);
-    const { data: batches } = await supabase.from("fish_inventory_batches").select("weight_kg_available").eq("brand_id", LF_BRAND_ID);
+    const { data: spices, error: spicesError } = await supabase.from("lf_spices").select("stock_qty").eq("brand_id", LF_BRAND_ID);
+    const { data: batches, error: batchesError } = await supabase.from("fish_inventory_batches").select("weight_kg_available").eq("brand_id", LF_BRAND_ID);
+    if (spicesError) loadFailed("Spice stock", spicesError);
+    if (batchesError) loadFailed("Fish stock", batchesError);
 
     const stock = {
       spices: (spices || []).reduce((s: number, r: any) => s + (r.stock_qty || 0), 0),
@@ -411,51 +472,77 @@ const AdminLakeFresh = () => {
       from: from || null,
       to: to || null,
     });
+    return true;
   };
 
   const loadSubscriptions = async () => {
-    const { data } = await supabase.from("lf_subscriptions").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("lf_subscriptions").select("*, fish_products(name, fish_species(name))").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false });
+    if (error) {
+      loadFailed("Subscriptions", error);
+      return false;
+    }
     setSubscriptions(data || []);
+    return true;
   };
 
   const loadBatches = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("fish_inventory_batches")
       .select("*, fish_species(name)")
       .eq("brand_id", LF_BRAND_ID)
       .order("received_date", { ascending: false });
+    if (error) {
+      loadFailed("Batches", error);
+      return false;
+    }
     setBatches(data || []);
+    return true;
   };
 
   const loadSlots = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("delivery_slots")
       .select("*, delivery_zones(name)")
       .eq("brand_id", LF_BRAND_ID)
       .gte("delivery_date", new Date().toISOString().slice(0, 10))
       .order("delivery_date")
       .limit(200);
+    if (error) {
+      loadFailed("Delivery slots", error);
+      return false;
+    }
     setSlots(data || []);
+    return true;
   };
 
   const loadOrders = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("orders")
       .select("*")
       .eq("brand_id", LF_BRAND_ID)
       .order("created_at", { ascending: false })
       .limit(100);
+    if (error) {
+      loadFailed("Orders", error);
+      return false;
+    }
     setOrders(data || []);
+    return true;
   };
 
   const loadCustomers = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("customer_profiles")
       .select("*")
       .eq("brand_id", LF_BRAND_ID)
       .order("updated_at", { ascending: false })
       .limit(200);
+    if (error) {
+      loadFailed("Customers", error);
+      return false;
+    }
     setCustomers(data || []);
+    return true;
   };
 
   const saveZoneCenter = async () => {
@@ -466,18 +553,19 @@ const AdminLakeFresh = () => {
     const { error } = await supabase
       .from("delivery_zones")
       .update({ center_lat: centerLat, center_lng: centerLng })
-      .eq("id", centerZoneId);
+      .eq("id", centerZoneId)
+      .eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Zone center saved" });
-      await loadZones();
+      await finishWrite(loadZones);
     }
   };
 
   const loadRouteOrders = async () => {
     setRouteLoading(true);
     // If the selected date has no orders, jump to the next date that does.
-    const { data: dateRows } = await supabase
+    const { data: dateRows, error: dateError } = await supabase
       .from("orders")
       .select("delivery_date")
       .eq("brand_id", LF_BRAND_ID)
@@ -485,6 +573,11 @@ const AdminLakeFresh = () => {
       .gte("delivery_date", routeDate)
       .order("delivery_date", { ascending: true })
       .limit(1);
+    if (dateError) {
+      loadFailed("Route dates", dateError);
+      setRouteLoading(false);
+      return;
+    }
     if (dateRows && dateRows.length > 0 && dateRows[0].delivery_date && dateRows[0].delivery_date !== routeDate) {
       setRouteDate(dateRows[0].delivery_date);
       setRouteLoading(false);
@@ -492,13 +585,18 @@ const AdminLakeFresh = () => {
       return;
     }
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("orders")
       .select("*")
       .eq("brand_id", LF_BRAND_ID)
       .eq("delivery_date", routeDate)
       .not("status", "in", "(cancelled)")
       .order("created_at", { ascending: true });
+    if (error) {
+      loadFailed("Route orders", error);
+      setRouteLoading(false);
+      return;
+    }
     const ords = data || [];
     const ids = ords.map((o: any) => o.id);
     let itemsByOrder: Record<string, any[]> = {};
@@ -617,10 +715,14 @@ const AdminLakeFresh = () => {
 
   const loadOrderItems = async (orderId: string) => {
     if (orderItems[orderId]) return;
-    const { data: items } = await supabase
+    const { data: items, error: itemsError } = await supabase
       .from("order_items")
       .select("id, product_name, unit_price_mwk, quantity, recipe_title")
       .eq("order_id", orderId);
+    if (itemsError) {
+      loadFailed("Order items", itemsError);
+      return;
+    }
     const ids = (items || []).map((i: any) => i.id);
     const { data: prep } = ids.length
       ? await supabase.from("order_preparation").select("*").in("order_item_id", ids)
@@ -633,19 +735,25 @@ const AdminLakeFresh = () => {
   };
 
   const loadPreparations = async () => {
-    const { data: items } = await supabase
+    const { data: items, error: itemsError } = await supabase
       .from("order_items")
       .select("id, order_id, product_name, quantity")
       .eq("brand_id", LF_BRAND_ID);
+    if (itemsError) {
+      loadFailed("Preparation items", itemsError);
+      return false;
+    }
     const itemIds = (items || []).map((i: any) => i.id);
-    const { data: prep } = itemIds.length
+    const { data: prep, error: prepError } = itemIds.length
       ? await supabase.from("order_preparation").select("*").in("order_item_id", itemIds)
-      : { data: [] };
+      : { data: [], error: null };
+    if (prepError) loadFailed("Preparation details", prepError);
     const itemMap = new Map((items || []).map((i: any) => [i.id, i]));
     const orderIds = [...new Set((items || []).map((i: any) => i.order_id))];
-    const { data: orders } = orderIds.length
+    const { data: orders, error: ordersError } = orderIds.length
       ? await supabase.from("orders").select("id, customer_name, payment_status, status").in("id", orderIds)
-      : { data: [] };
+      : { data: [], error: null };
+    if (ordersError) loadFailed("Preparation orders", ordersError);
     const orderMap = new Map((orders || []).map((o: any) => [o.id, o]));
     setPreparations(
       (prep || []).map((p: any) => {
@@ -654,15 +762,21 @@ const AdminLakeFresh = () => {
         return { ...p, item, order };
       }),
     );
+    return true;
   };
 
   const loadZones = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("delivery_zones")
       .select("*")
       .eq("brand_id", LF_BRAND_ID)
       .order("sort_order");
+    if (error) {
+      loadFailed("Delivery areas", error);
+      return false;
+    }
     setZones(data || []);
+    return true;
   };
 
   useEffect(() => {
@@ -688,7 +802,7 @@ const AdminLakeFresh = () => {
 
   const refreshAll = async () => {
     setLoading(true);
-    await Promise.all([
+    const results = await Promise.all([
       loadSpecies(),
       loadProducts(),
       loadSpices(),
@@ -705,7 +819,16 @@ const AdminLakeFresh = () => {
       loadCustomers(),
     ]);
     setLoading(false);
-    toast({ title: "Refreshed" });
+    const failed = results.filter((result) => result === false).length;
+    if (failed > 0) {
+      toast({
+        title: `Refreshed with ${failed} problem${failed === 1 ? "" : "s"}`,
+        description: "Some sections did not load. Look for the error messages above.",
+        variant: "destructive",
+      });
+    } else {
+      toast({ title: "Refreshed" });
+    }
   };
 
   // ---- Catalog actions ----
@@ -732,7 +855,7 @@ const AdminLakeFresh = () => {
     }
     toast({ title: "Product created" });
     setProductForm({ ...productForm, name: "", price_per_kg_mwk: "", image: "", description: "" });
-    await loadProducts();
+    await finishWrite(loadProducts);
   };
 
   const startEditProduct = (product: any) => {
@@ -756,7 +879,6 @@ const AdminLakeFresh = () => {
       return;
     }
     const { error } = await supabase.from("fish_products").update({
-      brand_id: LF_BRAND_ID,
       species_id: editProductForm.species_id || undefined,
       name: editProductForm.name,
       price_per_kg_mwk: Number(editProductForm.price_per_kg_mwk),
@@ -765,14 +887,16 @@ const AdminLakeFresh = () => {
       availability_status: editProductForm.availability_status,
       image: editProductForm.image || null,
       description: editProductForm.description || null,
-    });
+    })
+      .eq("id", editingProductId)
+      .eq("brand_id", LF_BRAND_ID);
     if (error) {
       toast({ title: "Update failed", description: error.message, variant: "destructive" });
       return;
     }
     toast({ title: "Product updated" });
     setEditingProductId(null);
-    await loadProducts();
+    await finishWrite(loadProducts);
   };
 
   const handleCreateSpice = async () => {
@@ -796,7 +920,7 @@ const AdminLakeFresh = () => {
     else {
       toast({ title: "Spice created" });
       setSpiceForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "", image: "" });
-      await loadSpices();
+      await finishWrite(loadSpices);
     }
   };
 
@@ -826,35 +950,36 @@ const AdminLakeFresh = () => {
     else {
       toast({ title: "Recipe created" });
       setRecipeForm({ title: "", slug: "", species_id: "", prep_time_min: "", cook_time_min: "", servings: "", cooking_method: "", recommended_spice: "", safety_notes: "", ingredients: "", steps: "", image: "", pdf_url: "" });
-      await loadRecipes();
+      await finishWrite(loadRecipes);
     }
   };
 
   const toggleRecipeActive = async (id: string, next: boolean) => {
-    const { error } = await supabase.from("lf_recipes").update({ is_active: next }).eq("id", id);
+    const { error } = await supabase.from("lf_recipes").update({ is_active: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else await loadRecipes();
+    else await finishWrite(loadRecipes);
   };
 
   const approveBusiness = async (id: string, status: "approved" | "rejected") => {
     const { error } = await supabase
       .from("business_accounts")
-      .update({ approval_status: status, approved_at: new Date().toISOString(), approved_by: null })
-      .eq("id", id);
+      .update({ approval_status: status, approved_at: new Date().toISOString(), approved_by: user?.id || null })
+      .eq("id", id)
+      .eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else { toast({ title: `Account ${status}` }); await loadBusinessAccounts(); }
   };
 
   const updateSubscriptionStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("lf_subscriptions").update({ status, updated_at: new Date().toISOString() }).eq("id", id);
+    const { error } = await supabase.from("lf_subscriptions").update({ status, updated_at: new Date().toISOString() }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else { toast({ title: "Updated" }); await loadSubscriptions(); }
+    else { toast({ title: "Updated" }); await finishWrite(loadSubscriptions); }
   };
 
   const toggleSpiceActive = async (id: string, next: boolean) => {
-    const { error } = await supabase.from("lf_spices").update({ is_active: next }).eq("id", id);
+    const { error } = await supabase.from("lf_spices").update({ is_active: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else await loadSpices();
+    else await finishWrite(loadSpices);
   };
 
   const startEditSpice = (spice: any) => {
@@ -884,20 +1009,22 @@ const AdminLakeFresh = () => {
       ingredients: editSpiceForm.ingredients || null,
       description: editSpiceForm.description || null,
       recommended_species: editSpiceForm.recommended_species.split(",").map((s) => s.trim()).filter(Boolean),
-    });
+    })
+      .eq("id", editingSpiceId)
+      .eq("brand_id", LF_BRAND_ID);
     if (error) {
       toast({ title: "Update failed", description: error.message, variant: "destructive" });
       return;
     }
     toast({ title: "Spice updated" });
     setEditingSpiceId(null);
-    await loadSpices();
+    await finishWrite(loadSpices);
   };
 
   const toggleProductActive = async (id: string, next: boolean) => {
-    const { error } = await supabase.from("fish_products").update({ is_active: next }).eq("id", id);
+    const { error } = await supabase.from("fish_products").update({ is_active: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else await loadProducts();
+    else await finishWrite(loadProducts);
   };
 
   // ---- Delivery zone actions ----
@@ -922,14 +1049,14 @@ const AdminLakeFresh = () => {
       slug: editZoneForm.slug,
       base_fee_mwk: Number(editZoneForm.base_fee_mwk),
       min_order_mwk: Number(editZoneForm.min_order_mwk),
-    }).eq("id", editingZoneId);
+    }).eq("id", editingZoneId).eq("brand_id", LF_BRAND_ID);
     if (error) {
       toast({ title: "Update failed", description: error.message, variant: "destructive" });
       return;
     }
     toast({ title: "Zone updated" });
     setEditingZoneId(null);
-    await loadZones();
+    await finishWrite(loadZones);
   };
 
   // ---- Batch actions ----
@@ -956,32 +1083,38 @@ const AdminLakeFresh = () => {
     }
     toast({ title: "Batch added" });
     setBatchForm({ ...batchForm, weight_kg_received: "", notes: "" });
-    await loadBatches();
+    await finishWrite(loadBatches);
   };
 
   // ---- Slot actions ----
   const handleGenerateSlots = async () => {
-    const { error } = await supabase.rpc("lf_generate_delivery_slots", {
+    const { data, error } = await supabase.rpc("lf_generate_delivery_slots", {
       p_days: Number(genDays),
       p_capacity_orders: Number(genOrders),
       p_capacity_weight_kg: Number(genWeight),
     });
-    if (error) toast({ title: "Generate failed", description: error.message, variant: "destructive" });
-    else {
-      toast({ title: "Slots generated" });
-      await loadSlots();
+    if (error) {
+      toast({ title: "Generate failed", description: error.message, variant: "destructive" });
+      return;
     }
+    const count = Number(data || 0);
+    toast({
+      title: count > 0 ? `Generated ${count} new slot${count === 1 ? "" : "s"}` : "No new slots needed",
+      description: count === 0 ? "Slots for these days already exist." : undefined,
+    });
+    invalidateStorefront();
+    await finishWrite(loadSlots);
   };
 
   const toggleSlotOpen = async (id: string, next: boolean) => {
-    const { error } = await supabase.from("delivery_slots").update({ is_open: next }).eq("id", id);
+    const { error } = await supabase.from("delivery_slots").update({ is_open: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else await loadSlots();
+    else await finishWrite(loadSlots);
   };
 
   // ---- Order actions ----
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
-    const { error } = await supabase.from("orders").update({ status: newStatus }).eq("id", orderId);
+    const { error } = await supabase.from("orders").update({ status: newStatus }).eq("id", orderId).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Status updated" });
@@ -1015,7 +1148,7 @@ const AdminLakeFresh = () => {
           console.warn("status email failed", e);
         }
       }
-      await loadOrders();
+      await finishWrite(loadOrders);
       if (tab === "route") void loadRouteOrders();
     }
   };
@@ -1028,7 +1161,7 @@ const AdminLakeFresh = () => {
     }
     if ((data as any)?.ok) {
       toast({ title: "Order marked paid" });
-      await loadOrders();
+      await finishWrite(loadOrders);
     } else {
       toast({ title: "Not marked paid", description: (data as any)?.outcome, variant: "destructive" });
     }
@@ -1038,11 +1171,12 @@ const AdminLakeFresh = () => {
     const { error } = await supabase
       .from("orders")
       .update({ status: "cancelled", payment_status: "refunded", updated_at: new Date().toISOString() })
-      .eq("id", orderId);
+      .eq("id", orderId)
+      .eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Refund failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Order cancelled and refunded" });
-      await loadOrders();
+      await finishWrite(loadOrders);
       if (tab === "route") void loadRouteOrders();
     }
   };
@@ -1054,12 +1188,15 @@ const AdminLakeFresh = () => {
       driver_name: "Unassigned",
       status: "assigned",
     });
-    if (aErr) toast({ title: "Dispatch failed", description: aErr.message, variant: "destructive" });
-    const { error } = await supabase.from("orders").update({ status: "dispatched" }).eq("id", orderId);
+    if (aErr) {
+      toast({ title: "Dispatch failed", description: aErr.message, variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.from("orders").update({ status: "dispatched" }).eq("id", orderId).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Status update failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Order dispatched" });
-      await loadOrders();
+      await finishWrite(loadOrders);
       if (tab === "route") void loadRouteOrders();
     }
   };
@@ -1074,7 +1211,8 @@ const AdminLakeFresh = () => {
         reconciled_at: new Date().toISOString(),
         reconciled_by: user?.id || null,
       })
-      .eq("id", prepId);
+      .eq("id", prepId)
+      .eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Preparation saved" });
@@ -1091,8 +1229,8 @@ const AdminLakeFresh = () => {
               .in("order_item_id", (await supabase.from("order_items").select("id").eq("order_id", item.order_id)).data?.map((x: any) => x.id) || []);
             const allDone = (allPrep || []).length > 0 && (allPrep || []).every((p: any) => p.reconciled_at);
             if (allDone) {
-              await supabase.from("orders").update({ status: "processing" }).eq("id", item.order_id).eq("status", "confirmed");
-              await loadOrders();
+              await supabase.from("orders").update({ status: "processing" }).eq("id", item.order_id).eq("brand_id", LF_BRAND_ID).eq("status", "confirmed");
+              await finishWrite(loadOrders);
             }
           }
         }
@@ -1120,14 +1258,14 @@ const AdminLakeFresh = () => {
     else {
       toast({ title: "Zone created" });
       setZoneForm({ name: "", slug: "", base_fee_mwk: "2000", min_order_mwk: "0" });
-      await loadZones();
+      await finishWrite(loadZones);
     }
   };
 
   const toggleZoneActive = async (id: string, next: boolean) => {
-    const { error } = await supabase.from("delivery_zones").update({ is_active: next }).eq("id", id);
+    const { error } = await supabase.from("delivery_zones").update({ is_active: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else await loadZones();
+    else await finishWrite(loadZones);
   };
 
   return (
@@ -1849,6 +1987,7 @@ const AdminLakeFresh = () => {
               <tr>
                 <th className="px-4 py-3 text-left">Customer</th>
                 <th className="px-4 py-3 text-left">Plan</th>
+                <th className="px-4 py-3 text-left">Catch</th>
                 <th className="px-4 py-3 text-right">Qty (kg)</th>
                 <th className="px-4 py-3 text-left">Prep</th>
                 <th className="px-4 py-3 text-left">Consent</th>
@@ -1864,6 +2003,9 @@ const AdminLakeFresh = () => {
                     <div className="text-xs text-gray-500">{s.customer_phone}</div>
                   </td>
                   <td className="px-4 py-3">{s.plan}</td>
+                  <td className="px-4 py-3">
+                    {s.fish_products?.fish_species?.name || s.fish_products?.name || "Not set"}
+                  </td>
                   <td className="px-4 py-3 text-right">{s.quantity_kg}</td>
                   <td className="px-4 py-3">{s.preparation}</td>
                   <td className="px-4 py-3">
@@ -1879,6 +2021,7 @@ const AdminLakeFresh = () => {
                       className="h-8 rounded border border-gray-300 px-2 text-xs"
                     >
                       <option value="pending_consent">pending_consent</option>
+                      <option value="pending_payment">pending_payment</option>
                       <option value="active">active</option>
                       <option value="paused">paused</option>
                       <option value="cancelled">cancelled</option>
@@ -1887,7 +2030,7 @@ const AdminLakeFresh = () => {
                 </tr>
               ))}
               {subscriptions.length === 0 && (
-                <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No subscriptions yet.</td></tr>
+                <tr><td colSpan={8} className="px-4 py-6 text-center text-gray-500">No subscriptions yet.</td></tr>
               )}
             </tbody>
           </table>
@@ -2410,7 +2553,7 @@ const AdminLakeFresh = () => {
                           )}
                           {o.status !== "delivered" && o.status !== "cancelled" && (
                             <button
-                              onClick={() => { updateOrderStatus(o.id, "delivered"); void loadRouteOrders(); }}
+                              onClick={() => void updateOrderStatus(o.id, "delivered")}
                               className="text-xs font-bold text-[#39B54A] underline"
                             >
                               Mark delivered

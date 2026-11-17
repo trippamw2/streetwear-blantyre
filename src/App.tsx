@@ -81,6 +81,9 @@ import LakeFreshLoyalty from "./pages/lf/LakeFreshLoyalty";
 import LakeFreshSubscribe from "./pages/lf/LakeFreshSubscribe";
 import LakeFreshTrack from "./pages/lf/LakeFreshTrack";
 import LakeFreshDriver from "./pages/lf/LakeFreshDriver";
+import LakeFreshPrivacy from "./pages/lf/LakeFreshPrivacy";
+import LakeFreshTerms from "./pages/lf/LakeFreshTerms";
+import LakeFreshRefund from "./pages/lf/LakeFreshRefund";
 import { LakeFreshLayout } from "./components/lf/LakeFreshLayout";
 import { LakeFreshProtectedRoute } from "./components/lf/LakeFreshProtectedRoute";
 import { IS_DUAL_SITE, IS_LF_SITE, SHOWS_LF, SHOWS_SB } from "./lib/brandSite";
@@ -155,6 +158,9 @@ const lakeFreshRouteChildren = (
     <Route path="loyalty" element={<LakeFreshLoyalty />} />
     <Route path="subscribe" element={<LakeFreshSubscribe />} />
     <Route path="track" element={<LakeFreshTrack />} />
+    <Route path="privacy" element={<LakeFreshPrivacy />} />
+    <Route path="terms" element={<LakeFreshTerms />} />
+    <Route path="refund" element={<LakeFreshRefund />} />
     <Route path="driver" element={<LakeFreshProtectedRoute><LakeFreshDriver /></LakeFreshProtectedRoute>} />
   </>
 );

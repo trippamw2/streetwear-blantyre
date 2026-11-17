@@ -75,10 +75,18 @@ const AdminDelivery = () => {
       };
 
       if (editingCompany) {
-        await supabase.from("delivery_companies").update(companyData).eq("id", editingCompany.id);
+        const { error } = await supabase.from("delivery_companies").update(companyData).eq("id", editingCompany.id);
+        if (error) {
+          toast({ title: "Error saving", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Delivery company updated!" });
       } else {
-        await supabase.from("delivery_companies").insert(companyData);
+        const { error } = await supabase.from("delivery_companies").insert(companyData);
+        if (error) {
+          toast({ title: "Error saving", description: error.message, variant: "destructive" });
+          return;
+        }
         toast({ title: "Delivery company created!" });
       }
 
@@ -86,7 +94,7 @@ const AdminDelivery = () => {
       setEditingCompany(null);
       resetForm();
       fetchCompanies();
-    } catch (error) {
+    } catch {
       toast({ title: "Error saving", variant: "destructive" });
     } finally {
       setSaving(false);
@@ -95,17 +103,25 @@ const AdminDelivery = () => {
 
   const handleDelete = async (id: string) => {
     if (confirm("Delete this delivery company?")) {
-      await supabase.from("delivery_companies").delete().eq("id", id);
+      const { error } = await supabase.from("delivery_companies").delete().eq("id", id);
+      if (error) {
+        toast({ title: "Error deleting", description: error.message, variant: "destructive" });
+        return;
+      }
       fetchCompanies();
       toast({ title: "Deleted" });
     }
   };
 
   const toggleActive = async (company: DeliveryCompany) => {
-    await supabase
+    const { error } = await supabase
       .from("delivery_companies")
       .update({ is_active: !company.is_active })
       .eq("id", company.id);
+    if (error) {
+      toast({ title: "Error updating delivery company", description: error.message, variant: "destructive" });
+      return;
+    }
     fetchCompanies();
   };
 
