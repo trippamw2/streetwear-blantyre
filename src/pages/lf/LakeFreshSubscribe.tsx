@@ -41,7 +41,7 @@ const LakeFreshSubscribe = () => {
     }
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("lf_subscriptions").insert({
+      const { data: sub, error } = await supabase.from("lf_subscriptions").insert({
         brand_id: LF_BRAND_ID,
         user_id: user?.id || null,
         customer_name: form.customer_name.trim(),
@@ -55,12 +55,28 @@ const LakeFreshSubscribe = () => {
         consent_given: true,
         consent_given_at: new Date().toISOString(),
         notes: form.notes.trim() || null,
-      });
+      }).select("id").maybeSingle();
       if (error) throw error;
-      toast({ title: "Subscription requested", description: "We will confirm your plan and set up billing." });
+
+      const subId = sub?.id;
+      const amount = Math.round(Number(form.quantity_kg) * 4500);
+      const [firstName, ...rest] = form.customer_name.trim().split(/\s+/);
+
+      const { redirectToPayChangu } = await import("@/lib/paychangu");
+      redirectToPayChangu({
+        amount,
+        currency: "MWK",
+        email: form.customer_email.trim() || user?.email || "",
+        firstName: firstName || form.customer_name.trim(),
+        lastName: rest.join(" ") || "-",
+        txRef: `LFSUB-${subId || Date.now()}`,
+        callbackUrl: `${window.location.origin}/lf/subscribe?status=callback`,
+        returnUrl: `${window.location.origin}/lf/subscribe?status=return`,
+        title: "Lake Fresh Subscription",
+        description: `${form.plan} subscription · ${form.quantity_kg} kg`,
+      });
     } catch (err) {
       toast({ title: "Request failed", description: err instanceof Error ? err.message : "Please try again.", variant: "destructive" });
-    } finally {
       setSubmitting(false);
     }
   };
@@ -82,7 +98,7 @@ const LakeFreshSubscribe = () => {
             <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Plan</label>
             <select className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.plan} onChange={(e) => setForm({ ...form, plan: e.target.value })}>
               <option value="weekly">Weekly</option>
-              <option value="biweekly">Biweekly</option>
+              <option value="biweekly">Bi-weekly</option>
               <option value="monthly">Monthly</option>
             </select>
           </div>

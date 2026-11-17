@@ -43,6 +43,7 @@ const LakeFreshHeader = () => {
           <LFNavLink to="/lf/fish" className={navLinkClass}>The Catch</LFNavLink>
           <LFNavLink to="/lf/spices" className={navLinkClass}>Spices</LFNavLink>
           <LFNavLink to="/lf/recipes" className={navLinkClass}>Recipes</LFNavLink>
+          <LFNavLink to="/lf/subscribe" className={navLinkClass}>Subscribe</LFNavLink>
           <LFNavLink to="/lf/loyalty" className={navLinkClass}>Rewards</LFNavLink>
           <LFNavLink to="/lf/pro" className={navLinkClass}>PRO</LFNavLink>
         </nav>
