@@ -13,7 +13,7 @@ const LakeFreshCatalog = () => {
   const { data: products, isLoading, isError, refetch } = useLakeFreshCatalog();
 
   return (
-    <div className="bg-white text-gray-900">
+    <div className="bg-white text-[#073B78]">
       <SEO
         brand="lake-fresh"
         title="The Catch | Lake Fresh Fish Mart"
@@ -29,8 +29,8 @@ const LakeFreshCatalog = () => {
             THE CATCH
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Fresh fish from the lake, prepared whole, cleaned or portioned. Priced per kilogram with next day
-            delivery, then add signature spices and a free recipe to finish the meal.
+            Fresh fish from the lake, made whole, cleaned or cut up. Priced per kilogram. Next day delivery. Add a
+            spice mix and a free recipe to finish your meal. Plan it your way.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <LFLink

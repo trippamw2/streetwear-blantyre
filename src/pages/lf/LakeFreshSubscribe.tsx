@@ -93,7 +93,7 @@ const LakeFreshSubscribe = () => {
             <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Plan</label>
             <select className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.plan} onChange={(e) => setForm({ ...form, plan: e.target.value })}>
               <option value="weekly">Weekly</option>
-              <option value="biweekly">Bi-weekly</option>
+              <option value="biweekly">Biweekly</option>
               <option value="monthly">Monthly</option>
             </select>
           </div>

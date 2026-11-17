@@ -108,8 +108,8 @@ const LakeFreshAuth = () => {
           </h1>
           <p className="mt-2 text-sm text-gray-500">
             {mode === "signin"
-              ? "Sign in to place a next day fish order and track it."
-              : "Create an account to order fresh fish for your table."}
+              ? "Sign in to order fresh fish and track it."
+              : "Make an account to order fresh fish for your table."}
           </p>
         </div>
 

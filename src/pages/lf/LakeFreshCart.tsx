@@ -20,7 +20,7 @@ const LakeFreshCart = () => {
         <SEO brand="lake-fresh" title="Your Basket | Lake Fresh Fish Mart" description="Your Lake Fresh fish basket." />
         <ShoppingBasket className="mx-auto h-12 w-12 text-gray-300" />
         <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">Your basket is empty</h1>
-        <p className="mt-2 text-sm text-gray-500">Add fresh fish from today&apos;s catch to get started.</p>
+        <p className="mt-2 text-sm text-gray-500">Pick fresh fish from today&apos;s catch to start.</p>
         <LFLink
           to="/lf/fish"
           className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white"

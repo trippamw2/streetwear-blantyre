@@ -207,7 +207,7 @@ const LakeFreshProduct = () => {
   const extrasCount = selectedSpices.length;
 
   return (
-    <div className="bg-white text-gray-900">
+    <div className="bg-white text-[#073B78]">
       <SEO
         brand="lake-fresh"
         title={`${product.speciesName || product.name} | Lake Fresh Fish Mart`}
