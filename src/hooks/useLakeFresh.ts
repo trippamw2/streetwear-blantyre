@@ -7,6 +7,7 @@ import {
   sortPilotProducts,
   sortPilotZones,
 } from "@/lib/lfPilot";
+import { lfGalleryImages } from "@/lib/lfImages";
 
 export const LF_BRAND_ID = BRANDS["lake-fresh"].id;
 
@@ -22,6 +23,7 @@ export interface LFCatalogProduct {
   preparationOptions: string[];
   availabilityStatus: "available" | "sold_out" | string;
   image: string | null;
+  images: string[];
   storageInfo: string | null;
   handlingInfo: string | null;
   availableKg: number;
@@ -77,6 +79,7 @@ export const useLakeFreshCatalog = () =>
         preparationOptions: toStringArray(row.preparation_options),
         availabilityStatus: String(row.availability_status || "sold_out"),
         image: row.image ? String(row.image) : null,
+        images: lfGalleryImages(row.image ? String(row.image) : null, row.images),
         storageInfo: row.storage_info ? String(row.storage_info) : null,
         handlingInfo: row.handling_info ? String(row.handling_info) : null,
         availableKg: toNumber(row.available_kg),

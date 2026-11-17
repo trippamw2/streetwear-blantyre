@@ -911,6 +911,7 @@ export type Database = {
           description: string | null
           id: string
           image: string | null
+          images: Json
           is_active: boolean
           min_order_qty_kg: number
           name: string
@@ -927,6 +928,7 @@ export type Database = {
           description?: string | null
           id?: string
           image?: string | null
+          images?: Json
           is_active?: boolean
           min_order_qty_kg?: number
           name: string
@@ -943,6 +945,7 @@ export type Database = {
           description?: string | null
           id?: string
           image?: string | null
+          images?: Json
           is_active?: boolean
           min_order_qty_kg?: number
           name?: string
@@ -1725,6 +1728,7 @@ export type Database = {
           description: string | null
           id: string
           image: string | null
+          images: Json
           ingredients: string | null
           is_active: boolean
           name: string
@@ -1741,6 +1745,7 @@ export type Database = {
           description?: string | null
           id?: string
           image?: string | null
+          images?: Json
           ingredients?: string | null
           is_active?: boolean
           name: string
@@ -1757,6 +1762,7 @@ export type Database = {
           description?: string | null
           id?: string
           image?: string | null
+          images?: Json
           ingredients?: string | null
           is_active?: boolean
           name?: string
@@ -3603,9 +3609,11 @@ export type Database = {
           handling_info: string
           id: string
           image: string
+          images: Json
           min_order_qty_kg: number
           name: string
           preparation_options: Json
+          pilot_option: string | null
           price_per_kg_mwk: number
           sort_order: number
           species_id: string

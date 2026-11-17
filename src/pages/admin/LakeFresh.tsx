@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import LFImageGalleryInput from "@/components/admin/LFImageGalleryInput";
+import { lfGalleryImages } from "@/lib/lfImages";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { formatMWK } from "@/data/products";
 import {
@@ -175,6 +177,7 @@ const AdminLakeFresh = () => {
     availability_status: "available",
     is_active: true,
     image: "",
+    images: [] as string[],
     description: "",
   });
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
@@ -186,6 +189,7 @@ const AdminLakeFresh = () => {
     preparation_options: "whole",
     availability_status: "available",
     image: "",
+    images: [] as string[],
     description: "",
   });
 
@@ -239,7 +243,7 @@ const AdminLakeFresh = () => {
 
   // ---- Spices state ----
   const [spices, setSpices] = useState<any[]>([]);
-  const [spiceForm, setSpiceForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "", image: "" });
+  const [spiceForm, setSpiceForm] = useState({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "", image: "", images: [] as string[] });
   const [editingSpiceId, setEditingSpiceId] = useState<string | null>(null);
   const [editSpiceForm, setEditSpiceForm] = useState({
     name: "",
@@ -249,6 +253,8 @@ const AdminLakeFresh = () => {
     ingredients: "",
     description: "",
     recommended_species: "",
+    image: "",
+    images: [] as string[],
   });
 
   // ---- Recipes state ----
@@ -314,21 +320,33 @@ const AdminLakeFresh = () => {
     }
   };
 
-  const updateProductImage = async (id: string, image: string) => {
-    const { error } = await supabase.from("fish_products").update({ image }).eq("id", id).eq("brand_id", LF_BRAND_ID);
+  const updateProductGallery = async (id: string, gallery: string[]) => {
+    const images = lfGalleryImages(null, gallery);
+    const image = images[0] || null;
+    const { error } = await supabase
+      .from("fish_products")
+      .update({ image, images })
+      .eq("id", id)
+      .eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else {
-      setProducts((prev) => prev.map((p: any) => (p.id === id ? { ...p, image } : p)));
-      toast({ title: "Product photo saved" });
+      setProducts((prev) => prev.map((p: any) => (p.id === id ? { ...p, image, images } : p)));
+      toast({ title: "Product photos saved" });
     }
   };
 
-  const updateSpiceImage = async (id: string, image: string) => {
-    const { error } = await supabase.from("lf_spices").update({ image }).eq("id", id).eq("brand_id", LF_BRAND_ID);
+  const updateSpiceGallery = async (id: string, gallery: string[]) => {
+    const images = lfGalleryImages(null, gallery);
+    const image = images[0] || null;
+    const { error } = await supabase
+      .from("lf_spices")
+      .update({ image, images })
+      .eq("id", id)
+      .eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else {
-      setSpices((prev) => prev.map((s: any) => (s.id === id ? { ...s, image } : s)));
-      toast({ title: "Spice photo saved" });
+      setSpices((prev) => prev.map((s: any) => (s.id === id ? { ...s, image, images } : s)));
+      toast({ title: "Seasoning photos saved" });
     }
   };
 
@@ -837,6 +855,7 @@ const AdminLakeFresh = () => {
       toast({ title: "Missing fields", variant: "destructive" });
       return;
     }
+    const images = lfGalleryImages(null, productForm.images);
     const { error } = await supabase.from("fish_products").insert({
       brand_id: LF_BRAND_ID,
       species_id: productForm.species_id,
@@ -846,7 +865,8 @@ const AdminLakeFresh = () => {
       preparation_options: productForm.preparation_options.split(",").map((s) => s.trim()),
       availability_status: productForm.availability_status,
       is_active: productForm.is_active,
-      image: productForm.image || null,
+      image: images[0] || null,
+      images,
       description: productForm.description || null,
     });
     if (error) {
@@ -854,11 +874,12 @@ const AdminLakeFresh = () => {
       return;
     }
     toast({ title: "Product created" });
-    setProductForm({ ...productForm, name: "", price_per_kg_mwk: "", image: "", description: "" });
+    setProductForm({ ...productForm, name: "", price_per_kg_mwk: "", image: "", images: [], description: "" });
     await finishWrite(loadProducts);
   };
 
   const startEditProduct = (product: any) => {
+    const images = lfGalleryImages(product.image, product.images);
     setEditingProductId(product.id);
     setEditProductForm({
       species_id: product.fish_species?.id || product.species_id || "",
@@ -867,7 +888,8 @@ const AdminLakeFresh = () => {
       min_order_qty_kg: String(product.min_order_qty_kg ?? "0.5"),
       preparation_options: Array.isArray(product.preparation_options) ? product.preparation_options.join(", ") : "whole",
       availability_status: product.availability_status || "available",
-      image: product.image || "",
+      image: images[0] || "",
+      images,
       description: product.description || "",
     });
   };
@@ -878,6 +900,7 @@ const AdminLakeFresh = () => {
       toast({ title: "Missing fields", variant: "destructive" });
       return;
     }
+    const images = lfGalleryImages(null, editProductForm.images);
     const { error } = await supabase.from("fish_products").update({
       species_id: editProductForm.species_id || undefined,
       name: editProductForm.name,
@@ -885,7 +908,8 @@ const AdminLakeFresh = () => {
       min_order_qty_kg: Number(editProductForm.min_order_qty_kg),
       preparation_options: editProductForm.preparation_options.split(",").map((s) => s.trim()).filter(Boolean),
       availability_status: editProductForm.availability_status,
-      image: editProductForm.image || null,
+      image: images[0] || null,
+      images,
       description: editProductForm.description || null,
     })
       .eq("id", editingProductId)
@@ -904,6 +928,7 @@ const AdminLakeFresh = () => {
       toast({ title: "Missing fields", variant: "destructive" });
       return;
     }
+    const images = lfGalleryImages(null, spiceForm.images);
     const { error } = await supabase.from("lf_spices").insert({
       brand_id: LF_BRAND_ID,
       name: spiceForm.name,
@@ -914,12 +939,13 @@ const AdminLakeFresh = () => {
       ingredients: spiceForm.ingredients || null,
       is_active: true,
       recommended_species: spiceForm.recommended_species.split(",").map((s) => s.trim()).filter(Boolean),
-      image: spiceForm.image || null,
+      image: images[0] || null,
+      images,
     });
     if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Spice created" });
-      setSpiceForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "", image: "" });
+      setSpiceForm({ name: "", price_mwk: "", size_label: "", stock_qty: "", ingredients: "", description: "", recommended_species: "", image: "", images: [] });
       await finishWrite(loadSpices);
     }
   };
@@ -983,6 +1009,7 @@ const AdminLakeFresh = () => {
   };
 
   const startEditSpice = (spice: any) => {
+    const images = lfGalleryImages(spice.image, spice.images);
     setEditingSpiceId(spice.id);
     setEditSpiceForm({
       name: spice.name || "",
@@ -992,6 +1019,8 @@ const AdminLakeFresh = () => {
       ingredients: spice.ingredients || "",
       description: spice.description || "",
       recommended_species: (spice.recommended_species || []).join(", "),
+      image: images[0] || "",
+      images,
     });
   };
 
@@ -1001,6 +1030,7 @@ const AdminLakeFresh = () => {
       toast({ title: "Missing fields", variant: "destructive" });
       return;
     }
+    const images = lfGalleryImages(null, editSpiceForm.images);
     const { error } = await supabase.from("lf_spices").update({
       name: editSpiceForm.name,
       price_mwk: Number(editSpiceForm.price_mwk),
@@ -1009,6 +1039,8 @@ const AdminLakeFresh = () => {
       ingredients: editSpiceForm.ingredients || null,
       description: editSpiceForm.description || null,
       recommended_species: editSpiceForm.recommended_species.split(",").map((s) => s.trim()).filter(Boolean),
+      image: images[0] || null,
+      images,
     })
       .eq("id", editingSpiceId)
       .eq("brand_id", LF_BRAND_ID);
@@ -1343,12 +1375,12 @@ const AdminLakeFresh = () => {
                   <option value="sold_out">Sold out</option>
                 </select>
               </div>
-              <div className="sm:col-span-2">
-                <AssetField
-                  label="Product photo"
-                  value={productForm.image}
+              <div className="sm:col-span-3">
+                <LFImageGalleryInput
+                  label="Catch photos"
                   folder="fish"
-                  onChange={(next) => setProductForm((prev) => ({ ...prev, image: next }))}
+                  value={productForm.images}
+                  onChange={(next) => setProductForm((prev) => ({ ...prev, images: next, image: next[0] || "" }))}
                 />
               </div>
               <div className="sm:col-span-2">
@@ -1409,6 +1441,14 @@ const AdminLakeFresh = () => {
                     <option value="limited">Limited</option>
                     <option value="sold_out">Sold out</option>
                   </select>
+                </div>
+                <div className="sm:col-span-3">
+                  <LFImageGalleryInput
+                    label="Catch photos"
+                    folder="fish"
+                    value={editProductForm.images}
+                    onChange={(next) => setEditProductForm((prev) => ({ ...prev, images: next, image: next[0] || "" }))}
+                  />
                 </div>
                 <div className="sm:col-span-2">
                   <Label>Short description</Label>
@@ -1539,11 +1579,11 @@ const AdminLakeFresh = () => {
                 <Textarea value={spiceForm.description} onChange={(e) => setSpiceForm({ ...spiceForm, description: e.target.value })} />
               </div>
               <div className="sm:col-span-3">
-                <AssetField
-                  label="Spice photo"
-                  value={spiceForm.image}
+                <LFImageGalleryInput
+                  label="Seasoning photos"
                   folder="spices"
-                  onChange={(next) => setSpiceForm((prev) => ({ ...prev, image: next }))}
+                  value={spiceForm.images}
+                  onChange={(next) => setSpiceForm((prev) => ({ ...prev, images: next, image: next[0] || "" }))}
                 />
               </div>
             </div>
@@ -1590,6 +1630,83 @@ const AdminLakeFresh = () => {
               </tbody>
             </table>
           </div>
+
+          {editingSpiceId ? (
+            <div className="rounded-xl border bg-white p-5">
+              <h2 className="font-display text-lg font-bold mb-4">Edit seasoning</h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <Label>Name</Label>
+                  <Input value={editSpiceForm.name} onChange={(e) => setEditSpiceForm({ ...editSpiceForm, name: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Price (MWK)</Label>
+                  <Input type="number" value={editSpiceForm.price_mwk} onChange={(e) => setEditSpiceForm({ ...editSpiceForm, price_mwk: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Size</Label>
+                  <Input value={editSpiceForm.size_label} onChange={(e) => setEditSpiceForm({ ...editSpiceForm, size_label: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Stock</Label>
+                  <Input type="number" value={editSpiceForm.stock_qty} onChange={(e) => setEditSpiceForm({ ...editSpiceForm, stock_qty: e.target.value })} />
+                </div>
+                <div className="sm:col-span-2">
+                  <Label>Ingredients</Label>
+                  <Input value={editSpiceForm.ingredients} onChange={(e) => setEditSpiceForm({ ...editSpiceForm, ingredients: e.target.value })} />
+                </div>
+                <div className="sm:col-span-3">
+                  <Label>Description</Label>
+                  <Textarea value={editSpiceForm.description} onChange={(e) => setEditSpiceForm({ ...editSpiceForm, description: e.target.value })} />
+                </div>
+                <div className="sm:col-span-2">
+                  <Label>Pairs with fish</Label>
+                  <div className="mt-1.5 flex flex-wrap gap-2">
+                    {species.map((sp) => {
+                      const checked = editSpiceForm.recommended_species
+                        .split(",")
+                        .map((value) => value.trim())
+                        .includes(sp.id);
+                      return (
+                        <label
+                          key={sp.id}
+                          className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                            checked
+                              ? "border-[#39B54A] bg-[#7ED321]/10 text-[#073B78]"
+                              : "border-gray-300 text-gray-600"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() =>
+                              toggleRecommendedSpecies(editSpiceForm.recommended_species, sp.id, (next) =>
+                                setEditSpiceForm({ ...editSpiceForm, recommended_species: next })
+                              )
+                            }
+                            className="h-3.5 w-3.5 accent-[#39B54A]"
+                          />
+                          {sp.name}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="sm:col-span-3">
+                  <LFImageGalleryInput
+                    label="Seasoning photos"
+                    folder="spices"
+                    value={editSpiceForm.images}
+                    onChange={(next) => setEditSpiceForm((prev) => ({ ...prev, images: next, image: next[0] || "" }))}
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button onClick={() => void saveEditedSpice()}>Save changes</Button>
+                <Button variant="outline" onClick={() => setEditingSpiceId(null)}>Cancel</Button>
+              </div>
+            </div>
+          ) : null}
         </div>
       )}
 
@@ -1749,35 +1866,41 @@ const AdminLakeFresh = () => {
 
           <div className="rounded-xl border bg-white p-5">
             <h2 className="font-display text-lg font-bold">Fish product photos</h2>
-            <p className="mb-4 text-sm text-gray-500">Used on catalog cards and the product page.</p>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <p className="mb-4 text-sm text-gray-500">
+              Cards show the cover photo. Each product page shows every photo in a slide viewer.
+            </p>
+            <div className="grid gap-5 lg:grid-cols-2">
               {products.map((p) => (
-                <AssetField
-                  key={p.id}
-                  label={p.name}
-                  value={p.image}
-                  folder="fish"
-                  onChange={(next) => updateProductImage(p.id, next)}
-                />
+                <div key={p.id} className="rounded-xl border border-gray-200 p-4">
+                  <LFImageGalleryInput
+                    label={p.name}
+                    folder="fish"
+                    value={lfGalleryImages(p.image, p.images)}
+                    onChange={(next) => void updateProductGallery(p.id, next)}
+                  />
+                </div>
               ))}
               {products.length === 0 && <p className="text-sm text-gray-500">No fish products yet.</p>}
             </div>
           </div>
 
           <div className="rounded-xl border bg-white p-5">
-            <h2 className="font-display text-lg font-bold">Spice photos</h2>
-            <p className="mb-4 text-sm text-gray-500">Each spice gets a clean pack photo.</p>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <h2 className="font-display text-lg font-bold">Seasoning photos</h2>
+            <p className="mb-4 text-sm text-gray-500">
+              Seasoning cards show the cover photo. Each seasoning page shows every photo in a slide viewer.
+            </p>
+            <div className="grid gap-5 lg:grid-cols-2">
               {spices.map((s) => (
-                <AssetField
-                  key={s.id}
-                  label={s.name}
-                  value={s.image}
-                  folder="spices"
-                  onChange={(next) => updateSpiceImage(s.id, next)}
-                />
+                <div key={s.id} className="rounded-xl border border-gray-200 p-4">
+                  <LFImageGalleryInput
+                    label={s.name}
+                    folder="spices"
+                    value={lfGalleryImages(s.image, s.images)}
+                    onChange={(next) => void updateSpiceGallery(s.id, next)}
+                  />
+                </div>
               ))}
-              {spices.length === 0 && <p className="text-sm text-gray-500">No spices yet.</p>}
+              {spices.length === 0 && <p className="text-sm text-gray-500">No seasonings yet.</p>}
             </div>
           </div>
 

@@ -76,6 +76,7 @@ import LakeFreshOrder from "./pages/lf/LakeFreshOrder";
 import LakeFreshRecipes from "./pages/lf/LakeFreshRecipes";
 import LakeFreshRecipe from "./pages/lf/LakeFreshRecipe";
 import LakeFreshSpices from "./pages/lf/LakeFreshSpices";
+import LakeFreshSpiceDetail from "./pages/lf/LakeFreshSpiceDetail";
 import LakeFreshPro from "./pages/lf/LakeFreshPro";
 import LakeFreshLoyalty from "./pages/lf/LakeFreshLoyalty";
 import LakeFreshSubscribe from "./pages/lf/LakeFreshSubscribe";
@@ -154,6 +155,7 @@ const lakeFreshRouteChildren = (
     <Route path="recipes" element={<LakeFreshRecipes />} />
     <Route path="recipes/:slug" element={<LakeFreshRecipe />} />
     <Route path="spices" element={<LakeFreshSpices />} />
+    <Route path="spices/:id" element={<LakeFreshSpiceDetail />} />
     <Route path="pro" element={<LakeFreshPro />} />
     <Route path="loyalty" element={<LakeFreshLoyalty />} />
     <Route path="subscribe" element={<LakeFreshSubscribe />} />

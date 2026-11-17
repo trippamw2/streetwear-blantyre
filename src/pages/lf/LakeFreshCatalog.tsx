@@ -1,4 +1,5 @@
 import { LFLink } from "@/components/lf/lfRouter";
+import LakeFreshImageCarousel from "@/components/lf/LakeFreshImageCarousel";
 import { Fish, ArrowRight, Leaf, BookOpen, PackageCheck, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useLakeFreshCatalog } from "@/hooks/useLakeFresh";
@@ -92,19 +93,18 @@ const LakeFreshCatalog = () => {
                       className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-lg"
                     >
                       <div className="relative h-44 overflow-hidden bg-[#EAF6FB]">
-                        {product.image ? (
-                          <img
-                            src={product.image}
+                        <LFLink
+                          to={`/lf/fish/${product.id}`}
+                          aria-label={`See photos of ${product.name}`}
+                          className="block h-full"
+                        >
+                          <LakeFreshImageCarousel
+                            images={product.images}
                             alt={product.name}
-                            loading="lazy"
-                            decoding="async"
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            coverOnly
+                            imageClassName="transition-transform duration-500 group-hover:scale-105"
                           />
-                        ) : (
-                          <div className="flex h-full items-center justify-center">
-                            <Fish className="h-12 w-12 text-[#08A9E8]" />
-                          </div>
-                        )}
+                        </LFLink>
                         <span
                           className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${
                             soldOut ? "bg-white/90 text-[#073B78]/60" : "bg-[#39B54A] text-white"

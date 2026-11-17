@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { LFLink } from "@/components/lf/lfRouter";
+import LakeFreshImageCarousel from "@/components/lf/LakeFreshImageCarousel";
 import { ArrowLeft, AlertCircle, Check, Fish, Loader2, Minus, Plus, Snowflake, ShieldCheck, Truck, PackageCheck } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
@@ -246,17 +247,13 @@ const LakeFreshProduct = () => {
           </LFLink>
 
           <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
-            <div className="flex h-72 w-full items-center justify-center rounded-2xl bg-[#073B78] lg:w-96">
-              {product.image ? (
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  decoding="async"
-                  className="h-full w-full rounded-2xl object-cover"
-                />
-              ) : (
-                <Fish className="h-20 w-20 text-[#08A9E8]" />
-              )}
+            <div className="w-full lg:w-[28rem] lg:shrink-0">
+              <LakeFreshImageCarousel images={product.images} alt={product.name} />
+              {product.images.length > 1 ? (
+                <p className="mt-3 text-center text-[11px] font-semibold text-[#073B78]/60">
+                  Use the arrows or choose a small photo to see more.
+                </p>
+              ) : null}
             </div>
 
             <div className="max-w-2xl flex-1">

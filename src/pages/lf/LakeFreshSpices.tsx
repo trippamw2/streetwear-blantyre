@@ -1,4 +1,5 @@
 import { LFLink } from "@/components/lf/lfRouter";
+import LakeFreshImageCarousel from "@/components/lf/LakeFreshImageCarousel";
 import { ArrowRight, Fish, Leaf, Loader2, Plus } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,6 +9,7 @@ import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
 import { lfDisplayCopy } from "@/lib/lfCopy";
+import { lfGalleryImages } from "@/lib/lfImages";
 
 const accents = ["#39B54A", "#08A9E8", "#7ED321"];
 
@@ -93,6 +95,7 @@ const LakeFreshSpices = () => {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {(data || []).map((s: any, index: number) => {
               const accent = accents[index % accents.length];
+              const images = lfGalleryImages(s.image, s.images);
               const pairings = (s.recommended_species || [])
                 .map((id: string) => ({ id, name: speciesName(id) }))
                 .filter((p: { name?: string }) => Boolean(p.name));
@@ -107,9 +110,13 @@ const LakeFreshSpices = () => {
                   key={s.id}
                   className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-lg"
                 >
-                  <div className="relative flex h-36 items-center justify-center overflow-hidden bg-[#F4FBF7]">
-                    {s.image ? (
-                      <img src={s.image} alt={s.name} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                  <LFLink
+                    to={`/lf/spices/${s.id}`}
+                    aria-label={`See photos of ${lfDisplayCopy(s.name)}`}
+                    className="relative flex h-36 items-center justify-center overflow-hidden bg-[#F4FBF7]"
+                  >
+                    {images.length > 0 ? (
+                      <LakeFreshImageCarousel images={images} alt={s.name} coverOnly />
                     ) : (
                       <>
                         <div
@@ -127,10 +134,14 @@ const LakeFreshSpices = () => {
                     <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#073B78]">
                       {lfDisplayCopy(s.size_label) || "Spice blend"}
                     </span>
-                  </div>
+                  </LFLink>
 
                   <div className="flex flex-1 flex-col p-5">
-                    <h3 className="font-display text-lg font-extrabold text-[#073B78]">{lfDisplayCopy(s.name)}</h3>
+                    <h3 className="font-display text-lg font-extrabold text-[#073B78]">
+                      <LFLink to={`/lf/spices/${s.id}`} className="hover:text-[#39B54A]">
+                        {lfDisplayCopy(s.name)}
+                      </LFLink>
+                    </h3>
                     {s.description ? (
                       <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-[#073B78]/60">{lfDisplayCopy(s.description)}</p>
                     ) : (
