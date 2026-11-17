@@ -23,10 +23,10 @@ if (isConfigured) {
     global: {
       fetch: (url, options) => fetch(url, {
         ...options,
-        // Timeout after 10 seconds
+        // Timeout after 60 seconds (uploads need more than 10s)
         signal: (() => {
           const controller = new AbortController();
-          setTimeout(() => controller.abort(), 10000);
+          setTimeout(() => controller.abort(), 60000);
           return controller.signal;
         })(),
       }),

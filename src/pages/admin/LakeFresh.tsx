@@ -47,11 +47,18 @@ const TABS: { key: Tab; label: string; icon: any }[] = [
 ];
 
 const uploadLfAsset = async (file: File, folder: string): Promise<string> => {
-  const extension = file.name.split(".").pop()?.toLowerCase() || (file.type === "application/pdf" ? "pdf" : "jpg");
-  const path = `lf/${folder}/${crypto.randomUUID()}.${extension}`;
+  const extension = (file.name.split(".").pop() || "").toLowerCase() ||
+    (file.type === "application/pdf" ? "pdf" : file.type.startsWith("image/") ? file.type.split("/")[1] : "jpg");
+  const safeExt = extension.replace(/[^a-z0-9]/g, "") || "bin";
+  const uuid =
+    (typeof crypto !== "undefined" && typeof (crypto as any).randomUUID === "function")
+      ? (crypto as any).randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const path = `lf/${folder}/${uuid}.${safeExt}`;
+  const contentType = file.type || (safeExt === "pdf" ? "application/pdf" : `image/${safeExt}`);
   const { error } = await supabase.storage
     .from("product-images")
-    .upload(path, file, { upsert: false, contentType: file.type || undefined });
+    .upload(path, file, { upsert: false, contentType });
   if (error) throw new Error(error.message);
   const { data } = supabase.storage.from("product-images").getPublicUrl(path);
   return data.publicUrl;
@@ -1013,6 +1020,19 @@ const AdminLakeFresh = () => {
     }
   };
 
+  const refundAndCancelOrder = async (orderId: string) => {
+    const { error } = await supabase
+      .from("orders")
+      .update({ status: "cancelled", payment_status: "refunded", updated_at: new Date().toISOString() })
+      .eq("id", orderId);
+    if (error) toast({ title: "Refund failed", description: error.message, variant: "destructive" });
+    else {
+      toast({ title: "Order cancelled and refunded" });
+      await loadOrders();
+      if (tab === "route") void loadRouteOrders();
+    }
+  };
+
   // ---- Preparation actions ----
   const savePreparation = async (prepId: string, packedWeight: string, finalPrice: string) => {
     const { error } = await supabase
@@ -1028,6 +1048,26 @@ const AdminLakeFresh = () => {
     else {
       toast({ title: "Preparation saved" });
       await loadPreparations();
+      // Status automation: if all prep rows for the order are reconciled, move order to 'processing'
+      try {
+        const { data: prepRow } = await supabase.from("order_preparation").select("order_item_id").eq("id", prepId).maybeSingle();
+        if (prepRow?.order_item_id) {
+          const { data: item } = await supabase.from("order_items").select("order_id").eq("id", prepRow.order_item_id).maybeSingle();
+          if (item?.order_id) {
+            const { data: allPrep } = await supabase
+              .from("order_preparation")
+              .select("id, reconciled_at, order_item_id")
+              .in("order_item_id", (await supabase.from("order_items").select("id").eq("order_id", item.order_id)).data?.map((x: any) => x.id) || []);
+            const allDone = (allPrep || []).length > 0 && (allPrep || []).every((p: any) => p.reconciled_at);
+            if (allDone) {
+              await supabase.from("orders").update({ status: "processing" }).eq("id", item.order_id).eq("status", "confirmed");
+              await loadOrders();
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("status automation failed", e);
+      }
     }
   };
 
@@ -1998,6 +2038,14 @@ const AdminLakeFresh = () => {
                             className="text-xs font-bold text-[#39B54A]"
                           >
                             Mark paid
+                          </button>
+                        )}
+                        {o.payment_status === "paid" && o.status !== "cancelled" && (
+                          <button
+                            onClick={() => refundAndCancelOrder(o.id)}
+                            className="text-xs font-bold text-red-600"
+                          >
+                            Refund & cancel
                           </button>
                         )}
                       </td>
