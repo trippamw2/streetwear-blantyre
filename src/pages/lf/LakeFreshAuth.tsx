@@ -92,7 +92,7 @@ const LakeFreshAuth = () => {
       <SEO
         brand="lake-fresh"
         title="Sign in | Lake Fresh Fish Mart"
-        description="Sign in to order fresh fish for next day delivery in Blantyre."
+        description="Sign in to choose fresh fish, add a free recipe and follow your delivery in Blantyre."
       />
       <div className="container flex min-h-[70vh] max-w-md flex-col justify-center py-14">
         <div className="mb-6 text-center">
@@ -106,10 +106,13 @@ const LakeFreshAuth = () => {
           <h1 className="mt-6 font-display text-3xl font-extrabold tracking-tight text-[#073B78]">
             {mode === "signin" ? "Welcome back" : "Join Lake Fresh"}
           </h1>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-[#073B78]/60">
             {mode === "signin"
-              ? "Sign in to order fresh fish and track it."
-              : "Make an account to order fresh fish for your table."}
+              ? "Sign in to pick your fish, choose a free recipe and follow your delivery."
+              : "Make an account so your fish order and delivery details stay in one place."}
+          </p>
+          <p className="mt-2 text-xs text-[#073B78]/70">
+            We know lake fish and we keep your order simple from basket to door.
           </p>
         </div>
 
@@ -128,7 +131,7 @@ const LakeFreshAuth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lf-phone">Phone (WhatsApp)</Label>
+                  <Label htmlFor="lf-phone">Phone or WhatsApp</Label>
                   <Input
                     id="lf-phone"
                     type="tel"
@@ -174,7 +177,7 @@ const LakeFreshAuth = () => {
             </Button>
           </form>
 
-          <p className="mt-5 text-center text-sm text-gray-500">
+          <p className="mt-5 text-center text-sm text-[#073B78]/60">
             {mode === "signin" ? "New to Lake Fresh?" : "Already have an account?"}{" "}
             <button
               type="button"
@@ -186,7 +189,7 @@ const LakeFreshAuth = () => {
           </p>
         </div>
 
-        <p className="mt-5 text-center text-xs text-gray-400">
+        <p className="mt-5 text-center text-xs text-[#073B78]/50">
           <LFLink to="/lf" className="hover:text-[#073B78]">← Back to Lake Fresh</LFLink>
         </p>
       </div>

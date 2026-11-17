@@ -35,8 +35,8 @@ const LakeFreshLoyalty = () => {
             <h1 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
               LAKEFRESH REWARDS
             </h1>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-600">
-              Sign in to earn points on every order, unlock tiers and refer friends for more.
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#073B78]/70">
+              Sign in to earn points on every order and share your code with a friend.
             </p>
             <LFLink
               to="/lf/auth"
@@ -65,15 +65,16 @@ const LakeFreshLoyalty = () => {
             <Sparkles className="h-3.5 w-3.5" /> Every order counts
           </span>
           <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">REWARDS</h1>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Earn points on every Lake Fresh order, grow your tier and share your code to reward friends.
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#073B78]/70 sm:text-base">
+            Every fish order earns points. As you order more, you reach new rewards and can share your code with
+            friends.
           </p>
         </div>
       </section>
 
       <div className="container max-w-4xl py-10 sm:py-14">
         {loyaltyLoading ? (
-          <p className="flex items-center gap-2 text-sm text-gray-500">
+          <p className="flex items-center gap-2 text-sm text-[#073B78]/60">
             <Loader2 className="h-4 w-4 animate-spin text-[#39B54A]" /> Loading
           </p>
         ) : (
@@ -87,7 +88,7 @@ const LakeFreshLoyalty = () => {
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[#2c6e12]">Available points</p>
               </div>
               <p className="mt-3 text-3xl font-extrabold text-[#073B78]">{availablePoints}</p>
-              <p className="mt-1 text-xs capitalize text-gray-500">Tier: {tier}</p>
+              <p className="mt-1 text-xs capitalize text-[#073B78]/60">Tier: {tier}</p>
             </div>
 
             <div className="relative overflow-hidden rounded-2xl border border-[#08A9E8]/25 bg-[#EAF6FB] p-5">
@@ -99,7 +100,7 @@ const LakeFreshLoyalty = () => {
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/70">Lifetime spent</p>
               </div>
               <p className="mt-3 text-3xl font-extrabold text-[#073B78]">{formatMWK(lifetimeSpent)}</p>
-              <p className="mt-1 text-xs text-gray-500">Total points: {loyalty?.total_points ?? 0}</p>
+              <p className="mt-1 text-xs text-[#073B78]/60">Total points: {loyalty?.total_points ?? 0}</p>
             </div>
           </div>
         )}
@@ -108,7 +109,7 @@ const LakeFreshLoyalty = () => {
           <div className="mt-5 rounded-2xl border border-[#7ED321]/40 bg-gradient-to-br from-[#F4FBF7] to-white p-5">
             <p className="text-[10px] font-bold uppercase tracking-widest text-[#39B54A]">Active program</p>
             <p className="mt-2 font-display text-lg font-extrabold text-[#073B78]">{program.name}</p>
-            <p className="mt-1 text-sm leading-relaxed text-gray-600">{program.description}</p>
+            <p className="mt-1 text-sm leading-relaxed text-[#073B78]/70">{program.description}</p>
             <p className="mt-3 inline-flex flex-wrap gap-2 text-[11px] text-[#2c6e12]">
               <span className="rounded-full bg-white px-2.5 py-1 font-semibold shadow-sm">
                 1 point per {formatMWK(program.points_per_mwk)}
@@ -118,7 +119,7 @@ const LakeFreshLoyalty = () => {
               </span>
             </p>
             {nextTier ? (
-              <p className="mt-3 text-xs text-gray-500">
+              <p className="mt-3 text-xs text-[#073B78]/60">
                 Next tier: <span className="font-bold capitalize text-[#073B78]">{nextTier.name}</span> at{" "}
                 {nextTier.min_lifetime_points.toLocaleString()} lifetime points.
               </p>
@@ -140,8 +141,8 @@ const LakeFreshLoyalty = () => {
                   }`}
                 >
                   <p className="text-sm font-extrabold capitalize text-[#073B78]">{t.name}</p>
-                  <p className="mt-0.5 text-[11px] text-gray-500">{t.min_lifetime_points.toLocaleString()}+ points</p>
-                  <p className="mt-2 text-[11px] text-gray-600">{t.points_multiplier}x points</p>
+                  <p className="mt-0.5 text-[11px] text-[#073B78]/60">{t.min_lifetime_points.toLocaleString()}+ points</p>
+                  <p className="mt-2 text-[11px] text-[#073B78]/70">{t.points_multiplier}x points</p>
                   {t.discount_percent > 0 && (
                     <p className="text-[11px] font-semibold text-[#2c6e12]">{t.discount_percent}% off orders</p>
                   )}
@@ -159,7 +160,7 @@ const LakeFreshLoyalty = () => {
             </span>
             <p className="font-display text-lg font-extrabold text-[#073B78]">Refer a friend</p>
           </div>
-          <p className="mt-2 text-sm leading-relaxed text-gray-500">
+          <p className="mt-2 text-sm leading-relaxed text-[#073B78]/60">
             Share your code and you both earn points when their first order is paid.
           </p>
           <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -184,18 +185,18 @@ const LakeFreshLoyalty = () => {
             </button>
           </div>
           {referralCode ? (
-            <p className="mt-2 text-xs text-gray-500">
-              {stats.successfulReferrals} successful of {stats.totalReferrals} referrals ·{" "}
-              {stats.totalEarned.toLocaleString()} points earned
+            <p className="mt-2 text-xs text-[#073B78]/60">
+              {stats.successfulReferrals} paid orders from {stats.totalReferrals} friends.{" "}
+              {stats.totalEarned.toLocaleString()} points earned.
             </p>
           ) : null}
         </div>
 
         <div className="mt-6 flex flex-col justify-between gap-3 rounded-2xl bg-[#073B78] p-5 sm:flex-row sm:items-center">
           <div>
-            <p className="font-display text-base font-extrabold text-white">Ready for more points?</p>
+            <p className="font-display text-base font-extrabold text-white">Want more points?</p>
             <p className="mt-1 text-xs text-white/60">
-              Fresh fish, signature spices and your choice of one free recipe in every order.
+              Every order has fresh fish, spice blends and one free recipe of your choice.
             </p>
           </div>
           <LFLink

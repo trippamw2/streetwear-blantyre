@@ -68,7 +68,7 @@ const LakeFreshSubscribe = () => {
         callbackUrl: `${window.location.origin}/lf/subscribe?status=callback`,
         returnUrl: `${window.location.origin}/lf/subscribe?status=return`,
         title: "Lake Fresh Subscription",
-        description: `${form.plan} subscription · ${form.quantity_kg} kg · first payment`,
+        description: `First payment for ${form.plan} fish plan, ${form.quantity_kg} kg`,
       });
     } catch (err) {
       toast({ title: "Request failed", description: err instanceof Error ? err.message : "Please try again.", variant: "destructive" });
@@ -80,40 +80,44 @@ const LakeFreshSubscribe = () => {
     <div className="bg-white">
       <SEO brand="lake-fresh" title="Subscribe | Lake Fresh Fish Mart" description="Lake Fresh fish subscription plans." />
       <div className="container max-w-2xl py-10 sm:py-14">
-        <LFLink to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]">
+        <LFLink to="/lf" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60 hover:text-[#073B78]">
           <Repeat className="h-3.5 w-3.5" /> Lake Fresh
         </LFLink>
-        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">SUBSCRIBE</h1>
-        <p className="mt-2 text-sm text-gray-500">
-          Get fresh fish delivered on a recurring schedule. You pay for each delivery manually — no automatic charges.
+        <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">FISH ON YOUR DAYS</h1>
+        <p className="mt-2 text-sm text-[#073B78]/60">
+          Choose weekly, every 2 weeks or monthly. We pack your fish cold and bring it on the days you choose. You pay
+          each time. We never charge you on our own.
         </p>
+        <div className="mt-4 rounded-xl border border-[#39B54A]/30 bg-[#F4FBF7] p-3 text-xs text-[#073B78]/80">
+          Pick your fish, cut and area. We will remind you before each delivery. PayChangu keeps each payment safe.
+        </div>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Plan</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Plan</label>
             <select className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.plan} onChange={(e) => setForm({ ...form, plan: e.target.value })}>
               <option value="weekly">Weekly</option>
-              <option value="biweekly">Biweekly</option>
+              <option value="biweekly">Every 2 weeks</option>
               <option value="monthly">Monthly</option>
             </select>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Quantity (kg)</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Quantity (kg)</label>
               <input type="number" step="0.5" className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.quantity_kg} onChange={(e) => setForm({ ...form, quantity_kg: e.target.value })} />
             </div>
             <div>
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Preparation</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Cut</label>
               <select className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.preparation} onChange={(e) => setForm({ ...form, preparation: e.target.value })}>
                 <option value="whole">Whole</option>
                 <option value="cleaned">Cleaned</option>
-                <option value="portioned">Portioned</option>
+                <option value="portioned">Cut in pieces</option>
               </select>
             </div>
           </div>
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Delivery zone</label>
-            {zonesLoading && <p className="mt-1 text-xs text-gray-500">Loading delivery areas…</p>}
+            <label className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Delivery area</label>
+            {zonesLoading && <p className="mt-1 text-xs text-[#073B78]/60">Loading delivery areas…</p>}
             {zonesError && (
               <div className="mt-1 text-xs text-red-600">
                 Could not load delivery areas.{" "}
@@ -130,20 +134,20 @@ const LakeFreshSubscribe = () => {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Name *</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Name *</label>
               <input className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.customer_name} onChange={(e) => setForm({ ...form, customer_name: e.target.value })} />
             </div>
             <div>
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Phone *</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Phone *</label>
               <input className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.customer_phone} onChange={(e) => setForm({ ...form, customer_phone: e.target.value })} />
             </div>
           </div>
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Email</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Email</label>
             <input className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.customer_email} onChange={(e) => setForm({ ...form, customer_email: e.target.value })} />
           </div>
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Notes</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Notes</label>
             <textarea className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" rows={3} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
           </div>
 

@@ -63,7 +63,7 @@ export const FISH_PRODUCTS: FishProduct[] = [
     id: "fish-prod-chambo",
     speciesId: "fish-chambo",
     name: "Lake Fresh Chambo",
-    description: "Whole, cleaned or portioned Chambo. Priced per kilogram.",
+    description: "Whole, cleaned or cut in pieces. Priced per kilogram.",
     pricePerKgMwk: 4500,
     minOrderQtyKg: 0.5,
     preparationOptions: ["whole", "cleaned", "portioned"],

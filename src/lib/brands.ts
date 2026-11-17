@@ -19,7 +19,7 @@ export const BRANDS = {
     slug: "lake-fresh",
     name: "Lake Fresh Fish Mart",
     domain: "lakefreshmw.com",
-    tagline: "Fresh from the Lake. Ready for Your Table.",
+    tagline: "Fresh fish from Lake Malawi, made for your table.",
     currency: "MWK" as const,
     storefrontPath: "/lf",
     envPrefix: "LF",

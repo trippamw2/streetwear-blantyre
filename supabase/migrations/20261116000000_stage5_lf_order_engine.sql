@@ -60,7 +60,7 @@ select
   s.id,
   'Lake Fresh ' || s.name,
   case s.slug
-    when 'chambo' then 'Whole, cleaned or portioned Chambo, priced per kilogram.'
+    when 'chambo' then 'Whole, cleaned or cut in pieces. Priced per kilogram.'
     when 'ncheni-micheni' then 'Fresh Ncheni / Micheni, cleaned or whole, priced per kilogram.'
     when 'usipa' then 'Fresh Usipa, sold whole by weight.'
     else 'Fresh fish from Lake Malawi, priced per kilogram.'

@@ -4,6 +4,7 @@ import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
+import { lfDisplayCopy } from "@/lib/lfCopy";
 
 const accents = ["#39B54A", "#08A9E8", "#7ED321"];
 
@@ -36,23 +37,26 @@ const LakeFreshRecipes = () => {
             <BookOpen className="h-3.5 w-3.5" /> Cook it well
           </span>
           <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">RECIPES</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Learn how to clean, season and cook your fresh fish at home. Choose any recipe free with your fish order, 
-            it arrives with your basket.
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#073B78]/70 sm:text-base">
+            See how to cook fresh fish at home, one clear step at a time. Pick a free recipe on the fish page and we add
+            it to your order.
           </p>
           <div className="mt-6 inline-flex items-start gap-3 rounded-2xl border border-[#7ED321]/40 bg-white px-4 py-3">
             <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-[#39B54A]" />
             <div>
               <p className="text-xs font-extrabold uppercase tracking-wide text-[#073B78]">Free with every fish</p>
-              <p className="mt-0.5 text-xs text-gray-500">Pick a recipe on the fish page and it travels with your order.</p>
+              <p className="mt-0.5 text-xs text-[#073B78]/60">Pick a recipe on the fish page and it travels with your order.</p>
             </div>
           </div>
+          <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#073B78] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-white">
+            <Fish className="h-3.5 w-3.5 text-[#7ED321]" /> Our recipes are made for Lake Malawi fish
+          </p>
         </div>
       </section>
 
       <section className="container max-w-6xl py-12 sm:py-16">
         {isLoading ? (
-          <p className="flex items-center gap-2 py-10 text-sm text-gray-500">
+          <p className="flex items-center gap-2 py-10 text-sm text-[#073B78]/60">
             <Loader2 className="h-4 w-4 animate-spin text-[#08A9E8]" /> Loading recipes…
           </p>
         ) : (
@@ -89,14 +93,14 @@ const LakeFreshRecipes = () => {
 
                   <div className="flex flex-1 flex-col p-5">
                     <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#39B54A]">
-                      <Fish className="h-3.5 w-3.5" /> {r.fish_species?.name || "Fish recipe"}
+                      <Fish className="h-3.5 w-3.5" /> {lfDisplayCopy(r.fish_species?.name) || "Fish recipe"}
                     </p>
-                    <h3 className="mt-2 font-display text-lg font-extrabold text-[#073B78]">{r.title}</h3>
+                    <h3 className="mt-2 font-display text-lg font-extrabold text-[#073B78]">{lfDisplayCopy(r.title)}</h3>
 
-                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-gray-600">
+                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-[#073B78]/70">
                       {r.prep_time_min ? (
                         <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 px-2.5 py-1">
-                          <Clock className="h-3.5 w-3.5 text-[#08A9E8]" /> Prep {r.prep_time_min}m
+                          <Clock className="h-3.5 w-3.5 text-[#08A9E8]" /> Get ready {r.prep_time_min}m
                         </span>
                       ) : null}
                       {r.cook_time_min ? (
@@ -117,7 +121,7 @@ const LakeFreshRecipes = () => {
                           className="inline-block rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest"
                           style={{ backgroundColor: `${accent}14`, color: accent }}
                         >
-                          {r.cooking_method}
+                          {lfDisplayCopy(r.cooking_method)}
                         </span>
                       ) : (
                         <span />
@@ -131,7 +135,7 @@ const LakeFreshRecipes = () => {
               );
             })}
             {(data || []).length === 0 && (
-              <p className="col-span-full py-10 text-center text-sm text-gray-500">No recipes published yet.</p>
+              <p className="col-span-full py-10 text-center text-sm text-[#073B78]/60">No recipes published yet.</p>
             )}
           </div>
         )}

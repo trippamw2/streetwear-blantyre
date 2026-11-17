@@ -19,29 +19,29 @@ import { toast } from "@/hooks/use-toast";
 
 const benefits = [
   {
-    title: "Wholesale pricing",
-    copy: "Volume rates quoted per order, per kilogram, no guesswork.",
+    title: "Good value for bulk orders",
+    copy: "Tell us what you need and we give you a clear price per kilogram.",
     icon: FileText,
     accent: "#39B54A",
     tint: "#F2FBEE",
   },
   {
-    title: "Reliable supply",
-    copy: "Planned catch windows keep your kitchen stocked.",
+    title: "Fish when you need it",
+    copy: "We plan each catch with your kitchen in mind.",
     icon: Truck,
     accent: "#08A9E8",
     tint: "#EAF6FB",
   },
   {
-    title: "Cold chain fresh",
-    copy: "Handled cold from the lake to your door.",
+    title: "Packed cold",
+    copy: "We clean, weigh and pack your fish cold before it leaves us.",
     icon: Snowflake,
     accent: "#073B78",
     tint: "#EAF6FB",
   },
   {
-    title: "Dedicated contact",
-    copy: "One point of contact for quotes, orders and delivery.",
+    title: "One friendly contact",
+    copy: "Talk to one person about quotes, orders and delivery.",
     icon: Users,
     accent: "#7ED321",
     tint: "#F7FCEB",
@@ -49,8 +49,8 @@ const benefits = [
 ];
 
 const fieldClass =
-  "mt-1 w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm text-[#073B78] outline-none transition-colors placeholder:text-gray-400 focus:border-[#08A9E8] focus:ring-2 focus:ring-[#08A9E8]/20";
-const labelClass = "text-[10px] font-bold uppercase tracking-widest text-gray-500";
+  "mt-1 w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm text-[#073B78] outline-none transition-colors placeholder:text-[#073B78]/50 focus:border-[#08A9E8] focus:ring-2 focus:ring-[#08A9E8]/20";
+const labelClass = "text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60";
 
 const LakeFreshPro = () => {
   const { user } = useAuth();
@@ -154,7 +154,7 @@ const LakeFreshPro = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title="LakeFresh PRO | Wholesale & Business Supply" description="Lake Fresh PRO for restaurants, hotels and food businesses: wholesale fish supply, volume pricing and reliable cold chain delivery across Blantyre." />
+      <SEO brand="lake-fresh" title="LakeFresh PRO | Fish for Business" description="Fresh fish supply for restaurants, hotels and food businesses. Clear prices, cold packing and delivery in Blantyre." />
 
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
@@ -168,7 +168,7 @@ const LakeFreshPro = () => {
         <div className="container relative max-w-5xl py-12 sm:py-16">
           <LFLink
             to="/lf"
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 transition-colors hover:text-[#073B78]"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60 transition-colors hover:text-[#073B78]"
           >
             <Building2 className="h-3.5 w-3.5" /> Lake Fresh
           </LFLink>
@@ -178,19 +178,22 @@ const LakeFreshPro = () => {
           <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">
             LAKEFRESH <span className="bg-gradient-to-r from-[#39B54A] to-[#08A9E8] bg-clip-text text-transparent">PRO</span>
           </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Wholesale fish supply for restaurants, hotels, lodges, caterers and food businesses. Register your account
-            or request a volume quote, we handle the rest.
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#073B78]/70 sm:text-base">
+            Your kitchen needs fresh fish you can count on. We know lake fish, and we clean, weigh and pack every order
+            with care. Register your business or ask for a price, and we will guide you from there.
+          </p>
+          <p className="mt-3 max-w-2xl text-xs font-bold text-[#073B78]/70">
+            We supply restaurants, hotels, lodges, caterers and food shops across Blantyre.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#39B54A]/30 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]">
-              <CheckCircle2 className="h-3.5 w-3.5 text-[#39B54A]" /> Volume pricing
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#39B54A]" /> Clear prices
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#08A9E8]/30 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#073B78]">
-              <Truck className="h-3.5 w-3.5 text-[#08A9E8]" /> Scheduled delivery
+              <Truck className="h-3.5 w-3.5 text-[#08A9E8]" /> Delivery on your day
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#7ED321]/40 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#2c6e12]">
-              <Snowflake className="h-3.5 w-3.5 text-[#7ED321]" /> Cold chain fresh
+              <Snowflake className="h-3.5 w-3.5 text-[#7ED321]" /> Packed cold
             </span>
           </div>
         </div>
@@ -210,7 +213,7 @@ const LakeFreshPro = () => {
               <p className="mt-3 font-display text-sm font-extrabold uppercase tracking-wide text-[#073B78]">
                 {benefit.title}
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-gray-500">{benefit.copy}</p>
+              <p className="mt-1 text-xs leading-relaxed text-[#073B78]/60">{benefit.copy}</p>
             </div>
           ))}
         </div>
@@ -226,7 +229,7 @@ const LakeFreshPro = () => {
               className={`-mb-px inline-flex items-center gap-2 border-b-2 px-4 py-3 text-[11px] font-extrabold uppercase tracking-widest transition-colors ${
                 tab === "register"
                   ? "border-[#39B54A] text-[#073B78]"
-                  : "border-transparent text-gray-500 hover:text-[#073B78]"
+                  : "border-transparent text-[#073B78]/60 hover:text-[#073B78]"
               }`}
             >
               <Building2 className={`h-3.5 w-3.5 ${tab === "register" ? "text-[#39B54A]" : ""}`} />
@@ -238,7 +241,7 @@ const LakeFreshPro = () => {
               className={`-mb-px inline-flex items-center gap-2 border-b-2 px-4 py-3 text-[11px] font-extrabold uppercase tracking-widest transition-colors ${
                 tab === "quote"
                   ? "border-[#08A9E8] text-[#073B78]"
-                  : "border-transparent text-gray-500 hover:text-[#073B78]"
+                  : "border-transparent text-[#073B78]/60 hover:text-[#073B78]"
               }`}
             >
               <FileText className={`h-3.5 w-3.5 ${tab === "quote" ? "text-[#08A9E8]" : ""}`} />
@@ -383,7 +386,7 @@ const LakeFreshPro = () => {
         <div className="mt-6 flex flex-col justify-between gap-3 rounded-2xl bg-[#073B78] p-5 sm:flex-row sm:items-center">
           <div>
             <p className="font-display text-base font-extrabold text-white">Not a business? Shop the catch.</p>
-            <p className="mt-1 text-xs text-white/60">Priced per kilogram, with signature spices and a free recipe.</p>
+            <p className="mt-1 text-xs text-white/60">Choose your fish, add a spice blend and get one free recipe.</p>
           </div>
           <LFLink
             to="/lf/fish"

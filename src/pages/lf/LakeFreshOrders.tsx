@@ -7,12 +7,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { formatDeliveryDate } from "@/lib/lfDelivery";
 import { formatMWK } from "@/data/products";
+import { formatLakeFreshPaymentRef } from "@/lib/lfPayments";
 
 const statusLabel = (status: string) =>
   ({
     new: "Pending payment",
     confirmed: "Payment confirmed",
-    processing: "Preparing",
+    processing: "Packing your fish",
     dispatched: "Out for delivery",
     delivered: "Delivered",
     cancelled: "Cancelled",
@@ -48,10 +49,10 @@ const LakeFreshOrders = () => {
       <SEO brand="lake-fresh" title="My Orders | Lake Fresh Fish Mart" description="Track your Lake Fresh fish orders." />
       <div className="container max-w-3xl py-10 sm:py-14">
         <h1 className="font-display text-4xl font-extrabold tracking-tight text-[#073B78]">MY ORDERS</h1>
-        <p className="mt-2 text-sm text-gray-500">Next day fish orders and their delivery dates.</p>
+        <p className="mt-2 text-sm text-[#073B78]/60">Next day fish orders and their delivery dates.</p>
 
         {isLoading && (
-          <p className="mt-8 flex items-center gap-2 text-sm text-gray-500">
+          <p className="mt-8 flex items-center gap-2 text-sm text-[#073B78]/60">
             <Loader2 className="h-4 w-4 animate-spin" /> Loading orders…
           </p>
         )}
@@ -67,9 +68,9 @@ const LakeFreshOrders = () => {
 
         {!isLoading && !isError && orders && orders.length === 0 && (
           <div className="mt-10 rounded-2xl border border-gray-200 p-10 text-center">
-            <Fish className="mx-auto h-10 w-10 text-gray-300" />
+            <Fish className="mx-auto h-10 w-10 text-[#073B78]/40" />
             <p className="mt-3 font-display text-xl font-extrabold text-[#073B78]">No orders yet</p>
-            <p className="mt-1 text-sm text-gray-500">Your Lake Fresh orders will appear here.</p>
+            <p className="mt-1 text-sm text-[#073B78]/60">Your Lake Fresh orders will appear here.</p>
             <LFLink
               to="/lf/fish"
               className="mt-5 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white"
@@ -88,13 +89,13 @@ const LakeFreshOrders = () => {
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="font-mono text-xs font-bold text-gray-500">
-                    {order.payment_reference || `LF-${order.id.slice(0, 8).toUpperCase()}`}
+                  <p className="font-mono text-xs font-bold text-[#073B78]/60">
+                    {formatLakeFreshPaymentRef(order.payment_reference) || `LF ${order.id.slice(0, 8).toUpperCase()}`}
                   </p>
                   <p className="mt-1 font-display text-lg font-extrabold text-[#073B78]">
                     {formatMWK(order.total_mwk)}
                   </p>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-[#073B78]/60">
                     {order.delivery_date
                       ? `Delivery ${formatDeliveryDate(order.delivery_date)}`
                       : "Delivery date pending"}
@@ -104,7 +105,7 @@ const LakeFreshOrders = () => {
                   <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${statusTone(order.status)}`}>
                     {statusLabel(order.status)}
                   </span>
-                  <ArrowRight className="h-4 w-4 text-gray-400" />
+                  <ArrowRight className="h-4 w-4 text-[#073B78]/50" />
                 </div>
               </div>
             </LFLink>

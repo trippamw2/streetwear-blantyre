@@ -30,17 +30,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
 const prepLabel = (value: string) =>
-  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Portioned" : value;
+  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cut in pieces" : value;
 
 const itemLine = (item: LakeFreshCartItem) => {
   if (item.kind === "unit") {
     return {
-      detail: `${item.quantity || 1} pack${item.quantity === 1 ? "" : "s"}${item.unit ? ` · ${item.unit}` : ""}`,
+      detail: `${item.quantity || 1} pack${item.quantity === 1 ? "" : "s"}${item.unit ? `. ${item.unit}` : ""}`,
       total: (item.unitPriceMwk || 0) * (item.quantity || 1),
     };
   }
   return {
-    detail: `${getEffectiveWeightKg(item.weightKg || 0, item.minOrderQtyKg || 0.5).toFixed(1)} kg · ${prepLabel(item.preparation || "whole")}`,
+    detail: `${getEffectiveWeightKg(item.weightKg || 0, item.minOrderQtyKg || 0.5).toFixed(1)} kg. ${prepLabel(item.preparation || "whole")}`,
     total: calculateFinalPrice(item.pricePerKgMwk || 0, item.weightKg || 0, item.minOrderQtyKg || 0.5),
   };
 };
@@ -325,7 +325,7 @@ const LakeFreshCheckout = () => {
           items: emailItems,
           total: payableTotal,
           location: selectedZone?.name || "",
-          deliveryMethod: selectedSlot ? `Next day · ${selectedSlot.deliveryDate}` : "Next day delivery",
+          deliveryMethod: selectedSlot ? `Next day. ${selectedSlot.deliveryDate}` : "Next day delivery",
           type: "confirmation",
           brand: "lake-fresh",
           recipes: recipePdfs,
@@ -414,7 +414,7 @@ const LakeFreshCheckout = () => {
         <button
           type="button"
           onClick={() => navigate("/lf/cart")}
-          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60 hover:text-[#073B78]"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to basket
         </button>
@@ -424,7 +424,9 @@ const LakeFreshCheckout = () => {
             <h1 className="font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
               Finish your order
             </h1>
-            <p className="mt-2 text-sm text-gray-600">Three short steps. Delivery area and date are already picked for you.</p>
+            <p className="mt-2 text-sm text-[#073B78]/70">
+              Three short steps. You choose where and when to get your fish, then pay with PayChangu.
+            </p>
           </div>
           <div className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-sm">
             {steps.map((s, index) => (
@@ -438,7 +440,7 @@ const LakeFreshCheckout = () => {
                       ? "bg-[#073B78] text-white"
                       : index < step
                         ? "bg-[#7ED321]/15 text-[#2c6e12]"
-                        : "bg-gray-50 text-gray-500"
+                        : "bg-gray-50 text-[#073B78]/60"
                   }`}
                 >
                   <s.icon className="h-3 w-3" /> {s.label}
@@ -460,7 +462,7 @@ const LakeFreshCheckout = () => {
               <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
                 <Fish className="h-4 w-4 text-[#39B54A]" /> Your basket
               </h2>
-              <p className="mt-1 text-xs text-gray-500">Fresh fish, signature spices and one free recipe. Delivery is next day.</p>
+              <p className="mt-1 text-xs text-[#073B78]/60">Fresh fish, spice blends and one free recipe. Delivery is next day.</p>
 
               <div className="mt-4 space-y-3">
                 {items.map((item) => {
@@ -469,9 +471,9 @@ const LakeFreshCheckout = () => {
                     <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                       <div>
                         <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-[#073B78]/60">
                           {line.detail}
-                          {item.recipeTitle ? ` · free recipe: ${item.recipeTitle}` : ""}
+                          {item.recipeTitle ? `. Free recipe: ${item.recipeTitle}` : ""}
                         </p>
                       </div>
                       <span className="font-semibold text-[#073B78]">{formatMWK(line.total)}</span>
@@ -481,16 +483,16 @@ const LakeFreshCheckout = () => {
               </div>
 
               <div className="mt-4 space-y-2 border-t border-gray-100 pt-4 text-sm">
-                <div className="flex justify-between text-gray-600">
-                  <span>Subtotal · {totalWeight.toFixed(1)} kg</span>
+                <div className="flex justify-between text-[#073B78]/70">
+                  <span>Fish and spices, {totalWeight.toFixed(1)} kg</span>
                   <span>{formatMWK(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-[#073B78]/70">
                   <span>Delivery</span>
                   <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                 </div>
                 <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
-                  <span>Estimated total</span>
+                  <span>Your total so far</span>
                   <span>{formatMWK(estimatedTotal)}</span>
                 </div>
               </div>
@@ -498,7 +500,7 @@ const LakeFreshCheckout = () => {
               {minOrderBlocked && selectedZone && (
                 <p className="mt-3 flex items-start gap-2 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
                   <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  Add {formatMWK(selectedZone.minOrderMwk - subtotal)} more to meet the {selectedZone.name} minimum order.
+                  Add {formatMWK(selectedZone.minOrderMwk - subtotal)} more to reach the {selectedZone.name} minimum.
                 </p>
               )}
 
@@ -521,7 +523,7 @@ const LakeFreshCheckout = () => {
                       <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                         <div>
                           <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
-                          <p className="text-xs text-gray-500">{line.detail}</p>
+                          <p className="text-xs text-[#073B78]/60">{line.detail}</p>
                         </div>
                         <span className="font-semibold text-[#073B78]">{formatMWK(line.total)}</span>
                       </div>
@@ -529,16 +531,16 @@ const LakeFreshCheckout = () => {
                   })}
                 </div>
                 <div className="mt-4 space-y-2 border-t border-gray-100 pt-4 text-sm">
-                  <div className="flex justify-between text-gray-600">
-                    <span>Subtotal · {totalWeight.toFixed(1)} kg</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Fish and spices, {totalWeight.toFixed(1)} kg</span>
                     <span>{formatMWK(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Delivery{selectedZone ? ` to ${selectedZone.name}` : ""}</span>
                     <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                   </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Insulated ice-box packaging</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Cold box packing</span>
                     <span className="text-[#39B54A] font-bold">Free</span>
                   </div>
                   <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
@@ -564,7 +566,7 @@ const LakeFreshCheckout = () => {
                 <h2 className="font-display text-lg font-extrabold text-[#073B78]">Your details</h2>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   <label className="block">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Full name *</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Full name *</span>
                     <input
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -575,7 +577,7 @@ const LakeFreshCheckout = () => {
                     />
                   </label>
                   <label className="block">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Phone / WhatsApp *</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Phone or WhatsApp *</span>
                     <input
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
@@ -588,7 +590,7 @@ const LakeFreshCheckout = () => {
                   </label>
                 </div>
                 <label className="mt-4 block">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">House number</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">House number</span>
                   <input
                     value={houseNumber}
                     onChange={(e) => setHouseNumber(e.target.value)}
@@ -598,7 +600,7 @@ const LakeFreshCheckout = () => {
                   />
                 </label>
                 <label className="mt-4 block">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Street name</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Street name</span>
                   <input
                     value={streetName}
                     onChange={(e) => setStreetName(e.target.value)}
@@ -608,8 +610,8 @@ const LakeFreshCheckout = () => {
                   />
                 </label>
                 <div className="mt-4">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Pin your exact location on the map</span>
-                  <p className="mt-1 text-xs text-gray-500">Tap the map to drop a pin. We use it to plan the fastest delivery route.</p>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Pin your exact location on the map</span>
+                  <p className="mt-1 text-xs text-[#073B78]/60">Tap the map to drop a pin. We use it to plan the fastest delivery route.</p>
                   <div className="mt-2 overflow-hidden rounded-xl border border-gray-200">
                     <LeafletMap
                       center={deliveryLat && deliveryLng ? [deliveryLat, deliveryLng] : [-15.7861, 35.0058]}
@@ -620,14 +622,14 @@ const LakeFreshCheckout = () => {
                     />
                   </div>
                   {deliveryLat && deliveryLng && (
-                    <p className="mt-2 text-xs text-gray-600">
+                    <p className="mt-2 text-xs text-[#073B78]/70">
                       Pinned: {deliveryLat.toFixed(5)}, {deliveryLng.toFixed(5)}
-                      {deliveryPlace ? ` · ${deliveryPlace}` : ""}
+                      {deliveryPlace ? `. ${deliveryPlace}` : ""}
                     </p>
                   )}
                 </div>
                 <label className="mt-4 block">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">
                     Nearest landmark and gate directions *
                   </span>
                   <textarea
@@ -639,12 +641,12 @@ const LakeFreshCheckout = () => {
                     className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
                     placeholder="e.g. Opposite the blue gate, near the Shoprite junction"
                   />
-                  <span className="mt-1 block text-[11px] text-gray-500">
+                  <span className="mt-1 block text-[11px] text-[#073B78]/60">
                     This helps our rider find you fast.
                   </span>
                 </label>
                 <label className="mt-4 block">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Other delivery notes (optional)</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Other notes for the rider</span>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
@@ -654,14 +656,14 @@ const LakeFreshCheckout = () => {
                     placeholder="Anything else our rider should know"
                   />
                 </label>
-                <label className="mt-4 flex items-start gap-2 text-xs text-gray-600">
+                <label className="mt-4 flex items-start gap-2 text-xs text-[#073B78]/70">
                   <input
                     type="checkbox"
                     checked={marketingConsent}
                     onChange={(e) => setMarketingConsent(e.target.checked)}
                     className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#073B78]"
                   />
-                  Send me occasional Lake Fresh offers. This consent is separate from SB Streetwear.
+                  Send me occasional Lake Fresh offers. We do not share this with other brands.
                 </label>
               </section>
 
@@ -671,7 +673,7 @@ const LakeFreshCheckout = () => {
                 </h2>
 
                 {zonesLoading && (
-                  <p className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+                  <p className="mt-3 flex items-center gap-2 text-sm text-[#073B78]/60">
                     <Loader2 className="h-4 w-4 animate-spin" /> Loading delivery areas…
                   </p>
                 )}
@@ -701,9 +703,9 @@ const LakeFreshCheckout = () => {
                           }`}
                         >
                           <span className="block text-sm font-bold">{zone.name}</span>
-                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
+                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-[#073B78]/60"}`}>
                             Delivery {zone.baseFeeMwk > 0 ? formatMWK(zone.baseFeeMwk) : "free"}
-                            {zone.minOrderMwk > 0 ? ` · min ${formatMWK(zone.minOrderMwk)}` : ""}
+                            {zone.minOrderMwk > 0 ? `. At least ${formatMWK(zone.minOrderMwk)}` : ""}
                           </span>
                         </button>
                       );
@@ -716,14 +718,14 @@ const LakeFreshCheckout = () => {
                 <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
                   <CalendarDays className="h-4 w-4 text-[#08A9E8]" /> Delivery date
                 </h2>
-                <p className="mt-1 text-xs text-gray-500">
-                  Orders placed before {formatCutoff(deliveryConfig.cutoff)} qualify for next day delivery.
+                <p className="mt-1 text-xs text-[#073B78]/60">
+                  Order before {formatCutoff(deliveryConfig.cutoff)} and we bring your fish the next day.
                 </p>
 
-                {!zoneId && <p className="mt-3 text-sm text-gray-500">Choose a delivery area first.</p>}
+                {!zoneId && <p className="mt-3 text-sm text-[#073B78]/60">Choose a delivery area first.</p>}
 
                 {zoneId && slotsLoading && (
-                  <p className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+                  <p className="mt-3 flex items-center gap-2 text-sm text-[#073B78]/60">
                     <Loader2 className="h-4 w-4 animate-spin" /> Loading delivery calendar…
                   </p>
                 )}
@@ -739,7 +741,7 @@ const LakeFreshCheckout = () => {
                       const status = !slot
                         ? "Unavailable"
                         : cutoffPassed
-                          ? "Cutoff passed"
+                          ? "Order time passed"
                           : full
                             ? "Full"
                             : slot.bookedOrders >= slot.capacityOrders
@@ -759,10 +761,10 @@ const LakeFreshCheckout = () => {
                           }`}
                         >
                           <span className="block text-sm font-bold">{formatDeliveryDate(date)}</span>
-                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
+                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-[#073B78]/60"}`}>
                             {status}
                             {slot && status === "Available"
-                              ? ` · ${Math.max(0, slot.capacityOrders - slot.bookedOrders)} orders left`
+                              ? `. ${Math.max(0, slot.capacityOrders - slot.bookedOrders)} places left`
                               : ""}
                           </span>
                         </button>
@@ -782,10 +784,10 @@ const LakeFreshCheckout = () => {
                 <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
                   <Clock className="h-4 w-4 text-[#08A9E8]" /> Delivery window *
                 </h2>
-                <p className="mt-1 text-xs text-gray-500">Choose when you would like your fish delivered.</p>
+                <p className="mt-1 text-xs text-[#073B78]/60">Choose when you would like your fish delivered.</p>
                 {selectedSlot && new Date(selectedSlot.cutoffAt).getTime() <= Date.now() ? (
                   <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                    The order cutoff for this day has passed. Pick another delivery date.
+                    It is too late for this day. Pick another delivery day.
                   </p>
                 ) : (
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -806,7 +808,7 @@ const LakeFreshCheckout = () => {
                           }`}
                         >
                           <span className="block text-sm font-bold">{option.label}</span>
-                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
+                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-[#073B78]/60"}`}>
                             {option.time}
                           </span>
                         </button>
@@ -827,7 +829,7 @@ const LakeFreshCheckout = () => {
                       <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                         <div>
                           <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
-                          <p className="text-xs text-gray-500">{line.detail}</p>
+                          <p className="text-xs text-[#073B78]/60">{line.detail}</p>
                         </div>
                         <span className="font-semibold text-[#073B78]">{formatMWK(line.total)}</span>
                       </div>
@@ -835,16 +837,16 @@ const LakeFreshCheckout = () => {
                   })}
                 </div>
                 <div className="mt-4 space-y-2 border-t border-gray-100 pt-4 text-sm">
-                  <div className="flex justify-between text-gray-600">
-                    <span>Subtotal · {totalWeight.toFixed(1)} kg</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Fish and spices, {totalWeight.toFixed(1)} kg</span>
                     <span>{formatMWK(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Delivery{selectedZone ? ` to ${selectedZone.name}` : ""}</span>
                     <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                   </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Insulated ice-box packaging</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Cold box packing</span>
                     <span className="text-[#39B54A] font-bold">Free</span>
                   </div>
                   <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">
@@ -869,9 +871,9 @@ const LakeFreshCheckout = () => {
                   <div className="flex items-center justify-between gap-3 rounded-xl bg-[#F6FBFD] p-3">
                     <div>
                       <p className="text-sm font-bold text-[#073B78]">Your points</p>
-                      <p className="text-xs text-gray-600">
+                      <p className="text-xs text-[#073B78]/70">
                         {availablePoints} points available
-                        {program ? ` · ${program.points_to_redeem} points = ${formatMWK(program.reward_value_mwk)} off` : ""}
+                        {program ? `. ${program.points_to_redeem} points give ${formatMWK(program.reward_value_mwk)} off` : ""}
                       </p>
                     </div>
                     <button
@@ -892,7 +894,7 @@ const LakeFreshCheckout = () => {
                   )}
 
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">
                       Promo code
                     </label>
                     <div className="mt-1.5 flex gap-2">
@@ -929,10 +931,12 @@ const LakeFreshCheckout = () => {
                 </h2>
                 <div className="mt-3 rounded-xl bg-gray-50 p-4">
                   <p className="text-sm font-bold text-[#073B78]">Pay online via PayChangu</p>
-                  <p className="mt-1 text-xs text-gray-500">Airtel Money · TNM Mpamba · Visa · Mastercard</p>
-                  <p className="mt-2 text-xs text-gray-500">
-                    You will be redirected to PayChangu after placing the order. Your order is only marked paid after
-                    the payment provider confirms it.
+                  <p className="mt-1 text-xs text-[#073B78]/60">
+                    Pay with Airtel Money, TNM Mpamba, Visa or Mastercard.
+                  </p>
+                  <p className="mt-2 text-xs text-[#073B78]/60">
+                    After you place the order, we take you to PayChangu. Your order is paid only after PayChangu
+                    confirms it.
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {["Airtel Money", "TNM Mpamba", "Visa", "Mastercard", "Bank transfer"].map((m) => (
@@ -942,7 +946,7 @@ const LakeFreshCheckout = () => {
                     ))}
                   </div>
                   <p className="mt-3 text-xs font-semibold text-[#39B54A]">
-                    Instant payment confirmation · Protected by our 100% freshness or full refund guarantee.
+                    PayChangu confirms payments quickly. If your fish is not fresh, we replace it or refund you.
                   </p>
                 </div>
               </section>
@@ -958,7 +962,7 @@ const LakeFreshCheckout = () => {
                       <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                         <div>
                           <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
-                          <p className="text-xs text-gray-500">{line.detail}</p>
+                          <p className="text-xs text-[#073B78]/60">{line.detail}</p>
                         </div>
                         <span className="font-semibold text-[#073B78]">{formatMWK(line.total)}</span>
                       </div>
@@ -967,16 +971,16 @@ const LakeFreshCheckout = () => {
                 </div>
 
                 <div className="mt-4 space-y-2 border-t border-gray-100 pt-4 text-sm">
-                  <div className="flex justify-between text-gray-600">
-                    <span>Subtotal · {totalWeight.toFixed(1)} kg</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Fish and spices, {totalWeight.toFixed(1)} kg</span>
                     <span>{formatMWK(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Delivery{selectedZone ? ` · ${selectedZone.name}` : ""}</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Delivery{selectedZone ? ` to ${selectedZone.name}` : ""}</span>
                     <span>{deliveryFee === 0 ? "Free" : formatMWK(deliveryFee)}</span>
                   </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Insulated ice-box packaging</span>
+                  <div className="flex justify-between text-[#073B78]/70">
+                    <span>Cold box packing</span>
                     <span className="text-[#39B54A] font-bold">Free</span>
                   </div>
                   {loyaltyPreview > 0 && (
@@ -1000,7 +1004,7 @@ const LakeFreshCheckout = () => {
                 {minOrderBlocked && selectedZone && (
                   <p className="mt-3 flex items-start gap-2 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
                     <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                    Add {formatMWK(selectedZone.minOrderMwk - subtotal)} more to meet the {selectedZone.name} minimum order.
+                    Add {formatMWK(selectedZone.minOrderMwk - subtotal)} more to reach the {selectedZone.name} minimum.
                   </p>
                 )}
 
@@ -1013,17 +1017,17 @@ const LakeFreshCheckout = () => {
                   {submitting ? "Placing order…" : `Pay ${formatMWK(estimatedTotal)}`}
                 </button>
 
-                <p className="mt-3 flex items-start gap-2 text-[11px] text-gray-500">
+                <p className="mt-3 flex items-start gap-2 text-[11px] text-[#073B78]/60">
                   <Snowflake className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
-                  You authorize the estimated total. We confirm packed weight before final settlement and will never
-                  silently charge more than you authorized.
+                  We use the estimated weight for payment. We weigh the fish when we pack it and tell you if the price
+                  changes. We never charge more than you agreed.
                 </p>
-                <p className="mt-2 flex items-start gap-2 text-[11px] text-gray-500">
+                <p className="mt-2 flex items-start gap-2 text-[11px] text-[#073B78]/60">
                   <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#073B78]/60" />
-                  Stock is reserved when the order is created. If capacity changed, you will be asked to pick another
-                  slot.
+                  We keep your fish aside when you place the order. If that day is full, we ask you to choose another
+                  day.
                 </p>
-                <p className="mt-3 text-center text-[11px] text-gray-500">
+                <p className="mt-3 text-center text-[11px] text-[#073B78]/60">
                   Already ordered?{" "}
                   <LFLink to="/lf/track" className="font-bold text-[#073B78] underline">
                     Track your order

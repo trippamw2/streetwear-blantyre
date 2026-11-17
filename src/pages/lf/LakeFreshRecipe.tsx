@@ -9,6 +9,7 @@ import { LF_BRAND_ID, useLakeFreshCatalog } from "@/hooks/useLakeFresh";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
+import { lfDisplayCopy } from "@/lib/lfCopy";
 
 type ShopItem = {
   id: string;
@@ -78,8 +79,12 @@ const LakeFreshRecipe = () => {
     },
   });
 
-  const ingredients = Array.isArray(data?.ingredients) ? (data.ingredients as string[]) : [];
-  const steps = Array.isArray(data?.steps) ? (data.steps as string[]) : [];
+  const ingredients = Array.isArray(data?.ingredients)
+    ? (data.ingredients as string[]).map((value) => lfDisplayCopy(value))
+    : [];
+  const steps = Array.isArray(data?.steps)
+    ? (data.steps as string[]).map((value) => lfDisplayCopy(value))
+    : [];
   const stepAccents = ["#39B54A", "#08A9E8", "#7ED321"];
 
   // Build shoppable items by matching ingredient lines to live catalogue products.
@@ -195,7 +200,7 @@ const LakeFreshRecipe = () => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center gap-3 text-sm text-gray-500">
+      <div className="flex min-h-[50vh] items-center justify-center gap-3 text-sm text-[#073B78]/60">
         <Loader2 className="h-5 w-5 animate-spin text-[#08A9E8]" /> Loading recipe…
       </div>
     );
@@ -204,9 +209,9 @@ const LakeFreshRecipe = () => {
   if (isError || !data) {
     return (
       <div className="container max-w-lg py-20 text-center">
-        <BookOpen className="mx-auto h-10 w-10 text-gray-300" />
+        <BookOpen className="mx-auto h-10 w-10 text-[#073B78]/40" />
         <h1 className="mt-4 font-display text-2xl font-extrabold text-[#073B78]">Recipe not available</h1>
-        <p className="mt-2 text-sm text-gray-500">{error instanceof Error ? error.message : "We could not load this recipe."}</p>
+        <p className="mt-2 text-sm text-[#073B78]/60">{error instanceof Error ? error.message : "We could not load this recipe."}</p>
         <LFLink
           to="/lf/recipes"
           className="mt-6 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-white"
@@ -219,13 +224,13 @@ const LakeFreshRecipe = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title={`${data.title} | Lake Fresh Fish Mart`} description="Lake Fresh fish recipe." />
+      <SEO brand="lake-fresh" title={`${lfDisplayCopy(data.title)} | Lake Fresh Fish Mart`} description="Lake Fresh fish recipe." />
 
       <section className="border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
         <div className="container max-w-4xl py-10 sm:py-14">
           <LFLink
             to="/lf/recipes"
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60 hover:text-[#073B78]"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> All recipes
           </LFLink>
@@ -244,16 +249,16 @@ const LakeFreshRecipe = () => {
 
             <div>
               <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#39B54A]">
-                <Fish className="h-3.5 w-3.5" /> {data.fish_species?.name || "Fish recipe"}
+                <Fish className="h-3.5 w-3.5" /> {lfDisplayCopy(data.fish_species?.name) || "Fish recipe"}
               </p>
               <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight tracking-tight text-[#073B78] sm:text-4xl">
-                {data.title}
+                {lfDisplayCopy(data.title)}
               </h1>
 
-              <div className="mt-4 flex flex-wrap gap-2 text-xs text-gray-600">
+              <div className="mt-4 flex flex-wrap gap-2 text-xs text-[#073B78]/70">
                 {data.prep_time_min ? (
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-sm">
-                    <Clock className="h-3.5 w-3.5 text-[#08A9E8]" /> Prep {data.prep_time_min} min
+                    <Clock className="h-3.5 w-3.5 text-[#08A9E8]" /> Get ready {data.prep_time_min} min
                   </span>
                 ) : null}
                 {data.cook_time_min ? (
@@ -268,7 +273,7 @@ const LakeFreshRecipe = () => {
                 ) : null}
                 {data.cooking_method ? (
                   <span className="inline-flex items-center rounded-full bg-[#073B78] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white">
-                    {data.cooking_method}
+                    {lfDisplayCopy(data.cooking_method)}
                   </span>
                 ) : null}
               </div>
@@ -280,7 +285,7 @@ const LakeFreshRecipe = () => {
                   rel="noopener noreferrer"
                   className="mt-4 inline-flex items-center gap-2 rounded-xl border border-[#073B78]/20 bg-white px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78] shadow-sm transition-colors hover:border-[#073B78]"
                 >
-                  <Download className="h-3.5 w-3.5" /> Download recipe PDF
+                  <Download className="h-3.5 w-3.5" /> Download recipe
                 </a>
               ) : null}
             </div>
@@ -294,7 +299,7 @@ const LakeFreshRecipe = () => {
             <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-[#39B54A]" />
             <div>
               <p className="text-sm font-extrabold text-[#073B78]">This recipe is free with your fish order.</p>
-              <p className="mt-1 text-xs text-gray-500">Pick it on any {data.fish_species?.name || "fish"} page and it arrives with your basket.</p>
+              <p className="mt-1 text-xs text-[#073B78]/60">Pick it on any {lfDisplayCopy(data.fish_species?.name) || "fish"} page and we add it to your order.</p>
             </div>
           </div>
           <LFLink
@@ -312,7 +317,7 @@ const LakeFreshRecipe = () => {
                 <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
                   <ShoppingBasket className="h-4 w-4 text-[#08A9E8]" /> Shop ingredients
                 </h2>
-                <p className="mt-1 text-xs text-gray-500">Tick what you need and add it all to your basket in one tap.</p>
+                <p className="mt-1 text-xs text-[#073B78]/60">Tick what you need and add it to your basket in one tap.</p>
               </div>
               <span className="shrink-0 rounded-full bg-[#EAF6FB] px-2.5 py-1 text-[10px] font-extrabold text-[#073B78]">
                 {selected.length}/{shopItems.length} chosen
@@ -337,8 +342,8 @@ const LakeFreshRecipe = () => {
                     />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-bold text-[#073B78]">{item.name}</p>
-                      <p className="truncate text-[11px] text-gray-500">
-                        {item.kind === "fish" ? `${item.weightKg} kg · priced per kg` : "Seasoning"}
+                      <p className="truncate text-[11px] text-[#073B78]/60">
+                        {item.kind === "fish" ? `${item.weightKg} kg. Priced per kg` : "Spice blend"}
                       </p>
                     </div>
                     <span className="shrink-0 text-sm font-extrabold text-[#073B78]">
@@ -356,7 +361,7 @@ const LakeFreshRecipe = () => {
             >
               <Check className="h-4 w-4" /> Add selected to basket
             </button>
-            <p className="mt-2 text-center text-[11px] text-gray-500">The recipe card stays free. You only pay for the items you tick.</p>
+            <p className="mt-2 text-center text-[11px] text-[#073B78]/60">The recipe card stays free. You only pay for the items you tick.</p>
           </section>
         ) : null}
 
@@ -367,8 +372,8 @@ const LakeFreshRecipe = () => {
                 <Leaf className="h-4 w-4" />
               </span>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Recommended spice</p>
-                <p className="text-sm font-bold text-[#073B78]">{data.recommended_spice}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Best spice</p>
+                <p className="text-sm font-bold text-[#073B78]">{lfDisplayCopy(data.recommended_spice)}</p>
               </div>
             </div>
             <LFLink
@@ -388,7 +393,7 @@ const LakeFreshRecipe = () => {
               </span>
               Ingredients
             </h2>
-            <ul className="mt-4 space-y-2 text-sm text-gray-700">
+            <ul className="mt-4 space-y-2 text-sm text-[#073B78]/80">
               {ingredients.map((ing: string, idx: number) => {
                 const linked = linkedForIngredient(ing);
                 return (
@@ -406,12 +411,12 @@ const LakeFreshRecipe = () => {
                   </li>
                 );
               })}
-              {ingredients.length === 0 && <li className="text-gray-500">No ingredients listed.</li>}
+              {ingredients.length === 0 && <li className="text-[#073B78]/60">No ingredients listed.</li>}
             </ul>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-extrabold text-[#073B78]">Method</h2>
+            <h2 className="font-display text-2xl font-extrabold text-[#073B78]">Steps</h2>
             <ol className="mt-4 space-y-4">
               {steps.map((step: string, idx: number) => (
                 <li key={idx} className="flex gap-3">
@@ -421,18 +426,18 @@ const LakeFreshRecipe = () => {
                   >
                     {idx + 1}
                   </span>
-                  <p className="pt-0.5 text-sm leading-relaxed text-gray-700">{step}</p>
+                  <p className="pt-0.5 text-sm leading-relaxed text-[#073B78]/80">{step}</p>
                 </li>
               ))}
-              {steps.length === 0 && <li className="text-sm text-gray-500">No steps listed.</li>}
+              {steps.length === 0 && <li className="text-sm text-[#073B78]/60">No steps listed.</li>}
             </ol>
           </section>
         </div>
 
         {data.safety_notes ? (
           <section className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-            <h2 className="font-display text-lg font-extrabold text-amber-900">Food safety</h2>
-            <p className="mt-2 text-sm leading-relaxed text-amber-900">{data.safety_notes}</p>
+            <h2 className="font-display text-lg font-extrabold text-amber-900">Safe food</h2>
+            <p className="mt-2 text-sm leading-relaxed text-amber-900">{lfDisplayCopy(data.safety_notes)}</p>
           </section>
         ) : null}
       </div>

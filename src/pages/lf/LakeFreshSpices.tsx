@@ -7,6 +7,7 @@ import { LF_BRAND_ID, useLakeFreshCatalog } from "@/hooks/useLakeFresh";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
+import { lfDisplayCopy } from "@/lib/lfCopy";
 
 const accents = ["#39B54A", "#08A9E8", "#7ED321"];
 
@@ -47,8 +48,8 @@ const LakeFreshSpices = () => {
     <div className="bg-white">
       <SEO
         brand="lake-fresh"
-        title="Signature Spices | Lake Fresh Fish Mart"
-        description="Lake Fresh signature fish spices and seasonings, paired with Chambo, Ncheni and Usipa."
+        title="Spice Blends | Lake Fresh Fish Mart"
+        description="Five spice blends made for lake fish. Pick the one that suits your Chambo, Ncheni or Usipa."
       />
 
       <section className="relative overflow-hidden border-b border-[#F2FBEE] bg-gradient-to-br from-[#F4FBF7] via-white to-[#F7FCEB]">
@@ -57,11 +58,11 @@ const LakeFreshSpices = () => {
             <Leaf className="h-3.5 w-3.5" /> Made for lake fish
           </span>
           <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">
-            SIGNATURE SPICES
+            SPICE BLENDS
           </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-            Five blends built to lift fresh fish, not bury it. Every seasoning is matched to the fish on our catch
-            list, so you always know what works.
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#073B78]/70 sm:text-base">
+            Pick a blend that suits your fish. We make five blends for lake fish and show which ones go with each catch,
+            so your meal is easy to plan.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <LFLink
@@ -76,13 +77,16 @@ const LakeFreshSpices = () => {
             >
               Free recipes <ArrowRight className="h-3.5 w-3.5" />
             </LFLink>
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#073B78] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-white">
+              <Fish className="h-3.5 w-3.5 text-[#7ED321]" /> We know which blend works with each fish
+            </p>
           </div>
         </div>
       </section>
 
       <section className="container max-w-6xl py-12 sm:py-16">
         {isLoading ? (
-          <p className="flex items-center gap-2 py-10 text-sm text-gray-500">
+          <p className="flex items-center gap-2 py-10 text-sm text-[#073B78]/60">
             <Loader2 className="h-4 w-4 animate-spin text-[#39B54A]" /> Loading spices…
           </p>
         ) : (
@@ -121,28 +125,28 @@ const LakeFreshSpices = () => {
                       </>
                     )}
                     <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#073B78]">
-                      {s.size_label || "Seasoning"}
+                      {lfDisplayCopy(s.size_label) || "Spice blend"}
                     </span>
                   </div>
 
                   <div className="flex flex-1 flex-col p-5">
-                    <h3 className="font-display text-lg font-extrabold text-[#073B78]">{s.name}</h3>
+                    <h3 className="font-display text-lg font-extrabold text-[#073B78]">{lfDisplayCopy(s.name)}</h3>
                     {s.description ? (
-                      <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-gray-500">{s.description}</p>
+                      <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-[#073B78]/60">{lfDisplayCopy(s.description)}</p>
                     ) : (
-                      <p className="mt-2 flex-1 text-sm text-gray-500">A Lake Fresh blend for fresh fish.</p>
+                      <p className="mt-2 flex-1 text-sm text-[#073B78]/60">A Lake Fresh blend for fresh fish.</p>
                     )}
 
                     {s.ingredients ? (
-                      <p className="mt-3 line-clamp-2 rounded-lg bg-gray-50 px-3 py-2 text-[11px] leading-relaxed text-gray-500">
-                        {s.ingredients}
+                      <p className="mt-3 line-clamp-2 rounded-lg bg-gray-50 px-3 py-2 text-[11px] leading-relaxed text-[#073B78]/60">
+                        {lfDisplayCopy(s.ingredients)}
                       </p>
                     ) : null}
 
                     {pairings.length > 0 ? (
                       <div className="mt-3">
                         <p className="flex flex-wrap items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[#2c6e12]">
-                          <Fish className="h-3.5 w-3.5 shrink-0 text-[#39B54A]" /> Best paired with
+                          <Fish className="h-3.5 w-3.5 shrink-0 text-[#39B54A]" /> Good with this fish
                         </p>
                         <div className="mt-1.5 flex flex-wrap gap-1.5">
                           {pairedProducts.length > 0
@@ -156,7 +160,7 @@ const LakeFreshSpices = () => {
                                 </LFLink>
                               ))
                             : pairings.map((p) => (
-                                <span key={p.id} className="rounded-full bg-gray-50 px-2.5 py-1 text-[11px] text-gray-600">
+                                <span key={p.id} className="rounded-full bg-gray-50 px-2.5 py-1 text-[11px] text-[#073B78]/70">
                                   {p.name}
                                 </span>
                               ))}
@@ -167,7 +171,7 @@ const LakeFreshSpices = () => {
                     <div className="mt-4 flex items-end justify-between gap-3 border-t border-gray-100 pt-4">
                       <p className="text-lg font-extrabold text-[#073B78]">{formatMWK(s.price_mwk)}</p>
                       {s.stock_qty <= 0 ? (
-                        <span className="text-xs font-bold text-gray-400">Out of stock</span>
+                        <span className="text-xs font-bold text-[#073B78]/50">Out of stock</span>
                       ) : (
                         <button
                           type="button"
@@ -195,7 +199,7 @@ const LakeFreshSpices = () => {
               );
             })}
             {(data || []).length === 0 && (
-              <p className="col-span-full py-10 text-center text-sm text-gray-500">No spices published yet.</p>
+              <p className="col-span-full py-10 text-center text-sm text-[#073B78]/60">No spices published yet.</p>
             )}
           </div>
         )}

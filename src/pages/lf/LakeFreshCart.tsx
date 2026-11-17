@@ -7,7 +7,7 @@ import { calculateFinalPrice, getEffectiveWeightKg } from "@/lib/lfDelivery";
 import { formatMWK } from "@/data/products";
 
 const prepLabel = (value: string) =>
-  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Portioned" : value;
+  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cut in pieces" : value;
 
 const LakeFreshCart = () => {
   const { items, setWeight, setQuantity, setPreparation, setRecipe, remove, subtotal, totalWeight } = useLakeFreshCart();
@@ -18,9 +18,9 @@ const LakeFreshCart = () => {
     return (
       <div className="container py-20 text-center">
         <SEO brand="lake-fresh" title="Your Basket | Lake Fresh Fish Mart" description="Your Lake Fresh fish basket." />
-        <ShoppingBasket className="mx-auto h-12 w-12 text-gray-300" />
+        <ShoppingBasket className="mx-auto h-12 w-12 text-[#073B78]/40" />
         <h1 className="mt-4 font-display text-3xl font-extrabold text-[#073B78]">Your basket is empty</h1>
-        <p className="mt-2 text-sm text-gray-500">Pick fresh fish from today&apos;s catch to start.</p>
+        <p className="mt-2 text-sm text-[#073B78]/60">Pick fresh fish from today&apos;s catch to start.</p>
         <LFLink
           to="/lf/fish"
           className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#073B78] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white"
@@ -39,15 +39,15 @@ const LakeFreshCart = () => {
       <div className="container max-w-4xl py-10 sm:py-14">
         <LFLink
           to="/lf/fish"
-          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60 hover:text-[#073B78]"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Keep shopping
         </LFLink>
         <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78]">YOUR BASKET</h1>
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-[#073B78]/60">
           {totalWeight.toFixed(1)} kg of fresh fish
-          {items.some((item) => item.kind === "unit") ? " plus selected extras" : ""} · delivery date and slot
-          selected at checkout.
+          {items.some((item) => item.kind === "unit") ? " plus spice blends" : ""}. You choose the delivery date and
+          time at checkout.
         </p>
 
         <div className="mt-8 space-y-4">
@@ -70,15 +70,15 @@ const LakeFreshCart = () => {
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <p className="font-display text-lg font-extrabold text-[#073B78]">{item.name}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-[#073B78]/60">
                             {item.itemType ? item.itemType.toUpperCase() : "ITEM"}
-                            {item.unit ? ` · ${item.unit}` : ""}
+                            {item.unit ? `. ${item.unit}` : ""}
                           </p>
                         </div>
                         <button
                           type="button"
                           onClick={() => remove(item.key)}
-                          className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                          className="rounded-lg p-2 text-[#073B78]/50 hover:bg-red-50 hover:text-red-600"
                           aria-label={`Remove ${item.name}`}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -86,7 +86,7 @@ const LakeFreshCart = () => {
                       </div>
 
                       <div className="mt-3">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Quantity</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Quantity</p>
                         <div className="mt-1.5 flex items-center gap-2">
                           <button
                             type="button"
@@ -111,7 +111,7 @@ const LakeFreshCart = () => {
                     </div>
 
                     <div className="text-right sm:w-28">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Line total</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Line total</p>
                       <p className="text-lg font-extrabold text-[#073B78]">{formatMWK(lineTotal)}</p>
                     </div>
                   </div>
@@ -144,14 +144,14 @@ const LakeFreshCart = () => {
                         <p className="font-display text-lg font-extrabold text-[#073B78]">
                           {item.speciesName || item.name}
                         </p>
-                        <p className="text-xs text-gray-500">
-                          {formatMWK(item.pricePerKgMwk || 0)} / kg · minimum {minWeight} kg
+                        <p className="text-xs text-[#073B78]/60">
+                          {formatMWK(item.pricePerKgMwk || 0)} per kg. At least {minWeight} kg
                         </p>
                       </div>
                       <button
                         type="button"
                         onClick={() => remove(item.key)}
-                        className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                        className="rounded-lg p-2 text-[#073B78]/50 hover:bg-red-50 hover:text-red-600"
                         aria-label={`Remove ${item.name}`}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -160,7 +160,7 @@ const LakeFreshCart = () => {
 
                     <div className="mt-3 grid gap-3 sm:grid-cols-2">
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Weight</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Weight</p>
                         <div className="mt-1.5 flex items-center gap-2">
                           <button
                             type="button"
@@ -186,12 +186,12 @@ const LakeFreshCart = () => {
                       </div>
 
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Preparation</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Cut</p>
                         <select
                           value={item.preparation || "whole"}
                           onChange={(e) => setPreparation(item.key, e.target.value)}
                           className="mt-1.5 h-9 w-full rounded-lg border border-gray-300 bg-white px-2 text-sm font-semibold text-[#073B78]"
-                          aria-label={`Preparation for ${item.name}`}
+                          aria-label={`Cut for ${item.name}`}
                         >
                           {options.map((option) => (
                             <option key={option} value={option}>
@@ -226,7 +226,7 @@ const LakeFreshCart = () => {
                   </div>
 
                   <div className="text-right sm:w-28">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Line total</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Line total</p>
                     <p className="text-lg font-extrabold text-[#073B78]">{formatMWK(lineTotal)}</p>
                   </div>
                 </div>
@@ -237,21 +237,22 @@ const LakeFreshCart = () => {
 
         <div className="mt-8 rounded-2xl border border-gray-200 bg-gray-50 p-5">
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between text-gray-600">
-              <span>Subtotal</span>
+            <div className="flex justify-between text-[#073B78]/70">
+              <span>Fish and spices</span>
               <span className="font-semibold text-[#073B78]">{formatMWK(subtotal)}</span>
             </div>
-            <div className="flex justify-between text-gray-600">
+            <div className="flex justify-between text-[#073B78]/70">
               <span>Delivery</span>
-              <span className="text-xs text-gray-500">Calculated by zone at checkout</span>
+              <span className="text-xs text-[#073B78]/60">We add this at checkout</span>
             </div>
             <div className="flex justify-between border-t border-gray-200 pt-3 text-base font-extrabold text-[#073B78]">
-              <span>Estimated total</span>
+              <span>Your total so far</span>
               <span>{formatMWK(subtotal)}</span>
             </div>
           </div>
-          <p className="mt-3 text-xs text-gray-500">
-            Free delivery on orders over {formatMWK(freeThreshold)}. Final item value is confirmed on packed weight.
+          <p className="mt-3 text-xs text-[#073B78]/60">
+            Delivery is free on orders over {formatMWK(freeThreshold)}. We weigh the fish when we pack it and confirm
+            the price then.
           </p>
           <button
             type="button"

@@ -218,7 +218,7 @@ export const LeafletMap = ({
     >
       {!ready && (
         <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span className="text-xs text-gray-500">Loading map…</span>
+          <span className="text-xs text-[#073B78]/60">Loading map…</span>
         </div>
       )}
     </div>

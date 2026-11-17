@@ -19,14 +19,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { toast } from "@/hooks/use-toast";
+import { lfDisplayCopy } from "@/lib/lfCopy";
 
 const prepCopy: Record<string, { label: string; description: string }> = {
-  whole: { label: "Whole scaled & gutted", description: "Whole fish, scaled, gutted and cleaned." },
-  filleted: { label: "Filleted", description: "Boneless fillets, ready to cook." },
-  steak: { label: "Steak cuts", description: "Thick steaks for grilling or frying." },
-  uncleaned: { label: "Whole uncleaned", description: "Whole fish as caught, for your own prep." },
-  cleaned: { label: "Cleaned", description: "Gutted, scaled and cleaned." },
-  portioned: { label: "Portioned", description: "Cut into evenly sized portions." },
+  whole: { label: "Whole, cleaned", description: "We scale and clean the whole fish for you." },
+  filleted: { label: "Fillets", description: "Boneless fish pieces you can cook right away." },
+  steak: { label: "Steaks", description: "Thick cuts for grilling or frying." },
+  uncleaned: { label: "Whole as caught", description: "Whole fish left as it was caught." },
+  cleaned: { label: "Cleaned", description: "Scaled and cleaned, ready for your pan." },
+  portioned: { label: "Cut in pieces", description: "We cut the fish into even pieces for you." },
 };
 
 const LakeFreshProduct = () => {
@@ -90,7 +91,7 @@ const LakeFreshProduct = () => {
     setSelectedSpices((prev) => {
       if (prev.includes(spiceId)) return prev.filter((value) => value !== spiceId);
       if (prev.length >= 5) {
-        toast({ title: "Up to 5 seasonings", description: "Remove one to choose another." });
+        toast({ title: "Pick up to 5 spice blends", description: "Remove one to choose another." });
         return prev;
       }
       return [...prev, spiceId];
@@ -99,7 +100,7 @@ const LakeFreshProduct = () => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center gap-3 text-sm text-gray-500">
+      <div className="flex min-h-[50vh] items-center justify-center gap-3 text-sm text-[#073B78]/60">
         <Loader2 className="h-5 w-5 animate-spin text-[#073B78]" /> Loading fish…
       </div>
     );
@@ -124,9 +125,9 @@ const LakeFreshProduct = () => {
   if (!product) {
     return (
       <div className="container py-16 text-center">
-        <Fish className="mx-auto h-10 w-10 text-gray-300" />
+        <Fish className="mx-auto h-10 w-10 text-[#073B78]/40" />
         <h1 className="mt-4 font-display text-2xl font-extrabold text-[#073B78]">Fish not found</h1>
-        <p className="mt-2 text-sm text-gray-500">This fish is no longer on the catch list.</p>
+        <p className="mt-2 text-sm text-[#073B78]/60">This fish is no longer on the catch list.</p>
         <LFLink
           to="/lf/fish"
           className="mt-6 inline-flex rounded-lg bg-[#073B78] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white"
@@ -195,12 +196,12 @@ const LakeFreshProduct = () => {
     toast({
       title: "Added to basket",
       description: [
-        `${effectiveWeight} kg ${product.speciesName || product.name} · ${prepCopy[selectedPreparation]?.label || selectedPreparation}`,
+        `${effectiveWeight} kg ${lfDisplayCopy(product.speciesName || product.name)}. ${prepCopy[selectedPreparation]?.label || selectedPreparation}`,
         extras > 0 ? `${extras} extra${extras === 1 ? "" : "s"}` : null,
         selectedRecipe ? `free recipe: ${selectedRecipe.title}` : null,
       ]
         .filter(Boolean)
-        .join(" · "),
+        .join(" "),
     });
   };
 
@@ -214,14 +215,14 @@ const LakeFreshProduct = () => {
       <SEO
         brand="lake-fresh"
         title={`${product.speciesName || product.name} | Lake Fresh Fish Mart`}
-        description={`${product.description || product.name} Priced ${formatMWK(product.pricePerKgMwk)} per kilogram with next day delivery in Blantyre.`}
+        description={`${lfDisplayCopy(product.description) || product.name} ${formatMWK(product.pricePerKgMwk)} per kilogram, packed cold and delivered the next day in Blantyre.`}
       />
 
       <section className="border-b border-gray-200 bg-[#EAF6FB]/50">
         <div className="container py-10 sm:py-14">
           <LFLink
             to="/lf/fish"
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#073B78]"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60 hover:text-[#073B78]"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back to the catch
           </LFLink>
@@ -247,7 +248,7 @@ const LakeFreshProduct = () => {
                 </span>
                 <span
                   className={`rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest ${
-                    soldOut ? "bg-gray-100 text-gray-500" : "bg-[#39B54A]/10 text-[#39B54A]"
+                    soldOut ? "bg-gray-100 text-[#073B78]/60" : "bg-[#39B54A]/10 text-[#39B54A]"
                   }`}
                 >
                   {soldOut ? "Sold out" : `${product.availableKg.toFixed(1)} kg available`}
@@ -257,17 +258,20 @@ const LakeFreshProduct = () => {
               <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">
                 {product.speciesName || product.name}
               </h1>
-              <p className="mt-3 leading-relaxed text-gray-600">{product.description}</p>
+              <p className="mt-3 leading-relaxed text-[#073B78]/70">{lfDisplayCopy(product.description)}</p>
+              <p className="mt-2 text-xs leading-relaxed text-[#073B78]/70">
+                We know Lake Malawi fish. Pick what you like and we clean, weigh and pack it cold for you.
+              </p>
 
-              <p className="mt-4 text-sm text-gray-600">
+              <p className="mt-4 text-sm text-[#073B78]/70">
                 <span className="font-bold uppercase tracking-wide text-[#073B78]">Price:</span>{" "}
-                {formatMWK(product.pricePerKgMwk)} per kilogram · minimum {minWeight} kg
+                {formatMWK(product.pricePerKgMwk)} per kilogram. At least {minWeight} kg
               </p>
 
               {!soldOut && (
                 <div className="mt-6 space-y-5 rounded-2xl border border-gray-200 bg-white p-5">
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Weight</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Weight</p>
                     <div className="mt-2 flex items-center gap-3">
                       <button
                         type="button"
@@ -291,7 +295,7 @@ const LakeFreshProduct = () => {
                           className="w-20 rounded-lg border border-gray-300 px-2 py-2 text-center text-lg font-bold text-[#073B78]"
                           aria-label="Weight in kilograms"
                         />
-                        <span className="text-sm font-semibold text-gray-500">kg</span>
+                        <span className="text-sm font-semibold text-[#073B78]/60">kg</span>
                       </div>
                       <button
                         type="button"
@@ -302,13 +306,13 @@ const LakeFreshProduct = () => {
                         <Plus className="h-4 w-4" />
                       </button>
                     </div>
-                    <p className="mt-2 text-xs text-gray-500">
-                      Charged on packed weight at dispatch. Price differences are reconciled transparently.
+                    <p className="mt-2 text-xs text-[#073B78]/60">
+                      We weigh the fish when we pack it and adjust the price before you pay.
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Preparation</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Cut</p>
                     <div className="mt-2 grid gap-2 sm:grid-cols-3">
                       {options.map((option) => {
                         const copy = prepCopy[option] || { label: option, description: "" };
@@ -325,7 +329,7 @@ const LakeFreshProduct = () => {
                             }`}
                           >
                             <span className="block text-sm font-bold">{copy.label}</span>
-                            <span className={`mt-1 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
+                            <span className={`mt-1 block text-[11px] ${selected ? "text-white/70" : "text-[#073B78]/60"}`}>
                               {copy.description}
                             </span>
                           </button>
@@ -336,21 +340,21 @@ const LakeFreshProduct = () => {
 
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-[#39B54A]/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-[#39B54A]">
-                      <Snowflake className="h-3.5 w-3.5" /> Order by 8 PM today, delivered chilled tomorrow
+                      <Snowflake className="h-3.5 w-3.5" /> Order by 8 PM today, packed cold for tomorrow
                     </span>
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-[#08A9E8]/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-[#073B78]">
-                      100% freshness guarantee
+                      Fresh or we replace it
                     </span>
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-4">
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Estimated total</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Your total</p>
                       <p className="text-2xl font-extrabold text-[#073B78]">{formatMWK(lineTotal + extrasTotal)}</p>
-                      <p className="text-xs text-gray-500">
-                        {effectiveWeight} kg × {formatMWK(product.pricePerKgMwk)}/kg
-                        {extrasCount > 0 ? ` + ${extrasCount} extra${extrasCount === 1 ? "" : "s"}` : ""}
-                        {selectedRecipe ? " · free recipe" : ""}
+                      <p className="text-xs text-[#073B78]/60">
+                        {effectiveWeight} kg at {formatMWK(product.pricePerKgMwk)} per kg
+                        {extrasCount > 0 ? ` plus ${extrasCount} spice blend${extrasCount === 1 ? "" : "s"}` : ""}
+                        {selectedRecipe ? ". Free recipe" : ""}
                       </p>
                     </div>
                     <button
@@ -363,14 +367,14 @@ const LakeFreshProduct = () => {
                     </button>
                   </div>
                   <div className="mt-4 rounded-xl border border-[#39B54A]/25 bg-[#F4FBF7] p-3 text-xs text-[#073B78]">
-                    <span className="font-extrabold">100% Freshness Guarantee:</span> If your fish arrives warm, spoiled or
-                    underweight, we replace it same day or refund you in full.
+                    <span className="font-extrabold">Our promise:</span> If your fish arrives warm, spoiled or short on
+                    weight, we replace it that day or refund you in full.
                   </div>
                 </div>
               )}
 
               {soldOut && (
-                <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+                <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-5 text-sm text-[#073B78]/70">
                   This fish is sold out for the current batch. It will return with the next catch.
                 </div>
               )}
@@ -380,7 +384,7 @@ const LakeFreshProduct = () => {
                   <Truck className="h-5 w-5 shrink-0 text-[#073B78]" />
                   <div>
                     <p className="text-sm font-bold text-[#073B78]">Next day delivery</p>
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-[#073B78]/60">
                       {earliestDate ? (
                         <>
                           Order before {formatCutoff(deliveryConfig.cutoff)} for{" "}
@@ -395,16 +399,16 @@ const LakeFreshProduct = () => {
                 <div className="flex gap-3 rounded-xl border border-gray-200 p-4">
                   <Snowflake className="h-5 w-5 shrink-0 text-[#073B78]" />
                   <div>
-                    <p className="text-sm font-bold text-[#073B78]">Storage &amp; handling</p>
-                    <p className="mt-1 text-xs text-gray-500">
-                      {product.storageInfo || "Keep refrigerated at 0 to 4°C and consume within 2 days."}
+                    <p className="text-sm font-bold text-[#073B78]">Keep it cold</p>
+                    <p className="mt-1 text-xs text-[#073B78]/60">
+                      {product.storageInfo || "Keep it cold at 0 to 4°C and eat within 2 days."}
                     </p>
                   </div>
                 </div>
               </div>
 
               {product.handlingInfo && (
-                <p className="mt-4 flex items-start gap-2 text-xs text-gray-500">
+                <p className="mt-4 flex items-start gap-2 text-xs text-[#073B78]/60">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#073B78]/60" />
                   {product.handlingInfo}
                 </p>
@@ -416,16 +420,16 @@ const LakeFreshProduct = () => {
 
       <section className="border-t border-gray-200 bg-[#EAF6FB]/40">
         <div className="container py-12 sm:py-16">
-          <h2 className="font-display text-2xl font-extrabold text-[#073B78]">COMPLETE YOUR MEAL</h2>
-          <p className="mt-2 text-sm text-gray-500">
-            Pick your seasonings and one free recipe. Everything you select is added with this fish.
+          <h2 className="font-display text-2xl font-extrabold text-[#073B78]">MAKE THIS FISH YOUR WAY</h2>
+          <p className="mt-2 text-sm text-[#073B78]/60">
+            Pick a spice blend and one free recipe. We add what you choose to this fish.
           </p>
 
           {recommendedSpices.length > 0 ? (
             <div className="mt-6">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                  Recommended spices for this fish <span className="text-[#39B54A]">· choose up to 5</span>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">
+                  Spice blends for this fish <span className="text-[#39B54A]">Pick up to 5</span>
                 </p>
                 <span className="text-[11px] font-bold text-[#073B78]">{selectedSpices.length}/5 selected</span>
               </div>
@@ -448,13 +452,13 @@ const LakeFreshProduct = () => {
                         <span className="font-display text-base font-extrabold text-[#073B78]">{s.name}</span>
                         <span
                           className={`inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
-                            selected ? "bg-[#39B54A] text-white" : "border border-gray-300 text-gray-400"
+                            selected ? "bg-[#39B54A] text-white" : "border border-gray-300 text-[#073B78]/50"
                           }`}
                         >
                           {selected ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
                         </span>
                       </span>
-                      <span className="mt-1 block text-xs text-gray-500">{s.size_label || "Seasoning"}</span>
+                      <span className="mt-1 block text-xs text-[#073B78]/60">{s.size_label || "Spice blend"}</span>
                       <span className="mt-2 block text-sm font-bold text-[#073B78]">{formatMWK(s.price_mwk)}</span>
                     </button>
                   );
@@ -466,14 +470,14 @@ const LakeFreshProduct = () => {
           {recommendedRecipes.length > 0 ? (
             <div className="mt-8">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                  Free recipes using this fish <span className="text-[#39B54A]">· included with this fish</span>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">
+                  Free recipes for this fish <span className="text-[#39B54A]">Choose one</span>
                 </p>
                 {selectedRecipe ? (
                   <button
                     type="button"
                     onClick={() => setSelectedRecipeId(null)}
-                    className="text-[11px] font-bold text-gray-500 underline hover:text-[#073B78]"
+                    className="text-[11px] font-bold text-[#073B78]/60 underline hover:text-[#073B78]"
                   >
                     Clear recipe
                   </button>
@@ -500,17 +504,17 @@ const LakeFreshProduct = () => {
                           Free
                         </span>
                       </span>
-                      <span className="mt-1 block text-xs text-gray-500">
-                        {r.prep_time_min ? `Prep ${r.prep_time_min}m` : ""}
-                        {r.prep_time_min && r.cook_time_min ? " · " : ""}
-                        {r.cook_time_min ? `Cook ${r.cook_time_min}m` : ""}
+                      <span className="mt-1 block text-xs text-[#073B78]/60">
+                        {r.prep_time_min ? `Get ready ${r.prep_time_min} min` : ""}
+                        {r.prep_time_min && r.cook_time_min ? " " : ""}
+                        {r.cook_time_min ? `Cook ${r.cook_time_min} min` : ""}
                       </span>
                       {r.recommended_spice ? (
                         <span className="mt-2 block text-[11px] text-[#39B54A]">Spice: {r.recommended_spice}</span>
                       ) : null}
                       {selected ? (
                         <span className="mt-2 flex items-center gap-1 text-[11px] font-bold text-[#2c6e12]">
-                          <Check className="h-3.5 w-3.5" /> Chosen, emailed with your order
+                          <Check className="h-3.5 w-3.5" /> Chosen. It comes with your order.
                         </span>
                       ) : null}
                     </button>
@@ -523,12 +527,12 @@ const LakeFreshProduct = () => {
           {!soldOut ? (
             <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-[#08A9E8]/30 bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Fish + extras</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Fish and spices</p>
                 <p className="text-xl font-extrabold text-[#073B78]">{formatMWK(lineTotal + extrasTotal)}</p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#073B78]/60">
                   {extrasCount} extra{extrasCount === 1 ? "" : "s"}
-                  {extrasCount > 0 ? ` · ${formatMWK(extrasTotal)}` : ""} ·{" "}
-                  {selectedRecipe ? `free recipe: ${selectedRecipe.title}` : "choose a free recipe above"}
+                  {extrasCount > 0 ? ` ${formatMWK(extrasTotal)}` : ""}{" "}
+                  {selectedRecipe ? `Free recipe: ${selectedRecipe.title}` : "choose one free recipe above"}
                 </p>
               </div>
               <button

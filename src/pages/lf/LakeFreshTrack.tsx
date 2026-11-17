@@ -4,6 +4,7 @@ import { LFLink } from "@/components/lf/lfRouter";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
+import { formatLakeFreshPaymentRef, normalizeLakeFreshPaymentRef } from "@/lib/lfPayments";
 import { AlertCircle, CheckCircle2, Loader2, MapPin, Search, Truck } from "lucide-react";
 
 interface TrackStep {
@@ -47,7 +48,7 @@ interface TrackResult {
 const statusCopy: Record<string, { label: string; tone: string }> = {
   new: { label: "Waiting for payment", tone: "bg-amber-50 text-amber-800 border-amber-200" },
   confirmed: { label: "Payment confirmed", tone: "bg-[#39B54A]/10 text-[#39B54A] border-[#39B54A]/30" },
-  processing: { label: "Preparing", tone: "bg-[#EAF6FB] text-[#073B78] border-[#08A9E8]/30" },
+  processing: { label: "Packing your fish", tone: "bg-[#EAF6FB] text-[#073B78] border-[#08A9E8]/30" },
   dispatched: { label: "Out for delivery", tone: "bg-[#EAF6FB] text-[#073B78] border-[#08A9E8]/30" },
   delivered: { label: "Delivered", tone: "bg-[#39B54A]/10 text-[#39B54A] border-[#39B54A]/30" },
   cancelled: { label: "Cancelled", tone: "bg-red-50 text-red-700 border-red-200" },
@@ -66,6 +67,9 @@ const friendlyDate = (value: string | null) => {
   });
 };
 
+const stepLabel = (label: string) =>
+  label === "Preparing your fish" ? "Packing your fish" : label;
+
 const REASON_COPY: Record<string, string> = {
   phone_required: "Enter the phone number you used when you ordered.",
   not_found: "We could not find an order with those details. Check the phone number and reference.",
@@ -74,7 +78,7 @@ const REASON_COPY: Record<string, string> = {
 const LakeFreshTrack = () => {
   const [searchParams] = useSearchParams();
   const [phone, setPhone] = useState(searchParams.get("phone") || "");
-  const [reference, setReference] = useState(searchParams.get("reference") || "");
+  const [reference, setReference] = useState(formatLakeFreshPaymentRef(searchParams.get("reference")));
   const [state, setState] = useState<"idle" | "loading" | "done">("idle");
   const [result, setResult] = useState<TrackResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -89,7 +93,7 @@ const LakeFreshTrack = () => {
     try {
       const { data, error: rpcError } = await supabase.rpc("lf_track_order", {
         p_phone: nextPhone.trim(),
-        p_reference: nextReference.trim() || null,
+        p_reference: normalizeLakeFreshPaymentRef(nextReference) || null,
       });
       if (rpcError) throw new Error(rpcError.message);
       const payload = (data || { ok: false }) as TrackResult;
@@ -111,7 +115,7 @@ const LakeFreshTrack = () => {
   }, []);
 
   const order = result?.ok ? result.order : undefined;
-  const status = order ? statusCopy[order.status] || { label: order.status, tone: "bg-gray-50 text-gray-700 border-gray-200" } : null;
+  const status = order ? statusCopy[order.status] || { label: order.status, tone: "bg-gray-50 text-[#073B78]/80 border-gray-200" } : null;
 
   return (
     <div className="min-h-[70vh] bg-[#F6FBFD]">
@@ -129,8 +133,9 @@ const LakeFreshTrack = () => {
           <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
             Where is my fish?
           </h1>
-          <p className="mx-auto mt-2 max-w-md text-sm text-gray-600">
-            Enter the phone number you ordered with. Add your order reference if you have it.
+          <p className="mx-auto mt-2 max-w-md text-sm text-[#073B78]/70">
+            Use the phone number you ordered with. Add your order number if you have it, and we will show you where your
+            fish is.
           </p>
         </div>
 
@@ -141,7 +146,7 @@ const LakeFreshTrack = () => {
             void track(phone, reference);
           }}
         >
-          <label className="block text-[11px] font-extrabold uppercase tracking-widest text-gray-500">
+          <label className="block text-[11px] font-extrabold uppercase tracking-widest text-[#073B78]/60">
             Phone number
           </label>
           <input
@@ -153,13 +158,13 @@ const LakeFreshTrack = () => {
             className="mt-1.5 h-12 w-full rounded-xl border border-gray-300 px-4 text-base font-semibold text-[#073B78] outline-none focus:border-[#08A9E8] focus:ring-2 focus:ring-[#08A9E8]/20"
           />
 
-          <label className="mt-4 block text-[11px] font-extrabold uppercase tracking-widest text-gray-500">
-            Order reference <span className="font-semibold normal-case text-gray-400">(optional)</span>
+          <label className="mt-4 block text-[11px] font-extrabold uppercase tracking-widest text-[#073B78]/60">
+            Order reference <span className="font-semibold normal-case text-[#073B78]/50">(optional)</span>
           </label>
           <input
             value={reference}
             onChange={(event) => setReference(event.target.value)}
-            placeholder="LF-XXXXXXXXXXXX"
+            placeholder="LF XXXXXXXXXXXX"
             className="mt-1.5 h-12 w-full rounded-xl border border-gray-300 px-4 font-mono text-sm text-[#073B78] outline-none focus:border-[#08A9E8] focus:ring-2 focus:ring-[#08A9E8]/20"
           />
 
@@ -184,12 +189,14 @@ const LakeFreshTrack = () => {
           <div className="mt-6 rounded-2xl border border-[#08A9E8]/20 bg-white p-4 shadow-sm sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="font-mono text-xs font-bold text-gray-500">{order.reference || order.id.slice(0, 8)}</p>
+                <p className="font-mono text-xs font-bold text-[#073B78]/60">
+                  {formatLakeFreshPaymentRef(order.reference) || order.id.slice(0, 8)}
+                </p>
                 <h2 className="mt-1 font-display text-2xl font-extrabold text-[#073B78]">
                   {formatMWK(order.total_mwk)}
                 </h2>
-                <p className="mt-1 text-xs text-gray-500">
-                  {order.customer_name} · placed {friendlyDate(order.created_at)}
+                <p className="mt-1 text-xs text-[#073B78]/60">
+                  For {order.customer_name}. Placed {friendlyDate(order.created_at)}.
                 </p>
               </div>
               <span className={`rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest ${status.tone}`}>
@@ -202,7 +209,7 @@ const LakeFreshTrack = () => {
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
                 <p>
                   Delivery on <span className="font-bold">{order.delivery_date}</span>
-                  {order.delivery_window ? ` · ${order.delivery_window}` : ""}
+                  {order.delivery_window ? `. ${order.delivery_window}.` : "."}
                 </p>
               </div>
             )}
@@ -214,14 +221,14 @@ const LakeFreshTrack = () => {
                     className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${
                       step.done
                         ? "border-[#39B54A] bg-[#39B54A] text-white"
-                        : "border-gray-300 bg-white text-gray-300"
+                        : "border-gray-300 bg-white text-[#073B78]/40"
                     }`}
                   >
                     {step.done ? <CheckCircle2 className="h-4 w-4" /> : <span className="h-1.5 w-1.5 rounded-full bg-current" />}
                   </span>
                   <div>
-                    <p className={`text-sm font-bold ${step.done ? "text-[#073B78]" : "text-gray-400"}`}>{step.label}</p>
-                    {step.at && <p className="text-[11px] text-gray-500">{friendlyDate(step.at)}</p>}
+                    <p className={`text-sm font-bold ${step.done ? "text-[#073B78]" : "text-[#073B78]/50"}`}>{stepLabel(step.label)}</p>
+                    {step.at && <p className="text-[11px] text-[#073B78]/60">{friendlyDate(step.at)}</p>}
                   </div>
                 </li>
               ))}
@@ -229,13 +236,13 @@ const LakeFreshTrack = () => {
 
             {(result?.items || []).length > 0 && (
               <div className="mt-6 border-t border-gray-100 pt-4">
-                <p className="text-[10px] font-extrabold uppercase tracking-widest text-gray-500">Your items</p>
+                <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]/60">Your items</p>
                 <ul className="mt-2 space-y-2">
                   {(result?.items || []).map((item, index) => (
                     <li key={`${item.name}-${index}`} className="flex items-start justify-between gap-3 text-sm">
                       <div>
                         <p className="font-semibold text-[#073B78]">{item.name}</p>
-                        {item.recipe_title && <p className="text-[11px] text-gray-500">Recipe: {item.recipe_title}</p>}
+                        {item.recipe_title && <p className="text-[11px] text-[#073B78]/60">Recipe: {item.recipe_title}</p>}
                       </div>
                       <p className="shrink-0 font-bold text-[#073B78]">{formatMWK(item.price_mwk)}</p>
                     </li>
@@ -255,7 +262,7 @@ const LakeFreshTrack = () => {
           </div>
         )}
 
-        <p className="mt-6 text-center text-xs text-gray-500">
+        <p className="mt-6 text-center text-xs text-[#073B78]/60">
           Need help?{" "}
           <a
             href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_LAKEFRESH || "265991234567"}`}

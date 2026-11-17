@@ -30,13 +30,13 @@ const LakeFreshHeader = () => {
     <header className="sticky top-0 z-40 border-b border-gray-100 bg-white">
       <div className="border-b border-gray-100 bg-[#F7FBFC]">
         <div className="container flex h-7 items-center justify-center text-[10px] font-semibold uppercase tracking-[0.25em] text-[#073B78]/70">
-          Fresh from the Lake. Ready for Your Table.
+          Fresh fish from Lake Malawi, made for your table.
         </div>
       </div>
       <div className="border-b border-[#39B54A]/20 bg-[#F4FBF7]">
         <div className="container flex h-8 items-center justify-center gap-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[#073B78]">
           <Snowflake className="h-3.5 w-3.5 text-[#39B54A]" />
-          Fresh from Lake Malawi · Ice-packed next-day delivery · 100% freshness replacement guarantee
+          Fresh from Lake Malawi. Packed cold. At your door tomorrow.
         </div>
       </div>
       <div className="container flex h-16 items-center justify-between gap-4">
@@ -44,7 +44,7 @@ const LakeFreshHeader = () => {
           <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-10 w-auto max-w-[200px] object-contain sm:h-12" />
         </LFLink>
 
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Lake Fresh">
+        <nav className="hidden items-center gap-6 lg:flex" aria-label="Lake Fresh">
           <LFNavLink to="/lf" end className={navLinkClass}>Home</LFNavLink>
           <LFNavLink to="/lf/fish" className={navLinkClass}>The Catch</LFNavLink>
           <LFNavLink to="/lf/spices" className={navLinkClass}>Spices</LFNavLink>
@@ -88,7 +88,7 @@ const LakeFreshHeader = () => {
 
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 lg:hidden"
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
             aria-label="Toggle menu"
@@ -99,7 +99,7 @@ const LakeFreshHeader = () => {
       </div>
 
       {menuOpen && (
-        <div className="border-t border-gray-100 bg-white md:hidden">
+        <div className="border-t border-gray-100 bg-white lg:hidden">
           <div className="container flex flex-col gap-4 py-4" onClick={() => setMenuOpen(false)}>
             <LFNavLink to="/lf" end className={navLinkClass}>Home</LFNavLink>
             <LFNavLink to="/lf/fish" className={navLinkClass}>The Catch</LFNavLink>
@@ -125,6 +125,9 @@ const LakeFreshFooter = () => (
       <div className="sm:col-span-2 lg:col-span-1">
         <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-10 w-auto max-w-[200px] object-contain" />
         <p className="mt-3 max-w-xs text-sm text-[#073B78]/70">{brand.tagline}</p>
+        <p className="mt-2 max-w-xs text-xs leading-relaxed text-[#073B78]/60">
+          We help families and kitchens cook fresh lake fish with clear weights, cold packing and simple recipes.
+        </p>
       </div>
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Shop</p>
@@ -150,7 +153,7 @@ const LakeFreshFooter = () => (
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
           <span>Next day delivery</span>
           <span>Blantyre, Malawi</span>
-          <span>Cold chain handled</span>
+          <span>Packed cold</span>
         </div>
       </div>
     </div>
@@ -160,20 +163,19 @@ const LakeFreshFooter = () => (
         <div className="flex gap-3">
           <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#39B54A]" />
           <div>
-            <p className="text-xs font-extrabold text-[#073B78]">Our prep hub</p>
+            <p className="text-xs font-extrabold text-[#073B78]">Where we pack your fish</p>
             <p className="mt-1 text-xs leading-relaxed text-[#073B78]/70">
-              Lake Fresh Fish Mart prep hub, Blantyre, Malawi. Fish is cleaned, weighed and ice packed here before it
-              leaves for your door.
+              Lake Fresh Fish Mart, Blantyre, Malawi. We clean, weigh and pack your fish with ice here, then send it to
+              your door.
             </p>
           </div>
         </div>
         <div className="flex gap-3">
           <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#08A9E8]" />
           <div>
-            <p className="text-xs font-extrabold text-[#073B78]">Food handling standards</p>
+            <p className="text-xs font-extrabold text-[#073B78]">Clean and careful</p>
             <p className="mt-1 text-xs leading-relaxed text-[#073B78]/70">
-              We use insulated cold boxes and food grade sealing. Every order is packed chilled and checked for weight
-              before dispatch.
+              We use cold boxes and clean seals. Every order is packed cold and weighed again before it leaves us.
             </p>
           </div>
         </div>
@@ -201,7 +203,7 @@ const LakeFreshFooter = () => (
     <div className="border-t border-gray-100">
       <div className="container flex flex-col gap-2 py-5 text-xs text-[#073B78]/45 sm:flex-row sm:items-center sm:justify-between">
         <p>© {new Date().getFullYear()} Lake Fresh Fish Mart. All rights reserved.</p>
-        <p>Registered business in Malawi · Fresh from the Lake. Ready for Your Table.</p>
+        <p>Registered business in Malawi. Fresh fish from Lake Malawi, made for your table.</p>
       </div>
     </div>
   </footer>

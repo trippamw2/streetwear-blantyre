@@ -67,7 +67,7 @@ export default function LakeFreshDriver() {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="mx-auto max-w-3xl space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="font-display text-xl font-bold text-[#073B78]">Driver — Delivery Stops</h1>
+          <h1 className="font-display text-xl font-bold text-[#073B78]">Today&apos;s delivery stops</h1>
           <input
             type="date"
             value={date}
@@ -91,7 +91,7 @@ export default function LakeFreshDriver() {
           </div>
         )}
 
-        {loading && <p className="text-sm text-gray-500">Loading stops...</p>}
+        {loading && <p className="text-sm text-[#073B78]/60">Loading stops...</p>}
 
         <div className="space-y-3">
           {orders.map((o, i) => (
@@ -101,25 +101,25 @@ export default function LakeFreshDriver() {
                   <p className="font-bold text-[#073B78]">
                     {i + 1}. {o.customer_name}
                   </p>
-                  <p className="mt-1 flex items-center gap-1 text-xs text-gray-600">
+                  <p className="mt-1 flex items-center gap-1 text-xs text-[#073B78]/70">
                     <Phone className="h-3 w-3" /> {o.customer_phone}
                   </p>
                   {(o.house_number || o.street_name) && (
-                    <p className="mt-1 flex items-center gap-1 text-xs text-gray-600">
+                    <p className="mt-1 flex items-center gap-1 text-xs text-[#073B78]/70">
                       <MapPin className="h-3 w-3" />
-                      {o.house_number ? `${o.house_number}, ` : ""}{o.street_name || ""} {o.customer_location ? `· ${o.customer_location}` : ""}
+                      {o.house_number ? `${o.house_number}, ` : ""}{o.street_name || ""} {o.customer_location ? `. ${o.customer_location}` : ""}
                     </p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500">
-                    {(o.items || []).map((it: any) => `${it.product_name} x ${it.quantity}`).join(", ")}
+                  <p className="mt-1 text-xs text-[#073B78]/60">
+                    {(o.items || []).map((it: any) => `${it.quantity} ${it.product_name}`).join(", ")}
                   </p>
                   {o.delivery_window && (
-                    <p className="mt-1 text-xs text-gray-500">Window: {o.delivery_window}</p>
+                    <p className="mt-1 text-xs text-[#073B78]/60">Time: {o.delivery_window}</p>
                   )}
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-2">
                   <label className="cursor-pointer rounded-lg bg-[#073B78] px-3 py-2 text-xs font-bold text-white">
-                    <Camera className="inline h-3.5 w-3.5 mr-1" /> Proof + Delivered
+                    <Camera className="inline h-3.5 w-3.5 mr-1" /> Add proof
                     <input
                       type="file"
                       accept="image/*"
@@ -135,14 +135,14 @@ export default function LakeFreshDriver() {
                     onClick={() => void markDelivered(o.id)}
                     className="rounded-lg bg-[#39B54A] px-3 py-2 text-xs font-bold text-white"
                   >
-                    <CheckCircle2 className="inline h-3.5 w-3.5 mr-1" /> Delivered
+                    <CheckCircle2 className="inline h-3.5 w-3.5 mr-1" /> Mark delivered
                   </button>
                 </div>
               </div>
             </div>
           ))}
           {orders.length === 0 && !loading && (
-            <p className="text-center text-sm text-gray-500">No stops for this date.</p>
+            <p className="text-center text-sm text-[#073B78]/60">No stops for this date.</p>
           )}
         </div>
       </div>

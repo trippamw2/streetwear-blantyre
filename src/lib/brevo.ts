@@ -32,7 +32,7 @@ const BRANDS: Record<EmailBrand, BrandConfig> = {
   },
   "lake-fresh": {
     name: "Lake Fresh Fish Mart",
-    tagline: "Fresh from the Lake. Ready for Your Table.",
+    tagline: "Fresh fish from Lake Malawi, made for your table.",
     email: "orders@lakefreshmw.com",
     website: "https://lakefreshmw.com",
     primaryColor: "#073B78",
