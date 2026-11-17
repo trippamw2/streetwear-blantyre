@@ -69,17 +69,17 @@ const categories = [
 
 const trustPoints = [
   { title: "Next day delivery", copy: "Order before cutoff, on your table tomorrow morning.", icon: Truck, accent: "#08A9E8" },
-  { title: "Fresh from the lake", copy: "Short freshness windows, cold-chain from lake to door.", icon: Snowflake, accent: "#39B54A" },
+  { title: "Fresh from the lake", copy: "Short freshness windows, cold chain from lake to door.", icon: Snowflake, accent: "#39B54A" },
   { title: "Honest weights", copy: "Priced per kilogram. You choose the weight, you see the price.", icon: Scale, accent: "#7ED321" },
 ];
 
 const whyPoints = [
-  { title: "Fresh from the lake", copy: "Short freshness windows and cold chain handling from lake to door.", icon: Fish, accent: "#073B78" },
-  { title: "Honest weights", copy: "Priced per kilogram with clear packed weights. No silent overcharging.", icon: Scale, accent: "#39B54A" },
-  { title: "Season it right", copy: "Signature spice blends matched to each fish on the catch list.", icon: Leaf, accent: "#7ED321" },
-  { title: "Free recipes", copy: "Choose a recipe with your fish, it arrives free with your order.", icon: BookOpen, accent: "#08A9E8" },
-  { title: "Business supply", copy: "LakeFresh PRO for restaurants, hotels and caterers.", icon: Building2, accent: "#073B78" },
-  { title: "Rewards that add up", copy: "Earn points on every order and refer friends for more.", icon: Sparkles, accent: "#39B54A" },
+  { title: "Fresh from the lake", copy: "Fish caught today. Cold kept from lake to your door.", icon: Fish, accent: "#073B78" },
+  { title: "Honest weight", copy: "You pay for each kilogram. No hidden charges.", icon: Scale, accent: "#39B54A" },
+  { title: "Season it right", copy: "Five spice mixes made for our fish.", icon: Leaf, accent: "#7ED321" },
+  { title: "Free recipes", copy: "Pick a recipe. It comes free with your order.", icon: BookOpen, accent: "#08A9E8" },
+  { title: "Business supply", copy: "LakeFresh PRO for shops, hotels and caterers.", icon: Building2, accent: "#073B78" },
+  { title: "Rewards", copy: "Earn points on every order. Refer friends for more.", icon: Sparkles, accent: "#39B54A" },
 ];
 
 const LakeFreshHome = () => {
@@ -377,7 +377,7 @@ const LakeFreshHome = () => {
             ))}
           </div>
           <p className="mt-6 text-xs text-gray-500">
-            Daily cutoff: {formatCutoff(deliveryConfig.cutoff)} · Free delivery over{" "}
+            Daily cutoff: {formatCutoff(deliveryConfig.cutoff)} ï¿½ Free delivery over{" "}
             {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)}
             {earliest ? ` Â· Next available: ${formatDeliveryDate(earliest)}` : ""}.
           </p>
