@@ -232,6 +232,7 @@ const LakeFreshProduct = () => {
                 <img
                   src={product.image}
                   alt={product.name}
+                  decoding="async"
                   className="h-full w-full rounded-2xl object-cover"
                 />
               ) : (
@@ -424,7 +425,7 @@ const LakeFreshProduct = () => {
             <div className="mt-6">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                  LakeFresh seasonings <span className="text-[#39B54A]">· choose up to 5</span>
+                  Recommended spices for this fish <span className="text-[#39B54A]">· choose up to 5</span>
                 </p>
                 <span className="text-[11px] font-bold text-[#073B78]">{selectedSpices.length}/5 selected</span>
               </div>
@@ -466,7 +467,7 @@ const LakeFreshProduct = () => {
             <div className="mt-8">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                  Choose your free recipe <span className="text-[#39B54A]">· included with this fish</span>
+                  Free recipes using this fish <span className="text-[#39B54A]">· included with this fish</span>
                 </p>
                 {selectedRecipe ? (
                   <button

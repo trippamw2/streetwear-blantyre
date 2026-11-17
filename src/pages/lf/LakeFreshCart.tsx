@@ -60,7 +60,7 @@ const LakeFreshCart = () => {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                     <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-[#073B78]">
                       {item.image ? (
-                        <img src={item.image} alt={item.name} className="h-full w-full rounded-xl object-cover" />
+                        <img src={item.image} alt={item.name} loading="lazy" decoding="async" className="h-full w-full rounded-xl object-cover" />
                       ) : (
                         <Package className="h-8 w-8 text-[#08A9E8]" />
                       )}
@@ -132,7 +132,7 @@ const LakeFreshCart = () => {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                   <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-[#073B78]">
                     {item.image ? (
-                      <img src={item.image} alt={item.name} className="h-full w-full rounded-xl object-cover" />
+                      <img src={item.image} alt={item.name} loading="lazy" decoding="async" className="h-full w-full rounded-xl object-cover" />
                     ) : (
                       <Fish className="h-8 w-8 text-[#08A9E8]" />
                     )}

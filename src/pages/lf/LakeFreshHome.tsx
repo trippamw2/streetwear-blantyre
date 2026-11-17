@@ -91,7 +91,7 @@ const LakeFreshHome = () => {
   const allProducts = products || [];
   const featured = allProducts.slice(0, 3);
   const heroImage =
-    "https://images.unsplash.com/photo-1543353071-10c8ba85a904?auto=format&fit=crop&w=1200&q=80";
+    "https://images.unsplash.com/photo-1543353071-10c8ba85a904?auto=format&fit=crop&fm=webp&w=1200&q=80";
 
   return (
     <div className="bg-white text-[#073B78]">
@@ -161,6 +161,7 @@ const LakeFreshHome = () => {
               <img
                 src={heroImage}
                 alt="An African family enjoying a fish meal"
+                decoding="async"
                 onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/brand/lake-fresh/fish-chambo.jpg"; }}
                 className="h-80 w-full rounded-[1.4rem] object-cover sm:h-96 lg:h-[34rem]"
               />

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
 import { lfUrl } from "@/lib/brandSite";
-import { AlertCircle, ArrowLeft, CalendarDays, CreditCard, Fish, Gift, Loader2, MapPin, Snowflake, Truck } from "lucide-react";
+import { AlertCircle, ArrowLeft, CalendarDays, Clock, CreditCard, Fish, Gift, Loader2, MapPin, Snowflake, Truck } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { useAuth } from "@/contexts/AuthContext";
@@ -54,6 +54,8 @@ const LakeFreshCheckout = () => {
   );
   const [phone, setPhone] = useState((user?.user_metadata?.phone as string | undefined) || "");
   const [notes, setNotes] = useState("");
+  const [landmark, setLandmark] = useState("");
+  const [deliveryWindow, setDeliveryWindow] = useState<"morning" | "afternoon">("morning");
   const [houseNumber, setHouseNumber] = useState("");
   const [streetName, setStreetName] = useState("");
   const [deliveryLat, setDeliveryLat] = useState<number | null>(null);
@@ -191,6 +193,14 @@ const LakeFreshCheckout = () => {
       toast({ title: "Enter your name and a valid phone number", variant: "destructive" });
       return;
     }
+    if (!landmark.trim()) {
+      toast({ title: "Add the nearest landmark and gate directions", variant: "destructive" });
+      return;
+    }
+    if (!deliveryWindow) {
+      toast({ title: "Choose a delivery window", variant: "destructive" });
+      return;
+    }
     if (minOrderBlocked && selectedZone) {
       toast({
         title: "Minimum order not reached",
@@ -221,13 +231,23 @@ const LakeFreshCheckout = () => {
         };
       });
 
+      const windowLabel =
+        deliveryWindow === "morning" ? "Morning, 8 AM to 11 AM" : "Afternoon, 4 PM to 6:30 PM";
+      const finalNotes = [
+        `Landmark and directions: ${landmark.trim()}`,
+        `Delivery window: ${windowLabel}`,
+        notes.trim(),
+      ]
+        .filter(Boolean)
+        .join(" | ");
+
       const { data, error } = await supabase.rpc("lf_place_order", {
         p_customer_name: name.trim(),
         p_customer_phone: phone.trim(),
         p_zone_id: selectedZone.id,
         p_slot_id: selectedSlot.id,
         p_items: payload,
-        p_notes: notes.trim() || undefined,
+        p_notes: finalNotes,
         p_marketing_consent: marketingConsent,
         p_redeem_points: pointsToUse,
         p_promo_code: promoPreview?.code || (promoCode.trim() || null),
@@ -357,6 +377,14 @@ const LakeFreshCheckout = () => {
     }
     if (!selectedSlot || !isDateUsable(selectedSlot.deliveryDate)) {
       toast({ title: "Choose an available delivery date", variant: "destructive" });
+      return;
+    }
+    if (!landmark.trim()) {
+      toast({ title: "Add the nearest landmark and gate directions", variant: "destructive" });
+      return;
+    }
+    if (!deliveryWindow) {
+      toast({ title: "Choose a delivery window", variant: "destructive" });
       return;
     }
     setStep(2);
@@ -588,14 +616,31 @@ const LakeFreshCheckout = () => {
                   )}
                 </div>
                 <label className="mt-4 block">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Delivery notes</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                    Nearest landmark and gate directions *
+                  </span>
+                  <textarea
+                    value={landmark}
+                    onChange={(e) => setLandmark(e.target.value)}
+                    required
+                    maxLength={300}
+                    rows={2}
+                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
+                    placeholder="e.g. Opposite the blue gate, near the Shoprite junction"
+                  />
+                  <span className="mt-1 block text-[11px] text-gray-500">
+                    This helps our rider find you fast.
+                  </span>
+                </label>
+                <label className="mt-4 block">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Other delivery notes (optional)</span>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     maxLength={500}
                     rows={2}
                     className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
-                    placeholder="Landmark, gate colour, or any delivery instructions"
+                    placeholder="Anything else our rider should know"
                   />
                 </label>
                 <label className="mt-4 flex items-start gap-2 text-xs text-gray-600">
@@ -719,6 +764,44 @@ const LakeFreshCheckout = () => {
                   <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
                     No delivery slots are open for this area. Please try another area or check back shortly.
                   </p>
+                )}
+              </section>
+
+              <section className="rounded-2xl border border-gray-200 bg-white p-5">
+                <h2 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#073B78]">
+                  <Clock className="h-4 w-4 text-[#08A9E8]" /> Delivery window *
+                </h2>
+                <p className="mt-1 text-xs text-gray-500">Choose when you would like your fish delivered.</p>
+                {selectedSlot && new Date(selectedSlot.cutoffAt).getTime() <= Date.now() ? (
+                  <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                    The order cutoff for this day has passed. Pick another delivery date.
+                  </p>
+                ) : (
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {[
+                      { key: "morning" as const, label: "Morning slot", time: "8 AM to 11 AM" },
+                      { key: "afternoon" as const, label: "Afternoon slot", time: "4 PM to 6:30 PM" },
+                    ].map((option) => {
+                      const selected = deliveryWindow === option.key;
+                      return (
+                        <button
+                          key={option.key}
+                          type="button"
+                          onClick={() => setDeliveryWindow(option.key)}
+                          className={`rounded-xl border p-3 text-left transition-colors ${
+                            selected
+                              ? "border-[#073B78] bg-[#073B78] text-white"
+                              : "border-gray-200 bg-white text-[#073B78] hover:border-[#073B78]/40"
+                          }`}
+                        >
+                          <span className="block text-sm font-bold">{option.label}</span>
+                          <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/70" : "text-gray-500"}`}>
+                            {option.time}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 )}
               </section>
             </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { LFLink, LFNavLink, useLFNavigate } from "@/components/lf/lfRouter";
-import { Menu, ShoppingBasket, X, LogOut, User, Snowflake } from "lucide-react";
+import { Menu, ShoppingBasket, X, LogOut, User, Snowflake, ShieldCheck, MapPin, MessageCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLakeFreshCart, LakeFreshCartProvider } from "@/contexts/LakeFreshCartContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -154,10 +154,54 @@ const LakeFreshFooter = () => (
         </div>
       </div>
     </div>
+
+    <div className="border-t border-[#39B54A]/20 bg-[#F4FBF7]">
+      <div className="container grid gap-6 py-8 sm:grid-cols-3">
+        <div className="flex gap-3">
+          <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#39B54A]" />
+          <div>
+            <p className="text-xs font-extrabold text-[#073B78]">Our prep hub</p>
+            <p className="mt-1 text-xs leading-relaxed text-[#073B78]/70">
+              Lake Fresh Fish Mart prep hub, Blantyre, Malawi. Fish is cleaned, weighed and ice packed here before it
+              leaves for your door.
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#08A9E8]" />
+          <div>
+            <p className="text-xs font-extrabold text-[#073B78]">Food handling standards</p>
+            <p className="mt-1 text-xs leading-relaxed text-[#073B78]/70">
+              We use insulated cold boxes and food grade sealing. Every order is packed chilled and checked for weight
+              before dispatch.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-3">
+          <div className="flex gap-3">
+            <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#25D366]" />
+            <div>
+              <p className="text-xs font-extrabold text-[#073B78]">Need help?</p>
+              <p className="mt-1 text-xs leading-relaxed text-[#073B78]/70">
+                Chat with our team on WhatsApp. We reply fast during delivery hours.
+              </p>
+            </div>
+          </div>
+          <a
+            href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"}?text=${encodeURIComponent("Hi Lake Fresh, I need help with my fish order.")}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#25D366] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white"
+          >
+            <MessageCircle className="h-3.5 w-3.5" /> Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
     <div className="border-t border-gray-100">
       <div className="container flex flex-col gap-2 py-5 text-xs text-[#073B78]/45 sm:flex-row sm:items-center sm:justify-between">
         <p>© {new Date().getFullYear()} Lake Fresh Fish Mart. All rights reserved.</p>
-        <p>Fresh from the Lake. Ready for Your Table.</p>
+        <p>Registered business in Malawi · Fresh from the Lake. Ready for Your Table.</p>
       </div>
     </div>
   </footer>

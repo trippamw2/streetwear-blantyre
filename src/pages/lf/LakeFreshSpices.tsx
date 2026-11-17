@@ -3,7 +3,7 @@ import { ArrowRight, Fish, Leaf, Loader2, Plus } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
+import { LF_BRAND_ID, useLakeFreshCatalog } from "@/hooks/useLakeFresh";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
@@ -12,6 +12,7 @@ const accents = ["#39B54A", "#08A9E8", "#7ED321"];
 
 const LakeFreshSpices = () => {
   const { addUnit } = useLakeFreshCart();
+  const { data: catalog } = useLakeFreshCatalog();
 
   const { data, isLoading } = useQuery({
     queryKey: ["lf", "spices"],
@@ -89,8 +90,14 @@ const LakeFreshSpices = () => {
             {(data || []).map((s: any, index: number) => {
               const accent = accents[index % accents.length];
               const pairings = (s.recommended_species || [])
-                .map((id: string) => speciesName(id))
-                .filter(Boolean);
+                .map((id: string) => ({ id, name: speciesName(id) }))
+                .filter((p: { name?: string }) => Boolean(p.name));
+              const pairedProducts = pairings
+                .map((p: { id: string; name?: string }) => {
+                  const product = (catalog || []).find((c) => c.speciesId === p.id && c.availabilityStatus === "available");
+                  return product ? { name: p.name, linkTo: `/lf/fish/${product.id}` } : null;
+                })
+                .filter(Boolean) as { name?: string; linkTo: string }[];
               return (
                 <div
                   key={s.id}
@@ -98,7 +105,7 @@ const LakeFreshSpices = () => {
                 >
                   <div className="relative flex h-36 items-center justify-center overflow-hidden bg-[#F4FBF7]">
                     {s.image ? (
-                      <img src={s.image} alt={s.name} className="h-full w-full object-cover" />
+                      <img src={s.image} alt={s.name} loading="lazy" decoding="async" className="h-full w-full object-cover" />
                     ) : (
                       <>
                         <div
@@ -133,10 +140,28 @@ const LakeFreshSpices = () => {
                     ) : null}
 
                     {pairings.length > 0 ? (
-                      <p className="mt-3 flex flex-wrap items-center gap-1 text-[11px] text-[#2c6e12]">
-                        <Fish className="h-3.5 w-3.5 shrink-0 text-[#39B54A]" />
-                        Pairs with {pairings.join(" · ")}
-                      </p>
+                      <div className="mt-3">
+                        <p className="flex flex-wrap items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[#2c6e12]">
+                          <Fish className="h-3.5 w-3.5 shrink-0 text-[#39B54A]" /> Best paired with
+                        </p>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
+                          {pairedProducts.length > 0
+                            ? pairedProducts.map((p) => (
+                                <LFLink
+                                  key={p.linkTo}
+                                  to={p.linkTo}
+                                  className="rounded-full border border-[#39B54A]/30 bg-[#F4FBF7] px-2.5 py-1 text-[11px] font-bold text-[#2c6e12] hover:bg-[#39B54A]/10"
+                                >
+                                  {p.name}
+                                </LFLink>
+                              ))
+                            : pairings.map((p) => (
+                                <span key={p.id} className="rounded-full bg-gray-50 px-2.5 py-1 text-[11px] text-gray-600">
+                                  {p.name}
+                                </span>
+                              ))}
+                        </div>
+                      </div>
                     ) : null}
 
                     <div className="mt-4 flex items-end justify-between gap-3 border-t border-gray-100 pt-4">
