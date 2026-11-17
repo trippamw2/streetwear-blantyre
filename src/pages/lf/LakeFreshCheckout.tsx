@@ -5,7 +5,7 @@ import { AlertCircle, ArrowLeft, CalendarDays, Clock, CreditCard, Fish, Gift, Lo
 import { SEO } from "@/components/SEO";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { useAuth } from "@/contexts/AuthContext";
-import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
+import { useLakeFreshCart, type LakeFreshCartItem } from "@/contexts/LakeFreshCartContext";
 import {
   useLakeFreshDeliveryConfig,
   useLakeFreshSlots,
@@ -31,6 +31,19 @@ import { toast } from "@/hooks/use-toast";
 
 const prepLabel = (value: string) =>
   value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Portioned" : value;
+
+const itemLine = (item: LakeFreshCartItem) => {
+  if (item.kind === "unit") {
+    return {
+      detail: `${item.quantity || 1} pack${item.quantity === 1 ? "" : "s"}${item.unit ? ` · ${item.unit}` : ""}`,
+      total: (item.unitPriceMwk || 0) * (item.quantity || 1),
+    };
+  }
+  return {
+    detail: `${getEffectiveWeightKg(item.weightKg || 0, item.minOrderQtyKg || 0.5).toFixed(1)} kg · ${prepLabel(item.preparation || "whole")}`,
+    total: calculateFinalPrice(item.pricePerKgMwk || 0, item.weightKg || 0, item.minOrderQtyKg || 0.5),
+  };
+};
 
 const LakeFreshCheckout = () => {
   const { user } = useAuth();
@@ -451,17 +464,17 @@ const LakeFreshCheckout = () => {
 
               <div className="mt-4 space-y-3">
                 {items.map((item) => {
-                  const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
+                  const line = itemLine(item);
                   return (
                     <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                       <div>
                         <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
                         <p className="text-xs text-gray-500">
-                          {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg · {prepLabel(item.preparation)}
+                          {line.detail}
                           {item.recipeTitle ? ` · free recipe: ${item.recipeTitle}` : ""}
                         </p>
                       </div>
-                      <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
+                      <span className="font-semibold text-[#073B78]">{formatMWK(line.total)}</span>
                     </div>
                   );
                 })}
@@ -503,16 +516,14 @@ const LakeFreshCheckout = () => {
                 <h2 className="font-display text-lg font-extrabold text-[#073B78]">Order summary</h2>
                 <div className="mt-3 space-y-3">
                   {items.map((item) => {
-                    const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
+                    const line = itemLine(item);
                     return (
                       <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                         <div>
                           <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
-                          <p className="text-xs text-gray-500">
-                            {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg · {prepLabel(item.preparation)}
-                          </p>
+                          <p className="text-xs text-gray-500">{line.detail}</p>
                         </div>
-                        <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
+                        <span className="font-semibold text-[#073B78]">{formatMWK(line.total)}</span>
                       </div>
                     );
                   })}
@@ -811,16 +822,14 @@ const LakeFreshCheckout = () => {
                 <h2 className="font-display text-lg font-extrabold text-[#073B78]">Order summary</h2>
                 <div className="mt-3 space-y-3">
                   {items.map((item) => {
-                    const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
+                    const line = itemLine(item);
                     return (
                       <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                         <div>
                           <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
-                          <p className="text-xs text-gray-500">
-                            {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg · {prepLabel(item.preparation)}
-                          </p>
+                          <p className="text-xs text-gray-500">{line.detail}</p>
                         </div>
-                        <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
+                        <span className="font-semibold text-[#073B78]">{formatMWK(line.total)}</span>
                       </div>
                     );
                   })}
@@ -944,16 +953,14 @@ const LakeFreshCheckout = () => {
                 <h2 className="font-display text-lg font-extrabold text-[#073B78]">Order summary</h2>
                 <div className="mt-3 space-y-3">
                   {items.map((item) => {
-                    const lineTotal = calculateFinalPrice(item.pricePerKgMwk, item.weightKg, item.minOrderQtyKg);
+                    const line = itemLine(item);
                     return (
                       <div key={item.key} className="flex items-start justify-between gap-3 text-sm">
                         <div>
                           <p className="font-semibold text-[#073B78]">{item.speciesName || item.name}</p>
-                          <p className="text-xs text-gray-500">
-                            {getEffectiveWeightKg(item.weightKg, item.minOrderQtyKg).toFixed(1)} kg · {prepLabel(item.preparation)}
-                          </p>
+                          <p className="text-xs text-gray-500">{line.detail}</p>
                         </div>
-                        <span className="font-semibold text-[#073B78]">{formatMWK(lineTotal)}</span>
+                        <span className="font-semibold text-[#073B78]">{formatMWK(line.total)}</span>
                       </div>
                     );
                   })}
