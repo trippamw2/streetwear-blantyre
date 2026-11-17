@@ -3,6 +3,7 @@ import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
 import { lfUrl } from "@/lib/brandSite";
 import { AlertCircle, ArrowLeft, CalendarDays, CreditCard, Fish, Gift, Loader2, MapPin, Snowflake, Truck } from "lucide-react";
 import { SEO } from "@/components/SEO";
+import { LeafletMap } from "@/components/lf/LeafletMap";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import {
@@ -53,6 +54,11 @@ const LakeFreshCheckout = () => {
   );
   const [phone, setPhone] = useState((user?.user_metadata?.phone as string | undefined) || "");
   const [notes, setNotes] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [streetName, setStreetName] = useState("");
+  const [deliveryLat, setDeliveryLat] = useState<number | null>(null);
+  const [deliveryLng, setDeliveryLng] = useState<number | null>(null);
+  const [deliveryPlace, setDeliveryPlace] = useState("");
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [step, setStep] = useState(0);
@@ -157,6 +163,20 @@ const LakeFreshCheckout = () => {
     setPromoPreview({ code: data.code as string, discount });
   };
 
+  const handleMapClick = (lat: number, lng: number) => {
+    setDeliveryLat(lat);
+    setDeliveryLng(lng);
+    // reverse geocode via OpenStreetMap Nominatim (free, no key)
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`, {
+      headers: { "Accept-Language": "en" },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.display_name) setDeliveryPlace(data.display_name);
+      })
+      .catch(() => {});
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!selectedZone) {
@@ -211,6 +231,11 @@ const LakeFreshCheckout = () => {
         p_marketing_consent: marketingConsent,
         p_redeem_points: pointsToUse,
         p_promo_code: promoPreview?.code || (promoCode.trim() || null),
+        p_house_number: houseNumber.trim() || undefined,
+        p_street_name: streetName.trim() || undefined,
+        p_delivery_lat: deliveryLat ?? undefined,
+        p_delivery_lng: deliveryLng ?? undefined,
+        p_delivery_place: deliveryPlace.trim() || undefined,
       });
 
       if (error) throw new Error(error.message);
@@ -517,6 +542,45 @@ const LakeFreshCheckout = () => {
                       placeholder="e.g. 0888 000 000"
                     />
                   </label>
+                </div>
+                <label className="mt-4 block">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">House number</span>
+                  <input
+                    value={houseNumber}
+                    onChange={(e) => setHouseNumber(e.target.value)}
+                    maxLength={40}
+                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
+                    placeholder="e.g. 12"
+                  />
+                </label>
+                <label className="mt-4 block">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Street name</span>
+                  <input
+                    value={streetName}
+                    onChange={(e) => setStreetName(e.target.value)}
+                    maxLength={120}
+                    className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
+                    placeholder="e.g. Mandala Road"
+                  />
+                </label>
+                <div className="mt-4">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Pin your exact location on the map</span>
+                  <p className="mt-1 text-xs text-gray-500">Tap the map to drop a pin. We use it to plan the fastest delivery route.</p>
+                  <div className="mt-2 overflow-hidden rounded-xl border border-gray-200">
+                    <LeafletMap
+                      center={deliveryLat && deliveryLng ? [deliveryLat, deliveryLng] : [-15.7861, 35.0058]}
+                      zoom={deliveryLat ? 16 : 13}
+                      marker={deliveryLat && deliveryLng ? { lat: deliveryLat, lng: deliveryLng } : null}
+                      onClick={handleMapClick}
+                      height={260}
+                    />
+                  </div>
+                  {deliveryLat && deliveryLng && (
+                    <p className="mt-2 text-xs text-gray-600">
+                      Pinned: {deliveryLat.toFixed(5)}, {deliveryLng.toFixed(5)}
+                      {deliveryPlace ? ` · ${deliveryPlace}` : ""}
+                    </p>
+                  )}
                 </div>
                 <label className="mt-4 block">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Delivery notes</span>

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { LeafletMap } from "@/components/lf/LeafletMap";
 import { formatMWK } from "@/data/products";
 import {
   Fish,
@@ -14,6 +15,7 @@ import {
   CalendarDays,
   ClipboardList,
   Truck,
+  MapPin,
   Plus,
   RefreshCw,
   CheckCircle2,
@@ -24,7 +26,7 @@ import {
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
 
-type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery";
+type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery" | "route";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
@@ -39,6 +41,7 @@ const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "orders", label: "Orders", icon: ClipboardList },
   { key: "preparation", label: "Preparation", icon: Package },
   { key: "delivery", label: "Delivery", icon: Truck },
+  { key: "route", label: "Route Map", icon: MapPin },
 ];
 
 const uploadLfAsset = async (file: File, folder: string): Promise<string> => {
@@ -132,7 +135,7 @@ const AssetField = ({
   );
 };
 
-const VALID_TABS: Tab[] = ["catalog", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery"];
+const VALID_TABS: Tab[] = ["catalog", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery", "route"];
 
 const AdminLakeFresh = () => {
   const { user } = useAuth();
@@ -192,6 +195,9 @@ const AdminLakeFresh = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [orderItems, setOrderItems] = useState<Record<string, any[]>>({});
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const [routeDate, setRouteDate] = useState(new Date().toISOString().slice(0, 10));
+  const [routeOrders, setRouteOrders] = useState<any[]>([]);
+  const [routeLoading, setRouteLoading] = useState(false);
 
   // ---- Preparation state ----
   const [preparations, setPreparations] = useState<any[]>([]);
@@ -413,6 +419,120 @@ const AdminLakeFresh = () => {
       .order("created_at", { ascending: false })
       .limit(100);
     setOrders(data || []);
+  };
+
+  const loadRouteOrders = async () => {
+    setRouteLoading(true);
+    const { data } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("brand_id", LF_BRAND_ID)
+      .eq("delivery_date", routeDate)
+      .not("status", "in", "(cancelled)")
+      .order("created_at", { ascending: true });
+    const ords = data || [];
+    // fetch items for each
+    const ids = ords.map((o: any) => o.id);
+    let itemsByOrder: Record<string, any[]> = {};
+    if (ids.length) {
+      const { data: items } = await supabase
+        .from("order_items")
+        .select("order_id, product_name, quantity, unit_price_mwk")
+        .in("order_id", ids);
+      for (const it of items || []) {
+        if (!itemsByOrder[it.order_id]) itemsByOrder[it.order_id] = [];
+        itemsByOrder[it.order_id].push(it);
+      }
+    }
+    const enriched = ords.map((o: any) => ({ ...o, items: itemsByOrder[o.id] || [] }));
+    setRouteOrders(enriched);
+    setRouteLoading(false);
+  };
+
+  const haversineKm = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
+    const R = 6371;
+    const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+    const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+    const x =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos((a.lat * Math.PI) / 180) * Math.cos((b.lat * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(x));
+  };
+
+  const optimizeRoute = (ords: any[]) => {
+    const withCoords = ords.filter((o) => o.delivery_lat != null && o.delivery_lng != null);
+    const without = ords.filter((o) => o.delivery_lat == null || o.delivery_lng == null);
+    if (withCoords.length === 0) return [...ords];
+    // start from centroid-ish depot (Blantyre center) then nearest neighbor
+    let current = { lat: -15.7861, lng: 35.0058 };
+    const remaining = [...withCoords];
+    const ordered: any[] = [];
+    while (remaining.length) {
+      let bestIdx = 0;
+      let bestDist = Infinity;
+      remaining.forEach((o, i) => {
+        const d = haversineKm(current, { lat: o.delivery_lat, lng: o.delivery_lng });
+        if (d < bestDist) {
+          bestDist = d;
+          bestIdx = i;
+        }
+      });
+      const next = remaining.splice(bestIdx, 1)[0];
+      ordered.push(next);
+      current = { lat: next.delivery_lat, lng: next.delivery_lng };
+    }
+    return [...ordered, ...without];
+  };
+
+  const printRouteSheet = () => {
+    const ordered = optimizeRoute(routeOrders);
+    const rows = ordered
+      .map((o, i) => {
+        const items = (o.items || [])
+          .map((it: any) => `${it.product_name} x ${it.quantity}`)
+          .join(", ");
+        return `<tr>
+          <td>${i + 1}</td>
+          <td>${o.customer_name || ""}</td>
+          <td>${o.customer_phone || ""}</td>
+          <td>${o.house_number || ""}</td>
+          <td>${o.street_name || ""}</td>
+          <td>${o.customer_location || ""}</td>
+          <td>${o.delivery_place || ""}</td>
+          <td>${items}</td>
+          <td>${o.delivery_window || ""}</td>
+          <td></td>
+        </tr>`;
+      })
+      .join("");
+    const html = `<!doctype html><html><head><title>Delivery route ${routeDate}</title>
+      <style>
+        body{font-family:Arial,sans-serif;margin:20px;color:#111}
+        h1{font-size:18px;margin-bottom:4px}
+        .meta{font-size:12px;color:#555;margin-bottom:12px}
+        table{width:100%;border-collapse:collapse;font-size:11px}
+        th,td{border:1px solid #999;padding:6px;vertical-align:top}
+        th{background:#073B78;color:#fff}
+        .sign{height:40px}
+        @media print{button{display:none}}
+      </style></head><body>
+      <h1>Lake Fresh Fish Mart - Delivery Route Sheet</h1>
+      <div class="meta">Date: ${routeDate} · ${ordered.length} stops · Driver signature: ____________</div>
+      <table>
+        <thead><tr>
+          <th>#</th><th>Customer</th><th>Phone</th><th>House no.</th><th>Street</th><th>Area</th><th>Pinned place</th><th>Items</th><th>Window</th><th>Delivered (sign)</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <p style="margin-top:12px;font-size:11px;color:#555">Keep this sheet with you. Tick each stop as delivered. Report any failed delivery with reason.</p>
+      </body></html>`;
+    const w = window.open("", "_blank");
+    if (w) {
+      w.document.write(html);
+      w.document.close();
+      w.focus();
+      setTimeout(() => w.print(), 400);
+    }
   };
 
   const loadOrderItems = async (orderId: string) => {
@@ -1944,9 +2064,109 @@ const AdminLakeFresh = () => {
           </div>
         </div>
       )}
+
+      {/* ROUTE MAP */}
+      {tab === "route" && (
+        <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <div className="flex flex-wrap items-end gap-3">
+              <div>
+                <Label>Delivery date</Label>
+                <Input
+                  type="date"
+                  value={routeDate}
+                  onChange={(e) => setRouteDate(e.target.value)}
+                  className="mt-1"
+                />
+              </div>
+              <Button onClick={() => void loadRouteOrders()} disabled={routeLoading}>
+                {routeLoading ? "Loading..." : "Load orders"}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={printRouteSheet}
+                disabled={routeOrders.length === 0}
+              >
+                Print route sheet
+              </Button>
+            </div>
+            <p className="mt-2 text-xs text-gray-500">
+              Orders for this date are mapped and ordered into the fastest route. Print the sheet for the delivery driver.
+            </p>
+          </div>
+
+          {routeOrders.length > 0 && (
+            <>
+              <div className="rounded-xl border bg-white overflow-hidden">
+                <LeafletMap
+                  center={
+                    routeOrders.find((o) => o.delivery_lat && o.delivery_lng)
+                      ? [routeOrders.find((o) => o.delivery_lat && o.delivery_lng).delivery_lat, routeOrders.find((o) => o.delivery_lat && o.delivery_lng).delivery_lng]
+                      : [-15.7861, 35.0058]
+                  }
+                  zoom={12}
+                  markers={routeOrders
+                    .filter((o) => o.delivery_lat != null && o.delivery_lng != null)
+                    .map((o, i) => ({
+                      lat: o.delivery_lat,
+                      lng: o.delivery_lng,
+                      label: `${i + 1}. ${o.customer_name} · ${o.customer_phone}`,
+                      color: "#073B78",
+                    }))}
+                  polyline={optimizeRoute(routeOrders)
+                    .filter((o) => o.delivery_lat != null && o.delivery_lng != null)
+                    .map((o) => [o.delivery_lat, o.delivery_lng] as [number, number])}
+                  height={420}
+                />
+              </div>
+
+              <div className="rounded-xl border bg-white overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                    <tr>
+                      <th className="px-4 py-3 text-left">#</th>
+                      <th className="px-4 py-3 text-left">Customer</th>
+                      <th className="px-4 py-3 text-left">Phone</th>
+                      <th className="px-4 py-3 text-left">House no.</th>
+                      <th className="px-4 py-3 text-left">Street</th>
+                      <th className="px-4 py-3 text-left">Area</th>
+                      <th className="px-4 py-3 text-left">Items</th>
+                      <th className="px-4 py-3 text-left">Window</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {optimizeRoute(routeOrders).map((o, i) => (
+                      <tr key={o.id} className="border-t">
+                        <td className="px-4 py-3 font-bold">{i + 1}</td>
+                        <td className="px-4 py-3 font-medium">{o.customer_name}</td>
+                        <td className="px-4 py-3">{o.customer_phone}</td>
+                        <td className="px-4 py-3">{o.house_number || "—"}</td>
+                        <td className="px-4 py-3">{o.street_name || "—"}</td>
+                        <td className="px-4 py-3">{o.customer_location || "—"}</td>
+                        <td className="px-4 py-3 text-xs">
+                          {(o.items || []).map((it: any) => `${it.product_name} x ${it.quantity}`).join(", ") || "—"}
+                        </td>
+                        <td className="px-4 py-3">{o.delivery_window || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {routeOrders.length === 0 && !routeLoading && (
+            <div className="rounded-xl border bg-white p-6 text-center text-gray-500">
+              No orders loaded. Choose a date and click "Load orders".
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
+
+export default AdminLakeFresh;
 
 const PreparationRow = ({ prep, onSave }: { prep: any; onSave: (id: string, packed: string, final: string) => void }) => {
   const [packed, setPacked] = useState(prep.packed_weight_kg ? String(prep.packed_weight_kg) : "");
@@ -1980,5 +2200,3 @@ const PreparationRow = ({ prep, onSave }: { prep: any; onSave: (id: string, pack
     </tr>
   );
 };
-
-export default AdminLakeFresh;
