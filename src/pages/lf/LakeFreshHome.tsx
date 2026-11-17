@@ -124,7 +124,7 @@ const LakeFreshHome = () => {
               READY FOR YOUR TABLE.
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/75 sm:text-base">
-              Wild-caught this morning, cold-chain handled, at your door tomorrow. Pick your fish, choose your
+              Wild caught this morning, cold chain handled, at your door tomorrow. Pick your fish, choose your
               weight, add a signature spice and a free recipe — your meal, planned by you.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
