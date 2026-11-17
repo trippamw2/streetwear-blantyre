@@ -1,28 +1,28 @@
 /**
  * Lake Fresh pilot limits.
  *
- * The pilot sells five fish options in three areas only. Keep these values in
- * one place so the storefront, checkout and subscription forms stay in step.
+ * The pilot sells three fish options: Chambo, Micheni and Usipa. Keep these
+ * values in one place so the storefront, checkout and forms stay in step.
  */
 
 export const LF_PILOT_ZONE_SLUGS = ["nkolokosa", "soche-east", "chitawira"] as const;
 
-export const LF_PILOT_SPECIES_SLUGS = ["chambo", "usipa", "chisense"] as const;
+export const LF_PILOT_SPECIES_SLUGS = ["chambo", "micheni", "usipa"] as const;
 
 export const LF_PILOT_ZONE_NAMES = "Nkolokosa, Soche East and Chitawira";
+
+export const LF_PILOT_FISH_NAMES = "Chambo, Micheni and Usipa";
 
 export const LF_PILOT_DELIVERY_PROMISE = "Order by 8 PM, delivered tomorrow";
 
 export const LF_PILOT_OPTION_ORDER = [
   "fresh_chambo",
+  "fresh_micheni",
   "fresh_usipa",
-  "fresh_chisense",
-  "fish_cuts",
-  "family_box",
 ] as const;
 
 export const LF_PILOT_OFFER = [
-  { label: "Fresh fish", detail: "Chambo, Usipa, Chisense, cuts or a family box." },
+  { label: "Fresh fish", detail: LF_PILOT_FISH_NAMES },
   { label: "Cleaned and cut", detail: "We clean your fish and cut it the way you like." },
   { label: "Choice of seasoning", detail: "Five seasonings to choose from." },
   { label: "Properly packed", detail: "Clean box, clear weight and clear price." },

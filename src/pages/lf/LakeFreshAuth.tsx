@@ -92,7 +92,7 @@ const LakeFreshAuth = () => {
       <SEO
         brand="lake-fresh"
         title="Sign in | Lake Fresh Fish Mart"
-        description="Sign in to choose fresh fish, add one free recipe and follow your delivery in Nkolokosa, Soche East or Chitawira."
+        description="Sign in to choose fresh fish, add one free recipe and follow your delivery."
       />
       <div className="container flex min-h-[70vh] max-w-md flex-col justify-center py-14">
         <div className="mb-6 text-center">

@@ -7,7 +7,7 @@ import { useLakeFreshCart, LakeFreshCartProvider } from "@/contexts/LakeFreshCar
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDS } from "@/lib/brands";
 import { formatMWK } from "@/data/products";
-import { LF_PILOT_DELIVERY_PROMISE, LF_PILOT_ZONE_NAMES } from "@/lib/lfPilot";
+import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
 
 const brand = BRANDS["lake-fresh"];
 
@@ -36,7 +36,7 @@ const LakeFreshHeader = () => {
       </div>
       <div className="border-b border-[#39B54A]/20 bg-[#F4FBF7]">
         <div className="container flex min-h-8 items-center justify-center px-3 text-center text-[10px] font-bold uppercase tracking-[0.14em] text-[#073B78]">
-          {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
+          {LF_PILOT_DELIVERY_PROMISE}.
         </div>
       </div>
       <div className="container flex h-16 items-center justify-between gap-4">
@@ -152,8 +152,7 @@ const LakeFreshFooter = () => (
         <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Delivery</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
           <span>{LF_PILOT_DELIVERY_PROMISE}</span>
-          <span>{LF_PILOT_ZONE_NAMES}</span>
-          <span>Five fish options</span>
+          <span>Three fish options</span>
         </div>
         <p className="mt-6 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Policies</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">

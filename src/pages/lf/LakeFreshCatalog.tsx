@@ -19,7 +19,7 @@ const LakeFreshCatalog = () => {
       <SEO
         brand="lake-fresh"
         title="The Catch | Lake Fresh Fish Mart"
-        description="Five fresh fish options for Nkolokosa, Soche East and Chitawira. Choose cleaned, cut or seasoned fish, one free recipe and delivery tomorrow."
+        description="Chambo, Micheni and Usipa. Choose cleaned, cut or seasoned fish, one free recipe and delivery tomorrow."
       />
 
       <section className="relative overflow-hidden border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
@@ -28,11 +28,11 @@ const LakeFreshCatalog = () => {
             <Fish className="h-3.5 w-3.5" /> Pilot options
           </span>
           <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-[#073B78] sm:text-5xl">
-            FIVE FISH OPTIONS
+            THREE FISH OPTIONS
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#073B78]/70 sm:text-base">
-            Fresh Chambo, Usipa, Chisense, cuts and a family box. We clean it, weigh it and pack it with care. Add one
-            of five seasonings and one free recipe. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
+            Chambo, Micheni and Usipa. We clean it, weigh it and pack it with care. Add one of five seasonings and one
+            free recipe. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <LFLink

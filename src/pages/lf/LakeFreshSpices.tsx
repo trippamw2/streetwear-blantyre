@@ -49,7 +49,7 @@ const LakeFreshSpices = () => {
       <SEO
         brand="lake-fresh"
         title="Seasonings | Lake Fresh Fish Mart"
-        description="Five seasonings made for lake fish. Pick one for Chambo, Usipa or Chisense."
+        description="Five seasonings made for lake fish. Pick one for Chambo, Micheni or Usipa."
       />
 
       <section className="relative overflow-hidden border-b border-[#F2FBEE] bg-gradient-to-br from-[#F4FBF7] via-white to-[#F7FCEB]">
@@ -69,7 +69,7 @@ const LakeFreshSpices = () => {
               to="/lf/fish"
               className="inline-flex items-center gap-2 rounded-full border border-[#073B78]/15 bg-white px-3.5 py-2 text-[10px] font-bold uppercase tracking-wide text-[#073B78]"
             >
-              <Fish className="h-3.5 w-3.5 text-[#08A9E8]" /> See the five options
+              <Fish className="h-3.5 w-3.5 text-[#08A9E8]" /> See the three options
             </LFLink>
             <LFLink
               to="/lf/recipes"

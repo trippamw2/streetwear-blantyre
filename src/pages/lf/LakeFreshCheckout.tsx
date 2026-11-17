@@ -614,7 +614,7 @@ const LakeFreshCheckout = () => {
                     onChange={(e) => setStreetName(e.target.value)}
                     maxLength={120}
                     className="mt-1.5 w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#073B78] outline-none focus:border-[#073B78]"
-                    placeholder="e.g. Chitawira Road"
+                    placeholder="e.g. Main Road"
                   />
                 </label>
                 <div className="mt-4">

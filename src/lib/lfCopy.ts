@@ -15,7 +15,10 @@ const REPLACEMENTS: Array<[RegExp, string]> = [
   [/\bready to cook\b/gi, "ready for your pan"],
   [/\bmeal kits?\b/gi, "fish and spices"],
   [/\bprep(?:ping|aration|ared|aring)?\b/gi, "getting ready"],
+  [/\bLF-SUB-/g, "LF SUB "],
   [/\bLF-/g, "LF "],
+  [/[—–·]/g, " "],
+  [/([A-Za-z])-([A-Za-z])/g, "$1 $2"],
 ];
 
 export const lfDisplayCopy = (value?: string | null): string => {
