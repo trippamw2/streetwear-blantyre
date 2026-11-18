@@ -21,7 +21,7 @@ export default function LakeFreshDriver() {
       .select("*")
       .eq("brand_id", LF_BRAND_ID)
       .eq("delivery_date", date)
-      .in("status", ["dispatched", "confirmed", "processing"])
+      .eq("status", "dispatched")
       .order("created_at", { ascending: true });
     const ords = data || [];
     const ids = ords.map((o: any) => o.id);
@@ -45,7 +45,16 @@ export default function LakeFreshDriver() {
   }, [user, date]);
 
   const markDelivered = async (id: string, proofUrl?: string) => {
-    await supabase.from("orders").update({ status: "delivered", delivery_proof_url: proofUrl || null }).eq("id", id);
+    const { error } = await supabase
+      .from("orders")
+      .update({ status: "delivered", delivery_proof_url: proofUrl || null })
+      .eq("id", id)
+      .eq("brand_id", LF_BRAND_ID)
+      .eq("status", "dispatched");
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
     void load();
   };
 

@@ -44,6 +44,51 @@ export type Database = {
         }
         Relationships: []
       }
+      brand_messages: {
+        Row: {
+          audience: string
+          body: string
+          brand_id: string
+          channel: string
+          created_at: string
+          created_by: string | null
+          id: string
+          recipients_count: number
+          sent_at: string | null
+          status: string
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          audience?: string
+          body: string
+          brand_id: string
+          channel?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          recipients_count?: number
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          audience?: string
+          body?: string
+          brand_id?: string
+          channel?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          recipients_count?: number
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       brand_settings: {
         Row: {
           brand_id: string
@@ -791,6 +836,8 @@ export type Database = {
         Row: {
           base_fee_mwk: number
           brand_id: string
+          center_lat: number | null
+          center_lng: number | null
           created_at: string
           description: string | null
           id: string
@@ -804,6 +851,8 @@ export type Database = {
         Insert: {
           base_fee_mwk?: number
           brand_id?: string
+          center_lat?: number | null
+          center_lng?: number | null
           created_at?: string
           description?: string | null
           id?: string
@@ -817,6 +866,8 @@ export type Database = {
         Update: {
           base_fee_mwk?: number
           brand_id?: string
+          center_lat?: number | null
+          center_lng?: number | null
           created_at?: string
           description?: string | null
           id?: string
@@ -915,6 +966,7 @@ export type Database = {
           is_active: boolean
           min_order_qty_kg: number
           name: string
+          pilot_option: string | null
           preparation_options: Json
           price_per_kg_mwk: number
           sort_order: number
@@ -932,6 +984,7 @@ export type Database = {
           is_active?: boolean
           min_order_qty_kg?: number
           name: string
+          pilot_option?: string | null
           preparation_options?: Json
           price_per_kg_mwk: number
           sort_order?: number
@@ -949,6 +1002,7 @@ export type Database = {
           is_active?: boolean
           min_order_qty_kg?: number
           name?: string
+          pilot_option?: string | null
           preparation_options?: Json
           price_per_kg_mwk?: number
           sort_order?: number
@@ -1570,6 +1624,7 @@ export type Database = {
           image: string | null
           ingredients: Json
           is_active: boolean
+          pdf_url: string | null
           prep_time_min: number | null
           qr_target_url: string | null
           recommended_spice: string | null
@@ -1591,6 +1646,7 @@ export type Database = {
           image?: string | null
           ingredients?: Json
           is_active?: boolean
+          pdf_url?: string | null
           prep_time_min?: number | null
           qr_target_url?: string | null
           recommended_spice?: string | null
@@ -1612,6 +1668,7 @@ export type Database = {
           image?: string | null
           ingredients?: Json
           is_active?: boolean
+          pdf_url?: string | null
           prep_time_min?: number | null
           qr_target_url?: string | null
           recommended_spice?: string | null
@@ -1869,6 +1926,13 @@ export type Database = {
             columns: ["delivery_zone_id"]
             isOneToOne: false
             referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lf_subscriptions_fish_product_id_fkey"
+            columns: ["fish_product_id"]
+            isOneToOne: false
+            referencedRelation: "fish_products"
             referencedColumns: ["id"]
           },
         ]
@@ -2288,15 +2352,21 @@ export type Database = {
           brand_id: string
           charge_id: string | null
           created_at: string
+          customer_email: string | null
           customer_location: string | null
           customer_name: string
           customer_phone: string
           delivery_date: string | null
           delivery_fee_mwk: number | null
+          delivery_lat: number | null
+          delivery_lng: number | null
+          delivery_place: string | null
+          delivery_proof_url: string | null
           delivery_slot_id: string | null
           delivery_window: string | null
           delivery_zone_id: string | null
           discount_mwk: number | null
+          house_number: string | null
           id: string
           inventory_committed_at: string | null
           notes: string | null
@@ -2308,6 +2378,7 @@ export type Database = {
           promo_code: string | null
           provider_reference: string | null
           status: Database["public"]["Enums"]["order_status"]
+          street_name: string | null
           subtotal_mwk: number | null
           total_mwk: number
           updated_at: string
@@ -2318,15 +2389,21 @@ export type Database = {
           brand_id?: string
           charge_id?: string | null
           created_at?: string
+          customer_email?: string | null
           customer_location?: string | null
           customer_name: string
           customer_phone: string
           delivery_date?: string | null
           delivery_fee_mwk?: number | null
+          delivery_lat?: number | null
+          delivery_lng?: number | null
+          delivery_place?: string | null
+          delivery_proof_url?: string | null
           delivery_slot_id?: string | null
           delivery_window?: string | null
           delivery_zone_id?: string | null
           discount_mwk?: number | null
+          house_number?: string | null
           id?: string
           inventory_committed_at?: string | null
           notes?: string | null
@@ -2338,6 +2415,7 @@ export type Database = {
           promo_code?: string | null
           provider_reference?: string | null
           status?: Database["public"]["Enums"]["order_status"]
+          street_name?: string | null
           subtotal_mwk?: number | null
           total_mwk: number
           updated_at?: string
@@ -2348,15 +2426,21 @@ export type Database = {
           brand_id?: string
           charge_id?: string | null
           created_at?: string
+          customer_email?: string | null
           customer_location?: string | null
           customer_name?: string
           customer_phone?: string
           delivery_date?: string | null
           delivery_fee_mwk?: number | null
+          delivery_lat?: number | null
+          delivery_lng?: number | null
+          delivery_place?: string | null
+          delivery_proof_url?: string | null
           delivery_slot_id?: string | null
           delivery_window?: string | null
           delivery_zone_id?: string | null
           discount_mwk?: number | null
+          house_number?: string | null
           id?: string
           inventory_committed_at?: string | null
           notes?: string | null
@@ -2368,6 +2452,7 @@ export type Database = {
           promo_code?: string | null
           provider_reference?: string | null
           status?: Database["public"]["Enums"]["order_status"]
+          street_name?: string | null
           subtotal_mwk?: number | null
           total_mwk?: number
           updated_at?: string
@@ -2479,6 +2564,13 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_events_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "lf_subscriptions"
             referencedColumns: ["id"]
           },
         ]
@@ -3556,8 +3648,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_credit_loyalty_points: {
+        Args: {
+          p_brand_id: string
+          p_description?: string
+          p_points: number
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      apply_referral_code: { Args: { p_code: string }; Returns: Json }
+      award_loyalty_for_order: { Args: { p_order_id: string }; Returns: Json }
+      complete_referral: {
+        Args: { p_order_id?: string; p_referee_id: string }
+        Returns: Json
+      }
       confirm_fish_reservation: {
         Args: { p_reservation_id: string }
+        Returns: undefined
+      }
+      credit_loyalty_points: {
+        Args: {
+          p_brand_id: string
+          p_description: string
+          p_order_id?: string
+          p_points: number
+          p_type: string
+          p_user_id: string
+        }
         Returns: undefined
       }
       generate_gift_tracking_token: { Args: never; Returns: string }
@@ -3565,6 +3683,7 @@ export type Database = {
       generate_qr_token: { Args: never; Returns: string }
       generate_serial_number: { Args: never; Returns: string }
       generate_slug: { Args: { input_text: string }; Returns: string }
+      has_brand_access: { Args: { _brand_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -3582,24 +3701,25 @@ export type Database = {
       }
       lf_place_order: {
         Args: {
+          p_customer_email?: string
           p_customer_name: string
           p_customer_phone: string
-          p_zone_id: string
-          p_slot_id: string
-          p_items: Json
-          p_notes?: string
-          p_marketing_consent?: boolean
-          p_redeem_points?: number
-          p_promo_code?: string
-          p_customer_email?: string
-          p_house_number?: string
-          p_street_name?: string
           p_delivery_lat?: number
           p_delivery_lng?: number
           p_delivery_place?: string
+          p_house_number?: string
+          p_items: Json
+          p_marketing_consent?: boolean
+          p_notes?: string
+          p_promo_code?: string
+          p_redeem_points?: number
+          p_slot_id: string
+          p_street_name?: string
+          p_zone_id: string
         }
         Returns: string
       }
+      lf_preview_promo: { Args: { p_code: string }; Returns: Json }
       lf_public_catalog: {
         Args: never
         Returns: {
@@ -3612,8 +3732,8 @@ export type Database = {
           images: Json
           min_order_qty_kg: number
           name: string
+          pilot_option: string
           preparation_options: Json
-          pilot_option: string | null
           price_per_kg_mwk: number
           sort_order: number
           species_id: string
@@ -3626,6 +3746,10 @@ export type Database = {
       lf_public_subscription_status: {
         Args: { p_subscription_id: string; p_tx_ref: string }
         Returns: string
+      }
+      lf_track_order: {
+        Args: { p_phone: string; p_reference?: string }
+        Returns: Json
       }
       mark_order_paid: { Args: { p_order_id: string }; Returns: Json }
       process_order_paid: {
@@ -3663,6 +3787,10 @@ export type Database = {
           p_scan_result: string
         }
         Returns: string
+      }
+      redeem_loyalty_points: {
+        Args: { p_brand_id: string; p_order_total: number; p_points: number }
+        Returns: Json
       }
       release_fish_reservation: {
         Args: { p_reservation_id: string }

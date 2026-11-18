@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,8 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import LFImageGalleryInput from "@/components/admin/LFImageGalleryInput";
+import LFFileManager from "@/components/admin/LFFileManager";
 import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { lfGalleryImages } from "@/lib/lfImages";
+import { deleteLfStorageAsset } from "@/lib/lfStorage";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { formatMWK } from "@/data/products";
 import {
@@ -23,6 +25,7 @@ import {
   Users,
   Plus,
   RefreshCw,
+  Trash2,
   CheckCircle2,
   AlertCircle,
   Image as ImageIcon,
@@ -30,6 +33,18 @@ import {
 } from "lucide-react";
 
 const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
+
+const escapeHtml = (value: unknown) =>
+  String(value ?? "").replace(/[&<>'"]/g, (char) => {
+    const entities: Record<string, string> = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return entities[char] || char;
+  });
 
 type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery" | "route" | "customers";
 
@@ -72,13 +87,16 @@ const AssetField = ({
   label,
   value,
   onChange,
+  onRemove,
   folder,
   accept = "image/*",
   kind = "image",
 }: {
   label: string;
   value: string | null | undefined;
-  onChange: (next: string) => void | Promise<void>;
+  onChange: (next: string) => void | boolean | Promise<void | boolean>;
+  /** Use this when the value is still only in a form and is saved elsewhere. */
+  onRemove?: (url: string) => void | boolean | Promise<void | boolean>;
   folder: string;
   accept?: string;
   kind?: "image" | "pdf";
@@ -90,13 +108,42 @@ const AssetField = ({
     setDraft(value || "");
   }, [value]);
 
+  const commit = async (next: string, previous: string) => {
+    setBusy(true);
+    try {
+      const saved = await onChange(next);
+      if (saved === false) return false;
+      if (previous && previous !== next) {
+        if (onRemove) await onRemove(previous);
+        else await deleteLfStorageAsset(previous);
+      }
+      setDraft(next);
+      return true;
+    } catch (error) {
+      toast({
+        title: "Save failed",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const upload = async (file: File | undefined) => {
     if (!file) return;
     setBusy(true);
     try {
+      const previous = draft;
       const url = await uploadLfAsset(file, folder);
       setDraft(url);
-      await onChange(url);
+      const saved = await commit(url, previous);
+      if (saved === false) {
+        await deleteLfStorageAsset(url).catch(() => false);
+        setDraft(previous);
+        return;
+      }
       toast({ title: kind === "pdf" ? "PDF attached" : "Photo updated" });
     } catch (error) {
       toast({
@@ -107,6 +154,13 @@ const AssetField = ({
     } finally {
       setBusy(false);
     }
+  };
+
+  const remove = async () => {
+    const previous = draft;
+    if (!previous) return;
+    const removed = await commit("", previous);
+    if (removed) toast({ title: kind === "pdf" ? "PDF removed" : "Photo removed" });
   };
 
   return (
@@ -121,8 +175,9 @@ const AssetField = ({
         />
         <button
           type="button"
-          onClick={() => void onChange(draft)}
-          className="h-8 shrink-0 rounded border border-gray-300 px-2 text-[10px] font-bold uppercase"
+          onClick={() => void commit(draft, value || "")}
+          disabled={busy}
+          className="h-8 shrink-0 rounded border border-gray-300 px-2 text-[10px] font-bold uppercase disabled:opacity-50"
         >
           Use link
         </button>
@@ -139,6 +194,17 @@ const AssetField = ({
             }}
           />
         </label>
+        {draft ? (
+          <button
+            type="button"
+            onClick={() => void remove()}
+            disabled={busy}
+            aria-label={`Remove ${label}`}
+            className="inline-flex h-8 shrink-0 items-center rounded border border-red-200 px-2 text-red-600 disabled:opacity-50"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        ) : null}
       </div>
       {kind === "image" && draft ? (
         <LakeFreshImage
@@ -283,6 +349,32 @@ const AdminLakeFresh = () => {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
 
   const [loading, setLoading] = useState(false);
+  const pendingAssetDeletes = useRef<Set<string>>(new Set());
+
+  const queueAssetDelete = (url: string) => {
+    if (url) pendingAssetDeletes.current.add(url);
+  };
+
+  const flushAssetDeletes = async () => {
+    const urls = Array.from(pendingAssetDeletes.current);
+    pendingAssetDeletes.current.clear();
+    const failed: string[] = [];
+    for (const url of urls) {
+      try {
+        await deleteLfStorageAsset(url);
+      } catch (error) {
+        failed.push(url);
+        console.error("Lake Fresh asset delete failed", error);
+      }
+    }
+    if (failed.length > 0) {
+      toast({
+        title: "Some photos were kept",
+        description: "They are still stored. Try again after the record is saved.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const loadFailed = (label: string, error: any) => {
     console.error(`${label} load failed`, error);
@@ -317,12 +409,14 @@ const AdminLakeFresh = () => {
   };
 
   const updateSpeciesImage = async (id: string, image: string) => {
-    const { error } = await supabase.from("fish_species").update({ image }).eq("id", id).eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else {
-      setSpecies((prev) => prev.map((s: any) => (s.id === id ? { ...s, image } : s)));
-      toast({ title: "Species photo saved" });
+    const { error } = await supabase.from("fish_species").update({ image: image || null }).eq("id", id).eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return false;
     }
+    setSpecies((prev) => prev.map((s: any) => (s.id === id ? { ...s, image } : s)));
+    invalidateStorefront();
+    return true;
   };
 
   const updateProductGallery = async (id: string, gallery: string[]) => {
@@ -333,11 +427,13 @@ const AdminLakeFresh = () => {
       .update({ image, images })
       .eq("id", id)
       .eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else {
-      setProducts((prev) => prev.map((p: any) => (p.id === id ? { ...p, image, images } : p)));
-      toast({ title: "Product photos saved" });
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return false;
     }
+    setProducts((prev) => prev.map((p: any) => (p.id === id ? { ...p, image, images } : p)));
+    invalidateStorefront();
+    return true;
   };
 
   const updateSpiceGallery = async (id: string, gallery: string[]) => {
@@ -348,20 +444,25 @@ const AdminLakeFresh = () => {
       .update({ image, images })
       .eq("id", id)
       .eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else {
-      setSpices((prev) => prev.map((s: any) => (s.id === id ? { ...s, image, images } : s)));
-      toast({ title: "Seasoning photos saved" });
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return false;
     }
+    setSpices((prev) => prev.map((s: any) => (s.id === id ? { ...s, image, images } : s)));
+    invalidateStorefront();
+    return true;
   };
 
   const updateRecipeMedia = async (id: string, patch: { image?: string; pdf_url?: string }) => {
-    const { error } = await supabase.from("lf_recipes").update(patch).eq("id", id).eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else {
-      setRecipes((prev) => prev.map((r: any) => (r.id === id ? { ...r, ...patch } : r)));
-      toast({ title: "Recipe updated" });
+    const cleanPatch = { image: patch.image || null, pdf_url: patch.pdf_url || null };
+    const { error } = await supabase.from("lf_recipes").update(cleanPatch).eq("id", id).eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return false;
     }
+    setRecipes((prev) => prev.map((r: any) => (r.id === id ? { ...r, ...cleanPatch } : r)));
+    invalidateStorefront();
+    return true;
   };
 
   const toggleRecommendedSpecies = (value: string, id: string, onChange: (next: string) => void) => {
@@ -690,23 +791,24 @@ const AdminLakeFresh = () => {
     const rows = ordered
       .map((o, i) => {
         const items = (o.items || [])
-          .map((it: any) => `${it.product_name} x ${it.quantity}`)
+          .map((it: any) => `${it.product_name || ""} x ${it.quantity ?? ""}`)
           .join(", ");
         return `<tr>
           <td>${i + 1}</td>
-          <td>${o.customer_name || ""}</td>
-          <td>${o.customer_phone || ""}</td>
-          <td>${o.house_number || ""}</td>
-          <td>${o.street_name || ""}</td>
-          <td>${o.customer_location || ""}</td>
-          <td>${o.delivery_place || ""}</td>
-          <td>${items}</td>
-          <td>${o.delivery_window || ""}</td>
+          <td>${escapeHtml(o.customer_name)}</td>
+          <td>${escapeHtml(o.customer_phone)}</td>
+          <td>${escapeHtml(o.house_number)}</td>
+          <td>${escapeHtml(o.street_name)}</td>
+          <td>${escapeHtml(o.customer_location)}</td>
+          <td>${escapeHtml(o.delivery_place)}</td>
+          <td>${escapeHtml(items)}</td>
+          <td>${escapeHtml(o.delivery_window)}</td>
           <td></td>
         </tr>`;
       })
       .join("");
-    const html = `<!doctype html><html><head><title>Delivery route ${routeDate}</title>
+    const safeDate = escapeHtml(routeDate);
+    const html = `<!doctype html><html><head><title>Delivery route ${safeDate}</title>
       <style>
         body{font-family:Arial,sans-serif;margin:20px;color:#111}
         h1{font-size:18px;margin-bottom:4px}
@@ -718,7 +820,7 @@ const AdminLakeFresh = () => {
         @media print{button{display:none}}
       </style></head><body>
       <h1>Lake Fresh Fish Mart - Delivery Route Sheet</h1>
-      <div class="meta">Date: ${routeDate} · ${ordered.length} stops · Driver signature: ____________</div>
+      <div class="meta">Date: ${safeDate} | ${ordered.length} stops | Driver sign: ____________</div>
       <table>
         <thead><tr>
           <th>#</th><th>Customer</th><th>Phone</th><th>House no.</th><th>Street</th><th>Area</th><th>Pinned place</th><th>Items</th><th>Window</th><th>Delivered (sign)</th>
@@ -885,6 +987,7 @@ const AdminLakeFresh = () => {
 
   const startEditProduct = (product: any) => {
     const images = lfGalleryImages(product.image, product.images);
+    pendingAssetDeletes.current.clear();
     setEditingProductId(product.id);
     setEditProductForm({
       species_id: product.fish_species?.id || product.species_id || "",
@@ -926,6 +1029,7 @@ const AdminLakeFresh = () => {
     toast({ title: "Product updated" });
     setEditingProductId(null);
     await finishWrite(loadProducts);
+    await flushAssetDeletes();
   };
 
   const handleCreateSpice = async () => {
@@ -1015,6 +1119,7 @@ const AdminLakeFresh = () => {
 
   const startEditSpice = (spice: any) => {
     const images = lfGalleryImages(spice.image, spice.images);
+    pendingAssetDeletes.current.clear();
     setEditingSpiceId(spice.id);
     setEditSpiceForm({
       name: spice.name || "",
@@ -1056,6 +1161,7 @@ const AdminLakeFresh = () => {
     toast({ title: "Spice updated" });
     setEditingSpiceId(null);
     await finishWrite(loadSpices);
+    await flushAssetDeletes();
   };
 
   const toggleProductActive = async (id: string, next: boolean) => {
@@ -1453,6 +1559,7 @@ const AdminLakeFresh = () => {
                     folder="fish"
                     value={editProductForm.images}
                     onChange={(next) => setEditProductForm((prev) => ({ ...prev, images: next, image: next[0] || "" }))}
+                    onRemove={queueAssetDelete}
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -1703,6 +1810,7 @@ const AdminLakeFresh = () => {
                     folder="spices"
                     value={editSpiceForm.images}
                     onChange={(next) => setEditSpiceForm((prev) => ({ ...prev, images: next, image: next[0] || "" }))}
+                    onRemove={queueAssetDelete}
                   />
                 </div>
               </div>
@@ -1881,7 +1989,7 @@ const AdminLakeFresh = () => {
                     label={p.name}
                     folder="fish"
                     value={lfGalleryImages(p.image, p.images)}
-                    onChange={(next) => void updateProductGallery(p.id, next)}
+                    onChange={(next) => updateProductGallery(p.id, next)}
                   />
                 </div>
               ))}
@@ -1901,7 +2009,7 @@ const AdminLakeFresh = () => {
                     label={s.name}
                     folder="spices"
                     value={lfGalleryImages(s.image, s.images)}
-                    onChange={(next) => void updateSpiceGallery(s.id, next)}
+                    onChange={(next) => updateSpiceGallery(s.id, next)}
                   />
                 </div>
               ))}
@@ -1937,6 +2045,8 @@ const AdminLakeFresh = () => {
               {recipes.length === 0 && <p className="text-sm text-gray-500">No recipes yet.</p>}
             </div>
           </div>
+
+          <LFFileManager />
         </div>
       )}
 
@@ -1995,7 +2105,7 @@ const AdminLakeFresh = () => {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <p className="font-medium text-[#073B78]">{q.requester_name}</p>
-                      <p className="text-xs text-gray-500">{q.requester_email || "N/A"} · {q.requester_phone || "N/A"}</p>
+                      <p className="text-xs text-gray-500">{q.requester_email || "N/A"} | {q.requester_phone || "N/A"}</p>
                     </div>
                     <span className="text-xs font-bold text-amber-600">{q.status}</span>
                   </div>
@@ -2055,7 +2165,7 @@ const AdminLakeFresh = () => {
                 <div className="rounded-xl border bg-white p-5">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Attachment rates</p>
                   <p className="mt-2 text-3xl font-extrabold text-[#073B78]">{analytics.recipeAttachment}%</p>
-                  <p className="mt-1 text-xs text-gray-500">Free recipe · spices {analytics.spiceAttachment}%</p>
+                  <p className="mt-1 text-xs text-gray-500">Free recipe | spices {analytics.spiceAttachment}%</p>
                 </div>
               </div>
 
@@ -2080,7 +2190,7 @@ const AdminLakeFresh = () => {
                   {(analytics.bestsellers || []).map((b: any) => (
                     <div key={b.name} className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">{b.name}</span>
-                      <span className="font-semibold text-[#073B78]">{b.qty} sold · {Number(b.revenue).toLocaleString()} MWK</span>
+                      <span className="font-semibold text-[#073B78]">{b.qty} sold | {Number(b.revenue).toLocaleString()} MWK</span>
                     </div>
                   ))}
                   {(!analytics.bestsellers || analytics.bestsellers.length === 0) && (
@@ -2388,10 +2498,10 @@ const AdminLakeFresh = () => {
                             <div key={item.id} className="flex justify-between text-xs py-1">
                               <span>
                                 {item.product_name} - {item.preparation
-                                  ? `${Number(item.preparation.requested_weight_kg).toFixed(1)} kg · ${item.preparation.preparation_type}`
+                                  ? `${Number(item.preparation.requested_weight_kg).toFixed(1)} kg | ${item.preparation.preparation_type}`
                                   : `${item.quantity} item(s)`}
                                 {item.recipe_title ? (
-                                  <span className="ml-1 text-[#39B54A]">· free recipe: {item.recipe_title}</span>
+                                  <span className="ml-1 text-[#39B54A]"> | free recipe: {item.recipe_title}</span>
                                 ) : null}
                               </span>
                               <span>{formatMWK(item.unit_price_mwk)}</span>
@@ -2626,7 +2736,7 @@ const AdminLakeFresh = () => {
                     .map((o, i) => ({
                       lat: o.delivery_lat,
                       lng: o.delivery_lng,
-                      label: `${i + 1}. ${o.customer_name} · ${o.customer_phone}`,
+                      label: `${i + 1}. ${o.customer_name} | ${o.customer_phone}`,
                       color: "#073B78",
                     }))}
                   polyline={optimizeRoute(routeOrders)
@@ -2726,11 +2836,11 @@ const AdminLakeFresh = () => {
             <tbody>
               {customers.map((c) => (
                 <tr key={c.id} className="border-t">
-                  <td className="px-4 py-3 font-medium">{c.full_name || "—"}</td>
-                  <td className="px-4 py-3">{c.phone || "—"}</td>
-                  <td className="px-4 py-3">{c.location || "—"}</td>
+                  <td className="px-4 py-3 font-medium">{c.full_name || "N/A"}</td>
+                  <td className="px-4 py-3">{c.phone || "N/A"}</td>
+                  <td className="px-4 py-3">{c.location || "N/A"}</td>
                   <td className="px-4 py-3">{c.marketing_consent ? "Yes" : "No"}</td>
-                  <td className="px-4 py-3 text-xs">{c.updated_at ? new Date(c.updated_at).toLocaleDateString() : "—"}</td>
+                  <td className="px-4 py-3 text-xs">{c.updated_at ? new Date(c.updated_at).toLocaleDateString() : "N/A"}</td>
                 </tr>
               ))}
               {customers.length === 0 && (

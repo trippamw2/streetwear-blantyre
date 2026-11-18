@@ -4,10 +4,13 @@ import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { LF_MAX_PRODUCT_IMAGES } from "@/lib/lfImages";
+import { deleteLfStorageAsset } from "@/lib/lfStorage";
 
 type LFImageGalleryInputProps = {
   value: string[];
-  onChange: (images: string[]) => void;
+  onChange: (images: string[]) => void | boolean | Promise<void | boolean>;
+  /** Called after a successful onChange for photos already saved in the database. */
+  onRemove?: (url: string) => void | boolean | Promise<void | boolean>;
   folder: "fish" | "spices";
   label?: string;
 };
@@ -27,11 +30,13 @@ const safeExtension = (file: File) => {
 const LFImageGalleryInput = ({
   value,
   onChange,
+  onRemove,
   folder,
   label = "Product photos",
 }: LFImageGalleryInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [removing, setRemoving] = useState<number | null>(null);
   const images = value ?? [];
 
   const uploadFiles = async (files: FileList | null) => {
@@ -66,7 +71,11 @@ const LFImageGalleryInput = ({
         const { data } = supabase.storage.from("product-images").getPublicUrl(path);
         uploaded.push(data.publicUrl);
       }
-      onChange([...images, ...uploaded]);
+      const saved = await onChange([...images, ...uploaded]);
+      if (saved === false) {
+        await Promise.all(uploaded.map((url) => deleteLfStorageAsset(url).catch(() => false)));
+        return;
+      }
       toast({ title: `${uploaded.length} photo${uploaded.length === 1 ? "" : "s"} added` });
     } catch (error) {
       toast({
@@ -79,7 +88,25 @@ const LFImageGalleryInput = ({
     }
   };
 
-  const remove = (index: number) => onChange(images.filter((_, itemIndex) => itemIndex !== index));
+  const remove = async (index: number) => {
+    const removed = images[index];
+    if (!removed) return;
+    setRemoving(index);
+    try {
+      const saved = await onChange(images.filter((_, itemIndex) => itemIndex !== index));
+      if (saved === false) return;
+      if (onRemove) await onRemove(removed);
+      else await deleteLfStorageAsset(removed);
+      toast({ title: "Photo removed" });
+    } catch (error) {
+      toast({
+        title: error instanceof Error ? error.message : "Could not remove photo",
+        variant: "destructive",
+      });
+    } finally {
+      setRemoving(null);
+    }
+  };
 
   const move = (index: number, step: number) => {
     const nextIndex = index + step;
@@ -87,7 +114,7 @@ const LFImageGalleryInput = ({
     const next = [...images];
     const [item] = next.splice(index, 1);
     next.splice(nextIndex, 0, item);
-    onChange(next);
+    void onChange(next);
   };
 
   return (
@@ -152,11 +179,16 @@ const LFImageGalleryInput = ({
                   </button>
                   <button
                     type="button"
-                    onClick={() => remove(index)}
-                    aria-label="Remove photo"
-                    className="rounded p-1 text-red-500 hover:bg-red-50"
+                    onClick={() => void remove(index)}
+                    disabled={removing === index}
+                    aria-label={`Remove photo ${index + 1}`}
+                    className="rounded p-1 text-red-500 hover:bg-red-50 disabled:opacity-50"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    {removing === index ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-3.5 w-3.5" />
+                    )}
                   </button>
                 </div>
               </div>
