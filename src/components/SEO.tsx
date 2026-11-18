@@ -189,6 +189,11 @@ export const defaultSEO = {
     description:
       "How Lake Fresh handles refunds, replacements and delivery problems for fresh fish orders in Blantyre, Malawi.",
   },
+  lfPhotoCredits: {
+    title: "Photo Credits | Lake Fresh Fish Mart",
+    description:
+      "The photographers and photo terms for the fish and seasoning photos shown on Lake Fresh in Blantyre, Malawi.",
+  },
   giftPacks: {
     title: "Gift Packs | SB Streetwear",
     description:

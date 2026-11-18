@@ -69,6 +69,7 @@ export const LakeFreshPolicyLayout = ({
         <LFLink to="/lf/privacy" className="hover:text-[#073B78]">Privacy Policy</LFLink>
         <LFLink to="/lf/terms" className="hover:text-[#073B78]">Terms and Conditions</LFLink>
         <LFLink to="/lf/refund" className="hover:text-[#073B78]">Refund Policy</LFLink>
+        <LFLink to="/lf/photo-credits" className="hover:text-[#073B78]">Photo Credits</LFLink>
       </div>
     </div>
   </div>
