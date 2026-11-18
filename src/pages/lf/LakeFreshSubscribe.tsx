@@ -10,7 +10,6 @@ import { lfDisplayCopy } from "@/lib/lfCopy";
 import {
   LF_PILOT_DELIVERY_PROMISE,
   LF_PILOT_FISH_NAMES,
-  LF_PILOT_ZONE_NAMES,
 } from "@/lib/lfPilot";
 import {
   calculateLFSubscriptionCost,
@@ -252,7 +251,7 @@ const LakeFreshSubscribe = () => {
           You pay each time. We never charge you on our own.
         </p>
         <div className="mt-4 rounded-xl border border-[#39B54A]/30 bg-[#F4FBF7] p-3 text-xs text-[#073B78]/80">
-          Pick your fish, cut and area. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}. We will remind you before
+          Pick your fish, cut and area. {LF_PILOT_DELIVERY_PROMISE}. We will remind you before
           each delivery. PayChangu keeps each payment safe.
         </div>
 
@@ -349,7 +348,7 @@ const LakeFreshSubscribe = () => {
             )}
             {zoneUnavailable && (
               <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-red-600">
-                <span>We deliver in {LF_PILOT_ZONE_NAMES}. The areas are not available right now.</span>
+                <span>Delivery areas are not available right now.</span>
                 <button type="button" onClick={() => refetchZones()} className="font-bold underline">Retry</button>
               </div>
             )}

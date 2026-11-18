@@ -1384,6 +1384,15 @@ const AdminLakeFresh = () => {
   };
 
   // ---- Zone actions ----
+  const generateZoneSlots = async () => {
+    const { error } = await supabase.rpc("lf_generate_delivery_slots", {
+      p_days: Number(genDays),
+      p_capacity_orders: Number(genOrders),
+      p_capacity_weight_kg: Number(genWeight),
+    });
+    if (error) throw error;
+  };
+
   const handleCreateZone = async () => {
     if (!zoneForm.name || !zoneForm.slug) {
       toast({ title: "Missing fields", variant: "destructive" });
@@ -1397,18 +1406,48 @@ const AdminLakeFresh = () => {
       min_order_mwk: Number(zoneForm.min_order_mwk),
       is_active: true,
     });
-    if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
-    else {
-      toast({ title: "Zone created" });
-      setZoneForm({ name: "", slug: "", base_fee_mwk: "2000", min_order_mwk: "0" });
-      await finishWrite(loadZones);
+    if (error) {
+      toast({ title: "Create failed", description: error.message, variant: "destructive" });
+      return;
     }
+    try {
+      await generateZoneSlots();
+    } catch (slotError) {
+      toast({
+        title: "Area added",
+        description: "Slots could not be generated. Open Slots and generate them.",
+        variant: "destructive",
+      });
+      console.error("LF slot generation failed", slotError);
+    }
+    toast({ title: "Area added and shared with the store" });
+    setZoneForm({ name: "", slug: "", base_fee_mwk: "2000", min_order_mwk: "0" });
+    await finishWrite(async () => {
+      await Promise.all([loadZones(), loadSlots()]);
+    });
   };
 
   const toggleZoneActive = async (id: string, next: boolean) => {
     const { error } = await supabase.from("delivery_zones").update({ is_active: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else await finishWrite(loadZones);
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    if (next) {
+      try {
+        await generateZoneSlots();
+      } catch (slotError) {
+        toast({
+          title: "Area is active",
+          description: "Slots could not be generated. Open Slots and generate them.",
+          variant: "destructive",
+        });
+        console.error("LF slot generation failed", slotError);
+      }
+    }
+    await finishWrite(async () => {
+      await Promise.all([loadZones(), loadSlots()]);
+    });
   };
 
   return (
@@ -2553,7 +2592,10 @@ const AdminLakeFresh = () => {
       {tab === "delivery" && (
         <div className="space-y-6">
           <div className="rounded-xl border bg-white p-5">
-            <h2 className="font-display text-lg font-bold mb-4">Add delivery zone</h2>
+            <h2 className="font-display text-lg font-bold mb-1">Add delivery location</h2>
+            <p className="mb-4 text-xs text-gray-500">
+              Active locations appear on the home page and in checkout and subscriptions.
+            </p>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <Label>Name</Label>
@@ -2573,13 +2615,13 @@ const AdminLakeFresh = () => {
               </div>
             </div>
             <Button className="mt-4" onClick={handleCreateZone}>
-              <Plus className="h-4 w-4 mr-2" /> Add zone
+              <Plus className="h-4 w-4 mr-2" /> Add location
             </Button>
           </div>
 
           {editingZoneId ? (
             <div className="rounded-xl border bg-white p-5">
-              <h2 className="font-display text-lg font-bold mb-4">Edit delivery zone</h2>
+              <h2 className="font-display text-lg font-bold mb-4">Edit delivery location</h2>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
                   <Label>Name</Label>
@@ -2609,7 +2651,7 @@ const AdminLakeFresh = () => {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-xs uppercase text-gray-500">
                 <tr>
-                  <th className="px-4 py-3 text-left">Name</th>
+                  <th className="px-4 py-3 text-left">Location</th>
                   <th className="px-4 py-3 text-left">Slug</th>
                   <th className="px-4 py-3 text-right">Base fee</th>
                   <th className="px-4 py-3 text-right">Min order</th>

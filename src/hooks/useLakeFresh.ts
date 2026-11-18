@@ -2,13 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDS } from "@/lib/brands";
 import { parseDeliveryConfig, type LFDeliveryConfig } from "@/lib/lfDelivery";
-import {
-  isPilotSpeciesSlug,
-  isPilotZoneSlug,
-  pilotZoneSlugFromName,
-  sortPilotProducts,
-  sortPilotZones,
-} from "@/lib/lfPilot";
+import { isPilotSpeciesSlug, sortPilotProducts } from "@/lib/lfPilot";
 import { lfGalleryImages } from "@/lib/lfImages";
 
 export const LF_BRAND_ID = BRANDS["lake-fresh"].id;
@@ -132,10 +126,7 @@ export const useLakeFreshZones = () =>
         minOrderMwk: toNumber(zone.min_order_mwk),
       }));
 
-      const pilotZones = zones.filter(
-        (zone) => isPilotZoneSlug(zone.slug) || pilotZoneSlugFromName(zone.name) !== null
-      );
-      return sortPilotZones(pilotZones);
+      return zones;
     },
   });
 

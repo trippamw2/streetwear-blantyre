@@ -27,7 +27,7 @@ import { sendOrderConfirmationEmail } from "@/lib/brevo";
 import { formatMWK } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { LF_PILOT_DELIVERY_PROMISE, LF_PILOT_ZONE_NAMES } from "@/lib/lfPilot";
+import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
 
 const prepLabel = (value: string) =>
   value === "whole"
@@ -416,7 +416,7 @@ const LakeFreshCheckout = () => {
       <SEO
         brand="lake-fresh"
         title="Checkout | Lake Fresh Fish Mart"
-        description={`${LF_PILOT_DELIVERY_PROMISE} in ${LF_PILOT_ZONE_NAMES}. Pay with PayChangu.`}
+        description={`${LF_PILOT_DELIVERY_PROMISE}. Pay with PayChangu.`}
       />
       <div className="container max-w-5xl py-8 sm:py-12">
         <button
@@ -680,7 +680,7 @@ const LakeFreshCheckout = () => {
                   <MapPin className="h-4 w-4 text-[#08A9E8]" /> Delivery area
                 </h2>
                 <p className="mt-1 text-xs text-[#073B78]/60">
-                  For this pilot we deliver to {LF_PILOT_ZONE_NAMES} only.
+                  Choose one of the areas below. We only deliver where a slot is open.
                 </p>
 
                 {zonesLoading && (
@@ -730,7 +730,7 @@ const LakeFreshCheckout = () => {
                   <CalendarDays className="h-4 w-4 text-[#08A9E8]" /> Delivery date
                 </h2>
                 <p className="mt-1 text-xs text-[#073B78]/60">
-                  {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}, when a next day slot is open.
+                  {LF_PILOT_DELIVERY_PROMISE}, when a next day slot is open.
                 </p>
 
                 {!zoneId && <p className="mt-3 text-sm text-[#073B78]/60">Choose a delivery area first.</p>}

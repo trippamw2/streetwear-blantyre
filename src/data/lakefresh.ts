@@ -72,20 +72,6 @@ export const FISH_PRODUCTS: FishProduct[] = [
   },
 ];
 
-export interface DeliveryZone {
-  id: string;
-  name: string;
-  slug: string;
-  baseFeeMwk: number;
-  minOrderMwk: number;
-}
-
-export const DELIVERY_ZONES: DeliveryZone[] = [
-  { id: "lf-zone-nkolokosa", name: "Nkolokosa", slug: "nkolokosa", baseFeeMwk: 2000, minOrderMwk: 0 },
-  { id: "lf-zone-soche-east", name: "Soche East", slug: "soche-east", baseFeeMwk: 2000, minOrderMwk: 0 },
-  { id: "lf-zone-chitawira", name: "Chitawira", slug: "chitawira", baseFeeMwk: 2000, minOrderMwk: 0 },
-];
-
 export const DEFAULT_LF_DELIVERY_FEE_MWK = 2000;
 export const DEFAULT_LF_FREE_DELIVERY_THRESHOLD_MWK = 15000;
 export const DEFAULT_LF_DELIVERY_DAYS = 1;

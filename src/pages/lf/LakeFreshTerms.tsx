@@ -30,8 +30,8 @@ const LakeFreshTerms = () => (
         order for you.
       </p>
       <p>
-        For this pilot we deliver in Nkolokosa, Soche East and Chitawira only. Order by 8 PM and we
-        deliver the next day when a slot is open. We may add more areas as we grow.
+        We deliver only to the areas shown on our home page. Order by 8 PM and we deliver the next day
+        when a slot is open. We may add more areas as we grow.
       </p>
     </LakeFreshPolicySection>
 

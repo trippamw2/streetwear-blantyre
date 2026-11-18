@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { toast } from "@/hooks/use-toast";
 import { lfDisplayCopy } from "@/lib/lfCopy";
-import { LF_PILOT_DELIVERY_PROMISE, LF_PILOT_ZONE_NAMES } from "@/lib/lfPilot";
+import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
 
 const prepCopy: Record<string, { label: string; description: string }> = {
   whole: { label: "Whole, cleaned", description: "We scale and clean the whole fish for you." },
@@ -234,7 +234,7 @@ const LakeFreshProduct = () => {
       <SEO
         brand="lake-fresh"
         title={`${product.speciesName || product.name} | Lake Fresh Fish Mart`}
-        description={`${lfDisplayCopy(product.description) || product.name} ${formatMWK(product.pricePerKgMwk)} per kilogram. ${LF_PILOT_DELIVERY_PROMISE} in ${LF_PILOT_ZONE_NAMES}.`}
+        description={`${lfDisplayCopy(product.description) || product.name} ${formatMWK(product.pricePerKgMwk)} per kilogram. ${LF_PILOT_DELIVERY_PROMISE}.`}
       />
 
       <section className="border-b border-gray-200 bg-[#EAF6FB]/50">
@@ -405,7 +405,7 @@ const LakeFreshProduct = () => {
                     <p className="mt-1 text-xs text-[#073B78]/60">
                       {earliestDate ? (
                         <>
-                          {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}. Next delivery day:{" "}
+                          {LF_PILOT_DELIVERY_PROMISE}. Next delivery day:{" "}
                           {formatDeliveryDate(earliestDate)}.
                         </>
                       ) : (

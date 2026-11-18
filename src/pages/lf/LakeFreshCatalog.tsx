@@ -5,7 +5,7 @@ import { SEO } from "@/components/SEO";
 import { useLakeFreshCatalog } from "@/hooks/useLakeFresh";
 import { formatMWK } from "@/data/products";
 import { lfDisplayCopy } from "@/lib/lfCopy";
-import { LF_PILOT_DELIVERY_PROMISE, LF_PILOT_ZONE_NAMES } from "@/lib/lfPilot";
+import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
 
 const prepLabel = (value: string) =>
   value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cleaned and cut" : value === "seasoned" ? "Seasoned" : value;
@@ -33,7 +33,7 @@ const LakeFreshCatalog = () => {
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#073B78]/70 sm:text-base">
             Chambo, Micheni and Usipa. We clean it, weigh it and pack it with care. Add one of five seasonings and one
-            free recipe. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
+            free recipe. {LF_PILOT_DELIVERY_PROMISE}.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <LFLink

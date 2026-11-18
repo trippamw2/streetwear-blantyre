@@ -29,7 +29,6 @@ import {
   LF_PILOT_DELIVERY_PROMISE,
   LF_PILOT_FISH_NAMES,
   LF_PILOT_OFFER,
-  LF_PILOT_ZONE_NAMES,
 } from "@/lib/lfPilot";
 
 const steps = [
@@ -127,7 +126,7 @@ const LakeFreshHome = () => {
               <span className="bg-gradient-to-r from-[#7ED321] to-[#08A9E8] bg-clip-text text-transparent">Delivered to your door</span>
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/75 sm:text-base">
-              Fresh fish, cleaned and cut, your choice of seasoning, properly packed and delivered home. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
+              Fresh fish, cleaned and cut, your choice of seasoning, properly packed and delivered home. {LF_PILOT_DELIVERY_PROMISE}.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <LFLink
@@ -208,7 +207,7 @@ const LakeFreshHome = () => {
               THREE FISH OPTIONS
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-[#073B78]/70">
-              {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
+              {LF_PILOT_DELIVERY_PROMISE}.
             </p>
           </div>
           <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -494,10 +493,10 @@ const LakeFreshHome = () => {
               <MapPin className="h-3.5 w-3.5" /> Delivery coverage
             </span>
             <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
-              WE DELIVER TO THREE AREAS
+              DELIVERY AREAS
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[#073B78]/70">
-              Choose Nkolokosa, Soche East or Chitawira at checkout to see the delivery fee and available days. Delivery starts at{" "}
+              Choose your area at checkout to see the delivery fee and available days. Delivery starts at{" "}
               {formatMWK(deliveryConfig.deliveryFeeMwk)}, and orders over{" "}
               {formatMWK(deliveryConfig.freeDeliveryThresholdMwk)} deliver free.
             </p>
@@ -513,7 +512,7 @@ const LakeFreshHome = () => {
               <p className="flex items-center gap-2 text-sm text-[#073B78]/60">
                 <Loader2 className="h-4 w-4 animate-spin" /> Loading areas…
               </p>
-            ) : (
+            ) : (zones || []).length > 0 ? (
               <div className="grid gap-2 sm:grid-cols-2">
                 {(zones || []).map((zone) => (
                   <div
@@ -525,6 +524,8 @@ const LakeFreshHome = () => {
                   </div>
                 ))}
               </div>
+            ) : (
+              <p className="text-sm text-[#073B78]/60">No delivery areas are open right now.</p>
             )}
             <p className="mt-3 text-[11px] text-[#073B78]/60">
               Delivery areas are managed by Lake Fresh. Availability can change by day.
@@ -608,7 +609,7 @@ const LakeFreshHome = () => {
             START YOUR FISH MEAL TODAY.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
-            Choose your fish, add a seasoning and one free recipe. {LF_PILOT_DELIVERY_PROMISE} in {LF_PILOT_ZONE_NAMES}.
+            Choose your fish, add a seasoning and one free recipe. {LF_PILOT_DELIVERY_PROMISE}.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <LFLink
