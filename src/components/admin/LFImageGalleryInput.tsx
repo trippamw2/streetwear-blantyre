@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ImagePlus, Loader2, Trash2 } from "lucide-react";
+import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { LF_MAX_PRODUCT_IMAGES } from "@/lib/lfImages";
@@ -121,7 +122,11 @@ const LFImageGalleryInput = ({
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {images.map((image, index) => (
             <div key={`${image}-${index}`} className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
-              <img src={image} alt={`${label} ${index + 1}`} className="h-24 w-full object-cover" />
+              <LakeFreshImage
+                src={image}
+                alt={`${label} ${index + 1}`}
+                className="h-24 w-full object-cover"
+              />
               <div className="flex items-center justify-between gap-1 p-2">
                 <span className="text-[11px] font-bold text-gray-600">
                   {index === 0 ? "Cover" : `Photo ${index + 1}`}

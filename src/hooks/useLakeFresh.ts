@@ -3,7 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { BRANDS } from "@/lib/brands";
 import { parseDeliveryConfig, type LFDeliveryConfig } from "@/lib/lfDelivery";
 import {
+  isPilotSpeciesSlug,
   isPilotZoneSlug,
+  pilotZoneSlugFromName,
   sortPilotProducts,
   sortPilotZones,
 } from "@/lib/lfPilot";
@@ -87,7 +89,13 @@ export const useLakeFreshCatalog = () =>
         pilotOption: row.pilot_option ? String(row.pilot_option) : null,
       }));
 
-      const pilotProducts = sortPilotProducts(products.filter((product) => product.pilotOption));
+      const pilotProducts = sortPilotProducts(
+        products.filter(
+          (product) =>
+            Boolean(product.pilotOption) ||
+            isPilotSpeciesSlug(product.speciesSlug)
+        )
+      );
       return pilotProducts.length > 0 ? pilotProducts : products;
     },
   });
@@ -124,7 +132,10 @@ export const useLakeFreshZones = () =>
         minOrderMwk: toNumber(zone.min_order_mwk),
       }));
 
-      return sortPilotZones(zones.filter((zone) => isPilotZoneSlug(zone.slug)));
+      const pilotZones = zones.filter(
+        (zone) => isPilotZoneSlug(zone.slug) || pilotZoneSlugFromName(zone.name) !== null
+      );
+      return sortPilotZones(pilotZones);
     },
   });
 

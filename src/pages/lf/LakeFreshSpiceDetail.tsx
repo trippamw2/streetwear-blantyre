@@ -139,8 +139,8 @@ const LakeFreshSpiceDetail = () => {
             <ArrowLeft className="h-3.5 w-3.5" /> Back to seasonings
           </LFLink>
 
-          <div className="mt-6 grid gap-8 lg:grid-cols-[28rem_1fr] lg:items-start">
-            <div>
+          <div className="mt-6 grid min-w-0 gap-8 lg:grid-cols-[28rem_minmax(0,1fr)] lg:items-start">
+            <div className="min-w-0">
               <LakeFreshImageCarousel images={images} alt={name} />
               {images.length > 1 ? (
                 <p className="mt-3 text-center text-[11px] font-semibold text-[#073B78]/60">
@@ -149,11 +149,11 @@ const LakeFreshSpiceDetail = () => {
               ) : null}
             </div>
 
-            <div className="max-w-2xl">
+            <div className="min-w-0 max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#39B54A] shadow-sm">
                 <Leaf className="h-3.5 w-3.5" /> Made for lake fish
               </span>
-              <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight sm:text-5xl">{name}</h1>
+              <h1 className="mt-4 break-words font-display text-4xl font-extrabold tracking-tight sm:text-5xl">{name}</h1>
               <p className="mt-3 leading-relaxed text-[#073B78]/70">
                 {lfDisplayCopy(spice.description) || "A Lake Fresh blend for fresh fish."}
               </p>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
+import LakeFreshImage from "@/components/lf/LakeFreshImage";
 
 type LakeFreshImageCarouselProps = {
   images: string[];
@@ -21,17 +22,31 @@ const LakeFreshImageCarousel = ({
   imageClassName = "",
 }: LakeFreshImageCarouselProps) => {
   const [active, setActive] = useState(0);
+  const [failedSources, setFailedSources] = useState<string[]>([]);
+  const imagesKey = images.join("|");
+  const visibleImages = images.filter((image) => !failedSources.includes(image));
+  const photo = visibleImages[active] ?? visibleImages[0] ?? null;
+  const visibleIndex = visibleImages.length > 0 ? Math.min(active, visibleImages.length - 1) : 0;
+  const canMove = visibleImages.length > 1;
 
   useEffect(() => {
-    if (active > images.length - 1) setActive(Math.max(images.length - 1, 0));
-  }, [images.length, active]);
+    setActive(0);
+    setFailedSources([]);
+  }, [imagesKey]);
 
-  const photo = images[active] ?? images[0] ?? null;
-  const canMove = images.length > 1;
+  useEffect(() => {
+    if (active > visibleImages.length - 1) {
+      setActive(Math.max(visibleImages.length - 1, 0));
+    }
+  }, [imagesKey, visibleImages.length, active]);
+
+  const markFailed = (source: string) => {
+    setFailedSources((current) => (current.includes(source) ? current : [...current, source]));
+  };
 
   const move = (step: number) => {
     if (!canMove) return;
-    setActive((current) => (current + step + images.length) % images.length);
+    setActive((current) => (current + step + visibleImages.length) % visibleImages.length);
   };
 
   if (coverOnly) {
@@ -43,26 +58,26 @@ const LakeFreshImageCarousel = ({
       );
     }
     return (
-      <img
+      <LakeFreshImage
         src={photo}
         alt={alt}
-        loading="lazy"
-        decoding="async"
         className={`h-full w-full object-cover ${imageClassName}`}
+        onError={() => markFailed(photo)}
       />
     );
   }
 
   return (
-    <div className={`overflow-hidden rounded-2xl border border-[#EAF6FB] bg-white ${className}`}>
+    <div className={`w-full min-w-0 overflow-hidden rounded-2xl border border-[#EAF6FB] bg-white ${className}`}>
       <div className="relative flex aspect-square items-center justify-center bg-[#F4FBF7] sm:aspect-[4/3]">
         {photo ? (
-          <img
+          <LakeFreshImage
             key={photo}
             src={photo}
-            alt={`${alt}, photo ${active + 1}`}
-            decoding="async"
+            alt={`${alt}, photo ${visibleIndex + 1}`}
+            loading="eager"
             className={`h-full w-full object-contain ${imageClassName}`}
+            onError={() => markFailed(photo)}
           />
         ) : (
           <div className="flex flex-col items-center gap-2 text-[#08A9E8]">
@@ -90,7 +105,7 @@ const LakeFreshImageCarousel = ({
               <ChevronRight className="h-5 w-5" aria-hidden="true" />
             </button>
             <span className="absolute bottom-2 right-2 rounded-full bg-[#073B78]/85 px-2.5 py-1 text-[10px] font-bold text-white">
-              {active + 1} / {images.length}
+              {visibleIndex + 1} / {visibleImages.length}
             </span>
           </>
         ) : null}
@@ -99,29 +114,34 @@ const LakeFreshImageCarousel = ({
       {canMove ? (
         <div className="border-t border-[#EAF6FB] p-3">
           <div className="flex gap-2 overflow-x-auto pb-1">
-            {images.map((image, index) => (
+            {visibleImages.map((image, index) => (
               <button
                 key={`${image}-${index}`}
                 type="button"
                 onClick={() => setActive(index)}
                 aria-label={`Show photo ${index + 1}`}
                 className={`h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 bg-[#F4FBF7] transition ${
-                  index === active ? "border-[#39B54A]" : "border-transparent opacity-70"
+                  index === visibleIndex ? "border-[#39B54A]" : "border-transparent opacity-70"
                 }`}
               >
-                <img src={image} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                <LakeFreshImage
+                  src={image}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  onError={() => markFailed(image)}
+                />
               </button>
             ))}
           </div>
           <div className="mt-2 flex justify-center gap-1.5">
-            {images.map((image, index) => (
+            {visibleImages.map((image, index) => (
               <button
                 key={`dot-${image}-${index}`}
                 type="button"
                 onClick={() => setActive(index)}
                 aria-label={`Go to photo ${index + 1}`}
                 className={`h-1.5 rounded-full transition-all ${
-                  index === active ? "w-5 bg-[#39B54A]" : "w-1.5 bg-[#073B78]/20"
+                  index === visibleIndex ? "w-5 bg-[#39B54A]" : "w-1.5 bg-[#073B78]/20"
                 }`}
               />
             ))}

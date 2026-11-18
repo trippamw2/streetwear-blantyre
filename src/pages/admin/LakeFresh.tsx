@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import LFImageGalleryInput from "@/components/admin/LFImageGalleryInput";
+import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { lfGalleryImages } from "@/lib/lfImages";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { formatMWK } from "@/data/products";
@@ -140,7 +141,11 @@ const AssetField = ({
         </label>
       </div>
       {kind === "image" && draft ? (
-        <img src={draft} alt={label} className="mt-2 h-16 w-full rounded object-cover" />
+        <LakeFreshImage
+          src={draft}
+          alt={label}
+          className="mt-2 h-16 w-full rounded object-cover"
+        />
       ) : null}
       {kind === "pdf" && draft ? (
         <a href={draft} target="_blank" rel="noreferrer" className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-[#073B78] underline">

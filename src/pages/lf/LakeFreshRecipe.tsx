@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { LFLink } from "@/components/lf/lfRouter";
 import { ArrowLeft, ArrowRight, BookOpen, Check, Clock, Download, Fish, Leaf, Loader2, ShoppingBasket, Sparkles, Users } from "lucide-react";
 import { SEO } from "@/components/SEO";
@@ -239,11 +240,11 @@ const LakeFreshRecipe = () => {
 
           <div className="mt-5 grid gap-6 sm:grid-cols-[1fr_1.05fr] sm:items-center">
             <div className="relative flex h-52 items-center justify-center overflow-hidden rounded-2xl bg-[#EAF6FB]">
-              {data.image ? (
-                <img src={data.image} alt={data.title} className="h-full w-full object-cover" decoding="async" />
-              ) : (
-                <BookOpen className="h-16 w-16 text-[#08A9E8]" />
-              )}
+              <LakeFreshImage
+                src={data.image}
+                alt={data.title}
+                className="h-full w-full object-cover"
+              />
               <span className="absolute left-3 top-3 rounded-full bg-[#7ED321] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]">
                 Free with fish
               </span>

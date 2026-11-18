@@ -5,6 +5,7 @@ import {
   LF_PILOT_ZONE_NAMES,
   isPilotSpeciesSlug,
   isPilotZoneSlug,
+  pilotZoneSlugFromName,
   sortPilotProducts,
   sortPilotZones,
 } from "../lfPilot";
@@ -31,6 +32,8 @@ describe("Lake Fresh pilot limits", () => {
     expect(isPilotZoneSlug("chitawira")).toBe(true);
     expect(isPilotZoneSlug("naperi")).toBe(false);
     expect(isPilotZoneSlug(null)).toBe(false);
+    expect(pilotZoneSlugFromName("Soche East")).toBe("soche-east");
+    expect(pilotZoneSlugFromName("Naperi")).toBeNull();
   });
 
   it("sorts zones and products in the pilot order", () => {

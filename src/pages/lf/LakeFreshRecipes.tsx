@@ -1,3 +1,4 @@
+import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { LFLink } from "@/components/lf/lfRouter";
 import { ArrowRight, BookOpen, Clock, Fish, Loader2, Sparkles, Users } from "lucide-react";
 import { SEO } from "@/components/SEO";
@@ -71,22 +72,11 @@ const LakeFreshRecipes = () => {
                   className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-lg"
                 >
                   <div className="relative h-40 overflow-hidden bg-[#EAF6FB]">
-                    {r.image ? (
-                      <img
-                        src={r.image}
-                        alt={r.title}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div
-                        className="flex h-full items-center justify-center"
-                        style={{ background: `linear-gradient(135deg, ${accent}14, #EAF6FB)` }}
-                      >
-                        <BookOpen className="h-10 w-10" style={{ color: accent }} />
-                      </div>
-                    )}
+                    <LakeFreshImage
+                      src={r.image}
+                      alt={r.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                     <span className="absolute left-3 top-3 rounded-full bg-[#7ED321] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]">
                       Free
                     </span>

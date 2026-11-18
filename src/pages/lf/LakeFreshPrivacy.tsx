@@ -100,7 +100,7 @@ const LakeFreshPrivacy = () => (
       <p>
         Send your request on WhatsApp. We may ask you to confirm your identity first. We will reply
         as soon as we can. If you are not happy with our answer, you may contact Malawi's Data
-        Protection Authority, which is hosted by MACRA.
+        Protection Authority hosted by MACRA.
       </p>
       <p>
         Data Protection Authority contacts: info@dpa.mw, phone +265 991 80 21 80, 1st Floor, Green

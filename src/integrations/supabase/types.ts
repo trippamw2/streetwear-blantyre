@@ -3623,6 +3623,10 @@ export type Database = {
         }[]
       }
       lf_public_config: { Args: never; Returns: Json }
+      lf_public_subscription_status: {
+        Args: { p_subscription_id: string; p_tx_ref: string }
+        Returns: string
+      }
       mark_order_paid: { Args: { p_order_id: string }; Returns: Json }
       process_order_paid: {
         Args: {

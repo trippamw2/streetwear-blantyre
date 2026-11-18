@@ -1,5 +1,6 @@
+import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
-import { ArrowLeft, Fish, Minus, Package, Plus, ShoppingBasket, Trash2 } from "lucide-react";
+import { ArrowLeft, Minus, Plus, ShoppingBasket, Trash2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import { useLakeFreshDeliveryConfig } from "@/hooks/useLakeFresh";
@@ -66,12 +67,12 @@ const LakeFreshCart = () => {
               return (
                 <div key={item.key} className="rounded-2xl border border-gray-200 p-4 sm:p-5">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-                    <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-[#073B78]">
-                      {item.image ? (
-                        <img src={item.image} alt={item.name} loading="lazy" decoding="async" className="h-full w-full rounded-xl object-cover" />
-                      ) : (
-                        <Package className="h-8 w-8 text-[#08A9E8]" />
-                      )}
+                    <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#073B78]">
+                      <LakeFreshImage
+                        src={item.image}
+                        alt={item.name}
+                        className="h-full w-full rounded-xl object-cover"
+                      />
                     </div>
 
                     <div className="min-w-0 flex-1">
@@ -138,12 +139,12 @@ const LakeFreshCart = () => {
             return (
               <div key={item.key} className="rounded-2xl border border-gray-200 p-4 sm:p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-[#073B78]">
-                    {item.image ? (
-                      <img src={item.image} alt={item.name} loading="lazy" decoding="async" className="h-full w-full rounded-xl object-cover" />
-                    ) : (
-                      <Fish className="h-8 w-8 text-[#08A9E8]" />
-                    )}
+                  <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#073B78]">
+                    <LakeFreshImage
+                      src={item.image}
+                      alt={item.name}
+                      className="h-full w-full rounded-xl object-cover"
+                    />
                   </div>
 
                   <div className="min-w-0 flex-1">
