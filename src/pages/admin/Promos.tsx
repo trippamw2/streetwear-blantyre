@@ -223,7 +223,7 @@ const AdminPromos = () => {
                       discount_type: formData.type,
                       discount_value: formData.value.toString(),
                     }}
-                    onGenerated={(type, content) => setFormData(p => ({ ...p, description: content }))}
+                    onGenerated={(_type, content) => setFormData(p => ({ ...p, description: content }))}
                   />
                 </div>
                 <Input

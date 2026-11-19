@@ -27,7 +27,7 @@ const Auth = () => {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [referredBy, setReferredBy] = useState<string | null>(null);
-  const { applyReferralCode, applying } = useReferralSignup();
+  const { applyReferralCode } = useReferralSignup();
 
   useEffect(() => {
     const refFromUrl = searchParams.get("ref");

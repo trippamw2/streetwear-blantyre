@@ -46,7 +46,7 @@ const BRANDS: Record<EmailBrand, BrandConfig> = {
 const getBrand = (brand?: EmailBrand): BrandConfig => BRANDS[brand || "sb"];
 
 // Premium Email wrapper with branding - LIGHT THEME
-const wrapEmail = (content: string, title: string, brand?: EmailBrand) => {
+const wrapEmail = (content: string, _title: string, brand?: EmailBrand) => {
   const BRAND = getBrand(brand);
   const primary = BRAND.primaryColor;
   return `
@@ -387,7 +387,6 @@ export const sendDeliveredEmail = async (order: OrderEmailParams) => {
 // SEND GENERIC EMAIL
 // ============================================
 export const sendEmail = async (to: string, subject: string, html: string, brand?: EmailBrand) => {
-  const B = getBrand(brand);
   return sendViaProxy("send-email", {
     to,
     subject,
@@ -401,7 +400,6 @@ export const sendEmail = async (to: string, subject: string, html: string, brand
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || "martinezkaponda@gmail.com";
 
 export const sendAdminNotificationEmail = async (order: OrderEmailParams) => {
-  const B = getBrand(order.brand);
   const itemsHtml = order.items
     .map(
       (item) => `

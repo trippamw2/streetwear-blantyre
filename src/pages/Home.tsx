@@ -8,7 +8,6 @@ import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
 import {
   ArrowRight,
   ArrowUpRight,
-  Heart,
   MapPin,
   Shirt,
   Sparkles,

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { formatMWK } from "@/data/products";
 import { AIWritingButton } from "@/components/admin/AIWritingButton";
-import { Users, MessageCircle, Send, Search, Filter, Download, Phone, Mail, ShoppingCart, Calendar, Loader2, Check, Package, DollarSign, TrendingUp } from "lucide-react";
+import { Users, MessageCircle, Send, Search, Download, Mail, ShoppingCart, Loader2, DollarSign, TrendingUp } from "lucide-react";
 import { format } from "date-fns";
 
 interface Customer {
@@ -18,14 +18,6 @@ interface Customer {
   total_orders: number;
   total_spent: number;
   last_order_date: string | null;
-  created_at: string;
-}
-
-interface Campaign {
-  id: string;
-  name: string;
-  message: string;
-  sent_count: number;
   created_at: string;
 }
 
@@ -41,7 +33,6 @@ interface Subscriber {
 
 const AdminCRM = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -57,7 +48,6 @@ const AdminCRM = () => {
 
   useEffect(() => {
     fetchCustomers();
-    fetchCampaigns();
     fetchSubscribers();
   }, []);
 
@@ -105,11 +95,6 @@ const AdminCRM = () => {
       setCustomers(customersData);
     }
     setLoading(false);
-  };
-
-  const fetchCampaigns = async () => {
-    const { data } = await supabase.from("whatsapp_campaigns").select("*").order("created_at", { ascending: false }).limit(10);
-    setCampaigns(data || []);
   };
 
   const sendCampaign = async () => {
@@ -181,7 +166,6 @@ Thanks for being a valued customer!
 
       setCampaignOpen(false);
       setCampaignForm({ name: "", message: "" });
-      fetchCampaigns();
     } catch {
       toast({ title: "Error sending campaign", variant: "destructive" });
     } finally {
@@ -205,16 +189,18 @@ Thanks for being a valued customer!
       case "vip":
         filtered = filtered.filter(c => c.total_spent >= 50000);
         break;
-      case "new":
+      case "new": {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         filtered = filtered.filter(c => new Date(c.created_at) >= thirtyDaysAgo);
         break;
-      case "inactive":
+      }
+      case "inactive": {
         const ninetyDaysAgo = new Date();
         ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
         filtered = filtered.filter(c => !c.last_order_date || new Date(c.last_order_date) < ninetyDaysAgo);
         break;
+      }
     }
 
     return filtered;
@@ -511,7 +497,7 @@ Thanks for being a valued customer!
                     campaign_type: campaignType === "email" ? "email" : "whatsapp",
                     content_direction: campaignForm.name || "customer update",
                   }}
-                  onGenerated={(type, content) => setCampaignForm(p => ({ ...p, message: content }))}
+                  onGenerated={(_type, content) => setCampaignForm(p => ({ ...p, message: content }))}
                 />
               </div>
               <textarea

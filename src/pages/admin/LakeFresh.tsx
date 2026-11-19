@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -723,7 +723,7 @@ const AdminLakeFresh = () => {
     }
     const ords = data || [];
     const ids = ords.map((o: any) => o.id);
-    let itemsByOrder: Record<string, any[]> = {};
+    const itemsByOrder: Record<string, any[]> = {};
     if (ids.length) {
       const { data: items } = await supabase
         .from("order_items")

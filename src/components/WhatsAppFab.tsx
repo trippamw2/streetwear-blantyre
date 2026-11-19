@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
-import { MessageCircle, X, ChevronUp } from "lucide-react";
+import { MessageCircle, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const WhatsAppFab = () => {

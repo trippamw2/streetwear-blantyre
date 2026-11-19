@@ -145,7 +145,7 @@ export const useReferralSignup = () => {
       if (result.ok) {
         try {
           localStorage.removeItem(PENDING_KEY);
-        } catch {}
+        } catch { /* best-effort: ignore */ }
         return { success: true };
       }
 
@@ -153,7 +153,7 @@ export const useReferralSignup = () => {
         // New accounts without a session yet: keep the code and apply after sign in.
         try {
           localStorage.setItem(PENDING_KEY, code.trim().toUpperCase());
-        } catch {}
+        } catch { /* best-effort: ignore */ }
         return { success: true, pending: true };
       }
 
@@ -171,7 +171,7 @@ export const useReferralSignup = () => {
     let stored: string | null = null;
     try {
       stored = localStorage.getItem(PENDING_KEY);
-    } catch {}
+    } catch { /* best-effort: ignore */ }
     if (!stored) return;
 
     supabase
@@ -181,7 +181,7 @@ export const useReferralSignup = () => {
         if (result.ok) {
           try {
             localStorage.removeItem(PENDING_KEY);
-          } catch {}
+          } catch { /* best-effort: ignore */ }
         }
       })
       .catch(() => {});

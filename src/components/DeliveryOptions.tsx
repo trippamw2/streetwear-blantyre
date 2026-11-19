@@ -2,7 +2,6 @@ import { MapPin, Check, Zap, Truck, Clock, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   type DeliveryOption,
-  type DeliverySpeed,
   getDeliveryOptions,
   detectZone,
   formatDeliveryFee,

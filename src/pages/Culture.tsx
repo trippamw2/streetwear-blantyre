@@ -36,13 +36,6 @@ const PILLAR_INFO: Record<Pillar, { name: string; description: string; color: st
   },
 };
 
-const PILLAR_BADGE_COLORS: Record<string, string> = {
-  music: "bg-purple-500/20 text-purple-300",
-  sports: "bg-green-500/20 text-green-300",
-  faith: "bg-amber-500/20 text-amber-300",
-  hustle: "bg-red-500/20 text-red-300",
-};
-
 interface CultureStory {
   id: string;
   title: string;

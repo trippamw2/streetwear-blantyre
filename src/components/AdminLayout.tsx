@@ -30,7 +30,7 @@ import { Logo } from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { lfPath, storefrontHome } from "@/lib/brandSite";
 import { supabase } from "@/integrations/supabase/client";
-import { adminBrandId, adminPath, useAdminBrand, type AdminBrand } from "@/lib/adminBrand";
+import { adminBrandId, adminPath, useAdminBrand } from "@/lib/adminBrand";
 
 interface AdminLink {
   to: string;

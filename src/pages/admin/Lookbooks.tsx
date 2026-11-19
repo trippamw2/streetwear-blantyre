@@ -6,9 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2, Loader2, Camera, Eye, EyeOff, GripVertical, X, Search } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, Camera, Search } from "lucide-react";
 import { AIWritingButton } from "@/components/admin/AIWritingButton";
-import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
 import { format } from "date-fns";
 
 interface Lookbook {
@@ -225,7 +224,7 @@ const AdminLookbooks = () => {
                     <AIWritingButton
                       contentTypes={["lookbook_title"]}
                       variables={{ theme: formData.title || formData.description || "curated collection", season: formData.season, pillar: formData.culture_pillar }}
-                      onGenerated={(type, content) => setFormData(p => ({ ...p, title: content }))}
+                      onGenerated={(_type, content) => setFormData(p => ({ ...p, title: content }))}
                     />
                   </div>
                   <Input value={formData.title} onChange={(e) => setFormData(p => ({ ...p, title: e.target.value }))} placeholder="e.g., The Faith Collection" />
@@ -241,7 +240,7 @@ const AdminLookbooks = () => {
                   <AIWritingButton
                     contentTypes={["lookbook_description"]}
                     variables={{ title: formData.title, season: formData.season, pillar: formData.culture_pillar }}
-                    onGenerated={(type, content) => setFormData(p => ({ ...p, description: content }))}
+                    onGenerated={(_type, content) => setFormData(p => ({ ...p, description: content }))}
                   />
                 </div>
                 <Textarea value={formData.description} onChange={(e) => setFormData(p => ({ ...p, description: e.target.value }))} rows={3} placeholder="What's the story behind this collection?" />
@@ -297,7 +296,7 @@ const AdminLookbooks = () => {
                           name: products.find(p => p.id === formData.selectedProducts[0]?.product_id)?.name || "",
                           theme: formData.title,
                         }}
-                        onGenerated={(type, content) => {
+                        onGenerated={(_type, content) => {
                           if (formData.selectedProducts.length > 0) {
                             updateProductNote(formData.selectedProducts[0].product_id, content);
                           }

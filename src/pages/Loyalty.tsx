@@ -1,5 +1,4 @@
-﻿import { useState } from "react";
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLoyalty } from "@/hooks/useLoyalty";
@@ -8,7 +7,7 @@ import { SEO, defaultSEO } from "@/components/SEO";
 import { PageSkeleton } from "@/components/Skeletons";
 import { Button } from "@/components/ui/button";
 import { PromotionSlider } from "@/components/PromotionSlider";
-import { Gift, Star, TrendingUp, Clock, ArrowRight, ShoppingBag, Zap, Crown, Award, Gem, Check, Minus, Plus, Users, Copy, Share2, Gift as GiftIcon } from "lucide-react";
+import { Gift, Star, TrendingUp, Clock, ArrowRight, ShoppingBag, Zap, Crown, Award, Gem, Check, Users, Copy, Share2 } from "lucide-react";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
 
@@ -21,9 +20,8 @@ const tierConfig = {
 
 const Loyalty = () => {
   const { user } = useAuth();
-  const { loyalty, program, tiers, transactions, loading, getRewardValue, redeemPoints, error } = useLoyalty(user?.id, user?.email);
-  const { referralCode, stats, loading: referralLoading, copied, copyCode, shareReferral } = useReferral();
-  const [redeeming, setRedeeming] = useState(false);
+  const { loyalty, program, tiers, transactions, loading, getRewardValue } = useLoyalty(user?.id, user?.email);
+  const { referralCode, stats, copied, copyCode, shareReferral } = useReferral();
 
   if (!user) {
     return (

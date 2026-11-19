@@ -2,33 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Product, culturePillars } from "@/data/products";
 
-interface DatabaseProduct {
-  id: string;
-  name: string;
-  benefit: string | null;
-  description: string | null;
-  price: number;
-  category: string;
-  brand: string | null;
-  image: string | null;
-  is_active: boolean | null;
-  is_featured: boolean | null;
-  is_best_seller: boolean | null;
-  is_on_sale: boolean | null;
-  discount_percent: number | null;
-  stock_quantity: number | null;
-  sort_order: number | null;
-  supplier_id: string | null;
-  culture_pillar: string | null;
-  wearable_category: string | null;
-  images: any[] | null;
-  gallery_images: any[] | null;
-  specs: Record<string, any> | null;
-  reward_points: number | null;
-  rating: number | null;
-  created_at: string;
-}
-
 interface InventoryRecord {
   product_id: string;
   quantity: number;

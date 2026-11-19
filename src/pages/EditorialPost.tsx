@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SEO } from "@/components/SEO";
 import { ProductCard } from "@/components/ProductCard";
-import { formatMWK, type Product as StoreProduct } from "@/data/products";
+import { type Product as StoreProduct } from "@/data/products";
 import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 

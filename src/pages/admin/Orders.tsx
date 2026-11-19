@@ -3,8 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { formatMWK } from "@/data/products";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Package, Check, Truck, Phone, MapPin, Loader2, Eye, MessageCircle, Clock, Zap, DollarSign } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Package, Truck, Phone, MapPin, Loader2, Eye, MessageCircle, Zap, DollarSign } from "lucide-react";
 import { format } from "date-fns";
 import { DELIVERY_ZONES } from "@/lib/delivery";
 import { 
@@ -259,7 +259,8 @@ Track: https://www.wearsb.com/track/${order.id}`;
           });
         }
       } catch (e) {
-        }
+        console.warn("Order status email failed", e);
+      }
     }
   };
 

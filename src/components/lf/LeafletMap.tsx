@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type L = any;
 
@@ -120,7 +120,7 @@ export const LeafletMap = ({
       if (mapRef.current) {
         try {
           mapRef.current.remove();
-        } catch {}
+        } catch { /* best-effort: ignore */ }
         mapRef.current = null;
       }
     };
@@ -141,13 +141,13 @@ export const LeafletMap = ({
     const obs = new IntersectionObserver(() => {
       try {
         mapRef.current.invalidateSize();
-      } catch {}
+      } catch { /* best-effort: ignore */ }
     });
     obs.observe(el);
     // initial
     try {
       mapRef.current.invalidateSize();
-    } catch {}
+    } catch { /* best-effort: ignore */ }
     return () => obs.disconnect();
   }, [ready]);
 
@@ -158,7 +158,7 @@ export const LeafletMap = ({
     if (layerRef.current) {
       try {
         mapRef.current.removeLayer(layerRef.current);
-      } catch {}
+      } catch { /* best-effort: ignore */ }
       layerRef.current = null;
     }
     const group = L.layerGroup().addTo(mapRef.current);

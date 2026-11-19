@@ -373,8 +373,6 @@ const LakeFreshCheckout = () => {
     { key: "delivery", label: "Delivery", icon: MapPin },
     { key: "pay", label: "Pay", icon: CreditCard },
   ];
-  const stepMeta = steps[Math.min(Math.max(step, 0), steps.length - 1)];
-
   const continueToDelivery = () => {
     if (minOrderBlocked && selectedZone) {
       toast({

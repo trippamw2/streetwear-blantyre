@@ -1,10 +1,8 @@
 ﻿import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Edit, Trash2, Loader2, Gift, Users, TrendingUp, Award } from "lucide-react";
+import { Trash2, Loader2, Gift, Users, TrendingUp, Award } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { adminBrandId, useAdminBrand } from "@/lib/adminBrand";
 
@@ -33,7 +31,6 @@ const AdminLoyalty = () => {
   const [programs, setPrograms] = useState<LoyaltyProgram[]>([]);
   const [tiers, setTiers] = useState<LoyaltyTier[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [stats, setStats] = useState({ total_members: 0, total_points: 0, redeemed_points: 0 });
 
   const fetchData = useCallback(async () => {
@@ -75,54 +72,6 @@ const AdminLoyalty = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  const saveProgram = async (program: Partial<LoyaltyProgram>) => {
-    setSaving(true);
-    try {
-      if (program.id) {
-        const { error } = await supabase.from("loyalty_programs").update(program).eq("id", program.id).eq("brand_id", brandId);
-        if (error) throw error;
-        toast({ title: "Program updated!" });
-      } else {
-        const { error } = await supabase.from("loyalty_programs").insert({ ...program, brand_id: brandId });
-        if (error) throw error;
-        toast({ title: "Program created!" });
-      }
-      fetchData();
-    } catch (error) {
-      toast({
-        title: "Could not save program",
-        description: error instanceof Error ? error.message : "Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const saveTier = async (tier: Partial<LoyaltyTier>) => {
-    setSaving(true);
-    try {
-      if (tier.id) {
-        const { error } = await supabase.from("loyalty_tiers").update(tier).eq("id", tier.id).eq("brand_id", brandId);
-        if (error) throw error;
-        toast({ title: "Tier updated!" });
-      } else {
-        const { error } = await supabase.from("loyalty_tiers").insert({ ...tier, brand_id: brandId });
-        if (error) throw error;
-        toast({ title: "Tier created!" });
-      }
-      fetchData();
-    } catch (error) {
-      toast({
-        title: "Could not save tier",
-        description: error instanceof Error ? error.message : "Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const toggleActive = async (program: LoyaltyProgram) => {
     const { error } = await supabase

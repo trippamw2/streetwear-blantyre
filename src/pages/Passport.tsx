@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Shield, Package, MapPin, Calendar, Hash, Heart, Share2,
-  Clock, User, ChevronRight, Loader2, Shirt,
+  Shield, Package, MapPin, Calendar, Hash, Heart, Share2, User, ChevronRight, Loader2, Shirt,
 } from "lucide-react";
 import { useProductAuthByToken } from "@/hooks/useProductAuth";
 

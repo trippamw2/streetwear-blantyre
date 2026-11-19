@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { formatMWK } from "@/data/products";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { CheckCircle2, Phone, MapPin, Camera } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
@@ -25,7 +24,7 @@ export default function LakeFreshDriver() {
       .order("created_at", { ascending: true });
     const ords = data || [];
     const ids = ords.map((o: any) => o.id);
-    let itemsByOrder: Record<string, any[]> = {};
+    const itemsByOrder: Record<string, any[]> = {};
     if (ids.length) {
       const { data: items } = await supabase
         .from("order_items")

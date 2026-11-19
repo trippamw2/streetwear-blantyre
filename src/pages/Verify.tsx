@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Shield, ShieldCheck, ShieldX, ShieldAlert, QrCode, Package,
+  ShieldCheck, ShieldX, ShieldAlert, Package,
   MapPin, Calendar, Hash, ChevronRight, Heart, Share2,
   AlertTriangle, UserPlus, Loader2,
 } from "lucide-react";

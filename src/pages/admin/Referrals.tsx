@@ -68,7 +68,7 @@ export default function AdminReferrals() {
     loadData();
   }, [loadData]);
 
-  const toast = useToast();
+  const { toast } = useToast();
 
   const updateStatus = async (id: string, status: string) => {
     const { error } = await supabase
