@@ -13,21 +13,22 @@ export interface PaymentVerification {
 
 export async function verifyOrderPayment(
   orderId: string,
+  reference?: string,
 ): Promise<PaymentVerification | null> {
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session?.access_token) return null;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (session?.access_token) {
+    headers.Authorization = `Bearer ${session.access_token}`;
+  }
 
   try {
     const response = await fetch("/api/payment/verify", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify({ orderId }),
+      headers,
+      body: JSON.stringify({ orderId, reference }),
     });
 
     if (!response.ok) return null;

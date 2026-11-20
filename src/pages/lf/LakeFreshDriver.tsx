@@ -4,8 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { CheckCircle2, Phone, MapPin, Camera } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { BRANDS } from "@/lib/brands";
 
-const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
+const LF_BRAND_ID = BRANDS["lake-fresh"].id;
 
 export default function LakeFreshDriver() {
   const { user } = useAuth();

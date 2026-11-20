@@ -128,14 +128,7 @@ const lakeFreshRouteChildren = (
     <Route path="fish/:id" element={<LakeFreshProduct />} />
     <Route path="cart" element={<LakeFreshCart />} />
     <Route path="auth" element={<LakeFreshAuth />} />
-    <Route
-      path="checkout"
-      element={
-        <LakeFreshProtectedRoute>
-          <LakeFreshCheckout />
-        </LakeFreshProtectedRoute>
-      }
-    />
+    <Route path="checkout" element={<LakeFreshCheckout />} />
     <Route
       path="orders"
       element={
@@ -144,14 +137,7 @@ const lakeFreshRouteChildren = (
         </LakeFreshProtectedRoute>
       }
     />
-    <Route
-      path="orders/:id"
-      element={
-        <LakeFreshProtectedRoute>
-          <LakeFreshOrder />
-        </LakeFreshProtectedRoute>
-      }
-    />
+    <Route path="orders/:id" element={<LakeFreshOrder />} />
     <Route path="recipes" element={<LakeFreshRecipes />} />
     <Route path="recipes/:slug" element={<LakeFreshRecipe />} />
     <Route path="spices" element={<LakeFreshSpices />} />

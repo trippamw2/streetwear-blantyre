@@ -121,9 +121,8 @@ const LakeFreshHome = () => {
               Lake Fresh Fish Mart
             </span>
             <h1 className="mt-6 font-display text-[2.35rem] font-extrabold leading-[0.96] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Lake Fresh Fish
-              <br />
-              <span className="bg-gradient-to-r from-[#7ED321] to-[#08A9E8] bg-clip-text text-transparent">Delivered to your door</span>
+              Lake Fresh Fish{" "}
+              <span className="block bg-gradient-to-r from-[#7ED321] to-[#08A9E8] bg-clip-text text-transparent">Delivered to your door</span>
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/75 sm:text-base">
               Fresh fish, cleaned and cut, your choice of seasoning, properly packed and delivered home. {LF_PILOT_DELIVERY_PROMISE}.
@@ -534,6 +533,49 @@ const LakeFreshHome = () => {
         </div>
       </section>
 
+      {/* QUESTIONS */}
+      <section className="bg-white">
+        <div className="container py-14 sm:py-20">
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#08A9E8]">Simple answers</span>
+          <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+            QUESTIONS PEOPLE ASK
+          </h2>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            {[
+              {
+                q: "When will my fish arrive?",
+                a: `${LF_PILOT_DELIVERY_PROMISE}. We show your delivery day at checkout.`,
+              },
+              {
+                q: "Can I choose the cut?",
+                a: "Yes. Choose whole, cleaned, or cleaned and cut.",
+              },
+              {
+                q: "Do seasonings cost extra?",
+                a: "Yes. Seasonings are paid extras. You choose from five.",
+              },
+              {
+                q: "How many recipes do I get?",
+                a: "One free recipe with every order. You choose which one.",
+              },
+              {
+                q: "Do you take money automatically?",
+                a: "No. You pay through PayChangu when you order. Subscriptions use manual payment too.",
+              },
+              {
+                q: "What if the packed weight changes?",
+                a: "We weigh the fish when we pack it. We show the final total before delivery.",
+              },
+            ].map((item) => (
+              <div key={item.q} className="rounded-2xl border border-gray-200 p-5">
+                <p className="text-sm font-extrabold text-[#073B78]">{item.q}</p>
+                <p className="mt-2 text-xs leading-relaxed text-[#073B78]/65">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* WHY LAKE FRESH */}
       <section className="border-y border-gray-200 bg-[#F4FBF7]">
         <div className="container py-14 sm:py-20">
@@ -557,6 +599,75 @@ const LakeFreshHome = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* THE CLEAR CHOICE */}
+      <section className="bg-white">
+        <div className="container py-14 sm:py-20">
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#08A9E8]">Compare your options</span>
+          <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+            THE SMART WAY TO BUY FISH
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#073B78]/70">
+            You have three ways to get fish. Only one lets you choose the fish, the weight, the cut and the recipe, then brings it to your door.
+          </p>
+          <div className="mt-8 grid gap-4 lg:grid-cols-3">
+            {[
+              {
+                title: "Big companies",
+                copy: "You get a box chosen for you. You cannot pick your cut. You cannot choose your recipe.",
+                className: "bg-gray-50 border-gray-200",
+              },
+              {
+                title: "Local sellers",
+                copy: "You queue in the heat. You argue over the weight. You carry the fish home and still wonder what to cook.",
+                className: "bg-[#F4FBF7] border-[#39B54A]/25",
+              },
+              {
+                title: "Lake Fresh",
+                copy: `You choose ${LF_PILOT_FISH_NAMES}. You pick the kilograms and the cut. You choose one free recipe. ${LF_PILOT_DELIVERY_PROMISE}.`,
+                className: "bg-[#EAF6FB] border-[#08A9E8]/40",
+              },
+            ].map((option) => (
+              <div key={option.title} className={`rounded-2xl border p-5 ${option.className}`}>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[#39B54A]" />
+                  <h3 className="font-display text-sm font-extrabold uppercase tracking-wide text-[#073B78]">
+                    {option.title}
+                  </h3>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-[#073B78]/70">{option.copy}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* THE WHOLE OFFER */}
+      <section className="border-y border-gray-200 bg-[#F7FBFC]">
+        <div className="container py-14 sm:py-20">
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#39B54A]">What we do for you</span>
+          <h2 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-[#073B78] sm:text-4xl">
+            THE WHOLE MEAL, SORTED
+          </h2>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { number: "3", title: "fish options", copy: LF_PILOT_FISH_NAMES },
+              { number: "5", title: "seasonings", copy: "Pick the one you like. Seasonings cost extra." },
+              { number: "1", title: "free recipe", copy: "You choose it. We pack it with your fish." },
+              { number: "8 PM", title: "order cutoff", copy: LF_PILOT_DELIVERY_PROMISE },
+            ].map((item) => (
+              <div key={item.title} className="rounded-2xl border border-gray-200 bg-white p-5">
+                <p className="font-display text-3xl font-extrabold text-[#08A9E8]">{item.number}</p>
+                <p className="mt-1 text-xs font-extrabold uppercase tracking-wide text-[#073B78]">{item.title}</p>
+                <p className="mt-2 text-xs leading-relaxed text-[#073B78]/60">{item.copy}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-xs text-[#073B78]/60">
+            Seasonings are paid extras. One recipe is free with every order, and you choose which one.
+          </p>
         </div>
       </section>
 
@@ -606,10 +717,10 @@ const LakeFreshHome = () => {
             <ShoppingBasket className="h-3.5 w-3.5 text-[#7ED321]" /> Your next meal starts here
           </span>
           <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-            START YOUR FISH MEAL TODAY.
+            Start your fish meal today.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
-            Choose your fish, add a seasoning and one free recipe. {LF_PILOT_DELIVERY_PROMISE}.
+            Choose your fish. Pick from five seasonings. Get one free recipe with every order. {LF_PILOT_DELIVERY_PROMISE}.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <LFLink

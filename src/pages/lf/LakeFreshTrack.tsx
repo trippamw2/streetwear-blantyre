@@ -5,6 +5,7 @@ import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
 import { formatLakeFreshPaymentRef, normalizeLakeFreshPaymentRef } from "@/lib/lfPayments";
+import { lfWhatsAppLink } from "@/lib/whatsapp";
 import { AlertCircle, CheckCircle2, Loader2, MapPin, Search, Truck } from "lucide-react";
 
 interface TrackStep {
@@ -265,7 +266,7 @@ const LakeFreshTrack = () => {
         <p className="mt-6 text-center text-xs text-[#073B78]/60">
           Need help?{" "}
           <a
-            href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_LAKEFRESH || "265991234567"}`}
+            href={lfWhatsAppLink("Hi Lake Fresh, please help me track my order.")}
             target="_blank"
             rel="noreferrer"
             className="font-bold text-[#073B78] underline"

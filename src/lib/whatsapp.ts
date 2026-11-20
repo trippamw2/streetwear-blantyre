@@ -25,6 +25,15 @@ export const buildWhatsAppLink = (message: string, phone?: string, brand?: Brand
   return `https://wa.me/${number}?text=${encoded}`;
 };
 
+/** One WhatsApp path for every Lake Fresh customer facing link. */
+export const lfWhatsAppLink = (message: string) => {
+  const number =
+    import.meta.env.VITE_WHATSAPP_LAKEFRESH ||
+    import.meta.env.VITE_WHATSAPP_BUSINESS ||
+    WHATSAPP_NUMBERS["lake-fresh"];
+  return buildWhatsAppLink(message, number, "lake-fresh");
+};
+
 export const defaultMessage = "Hi Streetwear Blantyre, I want to order.";
 export const defaultMessageFor = (brand?: BrandSlug) =>
   `Hi ${getBrandConfig(brand).name}, I want to order.`;

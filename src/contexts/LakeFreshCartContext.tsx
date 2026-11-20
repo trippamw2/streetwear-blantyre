@@ -175,7 +175,15 @@ export const LakeFreshCartProvider = ({ children }: { children: ReactNode }) => 
 
   const setRecipe = (key: string, recipeId: string | null, recipeTitle: string | null) =>
     setItems((prev) =>
-      prev.map((i) => (i.key === key && i.kind === "fish" ? { ...i, recipeId, recipeTitle } : i))
+      prev.map((i) => {
+        if (i.key === key && i.kind === "fish") {
+          return { ...i, recipeId, recipeTitle };
+        }
+        if (recipeId && i.kind === "fish") {
+          return { ...i, recipeId: null, recipeTitle: null };
+        }
+        return i;
+      })
     );
 
   const clear = () => setItems([]);

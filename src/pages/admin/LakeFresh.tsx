@@ -13,6 +13,7 @@ import LFFileManager from "@/components/admin/LFFileManager";
 import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { lfGalleryImages } from "@/lib/lfImages";
 import { deleteLfStorageAsset } from "@/lib/lfStorage";
+import { BRANDS } from "@/lib/brands";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { formatMWK } from "@/data/products";
 import {
@@ -32,7 +33,7 @@ import {
   FileText,
 } from "lucide-react";
 
-const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
+const LF_BRAND_ID = BRANDS["lake-fresh"].id;
 
 const escapeHtml = (value: unknown) =>
   String(value ?? "").replace(/[&<>'"]/g, (char) => {
@@ -46,10 +47,11 @@ const escapeHtml = (value: unknown) =>
     return entities[char] || char;
   });
 
-type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery" | "route" | "customers";
+type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery" | "route" | "customers" | "settings";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
+  { key: "settings", label: "Settings", icon: ClipboardList },
   { key: "spices", label: "Spices", icon: Package },
   { key: "recipes", label: "Recipes", icon: Package },
   { key: "media", label: "Photos & Files", icon: ImageIcon },
@@ -222,7 +224,15 @@ const AssetField = ({
   );
 };
 
-const VALID_TABS: Tab[] = ["catalog", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery", "route", "customers"];
+const VALID_TABS: Tab[] = ["catalog", "settings", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery", "route", "customers"];
+
+const SETTING_FIELDS: { key: string; label: string; defaultValue: string; kind: "time" | "number" }[] = [
+  { key: "delivery.cutoff", label: "Order cutoff", defaultValue: "20:00", kind: "time" },
+  { key: "delivery.delivery_days", label: "Days until first delivery", defaultValue: "1", kind: "number" },
+  { key: "delivery.max_advance_days", label: "Days customers can choose", defaultValue: "7", kind: "number" },
+  { key: "delivery.fee_mwk", label: "Base delivery fee (MWK)", defaultValue: "2000", kind: "number" },
+  { key: "delivery.free_threshold_mwk", label: "Free delivery from (MWK)", defaultValue: "15000", kind: "number" },
+];
 
 const AdminLakeFresh = () => {
   const { user } = useAuth();
@@ -238,6 +248,9 @@ const AdminLakeFresh = () => {
 
   // ---- Catalog state ----
   const [species, setSpecies] = useState<any[]>([]);
+  const [speciesForm, setSpeciesForm] = useState({ name: "", slug: "", description: "", image: "" });
+  const [editingSpeciesId, setEditingSpeciesId] = useState<string | null>(null);
+  const [editSpeciesForm, setEditSpeciesForm] = useState({ name: "", slug: "", description: "", image: "" });
   const [products, setProducts] = useState<any[]>([]);
   const [productForm, setProductForm] = useState({
     species_id: "",
@@ -280,6 +293,14 @@ const AdminLakeFresh = () => {
   const [genDays, setGenDays] = useState("14");
   const [genOrders, setGenOrders] = useState("20");
   const [genWeight, setGenWeight] = useState("50");
+  const [editingSlotId, setEditingSlotId] = useState<string | null>(null);
+  const [editSlotForm, setEditSlotForm] = useState({
+    delivery_date: "",
+    capacity_orders: "20",
+    capacity_weight_kg: "50",
+    cutoff_time: "20:00",
+    is_open: true,
+  });
 
   // ---- Orders state ----
   const [orders, setOrders] = useState<any[]>([]);
@@ -335,6 +356,12 @@ const AdminLakeFresh = () => {
     cooking_method: "", recommended_spice: "", safety_notes: "",
     ingredients: "", steps: "", image: "", pdf_url: "",
   });
+  const [editingRecipeId, setEditingRecipeId] = useState<string | null>(null);
+  const [editRecipeForm, setEditRecipeForm] = useState({
+    title: "", slug: "", species_id: "", prep_time_min: "", cook_time_min: "", servings: "",
+    cooking_method: "", recommended_spice: "", safety_notes: "",
+    ingredients: "", steps: "", image: "", pdf_url: "",
+  });
 
   // ---- PRO state ----
   const [businessAccounts, setBusinessAccounts] = useState<any[]>([]);
@@ -347,6 +374,12 @@ const AdminLakeFresh = () => {
 
   // ---- Subscriptions state ----
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [subscriptionCharges, setSubscriptionCharges] = useState<any[]>([]);
+
+  // ---- Settings and reconciliation state ----
+  const [brandSettings, setBrandSettings] = useState<Record<string, string>>({});
+  const [reconciliations, setReconciliations] = useState<any[]>([]);
+  const [refunds, setRefunds] = useState<any[]>([]);
 
   const [loading, setLoading] = useState(false);
   const pendingAssetDeletes = useRef<Set<string>>(new Set());
@@ -397,7 +430,7 @@ const AdminLakeFresh = () => {
   const loadSpecies = async () => {
     const { data, error } = await supabase
       .from("fish_species")
-      .select("id, name, slug, image")
+      .select("id, name, slug, description, image, is_active")
       .eq("brand_id", LF_BRAND_ID)
       .order("sort_order");
     if (error) {
@@ -417,6 +450,101 @@ const AdminLakeFresh = () => {
     setSpecies((prev) => prev.map((s: any) => (s.id === id ? { ...s, image } : s)));
     invalidateStorefront();
     return true;
+  };
+
+  const handleCreateSpecies = async () => {
+    if (!speciesForm.name || !speciesForm.slug) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.from("fish_species").insert({
+      brand_id: LF_BRAND_ID,
+      name: speciesForm.name,
+      slug: speciesForm.slug,
+      description: speciesForm.description || null,
+      image: speciesForm.image || null,
+      is_active: true,
+    });
+    if (error) {
+      toast({ title: "Create failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Fish guide added" });
+    setSpeciesForm({ name: "", slug: "", description: "", image: "" });
+    await finishWrite(loadSpecies);
+  };
+
+  const startEditSpecies = (item: any) => {
+    setEditingSpeciesId(item.id);
+    setEditSpeciesForm({
+      name: item.name || "",
+      slug: item.slug || "",
+      description: item.description || "",
+      image: item.image || "",
+    });
+  };
+
+  const saveEditedSpecies = async () => {
+    if (!editingSpeciesId) return;
+    if (!editSpeciesForm.name || !editSpeciesForm.slug) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("fish_species")
+      .update({
+        name: editSpeciesForm.name,
+        slug: editSpeciesForm.slug,
+        description: editSpeciesForm.description || null,
+        image: editSpeciesForm.image || null,
+      })
+      .eq("id", editingSpeciesId)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Fish guide updated" });
+    setEditingSpeciesId(null);
+    await finishWrite(loadSpecies);
+  };
+
+  const toggleSpeciesActive = async (item: any) => {
+    const { error } = await supabase
+      .from("fish_species")
+      .update({ is_active: !item.is_active })
+      .eq("id", item.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
+    else await finishWrite(loadSpecies);
+  };
+
+  const deleteSpeciesRecord = async (item: any) => {
+    if (!window.confirm(`Remove ${item.name} from the fish guide? This cannot be undone.`)) return;
+    // Recipes keep their title and steps. They simply lose this guide label.
+    const { error: recipeError } = await supabase
+      .from("lf_recipes")
+      .update({ species_id: null })
+      .eq("species_id", item.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (recipeError) {
+      toast({ title: "Could not remove", description: recipeError.message, variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("fish_species")
+      .delete()
+      .eq("id", item.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Could not remove", description: error.message, variant: "destructive" });
+      return;
+    }
+    if (item.image) await deleteLfStorageAsset(item.image).catch(() => false);
+    toast({ title: "Fish guide removed" });
+    await finishWrite(async () => {
+      await Promise.all([loadSpecies(), loadProducts(), loadRecipes()]);
+    });
   };
 
   const updateProductGallery = async (id: string, gallery: string[]) => {
@@ -904,6 +1032,69 @@ const AdminLakeFresh = () => {
     return true;
   };
 
+  const loadSettings = async () => {
+    const { data, error } = await supabase
+      .from("brand_settings")
+      .select("setting_key, setting_value")
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      loadFailed("Settings", error);
+      return false;
+    }
+    const next: Record<string, string> = {};
+    (data || []).forEach((row: any) => {
+      const value = row.setting_value;
+      next[row.setting_key] = typeof value === "string" ? value : String(value ?? "");
+    });
+    setBrandSettings(next);
+    return true;
+  };
+
+  const loadSubscriptionCharges = async () => {
+    const { data, error } = await supabase
+      .from("lf_subscription_charges")
+      .select("*, lf_subscriptions(customer_name, customer_phone, plan)")
+      .eq("brand_id", LF_BRAND_ID)
+      .order("period_date", { ascending: false })
+      .limit(100);
+    if (error) {
+      loadFailed("Subscription payments", error);
+      return false;
+    }
+    setSubscriptionCharges(data || []);
+    return true;
+  };
+
+  const loadReconciliations = async () => {
+    const { data, error } = await supabase
+      .from("price_reconciliation")
+      .select("*, orders(payment_reference, customer_name)")
+      .eq("brand_id", LF_BRAND_ID)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) {
+      loadFailed("Price checks", error);
+      return false;
+    }
+    setReconciliations(data || []);
+    return true;
+  };
+
+  const loadRefunds = async () => {
+    const { data, error } = await supabase
+      .from("lf_refund_audit")
+      .select("*, orders(payment_reference, customer_name)")
+      .eq("brand_id", LF_BRAND_ID)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) {
+      loadFailed("Refund record", error);
+      return false;
+    }
+    setRefunds(data || []);
+    return true;
+  };
+
   useEffect(() => {
     loadSpecies();
     loadProducts();
@@ -919,6 +1110,10 @@ const AdminLakeFresh = () => {
     loadPreparations();
     loadZones();
     loadCustomers();
+    loadSettings();
+    loadSubscriptionCharges();
+    loadReconciliations();
+    loadRefunds();
   }, []);
 
   useEffect(() => {
@@ -942,6 +1137,10 @@ const AdminLakeFresh = () => {
       loadPreparations(),
       loadZones(),
       loadCustomers(),
+      loadSettings(),
+      loadSubscriptionCharges(),
+      loadReconciliations(),
+      loadRefunds(),
     ]);
     setLoading(false);
     const failed = results.filter((result) => result === false).length;
@@ -1064,6 +1263,7 @@ const AdminLakeFresh = () => {
       toast({ title: "Missing fields", variant: "destructive" });
       return;
     }
+    pendingAssetDeletes.current.clear();
     const { error } = await supabase.from("lf_recipes").insert({
       brand_id: LF_BRAND_ID,
       title: recipeForm.title,
@@ -1086,6 +1286,7 @@ const AdminLakeFresh = () => {
       toast({ title: "Recipe created" });
       setRecipeForm({ title: "", slug: "", species_id: "", prep_time_min: "", cook_time_min: "", servings: "", cooking_method: "", recommended_spice: "", safety_notes: "", ingredients: "", steps: "", image: "", pdf_url: "" });
       await finishWrite(loadRecipes);
+      await flushAssetDeletes();
     }
   };
 
@@ -1093,6 +1294,61 @@ const AdminLakeFresh = () => {
     const { error } = await supabase.from("lf_recipes").update({ is_active: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else await finishWrite(loadRecipes);
+  };
+
+  const startEditRecipe = (recipe: any) => {
+    pendingAssetDeletes.current.clear();
+    setEditingRecipeId(recipe.id);
+    setEditRecipeForm({
+      title: recipe.title || "",
+      slug: recipe.slug || "",
+      species_id: recipe.species_id || "",
+      prep_time_min: String(recipe.prep_time_min ?? ""),
+      cook_time_min: String(recipe.cook_time_min ?? ""),
+      servings: String(recipe.servings ?? ""),
+      cooking_method: recipe.cooking_method || "",
+      recommended_spice: recipe.recommended_spice || "",
+      safety_notes: recipe.safety_notes || "",
+      ingredients: (recipe.ingredients || []).join("\n"),
+      steps: (recipe.steps || []).join("\n"),
+      image: recipe.image || "",
+      pdf_url: recipe.pdf_url || "",
+    });
+  };
+
+  const saveEditedRecipe = async () => {
+    if (!editingRecipeId) return;
+    if (!editRecipeForm.title || !editRecipeForm.slug) {
+      toast({ title: "Missing fields", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("lf_recipes")
+      .update({
+        title: editRecipeForm.title,
+        slug: editRecipeForm.slug,
+        species_id: editRecipeForm.species_id || null,
+        prep_time_min: editRecipeForm.prep_time_min ? Number(editRecipeForm.prep_time_min) : null,
+        cook_time_min: editRecipeForm.cook_time_min ? Number(editRecipeForm.cook_time_min) : null,
+        servings: editRecipeForm.servings ? Number(editRecipeForm.servings) : null,
+        cooking_method: editRecipeForm.cooking_method || null,
+        recommended_spice: editRecipeForm.recommended_spice || null,
+        safety_notes: editRecipeForm.safety_notes || null,
+        ingredients: editRecipeForm.ingredients.split("\n").map((s) => s.trim()).filter(Boolean),
+        steps: editRecipeForm.steps.split("\n").map((s) => s.trim()).filter(Boolean),
+        image: editRecipeForm.image || null,
+        pdf_url: editRecipeForm.pdf_url || null,
+      })
+      .eq("id", editingRecipeId)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Recipe updated" });
+    setEditingRecipeId(null);
+    await finishWrite(loadRecipes);
+    await flushAssetDeletes();
   };
 
   const approveBusiness = async (id: string, status: "approved" | "rejected") => {
@@ -1168,6 +1424,71 @@ const AdminLakeFresh = () => {
     const { error } = await supabase.from("fish_products").update({ is_active: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
     else await finishWrite(loadProducts);
+  };
+
+  const deleteProductRecord = async (product: any) => {
+    if (!window.confirm(`Remove ${product.name} from the catch? This cannot be undone.`)) return;
+    const { error: subscriptionError } = await supabase
+      .from("lf_subscriptions")
+      .update({ fish_product_id: null })
+      .eq("fish_product_id", product.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (subscriptionError) {
+      toast({ title: "Could not remove", description: subscriptionError.message, variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("fish_products")
+      .delete()
+      .eq("id", product.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Could not remove", description: error.message, variant: "destructive" });
+      return;
+    }
+    const urls = lfGalleryImages(product.image, product.images);
+    for (const url of urls) await deleteLfStorageAsset(url).catch(() => false);
+    if (editingProductId === product.id) setEditingProductId(null);
+    toast({ title: "Catch removed" });
+    await finishWrite(async () => {
+      await Promise.all([loadProducts(), loadSubscriptions()]);
+    });
+  };
+
+  const deleteSpiceRecord = async (spice: any) => {
+    if (!window.confirm(`Remove ${spice.name} from seasonings? This cannot be undone.`)) return;
+    const { error } = await supabase
+      .from("lf_spices")
+      .delete()
+      .eq("id", spice.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Could not remove", description: error.message, variant: "destructive" });
+      return;
+    }
+    const urls = lfGalleryImages(spice.image, spice.images);
+    for (const url of urls) await deleteLfStorageAsset(url).catch(() => false);
+    if (editingSpiceId === spice.id) setEditingSpiceId(null);
+    toast({ title: "Seasoning removed" });
+    await finishWrite(loadSpices);
+  };
+
+  const deleteRecipeRecord = async (recipe: any) => {
+    if (!window.confirm(`Remove ${recipe.title}? This cannot be undone.`)) return;
+    const { error } = await supabase
+      .from("lf_recipes")
+      .delete()
+      .eq("id", recipe.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Could not remove", description: error.message, variant: "destructive" });
+      return;
+    }
+    await deleteLfStorageAsset(recipe.image).catch(() => false);
+    await deleteLfStorageAsset(recipe.pdf_url).catch(() => false);
+    if (editingRecipeId === recipe.id) setEditingRecipeId(null);
+    toast({ title: "Recipe removed" });
+    await finishWrite(loadRecipes);
   };
 
   // ---- Delivery zone actions ----
@@ -1255,45 +1576,129 @@ const AdminLakeFresh = () => {
     else await finishWrite(loadSlots);
   };
 
-  // ---- Order actions ----
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
-    const { error } = await supabase.from("orders").update({ status: newStatus }).eq("id", orderId).eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
-    else {
-      toast({ title: "Status updated" });
-      // Send customer email on dispatched / delivered (best effort)
-      if (newStatus === "dispatched" || newStatus === "delivered") {
-        try {
-          const { data: ord } = await supabase
-            .from("orders")
-            .select("customer_name, customer_email, customer_phone, total_mwk, customer_location, delivery_date, delivery_window, payment_reference")
-            .eq("id", orderId)
-            .maybeSingle();
-          if (ord?.customer_email) {
-            const { sendDispatchedEmail, sendDeliveredEmail } = await import("@/lib/brevo");
-            const emailOrder = {
-              to: ord.customer_email,
-              toName: ord.customer_name || "Customer",
-              orderId,
-              brand: "lake-fresh" as const,
-              total: Number(ord.total_mwk || 0),
-              location: ord.customer_location || "",
-              items: [],
-              deliveryMethod: "Next day delivery",
-              type: (newStatus === "dispatched" ? "dispatched" : "delivered") as "dispatched" | "delivered",
-              eta: ord.delivery_window || undefined,
-              trackingUrl: `${window.location.origin}/lf/track?ref=${ord.payment_reference || orderId}`,
-            };
-            if (newStatus === "dispatched") await sendDispatchedEmail(emailOrder);
-            else await sendDeliveredEmail(emailOrder);
-          }
-        } catch (e) {
-          console.warn("status email failed", e);
-        }
-      }
-      await finishWrite(loadOrders);
-      if (tab === "route") void loadRouteOrders();
+  const startEditSlot = (slot: any) => {
+    const cutoff = slot.cutoff_at
+      ? new Date(slot.cutoff_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Blantyre" })
+      : "20:00";
+    setEditingSlotId(slot.id);
+    setEditSlotForm({
+      delivery_date: slot.delivery_date,
+      capacity_orders: String(slot.capacity_orders ?? 20),
+      capacity_weight_kg: String(slot.capacity_weight_kg ?? 50),
+      cutoff_time: cutoff,
+      is_open: Boolean(slot.is_open),
+    });
+  };
+
+  const saveEditedSlot = async () => {
+    if (!editingSlotId) return;
+    const [year, month, day] = editSlotForm.delivery_date.split("-").map(Number);
+    const [hour, minute] = editSlotForm.cutoff_time.split(":").map(Number);
+    if (!year || !month || !day || Number.isNaN(hour) || Number.isNaN(minute)) {
+      toast({ title: "Check the cutoff time", variant: "destructive" });
+      return;
     }
+    // Blantyre is UTC+2 all year, so this saves the chosen local clock time.
+    const cutoffAt = new Date(Date.UTC(year, month - 1, day, hour - 2, minute)).toISOString();
+    const { error } = await supabase
+      .from("delivery_slots")
+      .update({
+        capacity_orders: Number(editSlotForm.capacity_orders),
+        capacity_weight_kg: Number(editSlotForm.capacity_weight_kg),
+        cutoff_at: cutoffAt,
+        is_open: editSlotForm.is_open,
+      })
+      .eq("id", editingSlotId)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Delivery slot updated" });
+    setEditingSlotId(null);
+    await finishWrite(loadSlots);
+  };
+
+  // ---- Order actions ----
+  const callSetOrderStatus = async (
+    orderId: string,
+    status: string,
+    reason: string | null = null,
+    gatewayReference: string | null = null
+  ) => {
+    const { data, error } = await supabase.rpc("lf_set_order_status", {
+      p_order_id: orderId,
+      p_status: status,
+      p_reason: reason,
+      p_gateway_reference: gatewayReference,
+      p_gateway_response: { source: "admin", at: new Date().toISOString() },
+    });
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return false;
+    }
+    const result = data as any;
+    if (!result?.ok) {
+      const reasons: Record<string, string> = {
+        invalid_transition: "That status change is not allowed for this order.",
+        reason_required: "Add a reason before refunding.",
+        no_access: "You do not have access to this order.",
+        order_not_found: "That order was not found.",
+      };
+      toast({
+        title: "Status not changed",
+        description: reasons[result?.reason] || result?.reason || "Please try again.",
+        variant: "destructive",
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const finishOrderStatus = async (orderId: string, status: string) => {
+    toast({ title: status === "refunded" ? "Refund recorded" : "Status updated" });
+    if (status === "dispatched" || status === "delivered") {
+      try {
+        const { data: ord } = await supabase
+          .from("orders")
+          .select("customer_name, customer_email, customer_phone, total_mwk, customer_location, delivery_window, payment_reference")
+          .eq("id", orderId)
+          .maybeSingle();
+        if (ord?.customer_email) {
+          const { sendDispatchedEmail, sendDeliveredEmail } = await import("@/lib/brevo");
+          const emailOrder = {
+            to: ord.customer_email,
+            toName: ord.customer_name || "Customer",
+            orderId,
+            brand: "lake-fresh" as const,
+            total: Number(ord.total_mwk || 0),
+            location: ord.customer_location || "",
+            items: [],
+            deliveryMethod: "Next day delivery",
+            type: status === "dispatched" ? "dispatched" : "delivered" as "dispatched" | "delivered",
+            eta: ord.delivery_window || undefined,
+            trackingUrl: `${window.location.origin}/lf/track?ref=${ord.payment_reference || orderId}`,
+          };
+          if (status === "dispatched") await sendDispatchedEmail(emailOrder as any);
+          else await sendDeliveredEmail(emailOrder as any);
+        }
+      } catch (e) {
+        console.warn("status email failed", e);
+      }
+    }
+    await finishWrite(async () => {
+      await Promise.all([loadOrders(), loadRefunds(), loadReconciliations()]);
+    });
+    if (tab === "route") void loadRouteOrders();
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    if (newStatus === "refunded") {
+      await cancelOrRefundOrder(orderId, "refunded");
+      return;
+    }
+    const changed = await callSetOrderStatus(orderId, newStatus);
+    if (changed) await finishOrderStatus(orderId, newStatus);
   };
 
   const markOrderPaid = async (orderId: string) => {
@@ -1310,18 +1715,22 @@ const AdminLakeFresh = () => {
     }
   };
 
-  const refundAndCancelOrder = async (orderId: string) => {
-    const { error } = await supabase
-      .from("orders")
-      .update({ status: "cancelled", payment_status: "refunded", updated_at: new Date().toISOString() })
-      .eq("id", orderId)
-      .eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Refund failed", description: error.message, variant: "destructive" });
-    else {
-      toast({ title: "Order cancelled and refunded" });
-      await finishWrite(loadOrders);
-      if (tab === "route") void loadRouteOrders();
-    }
+  const cancelOrRefundOrder = async (orderId: string, status: "cancelled" | "refunded") => {
+    const reason = window.prompt(
+      status === "refunded" ? "Why is this order refunded?" : "Why is this order cancelled?"
+    );
+    if (reason === null) return;
+    const gatewayReference = status === "refunded"
+      ? window.prompt("PayChangu refund reference, if you have one.")
+      : null;
+    if (gatewayReference === null && status === "refunded") return;
+    const changed = await callSetOrderStatus(
+      orderId,
+      status,
+      reason.trim() || (status === "refunded" ? "Refund requested by customer" : "Cancelled by admin"),
+      gatewayReference
+    );
+    if (changed) await finishOrderStatus(orderId, status);
   };
 
   const dispatchOrder = async (orderId: string) => {
@@ -1335,13 +1744,8 @@ const AdminLakeFresh = () => {
       toast({ title: "Dispatch failed", description: aErr.message, variant: "destructive" });
       return;
     }
-    const { error } = await supabase.from("orders").update({ status: "dispatched" }).eq("id", orderId).eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Status update failed", description: error.message, variant: "destructive" });
-    else {
-      toast({ title: "Order dispatched" });
-      await finishWrite(loadOrders);
-      if (tab === "route") void loadRouteOrders();
-    }
+    const changed = await callSetOrderStatus(orderId, "dispatched");
+    if (changed) await finishOrderStatus(orderId, "dispatched");
   };
 
   // ---- Preparation actions ----
@@ -1372,8 +1776,8 @@ const AdminLakeFresh = () => {
               .in("order_item_id", (await supabase.from("order_items").select("id").eq("order_id", item.order_id)).data?.map((x: any) => x.id) || []);
             const allDone = (allPrep || []).length > 0 && (allPrep || []).every((p: any) => p.reconciled_at);
             if (allDone) {
-              await supabase.from("orders").update({ status: "processing" }).eq("id", item.order_id).eq("brand_id", LF_BRAND_ID).eq("status", "confirmed");
-              await finishWrite(loadOrders);
+              const moved = await callSetOrderStatus(item.order_id, "processing");
+              if (moved) await finishWrite(loadOrders);
             }
           }
         }
@@ -1427,6 +1831,32 @@ const AdminLakeFresh = () => {
     });
   };
 
+  const deleteZoneRecord = async (zone: any) => {
+    if (!window.confirm(`Remove ${zone.name}? Orders already using it will keep their address.`)) return;
+    const { error: subscriptionError } = await supabase
+      .from("lf_subscriptions")
+      .update({ delivery_zone_id: null })
+      .eq("delivery_zone_id", zone.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (subscriptionError) {
+      toast({ title: "Could not remove", description: subscriptionError.message, variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("delivery_zones")
+      .delete()
+      .eq("id", zone.id)
+      .eq("brand_id", LF_BRAND_ID);
+    if (error) {
+      toast({ title: "Could not remove", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Delivery area removed" });
+    await finishWrite(async () => {
+      await Promise.all([loadZones(), loadSlots()]);
+    });
+  };
+
   const toggleZoneActive = async (id: string, next: boolean) => {
     const { error } = await supabase.from("delivery_zones").update({ is_active: next }).eq("id", id).eq("brand_id", LF_BRAND_ID);
     if (error) {
@@ -1447,6 +1877,74 @@ const AdminLakeFresh = () => {
     }
     await finishWrite(async () => {
       await Promise.all([loadZones(), loadSlots()]);
+    });
+  };
+
+  const settingValue = (key: string, fallback: string) => brandSettings[key] || fallback;
+
+  const saveBrandSettings = async () => {
+    const rows = SETTING_FIELDS.map((field) => {
+      const raw = settingValue(field.key, field.defaultValue).trim();
+      if (field.kind === "time" && !/^([01]\d|2[0-3]):[0-5]\d$/.test(raw)) {
+        throw new Error(`${field.label} must look like 20:00`);
+      }
+      if (field.kind === "number" && (!Number.isFinite(Number(raw)) || Number(raw) < 0)) {
+        throw new Error(`${field.label} must be zero or more`);
+      }
+      return {
+        brand_id: LF_BRAND_ID,
+        setting_key: field.key,
+        setting_value: field.kind === "number" ? Number(raw) : raw,
+      };
+    });
+    if (Number(rows[1].setting_value) < 1 || Number(rows[2].setting_value) < 1) {
+      toast({ title: "Check the delivery days", description: "Both must be at least one.", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.from("brand_settings").upsert(rows, { onConflict: "brand_id,setting_key" });
+    if (error) {
+      toast({ title: "Settings not saved", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Settings saved for the store" });
+    await finishWrite(async () => {
+      await Promise.all([loadSettings(), loadSlots()]);
+    });
+  };
+
+  const handleSaveBrandSettings = async () => {
+    try {
+      await saveBrandSettings();
+    } catch (error) {
+      toast({
+        title: "Check your settings",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const confirmSubscriptionCharge = async (charge: any) => {
+    const gatewayReference = window.prompt("PayChangu reference for this payment, if you have one.");
+    const { data, error } = await supabase.rpc("lf_confirm_subscription_charge", {
+      p_charge_id: charge.id,
+      p_gateway_reference: gatewayReference || null,
+    });
+    if (error) {
+      toast({ title: "Payment not confirmed", description: error.message, variant: "destructive" });
+      return;
+    }
+    const result = data as any;
+    if (!result?.ok) {
+      toast({ title: "Payment not confirmed", description: result?.reason || "Please try again.", variant: "destructive" });
+      return;
+    }
+    toast({
+      title: "Payment confirmed",
+      description: `Order created. Next charge ${result.next_charge_date || "updated"}.`,
+    });
+    await finishWrite(async () => {
+      await Promise.all([loadSubscriptionCharges(), loadSubscriptions(), loadOrders()]);
     });
   };
 
@@ -1478,9 +1976,200 @@ const AdminLakeFresh = () => {
         ))}
       </div>
 
+      {/* SETTINGS */}
+      {tab === "settings" && (
+        <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold">Store rules</h2>
+            <p className="mt-1 text-sm text-gray-500">
+              These values flow to the store, checkout, subscriptions and delivery slots.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {SETTING_FIELDS.map((field) => (
+                <div key={field.key}>
+                  <Label>{field.label}</Label>
+                  <Input
+                    type={field.kind === "number" ? "number" : "time"}
+                    value={settingValue(field.key, field.defaultValue)}
+                    onChange={(e) =>
+                      setBrandSettings((prev) => ({ ...prev, [field.key]: e.target.value }))
+                    }
+                    className="mt-1"
+                  />
+                </div>
+              ))}
+            </div>
+            <Button className="mt-4" onClick={() => void handleSaveBrandSettings()}>
+              Save store rules
+            </Button>
+          </div>
+
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold">Subscription payments</h2>
+            <p className="mt-1 text-sm text-gray-500">
+              The planned charge is created automatically. Confirm only after the money reaches PayChangu.
+            </p>
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                  <tr>
+                    <th className="px-4 py-3 text-left">Reference</th>
+                    <th className="px-4 py-3 text-left">Customer</th>
+                    <th className="px-4 py-3 text-left">Plan</th>
+                    <th className="px-4 py-3 text-left">Period</th>
+                    <th className="px-4 py-3 text-right">Amount</th>
+                    <th className="px-4 py-3 text-left">Status</th>
+                    <th className="px-4 py-3 text-left">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {subscriptionCharges.map((charge) => (
+                    <tr key={charge.id} className="border-t">
+                      <td className="px-4 py-3 font-mono text-xs">{charge.payment_reference}</td>
+                      <td className="px-4 py-3">
+                        <div className="font-medium">{charge.lf_subscriptions?.customer_name || "Customer"}</div>
+                        <div className="text-xs text-gray-500">{charge.lf_subscriptions?.customer_phone || ""}</div>
+                      </td>
+                      <td className="px-4 py-3">{charge.lf_subscriptions?.plan || charge.plan || "N/A"}</td>
+                      <td className="px-4 py-3">{charge.period_date}</td>
+                      <td className="px-4 py-3 text-right font-semibold">{formatMWK(charge.amount_mwk)}</td>
+                      <td className="px-4 py-3">
+                        <span className={`text-xs font-bold ${charge.status === "paid" ? "text-[#39B54A]" : charge.status === "cancelled" ? "text-red-600" : "text-amber-600"}`}>
+                          {charge.status}
+                        </span>
+                        {charge.reminded_at ? <p className="text-[10px] text-gray-400">Reminder sent</p> : null}
+                      </td>
+                      <td className="px-4 py-3">
+                        {charge.status === "due" ? (
+                          <button
+                            onClick={() => void confirmSubscriptionCharge(charge)}
+                            className="text-xs font-bold text-[#073B78] underline"
+                          >
+                            Confirm paid
+                          </button>
+                        ) : charge.order_id ? (
+                          <span className="text-xs text-gray-500">Order created</span>
+                        ) : (
+                          <span className="text-xs text-gray-500">Closed</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  {subscriptionCharges.length === 0 && (
+                    <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No planned payments yet.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* CATALOG */}
       {tab === "catalog" && (
         <div className="space-y-6">
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold mb-1">Fish guide</h2>
+            <p className="mb-4 text-xs text-gray-500">
+              These names help customers learn about each fish. Removing a guide does not remove the fish for sale.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <Label>Name</Label>
+                <Input value={speciesForm.name} onChange={(e) => setSpeciesForm({ ...speciesForm, name: e.target.value })} />
+              </div>
+              <div>
+                <Label>Slug</Label>
+                <Input value={speciesForm.slug} onChange={(e) => setSpeciesForm({ ...speciesForm, slug: e.target.value })} placeholder="chambo" />
+              </div>
+              <div className="sm:col-span-2">
+                <AssetField
+                  label="Guide photo"
+                  value={speciesForm.image}
+                  folder="species"
+                  onChange={(next) => setSpeciesForm((prev) => ({ ...prev, image: next }))}
+                />
+              </div>
+              <div className="sm:col-span-4">
+                <Label>Short note</Label>
+                <Textarea value={speciesForm.description} onChange={(e) => setSpeciesForm({ ...speciesForm, description: e.target.value })} rows={2} />
+              </div>
+            </div>
+            <Button className="mt-4" onClick={() => void handleCreateSpecies()}>
+              <Plus className="h-4 w-4 mr-2" /> Add fish guide
+            </Button>
+          </div>
+
+          {editingSpeciesId ? (
+            <div className="rounded-xl border bg-white p-5">
+              <h2 className="font-display text-lg font-bold mb-4">Edit fish guide</h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <Label>Name</Label>
+                  <Input value={editSpeciesForm.name} onChange={(e) => setEditSpeciesForm({ ...editSpeciesForm, name: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Slug</Label>
+                  <Input value={editSpeciesForm.slug} onChange={(e) => setEditSpeciesForm({ ...editSpeciesForm, slug: e.target.value })} />
+                </div>
+                <div className="sm:col-span-2">
+                  <AssetField
+                    label="Guide photo"
+                    value={editSpeciesForm.image}
+                    folder="species"
+                    onChange={(next) => setEditSpeciesForm((prev) => ({ ...prev, image: next }))}
+                  />
+                </div>
+                <div className="sm:col-span-4">
+                  <Label>Short note</Label>
+                  <Textarea value={editSpeciesForm.description} onChange={(e) => setEditSpeciesForm({ ...editSpeciesForm, description: e.target.value })} rows={2} />
+                </div>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button onClick={() => void saveEditedSpecies()}>Save changes</Button>
+                <Button variant="outline" onClick={() => setEditingSpeciesId(null)}>Cancel</Button>
+              </div>
+            </div>
+          ) : null}
+
+          <div className="rounded-xl border bg-white overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th className="px-4 py-3 text-left">Guide</th>
+                  <th className="px-4 py-3 text-left">Slug</th>
+                  <th className="px-4 py-3 text-left">Shown</th>
+                  <th className="px-4 py-3 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {species.map((s) => (
+                  <tr key={s.id} className="border-t">
+                    <td className="px-4 py-3 font-medium">{s.name}</td>
+                    <td className="px-4 py-3">{s.slug}</td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => void toggleSpeciesActive(s)}
+                        className={`text-xs font-bold ${s.is_active ? "text-[#39B54A]" : "text-gray-400"}`}
+                      >
+                        {s.is_active ? "Yes" : "No"}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-wrap gap-3">
+                        <button onClick={() => startEditSpecies(s)} className="text-xs font-bold text-[#073B78] underline">Edit</button>
+                        <button onClick={() => void deleteSpeciesRecord(s)} className="text-xs font-bold text-red-600 underline">Remove</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {species.length === 0 && (
+                  <tr><td colSpan={4} className="px-4 py-6 text-center text-gray-500">No fish guides yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
           <div className="rounded-xl border bg-white p-5">
             <h2 className="font-display text-lg font-bold mb-4">Add fish product</h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -1628,10 +2317,11 @@ const AdminLakeFresh = () => {
                   <th className="px-4 py-3 text-left">Prep</th>
                   <th className="px-4 py-3 text-left">Status</th>
                   <th className="px-4 py-3 text-left">Active</th>
+                  <th className="px-4 py-3 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((p) => (
+                {products.map((p: any) => (
                   <tr key={p.id} className="border-t">
                     <td className="px-4 py-3 font-medium">{p.name}</td>
                     <td className="px-4 py-3">{p.fish_species?.name || "N/A"}</td>
@@ -1653,12 +2343,18 @@ const AdminLakeFresh = () => {
                         >
                           {p.is_active ? "Active" : "Inactive"}
                         </button>
+                        <button
+                          onClick={() => void deleteProductRecord(p)}
+                          className="text-xs font-bold text-red-600 underline"
+                        >
+                          Remove
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
                 {products.length === 0 && (
-                  <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No products yet.</td></tr>
+                  <tr><td colSpan={8} className="px-4 py-6 text-center text-gray-500">No products yet.</td></tr>
                 )}
               </tbody>
             </table>
@@ -1753,6 +2449,7 @@ const AdminLakeFresh = () => {
                   <th className="px-4 py-3 text-right">Stock</th>
                   <th className="px-4 py-3 text-left">Pairs with</th>
                   <th className="px-4 py-3 text-left">Active</th>
+                  <th className="px-4 py-3 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -1771,12 +2468,15 @@ const AdminLakeFresh = () => {
                         <button onClick={() => toggleSpiceActive(s.id, !s.is_active)} className={`text-xs font-bold ${s.is_active ? "text-[#39B54A]" : "text-gray-400"}`}>
                           {s.is_active ? "Active" : "Inactive"}
                         </button>
+                        <button onClick={() => void deleteSpiceRecord(s)} className="text-xs font-bold text-red-600 underline">
+                          Remove
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
                 {spices.length === 0 && (
-                  <tr><td colSpan={6} className="px-4 py-6 text-center text-gray-500">No spices yet.</td></tr>
+                  <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No spices yet.</td></tr>
                 )}
               </tbody>
             </table>
@@ -1967,6 +2667,7 @@ const AdminLakeFresh = () => {
                   <th className="px-4 py-3 text-left">Method</th>
                   <th className="px-4 py-3 text-left">Pairs with</th>
                   <th className="px-4 py-3 text-left">Active</th>
+                  <th className="px-4 py-3 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -1983,14 +2684,107 @@ const AdminLakeFresh = () => {
                         {r.is_active ? "Active" : "Inactive"}
                       </button>
                     </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <button onClick={() => startEditRecipe(r)} className="text-xs font-bold text-[#073B78] underline">
+                          Edit
+                        </button>
+                        <button onClick={() => void deleteRecipeRecord(r)} className="text-xs font-bold text-red-600 underline">
+                          Remove
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
                 {recipes.length === 0 && (
-                  <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No recipes yet.</td></tr>
+                  <tr><td colSpan={8} className="px-4 py-6 text-center text-gray-500">No recipes yet.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
+
+          {editingRecipeId ? (
+            <div className="rounded-xl border bg-white p-5">
+              <h2 className="font-display text-lg font-bold mb-4">Edit recipe</h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <Label>Title</Label>
+                  <Input value={editRecipeForm.title} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, title: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Slug</Label>
+                  <Input value={editRecipeForm.slug} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, slug: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Species</Label>
+                  <select
+                    value={editRecipeForm.species_id}
+                    onChange={(e) => setEditRecipeForm({ ...editRecipeForm, species_id: e.target.value })}
+                    className="mt-1 w-full h-10 rounded-md border border-gray-300 px-3 text-sm"
+                  >
+                    <option value="">Select...</option>
+                    {species.map((s) => (<option key={s.id} value={s.id}>{s.name}</option>))}
+                  </select>
+                </div>
+                <div>
+                  <Label>Prep time (min)</Label>
+                  <Input type="number" value={editRecipeForm.prep_time_min} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, prep_time_min: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Cook time (min)</Label>
+                  <Input type="number" value={editRecipeForm.cook_time_min} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, cook_time_min: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Servings</Label>
+                  <Input type="number" value={editRecipeForm.servings} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, servings: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Cooking method</Label>
+                  <Input value={editRecipeForm.cooking_method} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, cooking_method: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Recommended spice</Label>
+                  <Input value={editRecipeForm.recommended_spice} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, recommended_spice: e.target.value })} />
+                </div>
+                <div className="sm:col-span-3">
+                  <Label>Ingredients (one per line)</Label>
+                  <Textarea value={editRecipeForm.ingredients} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, ingredients: e.target.value })} />
+                </div>
+                <div className="sm:col-span-3">
+                  <Label>Steps (one per line)</Label>
+                  <Textarea value={editRecipeForm.steps} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, steps: e.target.value })} />
+                </div>
+                <div className="sm:col-span-3">
+                  <Label>Safety notes</Label>
+                  <Textarea value={editRecipeForm.safety_notes} onChange={(e) => setEditRecipeForm({ ...editRecipeForm, safety_notes: e.target.value })} />
+                </div>
+                <div className="sm:col-span-2">
+                  <AssetField
+                    label="Recipe photo"
+                    value={editRecipeForm.image}
+                    folder="recipes"
+                    onChange={(next) => setEditRecipeForm((prev) => ({ ...prev, image: next }))}
+                    onRemove={queueAssetDelete}
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <AssetField
+                    label="Recipe PDF"
+                    value={editRecipeForm.pdf_url}
+                    folder="recipes"
+                    accept="application/pdf"
+                    kind="pdf"
+                    onChange={(next) => setEditRecipeForm((prev) => ({ ...prev, pdf_url: next }))}
+                    onRemove={queueAssetDelete}
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button onClick={() => void saveEditedRecipe()}>Save changes</Button>
+                <Button variant="outline" onClick={() => setEditingRecipeId(null)}>Cancel</Button>
+              </div>
+            </div>
+          ) : null}
         </div>
       )}
 
@@ -2022,7 +2816,7 @@ const AdminLakeFresh = () => {
               Cards show the cover photo. Each product page shows every photo in a slide viewer.
             </p>
             <div className="grid gap-5 lg:grid-cols-2">
-              {products.map((p) => (
+              {products.map((p: any) => (
                 <div key={p.id} className="rounded-xl border border-gray-200 p-4">
                   <LFImageGalleryInput
                     label={p.name}
@@ -2426,7 +3220,9 @@ const AdminLakeFresh = () => {
                   <th className="px-4 py-3 text-right">Cap orders</th>
                   <th className="px-4 py-3 text-right">Booked kg</th>
                   <th className="px-4 py-3 text-right">Cap kg</th>
+                  <th className="px-4 py-3 text-left">Cutoff</th>
                   <th className="px-4 py-3 text-left">Open</th>
+                  <th className="px-4 py-3 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -2438,6 +3234,11 @@ const AdminLakeFresh = () => {
                     <td className="px-4 py-3 text-right">{s.capacity_orders}</td>
                     <td className="px-4 py-3 text-right">{Number(s.booked_weight_kg).toFixed(1)}</td>
                     <td className="px-4 py-3 text-right">{Number(s.capacity_weight_kg).toFixed(1)}</td>
+                    <td className="px-4 py-3 text-xs">
+                      {s.cutoff_at
+                        ? new Date(s.cutoff_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Blantyre" })
+                        : "N/A"}
+                    </td>
                     <td className="px-4 py-3">
                       <button
                         onClick={() => toggleSlotOpen(s.id, !s.is_open)}
@@ -2446,14 +3247,61 @@ const AdminLakeFresh = () => {
                         {s.is_open ? "Open" : "Closed"}
                       </button>
                     </td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => startEditSlot(s)}
+                        className="text-xs font-bold text-[#073B78] underline"
+                      >
+                        Edit
+                      </button>
+                    </td>
                   </tr>
                 ))}
                 {slots.length === 0 && (
-                  <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No slots. Generate above.</td></tr>
+                  <tr><td colSpan={9} className="px-4 py-6 text-center text-gray-500">No slots. Generate above.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
+
+          {editingSlotId ? (
+            <div className="rounded-xl border bg-white p-5">
+              <h2 className="font-display text-lg font-bold mb-4">Edit delivery slot</h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <Label>Delivery date</Label>
+                  <Input type="date" value={editSlotForm.delivery_date} onChange={(e) => setEditSlotForm({ ...editSlotForm, delivery_date: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Cutoff time</Label>
+                  <Input type="time" value={editSlotForm.cutoff_time} onChange={(e) => setEditSlotForm({ ...editSlotForm, cutoff_time: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Capacity orders</Label>
+                  <Input type="number" value={editSlotForm.capacity_orders} onChange={(e) => setEditSlotForm({ ...editSlotForm, capacity_orders: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Capacity weight (kg)</Label>
+                  <Input type="number" value={editSlotForm.capacity_weight_kg} onChange={(e) => setEditSlotForm({ ...editSlotForm, capacity_weight_kg: e.target.value })} />
+                </div>
+                <div className="flex items-end">
+                  <label className="inline-flex items-center gap-2 text-sm font-semibold">
+                    <input
+                      type="checkbox"
+                      checked={editSlotForm.is_open}
+                      onChange={(e) => setEditSlotForm({ ...editSlotForm, is_open: e.target.checked })}
+                      className="h-4 w-4 accent-[#39B54A]"
+                    />
+                    Open for orders
+                  </label>
+                </div>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button onClick={() => void saveEditedSlot()}>Save changes</Button>
+                <Button variant="outline" onClick={() => setEditingSlotId(null)}>Cancel</Button>
+              </div>
+            </div>
+          ) : null}
         </div>
       )}
 
@@ -2492,9 +3340,27 @@ const AdminLakeFresh = () => {
                           onChange={(e) => updateOrderStatus(o.id, e.target.value)}
                           className="h-8 rounded border border-gray-300 px-2 text-xs"
                         >
-                          {["new", "confirmed", "processing", "dispatched", "delivered", "cancelled"].map((s) => (
-                            <option key={s} value={s}>{s}</option>
-                          ))}
+                          {(() => {
+                            const next: Record<string, string[]> = {
+                              new: ["confirmed"],
+                              confirmed: ["processing"],
+                              processing: ["dispatched"],
+                              dispatched: ["delivered"],
+                              delivered: [],
+                              cancelled: [],
+                              refunded: [],
+                            };
+                            const options = [o.status, ...(next[o.status] || [])];
+                            if (
+                              (o.status === "delivered" || o.status === "cancelled") &&
+                              o.payment_status === "paid"
+                            ) {
+                              options.push("refunded");
+                            }
+                            return Array.from(new Set(options)).map((s) => (
+                              <option key={s} value={s}>{s}</option>
+                            ));
+                          })()}
                         </select>
                       </td>
                       <td className="px-4 py-3">
@@ -2520,12 +3386,21 @@ const AdminLakeFresh = () => {
                             Mark paid
                           </button>
                         )}
-                        {o.payment_status === "paid" && o.status !== "cancelled" && (
+                        {!["cancelled", "refunded", "delivered"].includes(o.status) && (
                           <button
-                            onClick={() => refundAndCancelOrder(o.id)}
+                            onClick={() => void cancelOrRefundOrder(o.id, "cancelled")}
                             className="text-xs font-bold text-red-600"
                           >
-                            Refund & cancel
+                            Cancel
+                          </button>
+                        )}
+                        {(o.status === "delivered" || o.status === "cancelled") &&
+                          o.payment_status === "paid" && (
+                          <button
+                            onClick={() => void cancelOrRefundOrder(o.id, "refunded")}
+                            className="text-xs font-bold text-red-600"
+                          >
+                            Record refund
                           </button>
                         )}
                       </td>
@@ -2556,6 +3431,76 @@ const AdminLakeFresh = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold">Price checks</h2>
+            <p className="mt-1 text-sm text-gray-500">
+              Estimated total compared with the final packed weight. The customer sees this on their order page.
+            </p>
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                  <tr>
+                    <th className="px-4 py-3 text-left">Order</th>
+                    <th className="px-4 py-3 text-left">Customer</th>
+                    <th className="px-4 py-3 text-right">Estimated</th>
+                    <th className="px-4 py-3 text-right">Final</th>
+                    <th className="px-4 py-3 text-right">Difference</th>
+                    <th className="px-4 py-3 text-left">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reconciliations.map((r) => (
+                    <tr key={r.id} className="border-t">
+                      <td className="px-4 py-3 font-mono text-xs">{r.orders?.payment_reference || r.order_id}</td>
+                      <td className="px-4 py-3">{r.orders?.customer_name || "Customer"}</td>
+                      <td className="px-4 py-3 text-right">{formatMWK(r.estimated_total_mwk)}</td>
+                      <td className="px-4 py-3 text-right">{r.final_total_mwk == null ? "N/A" : formatMWK(r.final_total_mwk)}</td>
+                      <td className="px-4 py-3 text-right">{r.difference_mwk == null ? "N/A" : formatMWK(r.difference_mwk)}</td>
+                      <td className="px-4 py-3 text-xs font-bold">{r.status}</td>
+                    </tr>
+                  ))}
+                  {reconciliations.length === 0 && (
+                    <tr><td colSpan={6} className="px-4 py-6 text-center text-gray-500">No price checks yet.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="rounded-xl border bg-white p-5">
+            <h2 className="font-display text-lg font-bold">Refund record</h2>
+            <p className="mt-1 text-sm text-gray-500">
+              Every refund is recorded here with its reason and gateway reference. No gateway refund is sent automatically.
+            </p>
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                  <tr>
+                    <th className="px-4 py-3 text-left">Date</th>
+                    <th className="px-4 py-3 text-left">Order</th>
+                    <th className="px-4 py-3 text-right">Amount</th>
+                    <th className="px-4 py-3 text-left">Reason</th>
+                    <th className="px-4 py-3 text-left">Gateway reference</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {refunds.map((r) => (
+                    <tr key={r.id} className="border-t">
+                      <td className="px-4 py-3 text-xs">{new Date(r.created_at).toLocaleString()}</td>
+                      <td className="px-4 py-3 font-mono text-xs">{r.orders?.payment_reference || r.order_id}</td>
+                      <td className="px-4 py-3 text-right font-semibold">{formatMWK(r.amount_mwk)}</td>
+                      <td className="px-4 py-3 text-xs">{r.reason}</td>
+                      <td className="px-4 py-3 font-mono text-xs">{r.gateway_reference || "N/A"}</td>
+                    </tr>
+                  ))}
+                  {refunds.length === 0 && (
+                    <tr><td colSpan={5} className="px-4 py-6 text-center text-gray-500">No refunds recorded.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -2656,6 +3601,7 @@ const AdminLakeFresh = () => {
                   <th className="px-4 py-3 text-right">Base fee</th>
                   <th className="px-4 py-3 text-right">Min order</th>
                   <th className="px-4 py-3 text-left">Active</th>
+                  <th className="px-4 py-3 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -2679,12 +3625,18 @@ const AdminLakeFresh = () => {
                         >
                           {z.is_active ? "Active" : "Inactive"}
                         </button>
+                        <button
+                          onClick={() => void deleteZoneRecord(z)}
+                          className="text-xs font-bold text-red-600 underline"
+                        >
+                          Remove
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
                 {zones.length === 0 && (
-                  <tr><td colSpan={5} className="px-4 py-6 text-center text-gray-500">No zones yet.</td></tr>
+                  <tr><td colSpan={6} className="px-4 py-6 text-center text-gray-500">No zones yet.</td></tr>
                 )}
               </tbody>
             </table>
@@ -2823,7 +3775,7 @@ const AdminLakeFresh = () => {
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          {o.status !== "delivered" && o.status !== "cancelled" && o.status !== "dispatched" && (
+                          {o.status === "processing" && (
                             <button
                               onClick={() => dispatchOrder(o.id)}
                               className="text-xs font-bold text-[#08A9E8] underline mr-2"
@@ -2831,7 +3783,7 @@ const AdminLakeFresh = () => {
                               Dispatch
                             </button>
                           )}
-                          {o.status !== "delivered" && o.status !== "cancelled" && (
+                          {o.status === "dispatched" && (
                             <button
                               onClick={() => void updateOrderStatus(o.id, "delivered")}
                               className="text-xs font-bold text-[#39B54A] underline"

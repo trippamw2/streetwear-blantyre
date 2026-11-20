@@ -6,10 +6,10 @@ test("LF storefront loads and shows the catch", async ({ page }) => {
   await expect(page.getByRole("link", { name: /the catch/i })).toBeVisible();
 });
 
-test("LF checkout redirects to auth when cart empty", async ({ page }) => {
+test("LF checkout supports guests with an empty cart", async ({ page }) => {
   await page.goto("/lf/checkout");
-  // Either shows basket or redirects; page should not crash
   await expect(page.locator("body")).toBeVisible();
+  await expect(page).not.toHaveURL(/auth/);
 });
 
 test("LF admin redirects unauthenticated users to sign in", async ({ page }) => {

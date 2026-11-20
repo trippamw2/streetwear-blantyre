@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BRANDS } from "@/lib/brands";
 import { formatMWK } from "@/data/products";
 import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
+import { lfWhatsAppLink } from "@/lib/whatsapp";
 
 const brand = BRANDS["lake-fresh"];
 
@@ -195,7 +196,7 @@ const LakeFreshFooter = () => (
             </div>
           </div>
           <a
-            href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"}?text=${encodeURIComponent("Hi Lake Fresh, I need help with my fish order.")}`}
+            href={lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.")}
             target="_blank"
             rel="noreferrer"
             className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#25D366] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white"
