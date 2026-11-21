@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import { BRANDS, type BrandSlug } from "@/lib/brands";
 import { LF_CONTACT } from "@/lib/lfContact";
 
+type SchemaObject = Record<string, unknown>;
+
 interface SEOProps {
   title: string;
   description: string;
@@ -12,6 +14,8 @@ interface SEOProps {
   type?: "website" | "product";
   /** Brand whose name/domain/metadata should be used. Defaults to SB. */
   brand?: BrandSlug;
+  /** Extra structured data, for example a recipe or breadcrumb trail. */
+  jsonLd?: SchemaObject | SchemaObject[];
 }
 
 const SITE_NAME = "Streetwear Blantyre";
@@ -47,6 +51,73 @@ const BRAND_ICONS: Record<BrandSlug, { icon: string; apple: string; manifest: st
 export const canonicalPathFor = (brand: BrandSlug, pathname: string) =>
   brand === "lake-fresh" ? pathname.replace(/^\/lf(?=\/|$)/, "") || "/" : pathname;
 
+const LF_SITE_URL = BRAND_META["lake-fresh"].siteUrl;
+
+export const lfBreadcrumbSchema = (
+  items: Array<{ name: string; path: string }>,
+): SchemaObject => ({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: items.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.name,
+    item: `${LF_SITE_URL}${canonicalPathFor("lake-fresh", item.path)}`,
+  })),
+});
+
+export const lfProductSchema = (input: {
+  name: string;
+  description: string;
+  image: string;
+  path: string;
+  priceMwk: number;
+  inStock: boolean;
+}): SchemaObject => ({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: input.name,
+  description: input.description,
+  image: input.image,
+  url: `${LF_SITE_URL}${canonicalPathFor("lake-fresh", input.path)}`,
+  brand: { "@type": "Brand", name: BRANDS["lake-fresh"].name },
+  offers: {
+    "@type": "Offer",
+    priceCurrency: "MWK",
+    price: Number(input.priceMwk.toFixed(0)),
+    availability: input.inStock
+      ? "https://schema.org/InStock"
+      : "https://schema.org/OutOfStock",
+    url: `${LF_SITE_URL}${canonicalPathFor("lake-fresh", input.path)}`,
+  },
+});
+
+export const lfRecipeSchema = (input: {
+  name: string;
+  description: string;
+  image: string;
+  path: string;
+  prepMinutes?: number;
+  cookMinutes?: number;
+  ingredients: string[];
+  steps: string[];
+}): SchemaObject => {
+  const minutes = Math.max(0, Number(input.prepMinutes || 0) + Number(input.cookMinutes || 0));
+  return {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: input.name,
+    description: input.description,
+    image: input.image,
+    url: `${LF_SITE_URL}${canonicalPathFor("lake-fresh", input.path)}`,
+    recipeCuisine: "Malawian",
+    recipeCategory: "Fish",
+    totalTime: minutes > 0 ? `PT${minutes}M` : undefined,
+    recipeIngredient: input.ingredients,
+    recipeInstructions: input.steps.map((step) => ({ "@type": "HowToStep", text: step })),
+  };
+};
+
 export const SEO = ({
   title,
   description,
@@ -54,6 +125,7 @@ export const SEO = ({
   image,
   type = "website",
   brand = "sb",
+  jsonLd,
 }: SEOProps) => {
   const location = useLocation();
   const meta = BRAND_META[brand] ?? BRAND_META.sb;
@@ -92,6 +164,11 @@ export const SEO = ({
           ...(type === "product" ? { image: resolvedImage } : {}),
         };
 
+  const extraSchemas = (Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []).filter(Boolean);
+  const schemaForPage = extraSchemas.length > 0
+    ? [structuredData, ...extraSchemas]
+    : structuredData;
+
   // Drop the other brand's bootstrap icons so a shared/local host never shows
   // the wrong tab icon after client-side navigation between storefronts.
   useEffect(() => {
@@ -126,7 +203,7 @@ export const SEO = ({
       <meta name="twitter:image" content={resolvedImage} />
 
       {/* JSON-LD Structured Data */}
-      <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+      <script type="application/ld+json">{JSON.stringify(schemaForPage)}</script>
     </Helmet>
   );
 };

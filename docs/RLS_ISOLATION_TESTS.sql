@@ -187,3 +187,38 @@
 -- select prosrc like '%recall_hold%' from pg_proc
 -- where proname='lf_set_order_status'; -- expect true
 
+-- 26. P5 reviews are moderated, brand scoped and never directly writable
+-- select prosrc like '%lf.reviews.write%' from pg_proc
+-- where proname='lf_permissions_for_role'; -- expect true
+-- select prosrc like '%lf.growth.read%' from pg_proc
+-- where proname='lf_permissions_for_role'; -- expect true
+-- select qual from pg_policies where schemaname='public'
+--   and tablename='lf_reviews' and policyname='lf_reviews_public_read';
+--   -- expect a condition containing status = 'approved' and the LF brand id
+-- select table_name from information_schema.role_table_grants
+-- where grantee in ('anon','authenticated') and table_schema='public'
+--   and table_name in ('lf_reviews','lf_newsletter_subscribers','lf_growth_events','lf_lifecycle_outbox')
+--   and privilege_type in ('INSERT','UPDATE','DELETE'); -- expect 0 rows
+-- select has_function_privilege('anon', 'public.lf_submit_review(uuid, integer, text, text, uuid, text, text)', 'EXECUTE'); -- expect true
+-- select has_function_privilege('anon', 'public.lf_moderate_review(uuid, text, text)', 'EXECUTE'); -- expect false
+-- select has_function_privilege('authenticated', 'public.lf_moderate_review(uuid, text, text)', 'EXECUTE'); -- expect true
+
+-- 27. P5 growth events are first party and lifecycle sends are server only
+-- select has_function_privilege('anon', 'public.lf_record_growth_event(text, text, text, text, text, text, text)', 'EXECUTE'); -- expect true
+-- select count(*) from information_schema.columns
+-- where table_schema='public' and table_name='lf_growth_events'
+--   and column_name in ('email','phone','user_id'); -- expect 0 (no personal data)
+-- select tgname from pg_trigger t join pg_class c on c.oid=t.tgrelid
+-- where c.relname='orders' and tgname='lf_lifecycle_queue'; -- expect 1 row
+-- select has_function_privilege('service_role', 'public.lf_claim_lifecycle_messages(integer)', 'EXECUTE'); -- expect true
+-- select has_function_privilege('anon', 'public.lf_claim_lifecycle_messages(integer)', 'EXECUTE'); -- expect false
+-- select has_function_privilege('service_role', 'public.lf_finish_lifecycle_message(uuid, boolean, text)', 'EXECUTE'); -- expect true
+-- select has_function_privilege('authenticated', 'public.lf_finish_lifecycle_message(uuid, boolean, text)', 'EXECUTE'); -- expect false
+-- select count(*) from public.loyalty_programs
+-- where brand_id='22222222-2222-2222-2222-222222222222' and name='Lake Fresh Rewards'; -- expect 1
+
+-- 28. P6 server functions use only server configuration
+-- grep -R "VITE_" api/ -- expect no matches
+-- grep -R "supabase.co" api/ -- expect no hard coded project URL
+-- grep -R "martinezkaponda@gmail.com" api/ -- expect no personal address fallback
+

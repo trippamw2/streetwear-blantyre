@@ -427,7 +427,8 @@ export const sendDeliveredEmail = async (order: OrderEmailParams) => {
       <ul>${itemsHtml}</ul>
       
       ${order.brand === "lake-fresh"
-        ? `<p style="margin: 16px 0;">Enjoy your fresh fish. Eat it within 2 days of delivery.</p>`
+        ? `<p style="margin: 16px 0;">Enjoy your fresh fish. Eat it within 2 days of delivery.</p>
+           <p style="margin: 16px 0;"><a href="${B.website}/reviews" style="color: #073B78;">Tell us about your order</a></p>`
         : `<p style="margin: 16px 0;">Hope you love your ${B.name} gear.</p>
            <p>Please leave a review: <a href="https://www.wearsb.com/reviews" style="color: #0f172a;">www.wearsb.com/reviews</a></p>`}
       <p style="margin-top: 24px;">Thanks for choosing ${B.name}.</p>
@@ -526,6 +527,20 @@ export const subscribeToList = async (email: string, name?: string) => {
     email,
     name,
     listId: parseInt(import.meta.env.VITE_BREVO_LIST_ID || "2"),
+  });
+};
+
+/**
+ * Lake Fresh consent goes through the server so it can be stored against the
+ * Lake Fresh brand only. The list ID stays on the server.
+ */
+export const subscribeToLfNewsletter = async (email: string, name?: string) => {
+  return sendViaProxy("subscribe", {
+    email,
+    name,
+    brand: "lake-fresh",
+    consent: true,
+    source: "lf_footer",
   });
 };
 

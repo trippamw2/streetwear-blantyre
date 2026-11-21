@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { LFLink } from "@/components/lf/lfRouter";
 import LakeFreshImageCarousel from "@/components/lf/LakeFreshImageCarousel";
 import { ArrowLeft, AlertCircle, Check, Fish, Loader2, Minus, Plus, Snowflake, ShieldCheck, Truck, PackageCheck } from "lucide-react";
-import { SEO } from "@/components/SEO";
+import { SEO, lfBreadcrumbSchema, lfProductSchema } from "@/components/SEO";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import {
   useLakeFreshCatalog,
@@ -237,6 +237,23 @@ const LakeFreshProduct = () => {
         brand="lake-fresh"
         title={`${product.speciesName || product.name} | Lake Fresh Fish Mart`}
         description={`${lfDisplayCopy(product.description) || product.name} ${formatMWK(product.pricePerKgMwk)} per kilogram. ${LF_PILOT_DELIVERY_PROMISE}.`}
+        path={`/fish/${product.id}`}
+        image={product.images[0] || "/brand/lake-fresh/logo.png"}
+        jsonLd={[
+          lfProductSchema({
+            name: lfDisplayCopy(product.speciesName || product.name),
+            description: lfDisplayCopy(product.description) || product.name,
+            image: product.images[0] || "/brand/lake-fresh/logo.png",
+            path: `/fish/${product.id}`,
+            priceMwk: product.pricePerKgMwk,
+            inStock: !soldOut,
+          }),
+          lfBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "The Catch", path: "/fish" },
+            { name: lfDisplayCopy(product.speciesName || product.name), path: `/fish/${product.id}` },
+          ]),
+        ]}
       />
 
       <section className="border-b border-gray-200 bg-[#EAF6FB]/50">

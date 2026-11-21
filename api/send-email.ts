@@ -12,8 +12,9 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "martinezkaponda@gmail.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "";
 const BREVO_LIST_ID = Number(process.env.BREVO_LIST_ID || 2);
+const LF_BREVO_LIST_ID = Number(process.env.LF_BREVO_LIST_ID || 0);
 
 const DEFAULT_ORIGINS = [
   "http://localhost:5173",
@@ -95,6 +96,49 @@ const bearerToken = (req: VercelRequest) => {
   return value.startsWith("Bearer ") ? value.slice(7).trim() : null;
 };
 
+async function handleSubscribe(
+  payload: SubscribePayload,
+  serviceClient: ReturnType<typeof createClient>,
+  res: VercelResponse,
+): Promise<VercelResponse> {
+  const email = typeof payload.email === "string" ? payload.email.trim() : "";
+  if (!validEmail(email)) {
+    return res.status(400).json({ error: "Enter a valid email address" });
+  }
+
+  if (payload.brand === "lake-fresh") {
+    if (payload.consent !== true) {
+      return res.status(400).json({ error: "Consent is required" });
+    }
+
+    const source = ["lf_footer", "lf_checkout", "lf_review"].includes(payload.source || "")
+      ? payload.source!
+      : "lf_footer";
+    const { error } = await serviceClient.from("lf_newsletter_subscribers").upsert(
+      {
+        brand_id: BRAND_IDS["lake-fresh"],
+        email,
+        name: typeof payload.name === "string" ? payload.name.trim().slice(0, 80) || null : null,
+        consent_given: true,
+        source,
+      },
+      { onConflict: "brand_id,email" },
+    );
+
+    if (error) {
+      console.error("[Brevo] LF consent save failed:", error.message);
+      return res.status(500).json({ error: "Consent could not be saved" });
+    }
+
+    const brevoSubscribed = LF_BREVO_LIST_ID > 0
+      ? await subscribeToList({ email, name: payload.name }, LF_BREVO_LIST_ID)
+      : false;
+    return res.status(200).json({ success: true, brevoSubscribed });
+  }
+
+  return res.status(200).json({ success: await subscribeToList(payload) });
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const origin = header(req, "origin");
   if (!origin || !allowedOrigin(origin)) {
@@ -121,10 +165,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    const serviceClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+      auth: { persistSession: false },
+    });
+
     if (action === "subscribe") {
-      return res.status(200).json({
-        success: await subscribeToList(payload as SubscribePayload),
-      });
+      return await handleSubscribe(payload as SubscribePayload, serviceClient, res);
     }
 
     const email = payload as EmailPayload;
@@ -141,10 +187,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       userId = data.user.id;
       userEmail = data.user.email || null;
     }
-
-    const serviceClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
-      auth: { persistSession: false },
-    });
 
     let recipient = typeof email.to === "string" ? email.to.trim() : "";
     let recipientName = typeof email.toName === "string" ? email.toName.trim() : recipient;
@@ -205,7 +247,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (!allowed) return res.status(403).json({ error: "Admin access required" });
 
       brand = targetBrand;
-      if (action === "admin_notification") recipient = ADMIN_EMAIL;
+      if (action === "admin_notification") {
+        if (!validEmail(ADMIN_EMAIL)) {
+          return res.status(500).json({ error: "Admin email is not configured" });
+        }
+        recipient = ADMIN_EMAIL;
+      }
     } else if (
       !validEmail(recipient) ||
       !userEmail ||
@@ -283,6 +330,9 @@ interface EmailPayload {
 interface SubscribePayload {
   email?: string;
   name?: string;
+  brand?: string;
+  consent?: boolean;
+  source?: string;
 }
 
 async function sendEmail(payload: {
@@ -318,7 +368,10 @@ async function sendEmail(payload: {
   return true;
 }
 
-async function subscribeToList(payload: SubscribePayload): Promise<boolean> {
+async function subscribeToList(
+  payload: SubscribePayload,
+  listId: number = BREVO_LIST_ID,
+): Promise<boolean> {
   if (!validEmail(payload.email)) return false;
   const response = await fetch(`${BREVO_API_URL}/contacts`, {
     method: "POST",
@@ -328,7 +381,7 @@ async function subscribeToList(payload: SubscribePayload): Promise<boolean> {
     },
     body: JSON.stringify({
       email: payload.email.trim(),
-      listIds: [Number.isFinite(BREVO_LIST_ID) ? BREVO_LIST_ID : 2],
+      listIds: [Number.isFinite(listId) && listId > 0 ? listId : 2],
       attributes: {
         FIRSTNAME:
           typeof payload.name === "string" && payload.name.trim()

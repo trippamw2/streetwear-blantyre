@@ -11,6 +11,7 @@ import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
 import { lfWhatsAppLink } from "@/lib/whatsapp";
 import { LF_CONTACT, lfEmailHref, lfPhoneHref } from "@/lib/lfContact";
 import { useLfDataSaver } from "@/hooks/useLfDataSaver";
+import { LfGrowthTracker } from "@/components/lf/LfGrowthTracker";
 
 const brand = BRANDS["lake-fresh"];
 
@@ -116,6 +117,7 @@ const LakeFreshHeader = () => {
             <LFNavLink to="/lf/subscribe" className={navLinkClass}>Subscribe</LFNavLink>
             <LFNavLink to="/lf/pro" className={navLinkClass}>PRO</LFNavLink>
             <LFNavLink to="/lf/support" className={navLinkClass}>Help</LFNavLink>
+            <LFNavLink to="/lf/reviews" className={navLinkClass}>Reviews</LFNavLink>
             {!user && <LFNavLink to="/lf/auth" className={navLinkClass}>Sign in</LFNavLink>}
           </div>
         </div>
@@ -126,9 +128,72 @@ const LakeFreshHeader = () => {
 
 const LakeFreshFooter = () => {
   const { enabled: dataSaver, toggle: toggleDataSaver } = useLfDataSaver();
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterConsent, setNewsletterConsent] = useState(false);
+  const [newsletterBusy, setNewsletterBusy] = useState(false);
+  const [newsletterDone, setNewsletterDone] = useState(false);
+
+  const handleNewsletter = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!newsletterEmail || !newsletterConsent) return;
+    setNewsletterBusy(true);
+    try {
+      const { subscribeToLfNewsletter } = await import("@/lib/brevo");
+      const ok = await subscribeToLfNewsletter(newsletterEmail);
+      if (ok) {
+        setNewsletterDone(true);
+        setNewsletterEmail("");
+      }
+    } catch {
+      // The form stays open so the customer can try again.
+    } finally {
+      setNewsletterBusy(false);
+    }
+  };
 
   return (
   <footer className="border-t border-gray-100 bg-[#F7FBFC] text-[#073B78]">
+    <div className="border-b border-[#39B54A]/20 bg-white">
+      <div className="container py-8">
+        {newsletterDone ? (
+          <p className="text-sm font-bold text-[#2c6e12]">Thank you. We will send Lake Fresh news to your inbox.</p>
+        ) : (
+          <form onSubmit={handleNewsletter} className="max-w-xl space-y-3">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Fresh news</p>
+            <p className="text-sm text-[#073B78]/70">
+              Get notes about fresh stock and simple recipes. We only use this for Lake Fresh messages.
+            </p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <input
+                type="email"
+                required
+                value={newsletterEmail}
+                onChange={(event) => setNewsletterEmail(event.target.value)}
+                placeholder="Your email address"
+                className="h-10 flex-1 rounded-md border border-input bg-white px-3 text-sm"
+                disabled={newsletterBusy}
+              />
+              <button
+                type="submit"
+                disabled={newsletterBusy || !newsletterEmail || !newsletterConsent}
+                className="h-10 rounded-md bg-[#08A9E8] px-5 text-[10px] font-extrabold uppercase tracking-widest text-white disabled:opacity-50"
+              >
+                {newsletterBusy ? "Saving" : "Join"}
+              </button>
+            </div>
+            <label className="flex items-start gap-2 text-xs text-[#073B78]/70">
+              <input
+                type="checkbox"
+                checked={newsletterConsent}
+                onChange={(event) => setNewsletterConsent(event.target.checked)}
+                className="mt-0.5"
+              />
+              Yes, send me occasional Lake Fresh offers. We do not share this with other brands.
+            </label>
+          </form>
+        )}
+      </div>
+    </div>
     <div className="container grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4">
       <div className="sm:col-span-2 lg:col-span-1">
         <img src="/brand/lake-fresh/logo.png" alt="Lake Fresh" className="h-10 w-auto max-w-[200px] object-contain" />
@@ -155,6 +220,7 @@ const LakeFreshFooter = () => {
           <LFLink to="/lf/subscribe" className="hover:text-[#073B78]">Subscribe</LFLink>
           <LFLink to="/lf/pro" className="hover:text-[#073B78]">LakeFresh PRO</LFLink>
           <LFLink to="/lf/support" className="hover:text-[#073B78]">Get Help</LFLink>
+          <LFLink to="/lf/reviews" className="hover:text-[#073B78]">Reviews</LFLink>
         </div>
       </div>
       <div>
@@ -259,6 +325,7 @@ const LakeFreshFooter = () => {
 export const LakeFreshLayout = () => (
   <LakeFreshCartProvider>
     <div className="lf-brand flex min-h-screen flex-col bg-white">
+      <LfGrowthTracker />
       <LakeFreshHeader />
       <main className="flex-1">
         <Outlet />

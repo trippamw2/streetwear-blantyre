@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { LFLink } from "@/components/lf/lfRouter";
 import { ArrowLeft, ArrowRight, BookOpen, Check, Clock, Download, Fish, Leaf, Loader2, ShoppingBasket, Sparkles, Users } from "lucide-react";
-import { SEO } from "@/components/SEO";
+import { SEO, lfBreadcrumbSchema, lfRecipeSchema } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { LF_BRAND_ID, useLakeFreshCatalog } from "@/hooks/useLakeFresh";
@@ -227,7 +227,30 @@ const LakeFreshRecipe = () => {
 
   return (
     <div className="bg-white">
-      <SEO brand="lake-fresh" title={`${lfDisplayCopy(data.title)} | Lake Fresh Fish Mart`} description="Lake Fresh fish recipe." />
+      <SEO
+        brand="lake-fresh"
+        title={`${lfDisplayCopy(data.title)} | Lake Fresh Fish Mart`}
+        description="A simple Lake Fresh fish recipe with clear steps and a free recipe card with your order."
+        path={`/recipes/${data.slug}`}
+        image={data.image || "/brand/lake-fresh/logo.png"}
+        jsonLd={[
+          lfRecipeSchema({
+            name: lfDisplayCopy(data.title),
+            description: "A simple Lake Fresh fish recipe with clear steps.",
+            image: data.image || "/brand/lake-fresh/logo.png",
+            path: `/recipes/${data.slug}`,
+            prepMinutes: Number(data.prep_time_min || 0),
+            cookMinutes: Number(data.cook_time_min || 0),
+            ingredients,
+            steps,
+          }),
+          lfBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Recipes", path: "/recipes" },
+            { name: lfDisplayCopy(data.title), path: `/recipes/${data.slug}` },
+          ]),
+        ]}
+      />
 
       <section className="border-b border-[#EAF6FB] bg-gradient-to-br from-[#F4FBF7] via-white to-[#EAF6FB]">
         <div className="container max-w-4xl py-10 sm:py-14">

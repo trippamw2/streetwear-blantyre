@@ -1,11 +1,13 @@
 {
   "rewrites": [
     { "source": "/api/payment/callback", "destination": "/api/payment/callback" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/(.*)", "destination": "/" }
   ],
   "crons": [
     { "path": "/api/cron/charge-subscriptions", "schedule": "0 6 * * *" },
-    { "path": "/api/cron/support-sla", "schedule": "0 * * * *" }
+    { "path": "/api/cron/support-sla", "schedule": "0 * * * *" },
+    { "path": "/api/cron/lf-lifecycle", "schedule": "30 7 * * *" }
   ],
   "headers": [
     {

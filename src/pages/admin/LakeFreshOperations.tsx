@@ -11,12 +11,14 @@ import { formatMWK } from "@/data/products";
 import { LF_BRAND_ID } from "@/lib/adminBrand";
 import { Loader2, RefreshCw } from "lucide-react";
 
-type Tab = "lots" | "qa" | "recalls" | "audit" | "team";
+type Tab = "lots" | "qa" | "recalls" | "reviews" | "growth" | "audit" | "team";
 
 const TABS: Array<{ key: Tab; label: string; note: string }> = [
   { key: "lots", label: "Lots", note: "Where each fish came from" },
   { key: "qa", label: "QA", note: "Checks before dispatch" },
   { key: "recalls", label: "Recalls", note: "Lots placed on hold" },
+  { key: "reviews", label: "Reviews", note: "Customer reviews to check" },
+  { key: "growth", label: "Growth", note: "Consent and first party signals" },
   { key: "audit", label: "Audit", note: "Who changed what" },
   { key: "team", label: "Team", note: "Who can use the admin" },
 ];
@@ -35,6 +37,9 @@ const TEAM_PERMISSIONS = [
   "lf.audit.read",
   "lf.team.read",
   "lf.team.write",
+  "lf.reviews.read",
+  "lf.reviews.write",
+  "lf.growth.read",
   "email.transactional",
   "email.admin_notification",
   "email.broadcast",
@@ -97,6 +102,10 @@ const AdminLakeFreshOperations = () => {
   const [recallLots, setRecallLots] = useState<any[]>([]);
   const [auditRows, setAuditRows] = useState<any[]>([]);
   const [staffRows, setStaffRows] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [growthEvents, setGrowthEvents] = useState<any[]>([]);
+  const [newsletterCount, setNewsletterCount] = useState(0);
+  const [lifecycleRows, setLifecycleRows] = useState<any[]>([]);
 
   const [lotForm, setLotForm] = useState(emptyLotForm);
   const [batchLinkForm, setBatchLinkForm] = useState({ batch_id: "", lot_id: "", supplier_id: "" });
@@ -126,6 +135,10 @@ const AdminLakeFreshOperations = () => {
         deliveryRes,
         authRes,
         staffRes,
+        reviewRes,
+        growthRes,
+        newsletterRes,
+        lifecycleRes,
       ] = await Promise.all([
         supabase.from("lf_lot_records").select("*").eq("brand_id", LF_BRAND_ID).order("received_date", { ascending: false }).limit(200),
         supabase.from("fish_species").select("id, name").order("name"),
@@ -139,6 +152,10 @@ const AdminLakeFreshOperations = () => {
         supabase.from("lf_delivery_events").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false }).limit(200),
         supabase.from("auth_audit_log").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false }).limit(200),
         supabase.from("staff_permissions").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false }).limit(200),
+        supabase.from("lf_reviews").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false }).limit(200),
+        supabase.from("lf_growth_events").select("*").eq("brand_id", LF_BRAND_ID).order("created_at", { ascending: false }).limit(100),
+        supabase.from("lf_newsletter_subscribers").select("id", { count: "exact", head: true }).eq("brand_id", LF_BRAND_ID),
+        supabase.from("lf_lifecycle_outbox").select("*").eq("brand_id", LF_BRAND_ID).order("due_at", { ascending: false }).limit(100),
       ]);
 
       report("Lots", lotRes.error);
@@ -153,6 +170,10 @@ const AdminLakeFreshOperations = () => {
       report("Delivery audit", deliveryRes.error);
       report("Admin audit", authRes.error);
       report("Team", staffRes.error);
+      report("Reviews", reviewRes.error);
+      report("Growth", growthRes.error);
+      report("Newsletter", newsletterRes.error);
+      report("Lifecycle", lifecycleRes.error);
 
       setLots(lotRes.data || []);
       setSpecies(speciesRes.data || []);
@@ -162,6 +183,10 @@ const AdminLakeFreshOperations = () => {
       setRecalls(recallRes.data || []);
       setRecallLots(recallLotRes.data || []);
       setStaffRows(staffRes.data || []);
+      setReviews(reviewRes.data || []);
+      setGrowthEvents(growthRes.data || []);
+      setNewsletterCount(Number(newsletterRes.count || 0));
+      setLifecycleRows(lifecycleRes.data || []);
 
       const rows = [
         ...(reconRes.data || []).map((item: any) => ({
@@ -356,6 +381,26 @@ const AdminLakeFreshOperations = () => {
       await loadAll();
     } catch (error: any) {
       toast({ title: "Recall not closed", description: error.message, variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const moderateReview = async (id: string, status: "approved" | "rejected") => {
+    setSaving(true);
+    try {
+      const { data, error } = await supabase.rpc("lf_moderate_review", {
+        p_review_id: id,
+        p_status: status,
+        p_moderation_note: null,
+      });
+      if (error) throw error;
+      const result = data as any;
+      if (!result?.ok) throw new Error(result?.reason || "We could not save that review.");
+      toast({ title: status === "approved" ? "Review added" : "Review rejected" });
+      await loadAll();
+    } catch (error: any) {
+      toast({ title: "Review not updated", description: error.message, variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -722,6 +767,108 @@ const AdminLakeFreshOperations = () => {
               );
             })}
             {recalls.length === 0 && <div className="rounded-xl border bg-white p-6 text-center text-gray-500">No recalls yet.</div>}
+          </div>
+        </div>
+      )}
+
+      {tab === "reviews" && (
+        <div className="space-y-3">
+          {reviews.map((review) => (
+            <div key={review.id} className="rounded-xl border bg-white p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs text-gray-500">{review.customer_name} | {review.product_type} | {review.rating} stars</p>
+                  <h2 className="mt-1 font-bold">{review.title || "No title"}</h2>
+                  <p className="mt-2 text-sm text-gray-600">{review.body}</p>
+                  <p className="mt-2 text-xs text-gray-400">Sent {when(review.created_at)}</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-bold text-[#073B78]">{review.status}</span>
+                  {review.status !== "approved" && (
+                    <Button size="sm" disabled={saving} onClick={() => void moderateReview(review.id, "approved")}>
+                      Approve
+                    </Button>
+                  )}
+                  {review.status !== "rejected" && (
+                    <Button size="sm" variant="outline" disabled={saving} onClick={() => void moderateReview(review.id, "rejected")}>
+                      Reject
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+          {reviews.length === 0 && <div className="rounded-xl border bg-white p-6 text-center text-gray-500">No reviews yet.</div>}
+        </div>
+      )}
+
+      {tab === "growth" && (
+        <div className="space-y-6">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border bg-white p-5">
+              <p className="text-xs text-gray-500">Newsletter consent</p>
+              <p className="mt-2 text-2xl font-extrabold text-[#073B78]">{newsletterCount}</p>
+            </div>
+            <div className="rounded-xl border bg-white p-5">
+              <p className="text-xs text-gray-500">Growth events</p>
+              <p className="mt-2 text-2xl font-extrabold text-[#073B78]">{growthEvents.length}</p>
+            </div>
+            <div className="rounded-xl border bg-white p-5">
+              <p className="text-xs text-gray-500">Lifecycle messages</p>
+              <p className="mt-2 text-2xl font-extrabold text-[#073B78]">{lifecycleRows.length}</p>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto rounded-xl border bg-white">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th className="px-4 py-3 text-left">When</th>
+                  <th className="px-4 py-3 text-left">Event</th>
+                  <th className="px-4 py-3 text-left">Page</th>
+                  <th className="px-4 py-3 text-left">Source</th>
+                </tr>
+              </thead>
+              <tbody>
+                {growthEvents.map((item) => (
+                  <tr key={item.id} className="border-t">
+                    <td className="px-4 py-3">{when(item.created_at)}</td>
+                    <td className="px-4 py-3 font-medium">{item.event_type}</td>
+                    <td className="px-4 py-3">{item.path || "-"}</td>
+                    <td className="px-4 py-3">{item.utm_source || item.ref_code || "-"}</td>
+                  </tr>
+                ))}
+                {growthEvents.length === 0 && (
+                  <tr><td colSpan={4} className="px-4 py-6 text-center text-gray-500">No events yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="overflow-x-auto rounded-xl border bg-white">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th className="px-4 py-3 text-left">Due</th>
+                  <th className="px-4 py-3 text-left">Message</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-left">Attempts</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lifecycleRows.map((item) => (
+                  <tr key={item.id} className="border-t">
+                    <td className="px-4 py-3">{when(item.due_at)}</td>
+                    <td className="px-4 py-3 font-medium">{item.kind}</td>
+                    <td className="px-4 py-3">{item.status}</td>
+                    <td className="px-4 py-3">{item.attempts}</td>
+                  </tr>
+                ))}
+                {lifecycleRows.length === 0 && (
+                  <tr><td colSpan={4} className="px-4 py-6 text-center text-gray-500">No messages queued.</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

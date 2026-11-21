@@ -77,6 +77,8 @@ const LF_LINKS: AdminLink[] = [
   { to: "?tab=delivery", label: "Delivery", icon: Truck, tab: "delivery" },
   { to: "?tab=preparation", label: "Preparation", icon: Package, tab: "preparation" },
   { to: "?tab=analytics", label: "Analytics", icon: Zap, tab: "analytics" },
+  { to: "/operations?tab=reviews", label: "Reviews", icon: MessageCircle, tab: "reviews" },
+  { to: "/operations?tab=growth", label: "Growth", icon: Zap, tab: "growth" },
   { to: "/promos", label: "Promo Codes", icon: Tag },
   { to: "/loyalty", label: "Rewards", icon: Star },
   { to: "/referrals", label: "Referrals", icon: Users },
