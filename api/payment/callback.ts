@@ -15,10 +15,7 @@ import crypto from "crypto";
  *     the order, confirms Lake Fresh reservations and commits SB inventory.
  */
 
-const SUPABASE_URL =
-  process.env.SUPABASE_URL ||
-  process.env.VITE_SUPABASE_URL ||
-  "https://qhpemjwrnnuqhfgifxnh.supabase.co";
+const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 const WEBHOOK_SECRET =
@@ -202,8 +199,8 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  if (!SUPABASE_SERVICE_KEY) {
-    console.error("Payment callback: SUPABASE_SERVICE_ROLE_KEY is not configured");
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+    console.error("Payment callback: Supabase server configuration is missing");
     return res.status(500).json({ error: "Server configuration error" });
   }
 

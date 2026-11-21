@@ -1,5 +1,5 @@
 // Vercel Cron — mark overdue Lake Fresh support requests and alert the team.
-// Uses only server-side configuration. No VITE_* values are accepted here.
+// Uses only server-side configuration. No browser variables are accepted here.
 
 import { createClient } from "@supabase/supabase-js";
 
