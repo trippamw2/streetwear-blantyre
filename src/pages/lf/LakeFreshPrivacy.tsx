@@ -75,6 +75,10 @@ const LakeFreshPrivacy = () => (
         order. We use tools with access controls to keep order records and photos safe.
       </p>
       <p>
+        The store can keep public pictures and pages on your phone so they load faster. It never keeps
+        your order details, payment pages, help messages or delivery photos in that offline store.
+      </p>
+      <p>
         No online system is risk free. If you think your information has been misused, tell us right
         away so we can look into it.
       </p>

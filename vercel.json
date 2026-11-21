@@ -6,6 +6,21 @@
   "crons": [
     { "path": "/api/cron/charge-subscriptions", "schedule": "0 6 * * *" },
     { "path": "/api/cron/support-sla", "schedule": "0 * * * *" }
+  ],
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Service-Worker-Allowed", "value": "/" }
+      ]
+    },
+    {
+      "source": "/brand/lake-fresh/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    }
   ]
 }
 

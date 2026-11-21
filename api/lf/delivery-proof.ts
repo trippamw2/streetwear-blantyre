@@ -5,6 +5,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 const PROOF_BUCKET = "lf-delivery-proof";
@@ -15,6 +16,7 @@ interface VercelRequest {
   method?: string;
   body?: Record<string, unknown>;
   query?: Record<string, unknown>;
+  headers?: Record<string, string | string[] | undefined>;
 }
 
 interface VercelResponse {
@@ -28,6 +30,11 @@ const value = (source: Record<string, unknown> | undefined, key: string) => {
   return typeof raw === "string" ? raw : "";
 };
 
+const header = (req: VercelRequest, name: string) => {
+  const raw = req.headers?.[name] ?? req.headers?.[name.toLowerCase()];
+  return Array.isArray(raw) ? raw[0] : raw;
+};
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader?.("Cache-Control", "no-store");
 
@@ -35,7 +42,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !SUPABASE_SERVICE_KEY) {
     return res.status(500).json({ error: "Server configuration is missing" });
   }
 
@@ -47,11 +54,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: "A valid order is required" });
   }
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+  // The authorization check runs as the caller (or as anon with the guest
+  // token). Only the final bucket signing step uses the service key.
+  const callerJwt = header(req, "authorization");
+  const caller = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { headers: callerJwt ? { Authorization: callerJwt } : {} },
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+  const service = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 
-  const { data, error } = await supabase.rpc("lf_public_order_proof", {
+  const { data, error } = await caller.rpc("lf_public_order_proof", {
     p_order_id: orderId,
     p_access_token: accessToken || null,
   });
@@ -69,7 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: "Invalid proof path" });
   }
 
-  const { data: signed, error: signError } = await supabase.storage
+  const { data: signed, error: signError } = await service.storage
     .from(PROOF_BUCKET)
     .createSignedUrl(result.proof_path, 60);
   if (signError) {

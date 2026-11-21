@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
 import LakeFreshImage from "@/components/lf/LakeFreshImage";
+import { useLfDataSaver } from "@/hooks/useLfDataSaver";
 
 type LakeFreshImageCarouselProps = {
   images: string[];
@@ -23,6 +24,7 @@ const LakeFreshImageCarousel = ({
 }: LakeFreshImageCarouselProps) => {
   const [active, setActive] = useState(0);
   const [failedSources, setFailedSources] = useState<string[]>([]);
+  const { enabled: dataSaver } = useLfDataSaver();
   const imagesKey = images.join("|");
   const visibleImages = images.filter((image) => !failedSources.includes(image));
   const photo = visibleImages[active] ?? visibleImages[0] ?? null;
@@ -111,7 +113,7 @@ const LakeFreshImageCarousel = ({
         ) : null}
       </div>
 
-      {canMove ? (
+      {canMove && !dataSaver ? (
         <div className="border-t border-[#EAF6FB] p-3">
           <div className="flex gap-2 overflow-x-auto pb-1">
             {visibleImages.map((image, index) => (

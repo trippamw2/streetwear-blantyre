@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { formatDeliveryDate } from "@/lib/lfDelivery";
 import { buildLakeFreshPaymentRef, formatLakeFreshPaymentRef } from "@/lib/lfPayments";
 import { lfDisplayCopy } from "@/lib/lfCopy";
+import { lfDeliveryProofUrl } from "@/lib/lfStorage";
 import { isOrderPaid, isOrderPayable } from "@/lib/paymentStatus";
 import { verifyOrderPayment } from "@/lib/paymentVerify";
 import { lfWhatsAppLink } from "@/lib/whatsapp";
@@ -96,6 +97,7 @@ const LakeFreshOrder = () => {
   const verifiedRef = useRef(false);
   const [verifyState, setVerifyState] = useState<"idle" | "checking" | "paid" | "pending" | "failed">("idle");
   const [confirmingTotal, setConfirmingTotal] = useState(false);
+  const [proofUrl, setProofUrl] = useState<string | null>(null);
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["lf", "order", id],
@@ -158,6 +160,27 @@ const LakeFreshOrder = () => {
       cancelled = true;
     };
   }, [paymentParam, id, refetch]);
+
+  // Delivery photos are private. The server signs a short-lived URL only after
+  // it confirms this visitor owns the order or has the private guest token.
+  useEffect(() => {
+    if (!id || data?.order?.status !== "delivered") {
+      setProofUrl(null);
+      return;
+    }
+    let cancelled = false;
+    const token = sessionStorage.getItem(`lf_order_access_${id}`);
+    void lfDeliveryProofUrl(id, token)
+      .then((url) => {
+        if (!cancelled) setProofUrl(url);
+      })
+      .catch(() => {
+        if (!cancelled) setProofUrl(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id, data?.order?.status]);
 
   if (isLoading) {
     return (
@@ -314,6 +337,16 @@ const LakeFreshOrder = () => {
           >
             Get help with this order
           </LFLink>
+          {proofUrl && (
+            <a
+              href={proofUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#39B54A] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
+            >
+              See delivery photo
+            </a>
+          )}
           {/* Other channels are only shown when real contact details exist. */}
           {supportWhatsApp && (
             <a

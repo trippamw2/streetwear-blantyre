@@ -10,6 +10,7 @@ import { formatMWK } from "@/data/products";
 import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
 import { lfWhatsAppLink } from "@/lib/whatsapp";
 import { LF_CONTACT, lfEmailHref, lfPhoneHref } from "@/lib/lfContact";
+import { useLfDataSaver } from "@/hooks/useLfDataSaver";
 
 const brand = BRANDS["lake-fresh"];
 
@@ -123,7 +124,10 @@ const LakeFreshHeader = () => {
   );
 };
 
-const LakeFreshFooter = () => (
+const LakeFreshFooter = () => {
+  const { enabled: dataSaver, toggle: toggleDataSaver } = useLfDataSaver();
+
+  return (
   <footer className="border-t border-gray-100 bg-[#F7FBFC] text-[#073B78]">
     <div className="container grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4">
       <div className="sm:col-span-2 lg:col-span-1">
@@ -158,6 +162,14 @@ const LakeFreshFooter = () => (
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
           <span>{LF_PILOT_DELIVERY_PROMISE}</span>
           <span>Three fish options</span>
+          <button
+            type="button"
+            onClick={toggleDataSaver}
+            aria-pressed={dataSaver}
+            className="mt-1 w-fit rounded-lg border border-[#08A9E8]/30 bg-white px-3 py-2 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
+          >
+            {dataSaver ? "Using less data" : "Use less data"}
+          </button>
         </div>
         <p className="mt-6 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/50">Policies</p>
         <div className="mt-3 flex flex-col gap-2 text-sm text-[#073B78]/75">
@@ -241,7 +253,8 @@ const LakeFreshFooter = () => (
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export const LakeFreshLayout = () => (
   <LakeFreshCartProvider>

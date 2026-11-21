@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { ImageIcon } from "lucide-react";
+import { useLfDataSaver } from "@/hooks/useLfDataSaver";
+import { lfOptimizedImageUrl } from "@/lib/lfImages";
 
 type LakeFreshImageProps = {
   src?: string | null;
@@ -7,6 +9,7 @@ type LakeFreshImageProps = {
   className?: string;
   loading?: "eager" | "lazy";
   decoding?: "async" | "sync" | "auto";
+  widthHint?: number;
   onError?: () => void;
 };
 
@@ -20,9 +23,16 @@ const LakeFreshImage = ({
   className = "",
   loading = "lazy",
   decoding = "async",
+  widthHint = 640,
   onError,
 }: LakeFreshImageProps) => {
   const [failed, setFailed] = useState(false);
+  const { enabled: dataSaver } = useLfDataSaver();
+  const optimizedSrc = lfOptimizedImageUrl(
+    src,
+    dataSaver ? Math.round(widthHint / 2) : widthHint,
+    dataSaver,
+  );
 
   useEffect(() => {
     setFailed(false);
@@ -42,7 +52,7 @@ const LakeFreshImage = ({
 
   return (
     <img
-      src={src}
+      src={optimizedSrc || src || undefined}
       alt={alt}
       loading={loading}
       decoding={decoding}

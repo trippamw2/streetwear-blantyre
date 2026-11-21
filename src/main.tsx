@@ -65,3 +65,12 @@ if (!container) {
 
 const root = createRoot(container);
 root.render(<AppWrapper />);
+
+// The offline shell is Lake Fresh only. Streetwear keeps its current behavior.
+if (IS_LF_SITE && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    void navigator.serviceWorker.register("/sw.js").catch(() => {
+      // Offline support is optional; never block the storefront if it fails.
+    });
+  });
+}

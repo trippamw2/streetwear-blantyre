@@ -102,9 +102,14 @@ export const lfDeliveryProofUrl = async (
   orderId: string,
   accessToken?: string | null,
 ): Promise<string> => {
+  const { data: session } = await supabase.auth.getSession();
+  const jwt = session.session?.access_token;
   const response = await fetch("/api/lf/delivery-proof", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
+    },
     body: JSON.stringify({
       order_id: orderId,
       access_token: accessToken || null,
