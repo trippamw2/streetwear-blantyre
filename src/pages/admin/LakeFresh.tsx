@@ -1737,6 +1737,10 @@ const AdminLakeFresh = () => {
       const reasons: Record<string, string> = {
         invalid_transition: "That status change is not allowed for this order.",
         confirmation_required: "Wait for the customer to agree to the final total first.",
+        lot_required: "Link the reserved batch to a lot before dispatch.",
+        qa_required: "Save a passing quality check before dispatch.",
+        qa_hold: "A quality check is holding this fish. Review it before dispatch.",
+        recall_hold: "A lot in this order is on recall. Review it before dispatch.",
         reason_required: "Add a reason before refunding.",
         no_access: "You do not have access to this order.",
         order_not_found: "That order was not found.",
@@ -1873,7 +1877,37 @@ const AdminLakeFresh = () => {
       return;
     }
 
-    toast({ title: "Final weight saved", description: "The customer can now agree to this total." });
+    const prepRow = preparations.find((item: any) => item.id === prepId);
+    const orderId = prepRow?.item?.order_id as string | undefined;
+    let shouldNotify = false;
+    let notified = false;
+
+    if (orderId) {
+      const related = preparations.filter((item: any) => item.item?.order_id === orderId);
+      shouldNotify = related.every(
+        (item: any) => item.id === prepId || item.final_price_mwk != null,
+      );
+      if (shouldNotify) {
+        try {
+          const { sendLfFinalTotalEmail } = await import("@/lib/brevo");
+          notified = await sendLfFinalTotalEmail({
+            orderId,
+            finalTotalMwk: Number(result.final_total_mwk || 0),
+          });
+        } catch (emailError) {
+          console.warn("final total email failed", emailError);
+        }
+      }
+    }
+
+    toast({
+      title: "Final weight saved",
+      description: !shouldNotify
+        ? "We will ask the customer to agree once all fish is weighed."
+        : notified
+          ? "The customer can now agree to this total."
+          : "The customer can agree, but the email did not send.",
+    });
     await loadPreparations();
     await loadReconciliations();
   };

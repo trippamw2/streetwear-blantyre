@@ -56,6 +56,7 @@ import AdminGifts from "./pages/admin/Gifts";
 import AdminCultureStories from "./pages/admin/CultureStories";
 import AdminCommunications from "./pages/admin/Communications";
 import AdminLakeFresh from "./pages/admin/LakeFresh";
+import AdminLakeFreshOperations from "./pages/admin/LakeFreshOperations";
 import AdminLookbooks from "./pages/admin/Lookbooks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GiftTrack from "./pages/GiftTrack";
@@ -268,6 +269,7 @@ const App = () => {
                         element={<AdminLayout />}
                       >
                         <Route index element={<AdminLakeFresh />} />
+                        <Route path="operations" element={<AdminLakeFreshOperations />} />
                         <Route path="promos" element={<AdminPromos />} />
                         <Route path="loyalty" element={<AdminLoyalty />} />
                         <Route path="referrals" element={<AdminReferrals />} />

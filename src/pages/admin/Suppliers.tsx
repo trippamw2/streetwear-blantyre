@@ -7,9 +7,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, Loader2, Phone, MapPin, Package } from "lucide-react";
+import { adminBrandId, useAdminBrand } from "@/lib/adminBrand";
 
 interface Supplier {
   id: string;
+  brand_id: string;
   name: string;
   phone: string | null;
   email: string | null;
@@ -20,6 +22,7 @@ interface Supplier {
 }
 
 const AdminSuppliers = () => {
+  const brandId = adminBrandId(useAdminBrand());
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -34,12 +37,13 @@ const AdminSuppliers = () => {
 
   useEffect(() => {
     fetchSuppliers();
-  }, []);
+  }, [brandId]);
 
   const fetchSuppliers = async () => {
     const { data } = await supabase
       .from("suppliers")
       .select("*")
+      .eq("brand_id", brandId)
       .order("created_at", { ascending: false });
     setSuppliers(data || []);
     setLoading(false);
@@ -49,6 +53,7 @@ const AdminSuppliers = () => {
     e.preventDefault();
     
     const supplierData = {
+      brand_id: brandId,
       name: formData.name,
       phone: formData.phone || null,
       email: formData.email || null,
@@ -61,7 +66,8 @@ const AdminSuppliers = () => {
         const { error } = await supabase
           .from("suppliers")
           .update(supplierData)
-          .eq("id", editingSupplier.id);
+          .eq("id", editingSupplier.id)
+          .eq("brand_id", brandId);
         if (error) throw error;
         toast({ title: "Supplier updated!" });
       } else {
@@ -96,7 +102,7 @@ const AdminSuppliers = () => {
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this supplier?")) return;
     
-    const { error } = await supabase.from("suppliers").delete().eq("id", id);
+    const { error } = await supabase.from("suppliers").delete().eq("id", id).eq("brand_id", brandId);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {

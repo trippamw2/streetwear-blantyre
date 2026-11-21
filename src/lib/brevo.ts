@@ -307,6 +307,36 @@ export const sendOrderConfirmationEmail = async (order: OrderEmailParams) => {
 };
 
 // ============================================
+// LAKE FRESH FINAL TOTAL CONFIRMATION
+// ============================================
+export const sendLfFinalTotalEmail = async (params: {
+  orderId: string;
+  finalTotalMwk: number;
+}) => {
+  const subject = "Please agree to your final total";
+  const total = Number(params.finalTotalMwk || 0).toLocaleString();
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #073B78; margin-top: 0;">Your fish is packed</h2>
+      <p>Hi there,</p>
+      <p>We weighed your fish. Your final total is <strong>MK ${total}</strong>.</p>
+      <p>Please open your order and agree to this total. We will send your fish after you agree.</p>
+      <p>Thanks, Lake Fresh Team</p>
+    </div>
+  `;
+
+  // The server derives the customer address from this order ID. No contact
+  // details are trusted from the browser.
+  return sendViaProxy("send-email", {
+    orderId: params.orderId,
+    adminAction: "transactional",
+    brand: "lake-fresh",
+    subject,
+    htmlContent: wrapEmail(html, subject, "lake-fresh"),
+  });
+};
+
+// ============================================
 // PAYMENT RECEIVED EMAIL
 // ============================================
 export const sendPaymentReceivedEmail = async (order: OrderEmailParams) => {

@@ -172,3 +172,18 @@
 --   and t.tgname like '%append_only%'; -- expect 2 rows
 -- select public.lf_mark_support_sla_breaches(); -- expect ok true, service role only
 
+-- 25. P3 operations consolidation (20261124000000)
+-- select prosrc like '%lf.team.write%' from pg_proc
+-- where proname='lf_permissions_for_role'; -- expect true
+-- select count(*) from information_schema.role_table_grants
+-- where grantee='authenticated' and table_name='staff_permissions'
+--   and privilege_type in ('INSERT','UPDATE','DELETE'); -- expect 0
+-- select policyname from pg_policies where schemaname='public'
+--   and tablename='staff_permissions' and policyname='lf_staff_permissions_read'; -- expect 1 row
+-- select has_function_privilege('anon', 'public.lf_admin_set_staff_permission(uuid, uuid, text, jsonb)', 'EXECUTE'); -- expect false
+-- select has_function_privilege('anon', 'public.lf_admin_remove_staff_permission(uuid, uuid, text)', 'EXECUTE'); -- expect false
+-- select prosrc like '%qa_hold%' from pg_proc
+-- where proname='lf_set_order_status'; -- expect true
+-- select prosrc like '%recall_hold%' from pg_proc
+-- where proname='lf_set_order_status'; -- expect true
+

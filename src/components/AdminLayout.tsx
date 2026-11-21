@@ -67,6 +67,8 @@ const SB_LINKS: AdminLink[] = [
 
 const LF_LINKS: AdminLink[] = [
   { to: "/", label: "Operations", icon: Fish, end: true },
+  { to: "/operations?tab=lots", label: "Traceability", icon: Shield, tab: "lots" },
+  { to: "/operations?tab=team", label: "Team", icon: Users, tab: "team" },
   { to: "?tab=orders", label: "Orders", icon: ShoppingCart, tab: "orders" },
   { to: "?tab=catalog", label: "Fish & Prices", icon: Fish, tab: "catalog" },
   { to: "?tab=spices", label: "Spices", icon: Package, tab: "spices" },
@@ -170,7 +172,8 @@ export const AdminLayout = () => {
   const linkTarget = (link: AdminLink) => adminPath(brand, link.to);
   const isActive = (link: AdminLink) => {
     if (link.tab) {
-      return location.pathname === base && activeTab === link.tab;
+      const linkPath = adminPath(brand, link.to.split("?")[0] || "/");
+      return location.pathname === linkPath && activeTab === link.tab;
     }
     if (link.end) return location.pathname === base && !activeTab;
     return location.pathname === adminPath(brand, link.to) ||
