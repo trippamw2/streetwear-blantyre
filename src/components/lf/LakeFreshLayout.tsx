@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { LFLink, LFNavLink, useLFNavigate } from "@/components/lf/lfRouter";
-import { Menu, ShoppingBasket, X, LogOut, User, ShieldCheck, MapPin, MessageCircle } from "lucide-react";
+import { Menu, ShoppingBasket, X, LogOut, User, ShieldCheck, MapPin, MessageCircle, Phone, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLakeFreshCart, LakeFreshCartProvider } from "@/contexts/LakeFreshCartContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,7 @@ import { BRANDS } from "@/lib/brands";
 import { formatMWK } from "@/data/products";
 import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
 import { lfWhatsAppLink } from "@/lib/whatsapp";
+import { LF_CONTACT, lfEmailHref, lfPhoneHref } from "@/lib/lfContact";
 
 const brand = BRANDS["lake-fresh"];
 
@@ -191,25 +192,49 @@ const LakeFreshFooter = () => (
             <div>
               <p className="text-xs font-extrabold text-[#073B78]">Need help?</p>
               <p className="mt-1 text-xs leading-relaxed text-[#073B78]/70">
-                Chat with our team on WhatsApp. We reply fast during delivery hours.
+                Contact our team during delivery hours. We are here to help with your order.
               </p>
             </div>
           </div>
-          <a
-            href={lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.")}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#25D366] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white"
-          >
-            <MessageCircle className="h-3.5 w-3.5" /> Chat on WhatsApp
-          </a>
+          <div className="flex flex-wrap gap-2">
+            {lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") && (
+              <a
+                href={lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") as string}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#25D366] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white"
+              >
+                <MessageCircle className="h-3.5 w-3.5" /> Chat on WhatsApp
+              </a>
+            )}
+            {lfPhoneHref() && (
+              <a
+                href={lfPhoneHref() as string}
+                className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#073B78] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white"
+              >
+                <Phone className="h-3.5 w-3.5" /> Call us
+              </a>
+            )}
+            {lfEmailHref() && (
+              <a
+                href={lfEmailHref() as string}
+                className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#073B78]/20 px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
+              >
+                <Mail className="h-3.5 w-3.5" /> Email us
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </div>
     <div className="border-t border-gray-100">
       <div className="container flex flex-col gap-2 py-5 text-xs text-[#073B78]/45 sm:flex-row sm:items-center sm:justify-between">
         <p>© {new Date().getFullYear()} Lake Fresh Fish Mart. All rights reserved.</p>
-        <p>Registered business in Malawi. Fresh fish from Lake Malawi, made for your table.</p>
+        <p>
+          {LF_CONTACT.registration
+            ? `Registered business in Malawi. Registration ${LF_CONTACT.registration}.`
+            : "Fresh fish from Lake Malawi, made for your table."}
+        </p>
       </div>
     </div>
   </footer>

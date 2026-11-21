@@ -87,12 +87,10 @@
 -- select count(*) from storage.objects
 -- where bucket_id='product-images' and name not like 'lf/%'; -- expect SB assets only
 
--- 15. Public order detail returns reconciliation, tracking uses exact reference
--- select count(*) from pg_proc p
--- join pg_namespace n on n.oid = p.pronamespace
--- where n.nspname='public' and p.proname='lf_public_order_detail'; -- expect 1
+-- 15. Public order detail is token aware, tracking uses exact reference
 -- select public.lf_track_order('0880000000', 'LF-ORDER-000001') ->> 'reason'; -- expect not_found for a partial reference
--- select public.lf_public_order_detail('<lf order uuid>') -> 'reconciliation' -> 'status'; -- expect pending or confirmed
+-- select public.lf_public_order_detail('<lf order uuid>', null) ->> 'reason'; -- expect unauthorized for anon without a token
+-- select public.lf_public_order_detail('<lf order uuid>', '<access token>') -> 'reconciliation' -> 'status'; -- expect pending or confirmed
 
 -- 16. Least privilege grants after the hardening migrations
 -- select proname, pg_get_function_identity_arguments(oid) as args
@@ -102,7 +100,7 @@
 --                   'lf_confirm_subscription_charge','lf_prepare_subscription_charges')
 --   and has_function_privilege('anon', p.oid, 'EXECUTE'); -- expect 0 rows
 -- select has_function_privilege('service_role', 'public.lf_prepare_subscription_charges()', 'EXECUTE'); -- expect true
--- select has_function_privilege('anon', 'public.lf_public_order_detail(uuid)', 'EXECUTE'); -- expect true
+-- select has_function_privilege('anon', 'public.lf_public_order_detail(uuid, text)', 'EXECUTE'); -- expect true
 -- select table_name, string_agg(privilege_type, ',' order by privilege_type) as anon_privs
 -- from information_schema.role_table_grants
 -- where grantee='anon' and table_schema='public'
@@ -113,4 +111,27 @@
 -- where grantee='anon' and table_schema='public'
 --   and table_name in ('brand_settings','lf_refund_audit','lf_subscription_charges',
 --                      'price_reconciliation','payment_events'); -- expect 0 rows
+
+-- 17. P0 guest access and delivery proof guarantees (20261121000000)
+-- select count(*) from information_schema.columns
+-- where table_name='orders' and column_name='guest_access_token'; -- expect 1
+-- select count(*) from public.orders
+-- where brand_id='22222222-2222-2222-2222-222222222222' and guest_access_token is null; -- expect 0
+-- select has_function_privilege('anon', 'public.lf_place_order(text,text,uuid,uuid,jsonb,text,boolean,integer,text,text,text,double precision,double precision,text,text)', 'EXECUTE'); -- expect false
+-- select has_function_privilege('anon', 'public.lf_place_order_guest(text,text,uuid,uuid,jsonb,text,boolean,integer,text,text,text,double precision,double precision,text,text)', 'EXECUTE'); -- expect true
+-- select has_function_privilege('anon', 'public.lf_verify_order_access(uuid, text)', 'EXECUTE'); -- expect false
+
+-- 18. Delivery proof is mandatory and status changes are server-owned
+-- select tgname from pg_trigger t join pg_class c on c.oid=t.tgrelid
+-- where c.relname='orders' and tgname='lf_enforce_delivery_proof'; -- expect 1 row
+-- update public.orders set status='delivered', delivery_proof_url=null
+-- where id='<dispatched lf order uuid>'; -- expect: Delivery proof is required
+-- select count(*) from public.lf_delivery_events where order_id='<lf order uuid>'; -- expect 1 after driver completion
+
+-- 19. Subscription references use one namespace
+-- select count(*) from public.lf_subscription_charges where payment_reference like 'LFSUB-%'; -- expect 0
+-- select count(*) from public.lf_subscription_charges where payment_reference like 'LF-SUB-%'; -- expect all renewal charges
+
+-- 20. Server secret fallbacks are removed from Vercel handlers
+-- grep -R "VITE_BREVO_API_KEY|VITE_SUPABASE_SERVICE_KEY|VITE_PAYCHANGU" api/ -- expect no matches
 

@@ -5,7 +5,9 @@ import { getBrandConfig, normalizeBrandSlug, type BrandSlug } from "@/lib/brands
 
 export const WHATSAPP_NUMBERS: Record<BrandSlug, string> = {
   sb: "265991234567",
-  "lake-fresh": "265991234567",
+  // Lake Fresh must never inherit another brand's number. The public number is
+  // configured with VITE_LF_WHATSAPP and hidden when it has not been provided.
+  "lake-fresh": "",
 };
 
 export const STORE_URLS: Record<BrandSlug, string> = {
@@ -18,20 +20,29 @@ export const STORE_URL = STORE_URLS.sb;
 
 const brandOf = (brand?: BrandSlug) => normalizeBrandSlug(brand);
 
+const configured = (value?: string) => (value || "").trim();
+
+/** The public Lake Fresh WhatsApp number, or null when it is not configured. */
+export const lfWhatsAppNumber = () =>
+  configured(
+    import.meta.env.VITE_LF_WHATSAPP ||
+      import.meta.env.VITE_WHATSAPP_LAKEFRESH ||
+      WHATSAPP_NUMBERS["lake-fresh"],
+  ) || null;
+
 export const buildWhatsAppLink = (message: string, phone?: string, brand?: BrandSlug) => {
   const b = brandOf(brand);
-  const number = (phone || WHATSAPP_NUMBERS[b]).replace(/[^0-9]/g, "");
+  const source = phone || (b === "lake-fresh" ? lfWhatsAppNumber() : WHATSAPP_NUMBERS[b]) || "";
+  const number = source.replace(/[^0-9]/g, "");
+  if (!number) return "";
   const encoded = encodeURIComponent(message);
   return `https://wa.me/${number}?text=${encoded}`;
 };
 
 /** One WhatsApp path for every Lake Fresh customer facing link. */
-export const lfWhatsAppLink = (message: string) => {
-  const number =
-    import.meta.env.VITE_WHATSAPP_LAKEFRESH ||
-    import.meta.env.VITE_WHATSAPP_BUSINESS ||
-    WHATSAPP_NUMBERS["lake-fresh"];
-  return buildWhatsAppLink(message, number, "lake-fresh");
+export const lfWhatsAppLink = (message: string): string | null => {
+  const number = lfWhatsAppNumber();
+  return number ? buildWhatsAppLink(message, number, "lake-fresh") : null;
 };
 
 export const defaultMessage = "Hi Streetwear Blantyre, I want to order.";

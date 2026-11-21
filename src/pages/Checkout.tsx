@@ -192,6 +192,7 @@ const Checkout = () => {
           to: formData.phone ? `${formData.phone}@wearsb.com` : "customer@wearsb.com",
           toName: formData.name,
           orderId,
+          adminAction: "transactional" as const,
           items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
           total: finalTotal,
           location: formData.location,

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import { BRANDS, type BrandSlug } from "@/lib/brands";
+import { LF_CONTACT } from "@/lib/lfContact";
 
 interface SEOProps {
   title: string;
@@ -76,6 +77,11 @@ export const SEO = ({
           url,
           image: resolvedImage,
           areaServed: "Blantyre, Malawi",
+          ...(LF_CONTACT.phone ? { telephone: LF_CONTACT.phone } : {}),
+          ...(LF_CONTACT.email ? { email: LF_CONTACT.email } : {}),
+          ...(LF_CONTACT.address
+            ? { address: { "@type": "PostalAddress", streetAddress: LF_CONTACT.address, addressCountry: "MW" } }
+            : {}),
         }
       : {
           "@context": "https://schema.org",

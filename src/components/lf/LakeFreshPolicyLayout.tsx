@@ -2,7 +2,8 @@ import { type ReactNode } from "react";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 import { LFLink } from "@/components/lf/lfRouter";
 import { SEO, defaultSEO } from "@/components/SEO";
-import { buildWhatsAppLink } from "@/lib/whatsapp";
+import { lfWhatsAppLink } from "@/lib/whatsapp";
+import { LF_CONTACT, lfEmailHref, lfPhoneHref } from "@/lib/lfContact";
 
 type SEOKey = keyof typeof defaultSEO;
 
@@ -55,14 +56,34 @@ export const LakeFreshPolicyLayout = ({
         <p className="mt-1 text-sm text-[#073B78]/75">
           Ask us about this page or about an order. We are here to help.
         </p>
-        <a
-          href={buildWhatsAppLink("Hi Lake Fresh, I need help with an order.", undefined, "lake-fresh")}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-extrabold uppercase tracking-widest text-white"
-        >
-          <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
-        </a>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {lfWhatsAppLink("Hi Lake Fresh, I need help with an order.") && (
+            <a
+              href={lfWhatsAppLink("Hi Lake Fresh, I need help with an order.") as string}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-extrabold uppercase tracking-widest text-white"
+            >
+              <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+            </a>
+          )}
+          {lfPhoneHref() && (
+            <a
+              href={lfPhoneHref() as string}
+              className="inline-flex items-center gap-2 rounded-full bg-[#073B78] px-5 py-2.5 text-xs font-extrabold uppercase tracking-widest text-white"
+            >
+              Call {LF_CONTACT.phone}
+            </a>
+          )}
+          {lfEmailHref() && (
+            <a
+              href={lfEmailHref() as string}
+              className="inline-flex items-center gap-2 rounded-full border border-[#073B78]/20 px-5 py-2.5 text-xs font-extrabold uppercase tracking-widest text-[#073B78]"
+            >
+              Email {LF_CONTACT.email}
+            </a>
+          )}
+        </div>
       </div>
 
       <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold text-[#08A9E8]">

@@ -262,7 +262,7 @@ const LakeFreshCheckout = () => {
         .filter(Boolean)
         .join(" | ");
 
-      const { data, error } = await supabase.rpc("lf_place_order", {
+      const { data, error } = await supabase.rpc("lf_place_order_guest", {
         p_customer_name: name.trim(),
         p_customer_phone: phone.trim(),
         p_zone_id: selectedZone.id,
@@ -283,20 +283,29 @@ const LakeFreshCheckout = () => {
       if (error) throw new Error(error.message);
       if (!data) throw new Error("Order could not be created");
 
-      const orderId = String(data);
+      const placed = data as { order_id?: string; access_token?: string } | string;
+      const orderId = String(typeof placed === "object" ? placed.order_id : placed);
+      const accessToken =
+        typeof placed === "object" && placed.access_token ? String(placed.access_token) : "";
+      if (!orderId) throw new Error("Order could not be created");
+
+      // The private token is the guest's proof of ownership for this order.
+      // It is kept in this browser tab only and is never sent in a URL.
+      if (accessToken) sessionStorage.setItem(`lf_order_access_${orderId}`, accessToken);
+
       const txRef = buildLakeFreshPaymentRef(orderId);
       const cleanPhone = phone.replace(/[^0-9]/g, "");
       const [firstName, ...rest] = name.trim().split(/\s+/);
 
-      // The server calculates the real total (promo and loyalty are validated
-      // there), so read it back before charging.
-      const { data: savedOrder } = await supabase
-        .from("orders")
-        .select("total_mwk, subtotal_mwk, delivery_fee_mwk, discount_mwk, payment_reference")
-        .eq("id", orderId)
-        .maybeSingle();
-      const payableTotal = savedOrder?.total_mwk || estimatedTotal;
-      const reference = savedOrder?.payment_reference || txRef;
+      // Read the server-calculated total through the token-guarded RPC. Never
+      // trust a browser total when charging a customer.
+      const { data: detail } = await supabase.rpc("lf_public_order_detail", {
+        p_order_id: orderId,
+        p_access_token: accessToken || null,
+      });
+      const detailOrder = (detail as any)?.ok ? (detail as any).order : null;
+      const payableTotal = detailOrder?.total_mwk || estimatedTotal;
+      const reference = detailOrder?.payment_reference || txRef;
 
       // Recipe PDFs attached to this order are emailed as downloadable links.
       let recipePdfs: Array<{ title: string; url: string }> = [];
@@ -330,6 +339,7 @@ const LakeFreshCheckout = () => {
           to: user?.email || `${cleanPhone}@lakefreshmw.com`,
           toName: name.trim(),
           orderId,
+          orderAccessToken: accessToken || undefined,
           items: emailItems,
           total: payableTotal,
           location: selectedZone?.name || "",

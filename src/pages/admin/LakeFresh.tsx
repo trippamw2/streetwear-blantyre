@@ -1671,6 +1671,7 @@ const AdminLakeFresh = () => {
             toName: ord.customer_name || "Customer",
             orderId,
             brand: "lake-fresh" as const,
+            adminAction: "transactional" as const,
             total: Number(ord.total_mwk || 0),
             location: ord.customer_location || "",
             items: [],

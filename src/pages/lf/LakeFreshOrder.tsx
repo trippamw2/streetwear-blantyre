@@ -12,6 +12,7 @@ import { buildLakeFreshPaymentRef, formatLakeFreshPaymentRef } from "@/lib/lfPay
 import { isOrderPaid, isOrderPayable } from "@/lib/paymentStatus";
 import { verifyOrderPayment } from "@/lib/paymentVerify";
 import { lfWhatsAppLink } from "@/lib/whatsapp";
+import { lfEmailHref } from "@/lib/lfContact";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
 
@@ -91,8 +92,12 @@ const LakeFreshOrder = () => {
     queryKey: ["lf", "order", id],
     enabled: Boolean(id),
     queryFn: async () => {
+      // Guest orders are unlocked by the private token stored at checkout.
+      // A signed-in owner can load the same order without a token.
+      const accessToken = sessionStorage.getItem(`lf_order_access_${id}`);
       const { data, error } = await supabase.rpc("lf_public_order_detail", {
         p_order_id: id as string,
+        p_access_token: accessToken || null,
       });
 
       if (error) throw new Error(error.message);
@@ -178,6 +183,9 @@ const LakeFreshOrder = () => {
   };
   const paymentRef = order.payment_reference || buildLakeFreshPaymentRef(order.id);
   const isPaid = isOrderPaid(order.payment_status);
+  const supportWhatsApp = lfWhatsAppLink(
+    `Hi Lake Fresh, my order number is ${formatLakeFreshPaymentRef(paymentRef)}. Please help me track it.`,
+  );
   const canPay = isOrderPayable(order.payment_status);
 
   const handlePay = async () => {
@@ -258,15 +266,27 @@ const LakeFreshOrder = () => {
           </ol>
         </div>
 
-        {/* WhatsApp tracking button */}
-        <a
-          href={lfWhatsAppLink(`Hi Lake Fresh, my order number is ${formatLakeFreshPaymentRef(paymentRef)}. Please help me track it.`)}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
-        >
-          Track or chat on WhatsApp
-        </a>
+        {/* Support channels are only shown when real contact details exist. */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {supportWhatsApp && (
+            <a
+              href={supportWhatsApp}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
+            >
+              Track or chat on WhatsApp
+            </a>
+          )}
+          {lfEmailHref() && (
+            <a
+              href={lfEmailHref() as string}
+              className="inline-flex items-center gap-2 rounded-lg border border-[#073B78]/20 px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
+            >
+              Email us about this order
+            </a>
+          )}
+        </div>
 
         {verifyState === "paid" || (paymentParam && isPaid) ? (
           <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#39B54A]/30 bg-[#39B54A]/10 p-4 text-sm text-emerald-900">
@@ -289,7 +309,9 @@ const LakeFreshOrder = () => {
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <div>
               <p className="font-bold">That payment did not complete.</p>
-              <p className="mt-1 text-xs">No money was taken. You can try again with the Pay now button.</p>
+              <p className="mt-1 text-xs">
+                PayChangu did not confirm a payment. You can try again with the Pay now button.
+              </p>
             </div>
           </div>
         ) : paymentParam && !isPaid ? (
@@ -348,7 +370,7 @@ const LakeFreshOrder = () => {
             <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">
               <PackageCheck className="h-3.5 w-3.5 text-[#08A9E8]" /> Cleaned and packed
             </p>
-            <p className="mt-2 text-sm font-bold text-[#073B78]">Kept at 0 to 4°C</p>
+            <p className="mt-2 text-sm font-bold text-[#073B78]">Packed fresh for your delivery window</p>
             <p className="mt-1 text-xs text-[#073B78]/60">Eat within 2 days of delivery. Rinse before you cook.</p>
           </div>
         </section>
@@ -406,8 +428,8 @@ const LakeFreshOrder = () => {
           </div>
 
           <p className="mt-3 text-xs text-[#073B78]/60">
-            We use the estimated weight at checkout. We weigh the fish when we pack it and tell you if the price
-            changes. We never charge more than you agreed.
+            You pay for the estimated weight at checkout. We weigh the fish again when we pack it and show the
+            final total here. We will contact you about any difference before delivery.
           </p>
 
           {reconciliation && (
@@ -436,7 +458,8 @@ const LakeFreshOrder = () => {
         )}
 
         <p className="mt-6 text-center text-xs text-[#073B78]/50">
-          Paid with PayChangu. Reference {formatLakeFreshPaymentRef(paymentRef)}
+          {isPaid ? "Paid with PayChangu. " : "Payment status: "}
+          Reference {formatLakeFreshPaymentRef(paymentRef)}
         </p>
       </div>
     </div>

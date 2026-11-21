@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 import { lfPath, storefrontHome } from "@/lib/brandSite";
 import { supabase } from "@/integrations/supabase/client";
 import { adminBrandId, adminPath, useAdminBrand } from "@/lib/adminBrand";
+import { AdminMfaGate } from "@/components/AdminMfaGate";
 
 interface AdminLink {
   to: string;
@@ -179,6 +180,7 @@ export const AdminLayout = () => {
   };
 
   return (
+    <AdminMfaGate>
     <div className="min-h-screen bg-gray-50 flex">
       {sidebarOpen && (
         <div
@@ -292,5 +294,6 @@ export const AdminLayout = () => {
         </main>
       </div>
     </div>
+    </AdminMfaGate>
   );
 };

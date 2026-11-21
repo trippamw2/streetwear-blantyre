@@ -134,7 +134,7 @@ const AdminCRM = () => {
                 <p style="margin-top: 20px; color: #666;">Thanks for being a valued customer!</p>
                 <p>- Streetwear Blantyre Team</p>
               </div>
-            `);
+            `, undefined, "broadcast");
             sent++;
             await new Promise(r => setTimeout(r, 200));
           }
