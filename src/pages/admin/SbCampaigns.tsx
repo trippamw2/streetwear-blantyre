@@ -458,7 +458,7 @@ const SbCampaigns = () => {
         <p className="mt-2 max-w-3xl text-xs text-gray-500">
           Keep campaign imagery balanced across the wardrobe: {SB_CAMPAIGN_IMAGE_MIX.TEE}% tees,{" "}
           {SB_CAMPAIGN_IMAGE_MIX.VEST}% vests, {SB_CAMPAIGN_IMAGE_MIX.SHORT_SLEEVE_SHIRT}% shirts and{" "}
-          {SB_CAMPAIGN_IMAGE_MIX.SHORTS}% shorts. SB is a full streetwear wardrobe, not just a T-shirt seller.
+          {SB_CAMPAIGN_IMAGE_MIX.SHORTS}% shorts. SB is a streetwear wardrobe, not just a T-shirt seller.
         </p>
       </div>
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { SB_BRAND_ID } from "@/data/sbArchitecture";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,8 +64,8 @@ const AdminCategories = () => {
 
   const fetchAll = async () => {
     const [catRes, pillarRes] = await Promise.all([
-      supabase.from("wearable_categories").select("*").order("sort_order"),
-      supabase.from("culture_pillars").select("*").order("sort_order"),
+      supabase.from("wearable_categories").select("*").eq("brand_id", SB_BRAND_ID).order("sort_order"),
+      supabase.from("culture_pillars").select("*").eq("brand_id", SB_BRAND_ID).order("sort_order"),
     ]);
     setCategories((catRes.data || []) as WearableCategory[]);
     setPillars((pillarRes.data || []) as CulturePillar[]);
@@ -77,6 +78,7 @@ const AdminCategories = () => {
     setCatSaving(true);
     try {
       const data = {
+        brand_id: SB_BRAND_ID,
         name: catForm.name,
         slug: catForm.slug || slugify(catForm.name),
         description: catForm.description || null,
@@ -85,7 +87,11 @@ const AdminCategories = () => {
         is_active: catForm.is_active,
       };
       if (editingCat) {
-        const { error } = await supabase.from("wearable_categories").update(data).eq("id", editingCat.id);
+        const { error } = await supabase
+          .from("wearable_categories")
+          .update(data)
+          .eq("id", editingCat.id)
+          .eq("brand_id", SB_BRAND_ID);
         if (error) {
           toast({ title: "Error saving category", description: error.message, variant: "destructive" });
           return;
@@ -112,7 +118,11 @@ const AdminCategories = () => {
 
   const deleteCategory = async (id: string) => {
     if (!confirm("Delete this category?")) return;
-    const { error } = await supabase.from("wearable_categories").delete().eq("id", id);
+    const { error } = await supabase
+      .from("wearable_categories")
+      .delete()
+      .eq("id", id)
+      .eq("brand_id", SB_BRAND_ID);
     if (error) {
       toast({ title: "Error deleting category", description: error.message, variant: "destructive" });
       return;
@@ -127,6 +137,7 @@ const AdminCategories = () => {
     setPillarSaving(true);
     try {
       const data = {
+        brand_id: SB_BRAND_ID,
         name: pillarForm.name,
         slug: pillarForm.slug || slugify(pillarForm.name),
         description: pillarForm.description || null,
@@ -136,7 +147,11 @@ const AdminCategories = () => {
         is_active: pillarForm.is_active,
       };
       if (editingPillar) {
-        const { error } = await supabase.from("culture_pillars").update(data).eq("id", editingPillar.id);
+        const { error } = await supabase
+          .from("culture_pillars")
+          .update(data)
+          .eq("id", editingPillar.id)
+          .eq("brand_id", SB_BRAND_ID);
         if (error) {
           toast({ title: "Error saving pillar", description: error.message, variant: "destructive" });
           return;
@@ -163,7 +178,11 @@ const AdminCategories = () => {
 
   const deletePillar = async (id: string) => {
     if (!confirm("Delete this pillar?")) return;
-    const { error } = await supabase.from("culture_pillars").delete().eq("id", id);
+    const { error } = await supabase
+      .from("culture_pillars")
+      .delete()
+      .eq("id", id)
+      .eq("brand_id", SB_BRAND_ID);
     if (error) {
       toast({ title: "Error deleting pillar", description: error.message, variant: "destructive" });
       return;

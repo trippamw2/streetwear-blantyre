@@ -130,6 +130,7 @@ export function useProducts() {
           compare_at_price: p.compare_at_price ?? null,
           cost_price: p.cost_price ?? null,
           category: (p.category || "all") as any,
+          subcategory: p.subcategory || undefined,
           collection_name: p.collection_name || undefined,
           product_type_code: p.product_type_code || undefined,
           fit: p.fit || undefined,

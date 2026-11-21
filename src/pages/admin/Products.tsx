@@ -72,6 +72,7 @@ interface Product {
   benefit: string;
   price: number;
   category: string;
+  subcategory?: string;
   product_type_code?: string;
   collection_name?: string;
   fit?: string;
@@ -87,6 +88,7 @@ interface Product {
   tags: string[];
   image: string;
   images: string[];
+  gallery_images?: string[];
   is_featured: boolean;
   is_best_seller: boolean;
   is_new_arrival: boolean;
@@ -116,6 +118,7 @@ const AdminProducts = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState<number | null>(null);
+  const [subcategories, setSubcategories] = useState<{ name: string; product_type_code: string }[]>([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -125,6 +128,7 @@ const AdminProducts = () => {
     compare_at_price: 0,
     cost_price: 0,
     category: "t-shirts",
+    subcategory: "",
     product_type_code: "TEE",
     collection_name: "",
     fit: "Relaxed fit",
@@ -165,13 +169,17 @@ const AdminProducts = () => {
       { data: suppliersData },
       { data: variantRows },
       { data: tagRows },
+      { data: subcategoryRows },
     ] = await Promise.all([
       supabase.from("products").select("*").eq("brand_id", SB_BRAND_ID).order("sort_order", { ascending: true }),
       supabase.from("product_types").select("*").order("sort_order", { ascending: true }),
       supabase.from("suppliers").select("id, name").order("name"),
       supabase.from("sb_product_variants").select("*").eq("brand_id", SB_BRAND_ID).order("size_label"),
       supabase.from("sb_product_tags").select("*").eq("brand_id", SB_BRAND_ID).order("sort_order"),
+      supabase.from("sb_product_subcategories").select("name, product_type_code").eq("brand_id", SB_BRAND_ID).order("sort_order"),
     ]);
+
+    setSubcategories(subcategoryRows || []);
 
     if (productsData) {
       const typeMap = new Map<string, ProductType[]>();
@@ -318,6 +326,7 @@ const AdminProducts = () => {
         compare_at_price: formData.compare_at_price || null,
         cost_price: formData.cost_price || null,
         category: formData.category,
+        subcategory: formData.subcategory || null,
         product_type_code: formData.product_type_code,
         collection_name: formData.collection_name || null,
         fit: formData.fit || null,
@@ -330,6 +339,7 @@ const AdminProducts = () => {
         model_fit_note: formData.model_fit_note || null,
         image: validImages[0] || "",
         images: validImages,
+        gallery_images: validImages,
         is_featured: formData.is_featured,
         is_best_seller: formData.is_best_seller,
         is_new_arrival: formData.is_new_arrival,
@@ -440,6 +450,7 @@ const AdminProducts = () => {
       compare_at_price: product.compare_at_price || 0,
       cost_price: product.cost_price || 0,
       category: product.category,
+      subcategory: product.subcategory || "",
       product_type_code: product.product_type_code || "TEE",
       collection_name: product.collection_name || "",
       fit: product.fit || "Relaxed fit",
@@ -451,7 +462,9 @@ const AdminProducts = () => {
       care_instructions: product.care_instructions || "",
       model_fit_note: product.model_fit_note || 'Model is 6\'0" and wears size L',
       tags: product.tags || [],
-      images: product.images && product.images.length > 0 ? product.images : [product.image || ""],
+      images: product.gallery_images && product.gallery_images.length > 0
+        ? product.gallery_images
+        : product.images && product.images.length > 0 ? product.images : [product.image || ""],
       is_featured: product.is_featured || false,
       is_best_seller: product.is_best_seller || false,
       is_new_arrival: product.is_new_arrival || false,
@@ -480,6 +493,7 @@ const AdminProducts = () => {
       compare_at_price: 0,
       cost_price: 0,
       category: "t-shirts",
+      subcategory: "",
       product_type_code: "TEE",
       collection_name: "",
       fit: "Relaxed fit",
@@ -691,6 +705,21 @@ const AdminProducts = () => {
                     {Object.entries(SB_PRODUCT_TYPE_LABELS).map(([code, label]) => (
                       <option key={code} value={code}>{label}</option>
                     ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Subcategory / Style</Label>
+                  <select
+                    value={formData.subcategory}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, subcategory: e.target.value }))}
+                    className="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm"
+                  >
+                    <option value="">No subcategory</option>
+                    {subcategories
+                      .filter((sub) => sub.product_type_code === formData.product_type_code)
+                      .map((sub) => (
+                        <option key={sub.name} value={sub.name}>{sub.name}</option>
+                      ))}
                   </select>
                 </div>
                 <div className="space-y-2">

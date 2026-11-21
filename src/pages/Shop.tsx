@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { culturePillars } from "@/data/products";
+import { SB_PRODUCT_TYPES } from "@/data/sbArchitecture";
 import { useProducts } from "@/hooks/useProducts";
+import { useSbSubcategories } from "@/hooks/useSbSubcategories";
 import { useWearableCategories } from "@/hooks/useWearableCategories";
 import { ProductCard } from "@/components/ProductCard";
 import { PromotionSlider } from "@/components/PromotionSlider";
@@ -13,16 +15,25 @@ import { Button } from "@/components/ui/button";
 
 const PRODUCTS_PER_PAGE = 12;
 
+const styleSlug = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { products, loading: productsLoading } = useProducts();
   const { categories, loading: categoriesLoading } = useWearableCategories();
-  const loading = productsLoading || categoriesLoading;
+  const { subcategories, loading: subcategoriesLoading } = useSbSubcategories();
+  const loading = productsLoading || categoriesLoading || subcategoriesLoading;
 
   const categoryParam = searchParams.get("category") || "all";
+  const styleParam = searchParams.get("style") || "";
   const qParam = searchParams.get("q") || "";
 
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
+  const [selectedStyle, setSelectedStyle] = useState(styleParam);
   const [selectedCulture, setSelectedCulture] = useState(searchParams.get("culture") || "");
   const [searchQuery, setSearchQuery] = useState(qParam);
   const [sortBy, setSortBy] = useState<"newest" | "best" | "price-low" | "price-high" | "name">(
@@ -42,18 +53,27 @@ const Shop = () => {
   }, [categoryParam]);
 
   useEffect(() => {
+    setSelectedStyle(styleParam);
+  }, [styleParam]);
+
+  useEffect(() => {
     setSearchQuery(qParam);
   }, [qParam]);
 
   useEffect(() => {
     setVisibleCount(PRODUCTS_PER_PAGE);
-  }, [selectedCategory, selectedCulture, searchQuery, selectedBrands, selectedSize, inStockOnly, priceMin, priceMax, sortBy]);
+  }, [selectedCategory, selectedStyle, selectedCulture, searchQuery, selectedBrands, selectedSize, inStockOnly, priceMin, priceMax, sortBy]);
 
   const categoryName =
     selectedCategory === "all"
       ? null
       : categories.find((c) => c.slug === selectedCategory)?.name ||
         selectedCategory.replace(/-/g, " ");
+  const selectedType = SB_PRODUCT_TYPES.find((type) => type.slug === selectedCategory);
+  const visibleSubcategories =
+    selectedCategory === "all"
+      ? subcategories
+      : subcategories.filter((sub) => sub.productTypeCode === selectedType?.code);
 
   const allSizes = useMemo(
     () =>
@@ -88,6 +108,7 @@ const Shop = () => {
 
   const filtered = products.filter((p) => {
     const matchesCategory = selectedCategory === "all" || p.category?.toLowerCase() === selectedCategory.toLowerCase();
+    const matchesStyle = !selectedStyle || styleSlug(p.subcategory || "") === selectedStyle;
     const matchesCulture = !selectedCulture || p.culture_pillar === selectedCulture;
     const haystack = `${p.name} ${p.benefit} ${p.brand || ""}`.toLowerCase();
     const matchesSearch = !searchQuery || haystack.includes(searchQuery.toLowerCase());
@@ -96,7 +117,7 @@ const Shop = () => {
     const matchesPrice = p.price >= priceMin && p.price <= priceMax;
     const matchesStock = !inStockOnly || (p.stock ?? 0) > 0;
     const matchesSize = selectedSize === "all" || (p.types || []).some((t) => t.name === selectedSize);
-    return matchesCategory && matchesCulture && matchesSearch && matchesBrand && matchesPrice && matchesStock && matchesSize;
+    return matchesCategory && matchesStyle && matchesCulture && matchesSearch && matchesBrand && matchesPrice && matchesStock && matchesSize;
   });
 
   const sorted = [...filtered].sort((a, b) => {
@@ -123,6 +144,7 @@ const Shop = () => {
 
   const activeFilterCount =
     (selectedCategory !== "all" ? 1 : 0) +
+    (selectedStyle ? 1 : 0) +
     (selectedCulture ? 1 : 0) +
     (searchQuery ? 1 : 0) +
     (selectedBrands.length ? 1 : 0) +
@@ -132,6 +154,7 @@ const Shop = () => {
 
   const clearFilters = () => {
     setSelectedCategory("all");
+    setSelectedStyle("");
     setSelectedCulture("");
     setSearchQuery("");
     setSelectedBrands([]);
@@ -174,8 +197,9 @@ const Shop = () => {
               </h1>
               <p className="text-sm leading-relaxed text-gray-500 sm:text-base">
                 {selectedCategory === "all"
-                  ? "T shirts, football jerseys, short sleeve shirts and vests. Everyday pieces for the street, the pitch and everything in between."
-                  : "Explore the category and find the fit that feels like you."}
+                  ? "Tees, vests, short-sleeve shirts and shorts from Blantyre. A full streetwear wardrobe built to layer, mix and speak for itself."
+                  : selectedType?.description ||
+                    "Explore the category and find the fit that feels like you."}
               </p>
             </div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
@@ -416,6 +440,42 @@ const Shop = () => {
               }`}
             >
               {c.name}
+            </button>
+          ))}
+        </div>
+
+        {/* STYLE CHIPS */}
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-400">Style</span>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedStyle("");
+              updateParam("style", "");
+            }}
+            className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+              selectedStyle === ""
+                ? "border-primary bg-primary text-white"
+                : "border-gray-200 bg-white text-gray-600 hover:border-primary/40 hover:text-primary"
+            }`}
+          >
+            All styles
+          </button>
+          {visibleSubcategories.map((sub) => (
+            <button
+              key={sub.id}
+              type="button"
+              onClick={() => {
+                setSelectedStyle(sub.slug);
+                updateParam("style", sub.slug);
+              }}
+              className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                selectedStyle === sub.slug
+                  ? "border-primary bg-primary text-white"
+                  : "border-gray-200 bg-white text-gray-600 hover:border-primary/40 hover:text-primary"
+              }`}
+            >
+              {sub.name}
             </button>
           ))}
         </div>

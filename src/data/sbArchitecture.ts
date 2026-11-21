@@ -3,10 +3,31 @@ import type { Product, ProductType } from "./products";
 export const SB_BRAND_ID = "11111111-1111-1111-1111-111111111111";
 
 export const SB_PRODUCT_TYPES = [
-  { code: "TEE", label: "T-Shirts", slug: "t-shirts" },
-  { code: "VEST", label: "Vests", slug: "vests" },
-  { code: "SHORT_SLEEVE_SHIRT", label: "Shirts", slug: "short-sleeve-shirts" },
-  { code: "SHORTS", label: "Shorts", slug: "shorts" },
+  {
+    code: "TEE",
+    label: "T-Shirts",
+    slug: "t-shirts",
+    description:
+      "Graphic, oversized, statement, essential and limited-drop tees. The piece that started the conversation.",
+  },
+  {
+    code: "VEST",
+    label: "Vests",
+    slug: "vests",
+    description: "Graphic, oversized, essential and summer vests. Made for layering or wearing on their own.",
+  },
+  {
+    code: "SHORT_SLEEVE_SHIRT",
+    label: "Shirts",
+    slug: "short-sleeve-shirts",
+    description: "Graphic, printed, relaxed-fit and statement shirts for a lighter layer.",
+  },
+  {
+    code: "SHORTS",
+    label: "Shorts",
+    slug: "shorts",
+    description: "Street, graphic, relaxed, utility and matching shorts built to complete every outfit.",
+  },
 ] as const;
 
 export type SbProductTypeCode = (typeof SB_PRODUCT_TYPES)[number]["code"];

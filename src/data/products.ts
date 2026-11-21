@@ -16,6 +16,7 @@ export interface Product {
   compare_at_price?: number | null;
   cost_price?: number | null;
   category: Category;
+  subcategory?: string;
   collection_name?: string;
   product_type_code?: string | null;
   fit?: string;

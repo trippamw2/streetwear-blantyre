@@ -18,6 +18,7 @@ import { toast } from "@/hooks/use-toast";
 
 type ProductTypeRow = Database["public"]["Tables"]["sb_product_types"]["Row"];
 type CompleteLookRuleRow = Database["public"]["Tables"]["sb_complete_look_rules"]["Row"];
+type SubcategoryRow = Database["public"]["Tables"]["sb_product_subcategories"]["Row"];
 
 interface CompleteLookRuleForm {
   source_type_code: string;
@@ -30,6 +31,14 @@ interface ProductTypeForm {
   code: string;
   label: string;
   description: string;
+  sort_order: number;
+  is_active: boolean;
+}
+
+interface SubcategoryForm {
+  product_type_code: string;
+  name: string;
+  slug: string;
   sort_order: number;
   is_active: boolean;
 }
@@ -49,10 +58,24 @@ const emptyRule: CompleteLookRuleForm = {
   is_active: true,
 };
 
+const emptySubcategory: SubcategoryForm = {
+  product_type_code: "TEE",
+  name: "",
+  slug: "",
+  sort_order: 0,
+  is_active: true,
+};
+
 const toNumber = (value: string) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
 };
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 
 const SbProductTypes = () => {
   const [rows, setRows] = useState<ProductTypeRow[]>([]);
@@ -68,13 +91,19 @@ const SbProductTypes = () => {
   const [ruleForm, setRuleForm] = useState<CompleteLookRuleForm>(emptyRule);
   const [ruleSaving, setRuleSaving] = useState(false);
 
+  const [subcategories, setSubcategories] = useState<SubcategoryRow[]>([]);
+  const [subcategoryDialogOpen, setSubcategoryDialogOpen] = useState(false);
+  const [editingSubcategory, setEditingSubcategory] = useState<SubcategoryRow | null>(null);
+  const [subcategoryForm, setSubcategoryForm] = useState<SubcategoryForm>(emptySubcategory);
+  const [subcategorySaving, setSubcategorySaving] = useState(false);
+
   useEffect(() => {
     void fetchAll();
   }, []);
 
   const fetchAll = async () => {
     setLoading(true);
-    const [typesRes, rulesRes] = await Promise.all([
+    const [typesRes, rulesRes, subcategoriesRes] = await Promise.all([
       supabase
         .from("sb_product_types")
         .select("*")
@@ -86,17 +115,25 @@ const SbProductTypes = () => {
         .select("*")
         .eq("brand_id", SB_BRAND_ID)
         .order("sort_order", { ascending: true }),
+      supabase
+        .from("sb_product_subcategories")
+        .select("*")
+        .eq("brand_id", SB_BRAND_ID)
+        .order("product_type_code", { ascending: true })
+        .order("sort_order", { ascending: true }),
     ]);
 
-    if (typesRes.error || rulesRes.error) {
+    const failed = [typesRes, rulesRes, subcategoriesRes].find((result) => result.error);
+    if (failed?.error) {
       toast({
         title: "Error loading SB taxonomy",
-        description: (typesRes.error || rulesRes.error)?.message,
+        description: failed.error.message,
         variant: "destructive",
       });
     } else {
       setRows(typesRes.data || []);
       setRules(rulesRes.data || []);
+      setSubcategories(subcategoriesRes.data || []);
     }
     setLoading(false);
   };
@@ -267,6 +304,88 @@ const SbProductTypes = () => {
       return;
     }
     toast({ title: "Rule deleted" });
+    await fetchAll();
+  };
+
+  const openSubcategoryDialog = (row?: SubcategoryRow) => {
+    setEditingSubcategory(row || null);
+    setSubcategoryForm(
+      row
+        ? {
+            product_type_code: row.product_type_code,
+            name: row.name,
+            slug: row.slug,
+            sort_order: row.sort_order,
+            is_active: row.is_active,
+          }
+        : emptySubcategory,
+    );
+    setSubcategoryDialogOpen(true);
+  };
+
+  const resetSubcategoryDialog = (open: boolean) => {
+    setSubcategoryDialogOpen(open);
+    if (!open) {
+      setEditingSubcategory(null);
+      setSubcategoryForm(emptySubcategory);
+    }
+  };
+
+  const saveSubcategory = async () => {
+    const name = subcategoryForm.name.trim();
+    if (!subcategoryForm.product_type_code || !name) {
+      toast({ title: "Product type and name are required", variant: "destructive" });
+      return;
+    }
+
+    setSubcategorySaving(true);
+    try {
+      const payload = {
+        brand_id: SB_BRAND_ID,
+        product_type_code: subcategoryForm.product_type_code,
+        name,
+        slug: subcategoryForm.slug.trim() || slugify(name),
+        sort_order: subcategoryForm.sort_order,
+        is_active: subcategoryForm.is_active,
+      };
+      const { error } = editingSubcategory
+        ? await supabase
+            .from("sb_product_subcategories")
+            .update(payload)
+            .eq("id", editingSubcategory.id)
+            .eq("brand_id", SB_BRAND_ID)
+        : await supabase.from("sb_product_subcategories").insert(payload);
+
+      if (error) {
+        toast({ title: "Error saving subcategory", description: error.message, variant: "destructive" });
+        return;
+      }
+      toast({ title: editingSubcategory ? "Subcategory updated!" : "Subcategory created!" });
+      resetSubcategoryDialog(false);
+      await fetchAll();
+    } catch (err) {
+      toast({
+        title: "Error saving subcategory",
+        description: err instanceof Error ? err.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setSubcategorySaving(false);
+    }
+  };
+
+  const removeSubcategory = async (row: SubcategoryRow) => {
+    if (!window.confirm(`Delete subcategory "${row.name}"?`)) return;
+    const { error } = await supabase
+      .from("sb_product_subcategories")
+      .delete()
+      .eq("id", row.id)
+      .eq("brand_id", SB_BRAND_ID);
+    if (error) {
+      toast({ title: "Error deleting subcategory", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Subcategory deleted" });
     await fetchAll();
   };
 
@@ -525,6 +644,143 @@ const SbProductTypes = () => {
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
                     No complete-the-look rules yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="pt-4">
+        <div className="mb-3 flex items-center justify-between">
+          <div>
+            <h2 className="font-display text-xl font-bold">Category Subcategories</h2>
+            <p className="text-sm text-gray-500">
+              Manage selectable styles such as Graphic, Oversized and Utility within each category.
+            </p>
+          </div>
+          <Dialog open={subcategoryDialogOpen} onOpenChange={resetSubcategoryDialog}>
+            <DialogTrigger asChild>
+              <Button onClick={() => openSubcategoryDialog()}>
+                <Plus className="h-4 w-4" /> Add Subcategory
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-lg">
+              <DialogHeader>
+                <DialogTitle>{editingSubcategory ? "Edit Subcategory" : "New Subcategory"}</DialogTitle>
+              </DialogHeader>
+              <div className="mt-4 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Category *</Label>
+                    <select
+                      value={subcategoryForm.product_type_code}
+                      onChange={(e) =>
+                        setSubcategoryForm((p) => ({ ...p, product_type_code: e.target.value }))
+                      }
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    >
+                      {rows.filter((row) => row.is_active).map((row) => (
+                        <option key={row.id} value={row.code}>
+                          {row.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Name *</Label>
+                    <Input
+                      value={subcategoryForm.name}
+                      onChange={(e) => setSubcategoryForm((p) => ({ ...p, name: e.target.value }))}
+                      placeholder="Graphic"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Slug</Label>
+                    <Input
+                      value={subcategoryForm.slug}
+                      onChange={(e) => setSubcategoryForm((p) => ({ ...p, slug: e.target.value }))}
+                      placeholder="auto-from-name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Sort Order</Label>
+                    <Input
+                      type="number"
+                      value={subcategoryForm.sort_order}
+                      onChange={(e) => setSubcategoryForm((p) => ({ ...p, sort_order: toNumber(e.target.value) }))}
+                    />
+                  </div>
+                </div>
+                <label className="flex w-fit items-center gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={subcategoryForm.is_active}
+                    onChange={(e) => setSubcategoryForm((p) => ({ ...p, is_active: e.target.checked }))}
+                    className="h-4 w-4 rounded border-gray-300 accent-primary"
+                  />
+                  Active
+                </label>
+                <Button
+                  onClick={() => void saveSubcategory()}
+                  disabled={subcategorySaving || !subcategoryForm.product_type_code || !subcategoryForm.name.trim()}
+                  className="w-full"
+                >
+                  {subcategorySaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                  {editingSubcategory ? "Update" : "Create"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <div className="overflow-hidden rounded-xl border bg-white">
+          <table className="w-full text-sm">
+            <thead className="border-b bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left font-medium">Category</th>
+                <th className="px-4 py-3 text-left font-medium">Name</th>
+                <th className="px-4 py-3 text-left font-medium">Slug</th>
+                <th className="px-4 py-3 text-center font-medium">Order</th>
+                <th className="px-4 py-3 text-center font-medium">Active</th>
+                <th className="px-4 py-3 text-right font-medium">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subcategories.map((row) => (
+                <tr key={row.id} className="border-b last:border-b-0 hover:bg-gray-50">
+                  <td className="px-4 py-3 font-mono text-xs">{row.product_type_code}</td>
+                  <td className="px-4 py-3 font-medium">{row.name}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-gray-500">{row.slug}</td>
+                  <td className="px-4 py-3 text-center">{row.sort_order}</td>
+                  <td className="px-4 py-3 text-center">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                        row.is_active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {row.is_active ? "Yes" : "No"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      <Button variant="ghost" size="icon" onClick={() => openSubcategoryDialog(row)}>
+                        <Edit className="h-4 w-4 text-gray-600" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => void removeSubcategory(row)}>
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {subcategories.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                    No subcategories yet.
                   </td>
                 </tr>
               )}

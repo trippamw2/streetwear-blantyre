@@ -3869,6 +3869,7 @@ export type Database = {
           specs: Json | null
           status: string
           stock_quantity: number | null
+          subcategory: string | null
           supplier_id: string | null
           updated_at: string
           wearable_category: string | null
@@ -3918,6 +3919,7 @@ export type Database = {
           specs?: Json | null
           status?: string
           stock_quantity?: number | null
+          subcategory?: string | null
           supplier_id?: string | null
           updated_at?: string
           wearable_category?: string | null
@@ -3967,6 +3969,7 @@ export type Database = {
           specs?: Json | null
           status?: string
           stock_quantity?: number | null
+          subcategory?: string | null
           supplier_id?: string | null
           updated_at?: string
           wearable_category?: string | null
@@ -4727,6 +4730,54 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      sb_product_subcategories: {
+        Row: {
+          brand_id: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          product_type_code: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          brand_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          product_type_code: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          product_type_code?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sb_product_subcategories_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sb_product_subcategories_brand_id_product_type_code_fkey"
+            columns: ["brand_id", "product_type_code"]
+            isOneToOne: false
+            referencedRelation: "sb_product_types"
+            referencedColumns: ["brand_id", "code"]
           },
         ]
       }

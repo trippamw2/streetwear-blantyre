@@ -303,6 +303,7 @@ const ProductDetail = () => {
   const specs = [
     { label: "Brand", value: getBrandName(product.brand) },
     { label: "Category", value: getProductTypeLabel(product) },
+    ...(product.subcategory ? [{ label: "Style", value: product.subcategory }] : []),
     { label: "Fit", value: product.fit || "Relaxed fit" },
     { label: "Material", value: product.material || "Cotton blend" },
     { label: "Gender", value: product.gender_classification || "Unisex" },

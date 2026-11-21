@@ -29,10 +29,19 @@ const Home = () => {
   const heroPlacement = placements.find((placement) => placement.sectionKey === "home_hero" && placement.isActive);
   const heroCampaign = campaigns.find((campaign) => campaign.id === heroPlacement?.campaignId);
   const heroImage = heroPlacement?.imageOverride || heroCampaign?.heroImage || hero;
+  const heroHref = heroPlacement?.ctaHref || heroCampaign?.ctaHref || "/shop";
 
+  const newArrivalsPlacement = placements.find(
+    (placement) => placement.sectionKey === "new_arrivals" && placement.isActive,
+  );
   const teePlacement = placements.find((placement) => placement.sectionKey === "sb_tee" && placement.isActive);
+  const teeHref = teePlacement?.ctaHref || "/shop?category=t-shirts";
+  const completeLookPlacement = placements.find(
+    (placement) => placement.sectionKey === "complete_look" && placement.isActive,
+  );
   const streetPlacement = placements.find((placement) => placement.sectionKey === "sb_street" && placement.isActive);
   const streetCampaign = campaigns.find((campaign) => campaign.id === streetPlacement?.campaignId);
+  const streetHref = streetPlacement?.ctaHref || streetCampaign?.ctaHref || "/shop";
 
   const newArrivals = pickBalancedNewArrivals(products);
   const teeProducts = products.filter((product) => getProductTypeCode(product) === "TEE");
@@ -77,11 +86,13 @@ const Home = () => {
               {heroPlacement?.headline || heroCampaign?.headline || "Wear What Speaks."}
             </h1>
             <p className="max-w-lg text-base leading-relaxed text-white/75 sm:text-lg">
-              A full streetwear wardrobe from Blantyre, Malawi. Built to layer, mix and speak for itself.
+              {heroPlacement?.body ||
+                heroCampaign?.description ||
+                "A full streetwear wardrobe from Blantyre, Malawi. Built to layer, mix and speak for itself."}
             </p>
             <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:gap-4">
               <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
-                <Link to="/shop">
+                <Link to={heroHref}>
                   {heroPlacement?.ctaLabel || heroCampaign?.ctaLabel || "Shop the collection"} <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -117,19 +128,23 @@ const Home = () => {
         <div className="container">
           <div className="mb-8 flex items-end justify-between gap-4 sm:mb-10">
             <div>
-              <p className="eyebrow mb-2 text-primary">New Arrivals</p>
+              <p className="eyebrow mb-2 text-primary">
+                {newArrivalsPlacement?.headline || "New Arrivals"}
+              </p>
               <h2 className="font-display text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                {newArrivals.length > 0 ? "Fresh from the wardrobe" : "New drops are landing soon"}
+                {newArrivals.length > 0
+                  ? newArrivalsPlacement?.body || "Fresh from the wardrobe"
+                  : "New drops are landing soon"}
               </h2>
               <p className="mt-2 text-sm text-gray-500">
                 Tees, vests, shirts and shorts — the latest pieces across all four categories.
               </p>
             </div>
             <Link
-              to="/shop?sort=new"
+              to={newArrivalsPlacement?.ctaHref || "/shop?sort=new"}
               className="hidden shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-gray-900 hover:text-primary sm:inline-flex"
             >
-              View all <ArrowRight className="h-3.5 w-3.5" />
+              {newArrivalsPlacement?.ctaLabel || "View all"} <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
@@ -179,10 +194,10 @@ const Home = () => {
               </p>
             </div>
             <Link
-              to="/shop?category=t-shirts"
+              to={teeHref}
               className="hidden shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-gray-900 hover:text-primary sm:inline-flex"
             >
-              Shop T-Shirts <ArrowRight className="h-3.5 w-3.5" />
+              {teePlacement?.ctaLabel || "Shop T-Shirts"} <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
@@ -220,7 +235,7 @@ const Home = () => {
 
           <div className="mt-8 flex justify-center sm:hidden">
             <Button asChild variant="hero">
-              <Link to="/shop?category=t-shirts">Shop T-Shirts <ArrowRight className="h-4 w-4" /></Link>
+              <Link to={teeHref}>{teePlacement?.ctaLabel || "Shop T-Shirts"} <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </div>
         </div>
@@ -232,16 +247,21 @@ const Home = () => {
           <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="eyebrow mb-2 text-white/45">Shop the outfit</p>
-              <h2 className="font-display text-3xl font-extrabold uppercase text-white sm:text-4xl">Complete the Look</h2>
+              <h2 className="font-display text-3xl font-extrabold uppercase text-white sm:text-4xl">
+                {completeLookPlacement?.headline || "Complete the Look"}
+              </h2>
               <p className="mt-2 max-w-lg text-sm text-white/60">
-                The wardrobe is made to mix. Start with one piece, build the full fit.
+                {completeLookPlacement?.body ||
+                  "The wardrobe is made to mix. Start with one piece, build the full fit."}
               </p>
             </div>
-            {featureLook && (
-              <Link to={`/looks/${featureLook.slug}`} className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-white hover:text-white/70">
-                {featureLook.title} <ArrowUpRight className="h-3.5 w-3.5" />
-              </Link>
-            )}
+            <Link
+              to={completeLookPlacement?.ctaHref || "/looks"}
+              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-white hover:text-white/70"
+            >
+              {completeLookPlacement?.ctaLabel || (featureLook ? featureLook.title : "Explore all looks")}{" "}
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
@@ -316,7 +336,7 @@ const Home = () => {
                 <Link to="/stories">Read the stories <ArrowRight className="h-4 w-4" /></Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link to="/collections">Shop collections</Link>
+                <Link to={streetHref}>{streetPlacement?.ctaLabel || streetCampaign?.ctaLabel || "Shop the wardrobe"}</Link>
               </Button>
             </div>
           </div>
