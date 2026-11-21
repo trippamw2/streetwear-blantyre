@@ -1,7 +1,7 @@
 {
   "name": "Lake Fresh Fish Mart",
   "short_name": "Lake Fresh",
-  "description": "Fresh from the Lake. Ready for Your Table. Order fresh fish, seasonings and a free recipe with next-day delivery in Blantyre.",
+  "description": "Fresh from the Lake. Ready for Your Table. Order fresh fish, seasonings and a free recipe. Order by 8 PM, delivered tomorrow in Blantyre.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

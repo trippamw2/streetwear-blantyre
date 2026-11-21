@@ -23,6 +23,7 @@ import {
   calculateFinalPrice,
 } from "@/lib/lfDelivery";
 import { buildLakeFreshPaymentRef } from "@/lib/lfPayments";
+import { lfDisplayCopy } from "@/lib/lfCopy";
 import { sendOrderConfirmationEmail } from "@/lib/brevo";
 import { formatMWK } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,7 +39,7 @@ const prepLabel = (value: string) =>
         ? "Cleaned and cut"
         : value === "seasoned"
           ? "Seasoned"
-          : value;
+          : lfDisplayCopy(value);
 
 const itemLine = (item: LakeFreshCartItem) => {
   if (item.kind === "unit") {

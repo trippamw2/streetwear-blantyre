@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatDeliveryDate } from "@/lib/lfDelivery";
 import { buildLakeFreshPaymentRef, formatLakeFreshPaymentRef } from "@/lib/lfPayments";
+import { lfDisplayCopy } from "@/lib/lfCopy";
 import { isOrderPaid, isOrderPayable } from "@/lib/paymentStatus";
 import { verifyOrderPayment } from "@/lib/paymentVerify";
 import { lfWhatsAppLink } from "@/lib/whatsapp";
@@ -27,7 +28,13 @@ const statusCopy: Record<string, { label: string; tone: string }> = {
 };
 
 const prepLabel = (value: string) =>
-  value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cut in pieces" : value;
+  value === "whole"
+    ? "Whole"
+    : value === "cleaned"
+      ? "Cleaned"
+      : value === "portioned"
+        ? "Cut in pieces"
+        : lfDisplayCopy(value);
 
 type OrderRow = {
   id: string;
@@ -70,6 +77,7 @@ type ReconciliationRow = {
   estimated_total_mwk: number;
   final_total_mwk: number | null;
   difference_mwk: number | null;
+  customer_confirmed_at: string | null;
 };
 
 type OrderDetail = {
@@ -87,6 +95,7 @@ const LakeFreshOrder = () => {
   const paymentParam = searchParams.get("payment");
   const verifiedRef = useRef(false);
   const [verifyState, setVerifyState] = useState<"idle" | "checking" | "paid" | "pending" | "failed">("idle");
+  const [confirmingTotal, setConfirmingTotal] = useState(false);
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["lf", "order", id],
@@ -205,6 +214,38 @@ const LakeFreshOrder = () => {
       description: `Order ${paymentRef}`,
     });
     toast({ title: "Redirecting to PayChangu…" });
+  };
+
+  const confirmTotal = async () => {
+    if (!reconciliation) return;
+    setConfirmingTotal(true);
+    try {
+      const accessToken = sessionStorage.getItem(`lf_order_access_${order.id}`);
+      const { data, error } = await supabase.rpc("lf_customer_confirm_reconciliation", {
+        p_order_id: order.id,
+        p_access_token: accessToken || null,
+      });
+      if (error) throw new Error(error.message);
+      const result = data as { ok?: boolean; reason?: string };
+      if (!result?.ok) {
+        const reasons: Record<string, string> = {
+          unauthorized: "We could not confirm this order. Please open it from your confirmation message.",
+          not_ready: "The final total is not ready yet.",
+          not_found: "We could not find this price check.",
+        };
+        throw new Error(reasons[result?.reason || ""] || "We could not confirm this total.");
+      }
+      toast({ title: "Thank you", description: "You have agreed to the final total." });
+      await refetch();
+    } catch (err) {
+      toast({
+        title: "Could not confirm",
+        description: err instanceof Error ? err.message : "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setConfirmingTotal(false);
+    }
   };
 
   return (
@@ -443,8 +484,29 @@ const LakeFreshOrder = () => {
               </p>
               {reconciliation.difference_mwk != null && (
                 <p className="mt-1 text-xs text-[#073B78]/70">
-                  Difference {formatMWK(reconciliation.difference_mwk)}. {reconciliation.status === "confirmed" ? "You agreed to this total." : "We will tell you before delivery."}
+                  {reconciliation.difference_mwk === 0
+                    ? "This is the same as what you paid."
+                    : `Difference ${formatMWK(reconciliation.difference_mwk)}.`}{" "}
+                  {reconciliation.status === "confirmed" || reconciliation.customer_confirmed_at
+                    ? "You agreed to this total."
+                    : "Please agree before we send your fish."}
                 </p>
+              )}
+
+              {reconciliation.status === "awaiting_confirmation" && reconciliation.final_total_mwk != null && (
+                <button
+                  type="button"
+                  onClick={confirmTotal}
+                  disabled={confirmingTotal}
+                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#073B78] px-4 py-2.5 text-xs font-extrabold text-white disabled:opacity-60"
+                >
+                  {confirmingTotal ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                  )}
+                  I agree to this total
+                </button>
               )}
             </div>
           )}

@@ -119,16 +119,14 @@ export const AdminLayout = () => {
         .eq("user_id", user.id)
         .eq("role", "admin")
         .maybeSingle(),
-      supabase
-        .from("staff_permissions")
-        .select("brand_id")
-        .eq("user_id", user.id)
-        .eq("brand_id", brandId)
-        .limit(1),
+      supabase.rpc("has_brand_permission", {
+        p_brand_id: brandId,
+        p_permission: "brand.access",
+      }),
     ])
-      .then(([roleRes, staffRes]) => {
+      .then(([roleRes, permissionRes]) => {
         if (cancelled) return;
-        const allowed = Boolean(roleRes.data) || (staffRes.data || []).length > 0;
+        const allowed = Boolean(roleRes.data) || permissionRes.data === true;
         setAccess(allowed ? "allowed" : "denied");
       })
       .catch(() => {

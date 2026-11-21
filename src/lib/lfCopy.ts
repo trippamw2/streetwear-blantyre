@@ -1,5 +1,11 @@
 /** Keep catalogue text in the Lake Fresh voice even when an admin edits it. */
 const REPLACEMENTS: Array<[RegExp, string]> = [
+  [/\bLF-SUB-/g, "LF SUB "],
+  [/\bLF-/g, "LF "],
+  [/[—–·]/g, " "],
+  // Plain words first, so "ready-to-cook" cannot turn into "ready to cook".
+  [/([A-Za-z])-([A-Za-z])/g, "$1 $2"],
+  [/\bLF\s+SUB-/g, "LF SUB "],
   [/\bsignature spices\b/gi, "spice blends"],
   [/\bsignature spice\b/gi, "spice blend"],
   [/\bsignature\b/gi, "spice blend"],
@@ -14,11 +20,7 @@ const REPLACEMENTS: Array<[RegExp, string]> = [
   [/\bmarinades?\b/gi, "spice blends"],
   [/\bready to cook\b/gi, "ready for your pan"],
   [/\bmeal kits?\b/gi, "fish and spices"],
-  [/\bprep(?:ping|aration|ared|aring)?\b/gi, "getting ready"],
-  [/\bLF-SUB-/g, "LF SUB "],
-  [/\bLF-/g, "LF "],
-  [/[—–·]/g, " "],
-  [/([A-Za-z])-([A-Za-z])/g, "$1 $2"],
+  [/\bprep(?:p?ed|ping|arations?|ared|aring|s)?\b/gi, "getting ready"],
 ];
 
 export const lfDisplayCopy = (value?: string | null): string => {

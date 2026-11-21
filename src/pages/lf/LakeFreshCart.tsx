@@ -5,6 +5,7 @@ import { SEO } from "@/components/SEO";
 import { useLakeFreshCart } from "@/contexts/LakeFreshCartContext";
 import { useLakeFreshDeliveryConfig } from "@/hooks/useLakeFresh";
 import { calculateFinalPrice, getEffectiveWeightKg } from "@/lib/lfDelivery";
+import { lfDisplayCopy } from "@/lib/lfCopy";
 import { formatMWK } from "@/data/products";
 
 const prepLabel = (value: string) =>
@@ -16,7 +17,7 @@ const prepLabel = (value: string) =>
         ? "Cleaned and cut"
         : value === "seasoned"
           ? "Seasoned"
-          : value;
+          : lfDisplayCopy(value);
 
 const LakeFreshCart = () => {
   const { items, setWeight, setQuantity, setPreparation, setRecipe, remove, subtotal, totalWeight } = useLakeFreshCart();

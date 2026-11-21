@@ -135,3 +135,27 @@
 -- 20. Server secret fallbacks are removed from Vercel handlers
 -- grep -R "VITE_BREVO_API_KEY|VITE_SUPABASE_SERVICE_KEY|VITE_PAYCHANGU" api/ -- expect no matches
 
+-- 21. P1 named permissions and append only records (20261122000000)
+-- select public.has_brand_permission('22222222-2222-2222-2222-222222222222','lf.orders.write');
+--   -- expect true only for an LF staff user with that named permission
+-- select has_function_privilege('service_role', 'public.user_has_brand_permission(uuid, uuid, text)', 'EXECUTE'); -- expect true
+-- select has_function_privilege('anon', 'public.user_has_brand_permission(uuid, uuid, text)', 'EXECUTE'); -- expect false
+-- select tgname from pg_trigger t join pg_class c on c.oid=t.tgrelid
+-- where c.relname in ('lf_reconciliation_audit','lf_refund_audit','auth_audit_log','lf_delivery_events')
+--   and t.tgname like '%append_only%'; -- expect 4 rows
+
+-- 22. P1 reconciliation is server owned and customer confirmed
+-- select has_function_privilege('anon', 'public.lf_admin_save_preparation(uuid, numeric)', 'EXECUTE'); -- expect false
+-- select has_function_privilege('anon', 'public.lf_customer_confirm_reconciliation(uuid, text)', 'EXECUTE'); -- expect true
+-- select privilege_type from information_schema.role_table_grants
+-- where grantee='authenticated' and table_name in ('order_preparation','price_reconciliation')
+--   and privilege_type in ('INSERT','UPDATE','DELETE'); -- expect 0 rows
+-- select count(*) from public.lf_reconciliation_audit where action='customer_confirmed'; -- expect 1 after confirmation
+
+-- 23. P1 traceability tables are brand scoped
+-- select tablename from pg_tables where schemaname='public'
+--   and tablename in ('lf_lot_records','lf_qa_checks','lf_recall_events','lf_recall_lots'); -- expect 4 rows
+-- select count(*) from information_schema.role_table_grants
+-- where grantee='anon' and table_name like 'lf\_%' and table_name in
+--   ('lf_lot_records','lf_qa_checks','lf_recall_events','lf_recall_lots'); -- expect 0
+

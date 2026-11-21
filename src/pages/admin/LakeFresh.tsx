@@ -1641,6 +1641,7 @@ const AdminLakeFresh = () => {
     if (!result?.ok) {
       const reasons: Record<string, string> = {
         invalid_transition: "That status change is not allowed for this order.",
+        confirmation_required: "Wait for the customer to agree to the final total first.",
         reason_required: "Add a reason before refunding.",
         no_access: "You do not have access to this order.",
         order_not_found: "That order was not found.",
@@ -1750,42 +1751,36 @@ const AdminLakeFresh = () => {
   };
 
   // ---- Preparation actions ----
-  const savePreparation = async (prepId: string, packedWeight: string, finalPrice: string) => {
-    const { error } = await supabase
-      .from("order_preparation")
-      .update({
-        packed_weight_kg: packedWeight ? Number(packedWeight) : null,
-        final_price_mwk: finalPrice ? Number(finalPrice) : null,
-        reconciled_at: new Date().toISOString(),
-        reconciled_by: user?.id || null,
-      })
-      .eq("id", prepId)
-      .eq("brand_id", LF_BRAND_ID);
-    if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
-    else {
-      toast({ title: "Preparation saved" });
-      await loadPreparations();
-      // Status automation: if all prep rows for the order are reconciled, move order to 'processing'
-      try {
-        const { data: prepRow } = await supabase.from("order_preparation").select("order_item_id").eq("id", prepId).maybeSingle();
-        if (prepRow?.order_item_id) {
-          const { data: item } = await supabase.from("order_items").select("order_id").eq("id", prepRow.order_item_id).maybeSingle();
-          if (item?.order_id) {
-            const { data: allPrep } = await supabase
-              .from("order_preparation")
-              .select("id, reconciled_at, order_item_id")
-              .in("order_item_id", (await supabase.from("order_items").select("id").eq("order_id", item.order_id)).data?.map((x: any) => x.id) || []);
-            const allDone = (allPrep || []).length > 0 && (allPrep || []).every((p: any) => p.reconciled_at);
-            if (allDone) {
-              const moved = await callSetOrderStatus(item.order_id, "processing");
-              if (moved) await finishWrite(loadOrders);
-            }
-          }
-        }
-      } catch (e) {
-        console.warn("status automation failed", e);
-      }
+  const savePreparation = async (prepId: string, packedWeight: string) => {
+    const { data, error } = await supabase.rpc("lf_admin_save_preparation", {
+      p_preparation_id: prepId,
+      p_packed_weight_kg: packedWeight ? Number(packedWeight) : null,
+    });
+    if (error) {
+      toast({ title: "Save failed", description: error.message, variant: "destructive" });
+      return;
     }
+
+    const result = data as any;
+    if (!result?.ok) {
+      const reasons: Record<string, string> = {
+        invalid_weight: "Enter a packed weight above zero.",
+        no_access: "You do not have access to this order.",
+        order_not_editable: "This order can no longer be changed.",
+        price_missing: "This item has no price per kilogram.",
+        reconciliation_missing: "The price check for this order is missing.",
+      };
+      toast({
+        title: "Save failed",
+        description: reasons[result?.reason] || result?.reason || "Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({ title: "Final weight saved", description: "The customer can now agree to this total." });
+    await loadPreparations();
+    await loadReconciliations();
   };
 
   // ---- Zone actions ----
@@ -3449,6 +3444,7 @@ const AdminLakeFresh = () => {
                     <th className="px-4 py-3 text-right">Final</th>
                     <th className="px-4 py-3 text-right">Difference</th>
                     <th className="px-4 py-3 text-left">Status</th>
+                    <th className="px-4 py-3 text-left">Customer</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -3460,10 +3456,13 @@ const AdminLakeFresh = () => {
                       <td className="px-4 py-3 text-right">{r.final_total_mwk == null ? "N/A" : formatMWK(r.final_total_mwk)}</td>
                       <td className="px-4 py-3 text-right">{r.difference_mwk == null ? "N/A" : formatMWK(r.difference_mwk)}</td>
                       <td className="px-4 py-3 text-xs font-bold">{r.status}</td>
+                      <td className="px-4 py-3 text-xs">
+                        {r.customer_confirmed_at ? "Agreed" : "Waiting"}
+                      </td>
                     </tr>
                   ))}
                   {reconciliations.length === 0 && (
-                    <tr><td colSpan={6} className="px-4 py-6 text-center text-gray-500">No price checks yet.</td></tr>
+                    <tr><td colSpan={7} className="px-4 py-6 text-center text-gray-500">No price checks yet.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -3851,9 +3850,8 @@ const AdminLakeFresh = () => {
 
 export default AdminLakeFresh;
 
-const PreparationRow = ({ prep, onSave }: { prep: any; onSave: (id: string, packed: string, final: string) => void }) => {
+const PreparationRow = ({ prep, onSave }: { prep: any; onSave: (id: string, packed: string) => void }) => {
   const [packed, setPacked] = useState(prep.packed_weight_kg ? String(prep.packed_weight_kg) : "");
-  const [finalPrice, setFinalPrice] = useState(prep.final_price_mwk ? String(prep.final_price_mwk) : "");
   return (
     <tr className="border-t">
       <td className="px-4 py-3 text-xs font-mono">{prep.order?.customer_name || prep.item?.order_id?.slice(0, 8)}</td>
@@ -3863,8 +3861,12 @@ const PreparationRow = ({ prep, onSave }: { prep: any; onSave: (id: string, pack
         <Input className="h-8 w-20" type="number" step="0.01" value={packed} onChange={(e) => setPacked(e.target.value)} />
       </td>
       <td className="px-4 py-3 text-right">{prep.price_per_kg_mwk ? formatMWK(prep.price_per_kg_mwk) : "N/A"}</td>
-      <td className="px-4 py-3">
-        <Input className="h-8 w-24" type="number" value={finalPrice} onChange={(e) => setFinalPrice(e.target.value)} />
+      <td className="px-4 py-3 text-right">
+        {packed && prep.price_per_kg_mwk
+          ? formatMWK(Number(packed) * Number(prep.price_per_kg_mwk))
+          : prep.final_price_mwk
+            ? formatMWK(prep.final_price_mwk)
+            : "N/A"}
       </td>
       <td className="px-4 py-3 text-xs">
         {prep.reconciled_at ? (
@@ -3878,7 +3880,7 @@ const PreparationRow = ({ prep, onSave }: { prep: any; onSave: (id: string, pack
         )}
       </td>
       <td className="px-4 py-3">
-        <Button size="sm" onClick={() => onSave(prep.id, packed, finalPrice)}>Save</Button>
+        <Button size="sm" onClick={() => onSave(prep.id, packed)}>Save</Button>
       </td>
     </tr>
   );

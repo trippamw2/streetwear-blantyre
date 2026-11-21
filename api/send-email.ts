@@ -7,14 +7,13 @@ import { createClient } from "@supabase/supabase-js";
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const BREVO_API_URL = "https://api.brevo.com/v3";
 
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
-const ADMIN_EMAIL =
-  process.env.ADMIN_EMAIL || process.env.VITE_ADMIN_EMAIL || "martinezkaponda@gmail.com";
-const BREVO_LIST_ID = Number(process.env.BREVO_LIST_ID || process.env.VITE_BREVO_LIST_ID || 2);
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "martinezkaponda@gmail.com";
+const BREVO_LIST_ID = Number(process.env.BREVO_LIST_ID || 2);
 
 const DEFAULT_ORIGINS = [
   "http://localhost:5173",
@@ -53,6 +52,23 @@ type EmailBrand = "sb" | "lake-fresh";
 const SENDERS: Record<EmailBrand, { name: string; email: string }> = {
   sb: { name: "Streetwear Blantyre", email: "orders@wearsb.com" },
   "lake-fresh": { name: "Lake Fresh Fish Mart", email: "orders@lakefreshmw.com" },
+};
+
+const BRAND_IDS: Record<EmailBrand, string> = {
+  sb: "11111111-1111-1111-1111-111111111111",
+  "lake-fresh": "22222222-2222-2222-2222-222222222222",
+};
+
+const ACTION_PERMISSIONS: Record<string, string> = {
+  transactional: "email.transactional",
+  admin_notification: "email.admin_notification",
+  broadcast: "email.broadcast",
+};
+
+const brandFromId = (brandId: unknown): EmailBrand | null => {
+  if (brandId === BRAND_IDS["lake-fresh"]) return "lake-fresh";
+  if (brandId === BRAND_IDS.sb) return "sb";
+  return null;
 };
 
 const header = (req: VercelRequest, name: string) => {
@@ -153,9 +169,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     } else if (!userId) {
       return res.status(401).json({ error: "Authentication required" });
     } else if (email.adminAction) {
-      const isAdmin = await callerIsAdmin(serviceClient, userId, email.adminAction);
-      if (!isAdmin) return res.status(403).json({ error: "Admin access required" });
-      if (email.adminAction === "admin_notification") recipient = ADMIN_EMAIL;
+      const action = email.adminAction;
+      const permission = ACTION_PERMISSIONS[action];
+      if (!permission) return res.status(403).json({ error: "Admin action not allowed" });
+
+      let targetBrand: EmailBrand = brand;
+
+      // Admin emails for an order use the order's real brand and recipient.
+      // The caller cannot choose either one.
+      if (action === "transactional") {
+        if (!email.orderId) {
+          return res.status(400).json({ error: "Order is required for this email" });
+        }
+        const { data: order, error: orderError } = await serviceClient
+          .from("orders")
+          .select("brand_id, customer_email, customer_name")
+          .eq("id", email.orderId)
+          .maybeSingle();
+        if (orderError || !order) {
+          return res.status(403).json({ error: "Order could not be verified" });
+        }
+        const orderBrand = brandFromId((order as any).brand_id);
+        if (!orderBrand) return res.status(403).json({ error: "Order brand not allowed" });
+        targetBrand = orderBrand;
+        recipient = String((order as any).customer_email || "").trim();
+        recipientName = String((order as any).customer_name || "").trim() || recipient;
+      }
+
+      const allowed = await callerHasPermission(
+        serviceClient,
+        userId,
+        BRAND_IDS[targetBrand],
+        permission,
+      );
+      if (!allowed) return res.status(403).json({ error: "Admin access required" });
+
+      brand = targetBrand;
+      if (action === "admin_notification") recipient = ADMIN_EMAIL;
     } else if (
       !validEmail(recipient) ||
       !userEmail ||
@@ -194,17 +244,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
 // Structural type keeps this compatible with the different Supabase client
 // typings used by local and Vercel build environments.
-async function callerIsAdmin(
-  client: { from: (table: string) => any },
+interface EmailServiceClient {
+  from: (table: string) => any;
+  rpc: (
+    functionName: string,
+    args: Record<string, unknown>,
+  ) => Promise<{ data: unknown; error: unknown }>;
+}
+
+async function callerHasPermission(
+  client: EmailServiceClient,
   userId: string,
-  adminAction: string,
-) {
-  if (!["broadcast", "admin_notification", "transactional"].includes(adminAction)) return false;
-  const [roleRes, staffRes] = await Promise.all([
-    client.from("user_roles").select("role").eq("user_id", userId).eq("role", "admin").limit(1),
-    client.from("staff_permissions").select("brand_id").eq("user_id", userId).limit(1),
-  ]);
-  return Boolean(roleRes.data?.length) || Boolean(staffRes.data?.length);
+  brandId: string,
+  permission: string,
+): Promise<boolean> {
+  const { data, error } = await client.rpc("user_has_brand_permission", {
+    p_user_id: userId,
+    p_brand_id: brandId,
+    p_permission: permission,
+  });
+  if (error) return false;
+  return data === true;
 }
 
 interface EmailPayload {

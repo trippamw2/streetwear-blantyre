@@ -12,7 +12,14 @@ describe("Lake Fresh display copy", () => {
     expect(lfDisplayCopy("Lake Fresh — fresh fish · daily")).toBe("Lake Fresh   fresh fish   daily");
   });
 
+  it("removes hyphenated forbidden phrases", () => {
+    expect(lfDisplayCopy("ready-to-cook fish")).toBe("ready for your pan fish");
+    expect(lfDisplayCopy("meal-kits and cold-chain")).toBe("fish and spices and cold packing");
+    expect(lfDisplayCopy("preparations and prepped fish")).toBe("getting ready and getting ready fish");
+  });
+
   it("keeps payment refs readable", () => {
     expect(lfDisplayCopy("LF-SUB-123")).toBe("LF SUB 123");
+    expect(lfDisplayCopy("LF-123")).toBe("LF 123");
   });
 });
