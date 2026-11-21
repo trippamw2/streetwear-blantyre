@@ -7,7 +7,7 @@
  * Generate a unique barcode for a product
  * Format: SB-{year}-{random8chars}
  */
-export function generateProductBarcode(productId: string): string {
+export function generateProductBarcode(_productId: string): string {
   const year = new Date().getFullYear();
   const rand = Array.from(crypto.getRandomValues(new Uint8Array(4)))
     .map((b) => b.toString(16).padStart(2, "0"))
@@ -286,7 +286,7 @@ export function printBarcodeLabel(options: {
 /**
  * Wrap text to fit within maxWidth (approximate)
  */
-function wrapText(text: string, maxWidth: number): string[] {
+function wrapText(text: string, _maxWidth: number): string[] {
   if (text.length <= 30) return [text];
   const words = text.split(" ");
   const lines: string[] = [];

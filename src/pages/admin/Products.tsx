@@ -11,9 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Edit, Trash2, Image as ImageIcon, Loader2, Download, Printer, QrCode } from "lucide-react";
+import { Plus, Edit, Trash2, Image as ImageIcon, Loader2, Download, Printer } from "lucide-react";
 import { AIWritingButton } from "@/components/admin/AIWritingButton";
-import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
 import { toast } from "@/hooks/use-toast";
 import { useWearableCategories } from "@/hooks/useWearableCategories";
 import { generateProductBarcode, downloadBarcodeLabel, printBarcodeLabel } from "@/lib/barcode";
@@ -309,7 +308,7 @@ const AdminProducts = () => {
       const fileName = `products/${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
       
       // Upload to Supabase Storage
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from('product-images')
         .upload(fileName, file, {
           cacheControl: '3600',
@@ -467,7 +466,7 @@ const AdminProducts = () => {
                   <AIWritingButton
                     contentTypes={["product_benefit"]}
                     variables={{ name: formData.name, category: formData.category, pillar: formData.culture_pillar }}
-                    onGenerated={(type, content) => setFormData(prev => ({ ...prev, benefit: content }))}
+                    onGenerated={(_type, content) => setFormData(prev => ({ ...prev, benefit: content }))}
                   />
                 </div>
                 <Textarea

@@ -20,13 +20,9 @@ const SUPABASE_URL =
   process.env.VITE_SUPABASE_URL ||
   "https://qhpemjwrnnuqhfgifxnh.supabase.co";
 const SUPABASE_SERVICE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.SUPABASE_SERVICE_KEY ||
-  process.env.VITE_SUPABASE_SERVICE_KEY;
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 const WEBHOOK_SECRET =
-  process.env.PAYCHANGU_WEBHOOK_SECRET ||
-  process.env.PAYCHANGU_WEB_SECRET ||
-  process.env.VITE_PAYCHANGU_WEBHOOK_SECRET;
+  process.env.PAYCHANGU_WEBHOOK_SECRET || process.env.PAYCHANGU_WEB_SECRET;
 const PAYCHANGU_SECRET_KEY = process.env.PAYCHANGU_SECRET_KEY;
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const PAYCHANGU_VERIFY_URL = "https://api.paychangu.com/verify-payment";
@@ -237,7 +233,11 @@ export default async function handler(req: any, res: any) {
     return res.status(400).json({ error: "Invalid JSON" });
   }
 
-  const txRef = String(payload.tx_ref ?? payload.data?.tx_ref ?? "").trim();
+  // Older renewal reminders used LFSUB-. Accept them, but store one namespace.
+  const normalizeSubscriptionRef = (value: string) => value.replace(/^LFSUB-/i, "LF-SUB-");
+  const txRef = normalizeSubscriptionRef(
+    String(payload.tx_ref ?? payload.data?.tx_ref ?? "").trim(),
+  );
   if (!txRef) {
     // PayChangu's sample payloads do not always include tx_ref. Acknowledge so
     // the provider stops retrying; the client-side return flow verifies via
@@ -269,7 +269,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const data = verified.data!;
-    if (normalizeStatus(data.tx_ref) !== normalizeStatus(txRef)) {
+    if (normalizeStatus(normalizeSubscriptionRef(String(data.tx_ref ?? ""))) !== normalizeStatus(txRef)) {
       console.warn("Payment callback: tx_ref mismatch", txRef, data.tx_ref);
       return res.status(200).json({ received: true, status: "reference_mismatch" });
     }

@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { QRCodeSVG, QRCodeCanvas } from "qrcode.react";
+import { useState, useEffect, useCallback } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import {
   Shield, Plus, Search, Download, QrCode, Eye, AlertTriangle,
-  CheckCircle, XCircle, Loader2, RefreshCw, MapPin, FileImage,
-  Smartphone, Globe, Package, Trash2, ChevronDown, ChevronUp,
+  CheckCircle, XCircle, Loader2, MapPin, FileImage,
+  Smartphone, Globe, Package, Trash2,
   Check, ArrowDownToLine, Layers,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -84,7 +84,7 @@ async function downloadQRLabel(record: ProductAuthRecord) {
   // Product name
   ctx.fillStyle = "#0f172a";
   ctx.font = "bold 22px 'Cormorant Garamond', Georgia, serif";
-  const nameLines = wrapText(record.product_name, W - 80);
+  const nameLines = wrapText(record.product_name);
   nameLines.forEach((line, i) => {
     ctx.fillText(line, W / 2, 270 + i * 30);
   });
@@ -153,8 +153,6 @@ async function downloadQRLabel(record: ProductAuthRecord) {
   tempDiv.style.top = "-9999px";
   document.body.appendChild(tempDiv);
 
-  // Use an offscreen QRCodeCanvas render
-  const qrSvgNs = "http://www.w3.org/2000/svg";
   const qrSize = 220;
   const svgStr = await generateQRCodeSVGString(qrUrl, qrSize);
   const img = new Image();
@@ -243,7 +241,7 @@ function generateQRCodeSVGString(value: string, size: number): Promise<string> {
   });
 }
 
-function wrapText(text: string, maxWidth: number): string[] {
+function wrapText(text: string): string[] {
   if (text.length <= 30) return [text];
   const words = text.split(" ");
   const lines: string[] = [];

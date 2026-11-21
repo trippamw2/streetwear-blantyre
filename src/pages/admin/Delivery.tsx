@@ -101,18 +101,6 @@ const AdminDelivery = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Delete this delivery company?")) {
-      const { error } = await supabase.from("delivery_companies").delete().eq("id", id);
-      if (error) {
-        toast({ title: "Error deleting", description: error.message, variant: "destructive" });
-        return;
-      }
-      fetchCompanies();
-      toast({ title: "Deleted" });
-    }
-  };
-
   const toggleActive = async (company: DeliveryCompany) => {
     const { error } = await supabase
       .from("delivery_companies")

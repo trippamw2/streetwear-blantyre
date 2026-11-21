@@ -18,9 +18,7 @@ const SUPABASE_URL =
   process.env.VITE_SUPABASE_URL ||
   "https://qhpemjwrnnuqhfgifxnh.supabase.co";
 const SUPABASE_SERVICE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.SUPABASE_SERVICE_KEY ||
-  process.env.VITE_SUPABASE_SERVICE_KEY;
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 const SUPABASE_ANON_KEY =
   process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 const PAYCHANGU_SECRET_KEY = process.env.PAYCHANGU_SECRET_KEY;
@@ -180,14 +178,6 @@ export default async function handler(req: any, res: any) {
     const orderId = String(body?.orderId ?? "");
     if (!orderId) return res.status(400).json({ error: "Missing order id" });
 
-    const token = String(req.headers.authorization ?? "").replace(/^Bearer\s+/i, "");
-    if (!token) return res.status(401).json({ error: "Authentication required" });
-
-    const { data: authData, error: authError } = await supabase.auth.getUser(token);
-    if (authError || !authData?.user) {
-      return res.status(401).json({ error: "Authentication required" });
-    }
-
     const { data: order, error } = await supabase
       .from("orders")
       .select("id, user_id, brand_id, total_mwk, payment_status, payment_reference")
@@ -195,9 +185,22 @@ export default async function handler(req: any, res: any) {
       .maybeSingle();
 
     if (error || !order) return res.status(404).json({ error: "Order not found" });
-    if (order.user_id !== authData.user.id) {
-      return res.status(404).json({ error: "Order not found" });
+
+    const token = String(req.headers.authorization ?? "").replace(/^Bearer\s+/i, "");
+    const reference = String(body?.reference ?? "").trim();
+
+    if (token) {
+      const { data: authData, error: authError } = await supabase.auth.getUser(token);
+      if (authError || !authData?.user) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      if (order.user_id && order.user_id !== authData.user.id) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+    } else if (!reference || reference !== order.payment_reference) {
+      return res.status(401).json({ error: "Authentication required" });
     }
+
     if (order.payment_status === "paid") {
       return res.status(200).json({ status: "paid", orderId: order.id });
     }
@@ -207,18 +210,26 @@ export default async function handler(req: any, res: any) {
     expectedTotal = Number(order.total_mwk);
   }
 
-  const verified = await verifyWithPayChangu(txRef);
+  // Older renewal reminders used LFSUB-. Normalise before verification so
+  // those payments still reconcile into the LF-SUB- subscription namespace.
+  const normalizeSubscriptionRef = (value: string) => value.replace(/^LFSUB-/i, "LF-SUB-");
+  const canonicalRef = normalizeSubscriptionRef(txRef);
+
+  const verified = await verifyWithPayChangu(canonicalRef);
   if (!verified) {
     return res.status(200).json({ status: "unavailable", kind });
   }
 
-  if (String(verified.tx_ref ?? "").toUpperCase() !== txRef.toUpperCase()) {
+  if (
+    normalizeSubscriptionRef(String(verified.tx_ref ?? "")).toUpperCase() !==
+    canonicalRef.toUpperCase()
+  ) {
     console.warn("verify: reference mismatch", txRef, verified.tx_ref);
     return res.status(200).json({ status: "failed", reason: "reference_mismatch", kind });
   }
 
   const { data: result, error } = await supabase.rpc("process_payment_event", {
-    p_tx_ref: txRef,
+    p_tx_ref: canonicalRef,
     p_status: String(verified.status ?? "").toLowerCase(),
     p_amount: verified.amount !== undefined ? Number(verified.amount) : null,
     p_currency: verified.currency ?? "MWK",

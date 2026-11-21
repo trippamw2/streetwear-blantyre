@@ -20,7 +20,7 @@ const LakeFreshTerms = () => (
       </p>
       <p>
         Fish, seasonings and recipes are separate parts of the store. Seasonings are paid items.
-        Every order comes with one free recipe of our choice.
+        Every order comes with one free recipe. You choose the recipe.
       </p>
     </LakeFreshPolicySection>
 

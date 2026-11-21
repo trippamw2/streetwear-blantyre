@@ -130,7 +130,7 @@ const AdminInventory = () => {
     }
   };
 
-  const updateQuantity = async (item: InventoryItem, change: number, type: string) => {
+  const updateQuantity = async (item: InventoryItem, change: number, _type: string) => {
     const { error } = await supabase
       .from("inventory")
       .update({ quantity: Math.max(0, item.quantity + change) })

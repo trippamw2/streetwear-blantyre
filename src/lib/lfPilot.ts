@@ -21,7 +21,7 @@ export const LF_PILOT_OPTION_ORDER = [
 export const LF_PILOT_OFFER = [
   { label: "Fresh fish", detail: LF_PILOT_FISH_NAMES },
   { label: "Cleaned and cut", detail: "We clean your fish and cut it the way you like." },
-  { label: "Choice of seasoning", detail: "Five seasonings to choose from." },
+  { label: "Choice of seasoning", detail: "Five seasonings to choose from. Seasonings cost extra." },
   { label: "Properly packed", detail: "Clean box, clear weight and clear price." },
   { label: "Delivered to your home", detail: LF_PILOT_DELIVERY_PROMISE },
 ] as const;

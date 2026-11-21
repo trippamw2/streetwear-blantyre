@@ -2,6 +2,8 @@
 // All Brevo API calls are proxied through /api/send-email (serverless)
 // The API key is NEVER exposed to the client bundle
 
+import { supabase } from "@/integrations/supabase/client";
+
 const BREVO_PROXY_URL = "/api/send-email";
 
 export type EmailBrand = "sb" | "lake-fresh";
@@ -27,7 +29,9 @@ const BRANDS: Record<EmailBrand, BrandConfig> = {
     primaryColor: "${primary}",
     businessName: "Streetwear Blantyre",
     address: "Blantyre, Malawi",
-    whatsapp: `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"}`,
+    whatsapp: import.meta.env.VITE_WHATSAPP_BUSINESS
+      ? `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS}`
+      : "",
     logoText: "SB",
   },
   "lake-fresh": {
@@ -38,7 +42,9 @@ const BRANDS: Record<EmailBrand, BrandConfig> = {
     primaryColor: "#073B78",
     businessName: "Lake Fresh Fish Mart",
     address: "Blantyre, Malawi",
-    whatsapp: `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS || "265991234567"}`,
+    whatsapp: import.meta.env.VITE_LF_WHATSAPP
+      ? `https://wa.me/${import.meta.env.VITE_LF_WHATSAPP}`
+      : "",
     logoText: "LF",
   },
 };
@@ -46,7 +52,7 @@ const BRANDS: Record<EmailBrand, BrandConfig> = {
 const getBrand = (brand?: EmailBrand): BrandConfig => BRANDS[brand || "sb"];
 
 // Premium Email wrapper with branding - LIGHT THEME
-const wrapEmail = (content: string, title: string, brand?: EmailBrand) => {
+const wrapEmail = (content: string, _title: string, brand?: EmailBrand) => {
   const BRAND = getBrand(brand);
   const primary = BRAND.primaryColor;
   return `
@@ -113,7 +119,7 @@ const wrapEmail = (content: string, title: string, brand?: EmailBrand) => {
                     
                     <table cellpadding="0" cellspacing="0" style="margin: 0 auto 24px auto;">
                       <tr>
-                        <td style="padding: 0 8px;"><a href="${BRAND.whatsapp}" style="display: inline-block; background: #25D366; color: #ffffff; text-decoration: none; font-size: 11px; font-weight: 600; padding: 10px 16px; border-radius: 10px; letter-spacing: 0.5px;">WhatsApp</a></td>
+                        ${BRAND.whatsapp ? `<td style="padding: 0 8px;"><a href="${BRAND.whatsapp}" style="display: inline-block; background: #25D366; color: #ffffff; text-decoration: none; font-size: 11px; font-weight: 600; padding: 10px 16px; border-radius: 10px; letter-spacing: 0.5px;">WhatsApp</a></td>` : ""}
                         <td style="padding: 0 8px;"><a href="${BRAND.website}" style="display: inline-block; background: ${primary}; color: #ffffff; text-decoration: none; font-size: 11px; font-weight: 600; padding: 10px 16px; border-radius: 10px; letter-spacing: 0.5px;">Shop</a></td>
                       </tr>
                     </table>
@@ -148,9 +154,14 @@ const wrapEmail = (content: string, title: string, brand?: EmailBrand) => {
 // ============================================
 async function sendViaProxy(action: string, payload: Record<string, unknown>): Promise<boolean> {
   try {
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
     const response = await fetch(BREVO_PROXY_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify({ action, payload }),
     });
 
@@ -178,6 +189,10 @@ interface OrderEmailParams {
   eta?: string;
   type: 'confirmation' | 'payment' | 'dispatched' | 'delivered';
   brand?: EmailBrand;
+  /** Private token from guest checkout. Never placed in a URL or email. */
+  orderAccessToken?: string;
+  /** Set by admin screens that send customer emails on the customer's behalf. */
+  adminAction?: "transactional";
   /** Recipe PDF links emailed with a Lake Fresh order. */
   recipes?: Array<{ title: string; url: string }>;
   /** Public tracking link for this order. */
@@ -213,8 +228,8 @@ export const sendBrandBroadcast = async (params: {
     toName: params.toName || params.to,
     subject: params.subject,
     htmlContent: wrapEmail(html, params.subject, params.brand),
-    senderName: B.businessName,
-    senderEmail: B.email,
+    brand: params.brand,
+    adminAction: "broadcast",
   });
 };
 
@@ -282,6 +297,10 @@ export const sendOrderConfirmationEmail = async (order: OrderEmailParams) => {
   return sendViaProxy("send-email", {
     to: order.to,
     toName: order.toName,
+    orderId: order.orderId,
+    orderAccessToken: order.orderAccessToken,
+    adminAction: order.adminAction,
+    brand: order.brand,
     subject: `Order Confirmed. #${order.orderId.slice(0, 8).toUpperCase()}`,
     htmlContent: wrapEmail(html, "Order Confirmed", order.brand),
   });
@@ -312,6 +331,10 @@ export const sendPaymentReceivedEmail = async (order: OrderEmailParams) => {
   return sendViaProxy("send-email", {
     to: order.to,
     toName: order.toName,
+    orderId: order.orderId,
+    orderAccessToken: order.orderAccessToken,
+    adminAction: order.adminAction,
+    brand: order.brand,
     subject: `Payment Received. #${order.orderId.slice(0, 8).toUpperCase()}`,
     htmlContent: wrapEmail(html, "Payment Received", order.brand),
   });
@@ -347,6 +370,10 @@ export const sendDispatchedEmail = async (order: OrderEmailParams) => {
   return sendViaProxy("send-email", {
     to: order.to,
     toName: order.toName,
+    orderId: order.orderId,
+    orderAccessToken: order.orderAccessToken,
+    adminAction: order.adminAction,
+    brand: order.brand,
     subject: `Order On The Way. #${order.orderId.slice(0, 8).toUpperCase()}`,
     htmlContent: wrapEmail(html, "Order On The Way", order.brand),
   });
@@ -369,8 +396,10 @@ export const sendDeliveredEmail = async (order: OrderEmailParams) => {
       
       <ul>${itemsHtml}</ul>
       
-      <p style="margin: 16px 0;">Hope you love your ${B.name} gear.</p>
-      <p>Please leave a review: <a href="https://www.wearsb.com/reviews" style="color: #0f172a;">www.wearsb.com/reviews</a></p>
+      ${order.brand === "lake-fresh"
+        ? `<p style="margin: 16px 0;">Enjoy your fresh fish. Eat it within 2 days of delivery.</p>`
+        : `<p style="margin: 16px 0;">Hope you love your ${B.name} gear.</p>
+           <p>Please leave a review: <a href="https://www.wearsb.com/reviews" style="color: #0f172a;">www.wearsb.com/reviews</a></p>`}
       <p style="margin-top: 24px;">Thanks for choosing ${B.name}.</p>
     </div>
   `;
@@ -378,6 +407,10 @@ export const sendDeliveredEmail = async (order: OrderEmailParams) => {
   return sendViaProxy("send-email", {
     to: order.to,
     toName: order.toName,
+    orderId: order.orderId,
+    orderAccessToken: order.orderAccessToken,
+    adminAction: order.adminAction,
+    brand: order.brand,
     subject: `Order Delivered. #${order.orderId.slice(0, 8).toUpperCase()}`,
     htmlContent: wrapEmail(html, "Order Delivered", order.brand),
   });
@@ -386,12 +419,19 @@ export const sendDeliveredEmail = async (order: OrderEmailParams) => {
 // ============================================
 // SEND GENERIC EMAIL
 // ============================================
-export const sendEmail = async (to: string, subject: string, html: string, brand?: EmailBrand) => {
-  const B = getBrand(brand);
+export const sendEmail = async (
+  to: string,
+  subject: string,
+  html: string,
+  brand?: EmailBrand,
+  adminAction?: "broadcast",
+) => {
   return sendViaProxy("send-email", {
     to,
     subject,
     htmlContent: wrapEmail(html, subject, brand),
+    brand,
+    adminAction,
   });
 };
 
@@ -401,7 +441,6 @@ export const sendEmail = async (to: string, subject: string, html: string, brand
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || "martinezkaponda@gmail.com";
 
 export const sendAdminNotificationEmail = async (order: OrderEmailParams) => {
-  const B = getBrand(order.brand);
   const itemsHtml = order.items
     .map(
       (item) => `
@@ -441,9 +480,11 @@ export const sendAdminNotificationEmail = async (order: OrderEmailParams) => {
 
   return sendViaProxy("send-email", {
     to: ADMIN_EMAIL,
-    toName: "Streetwear Blantyre Admin",
+    toName: "Store Admin",
     subject: `NEW ORDER #${order.orderId.slice(0, 8).toUpperCase()} - MK ${order.total.toLocaleString()}`,
     htmlContent: wrapEmail(html, "New Order", order.brand),
+    brand: order.brand,
+    adminAction: "admin_notification",
   });
 };
 

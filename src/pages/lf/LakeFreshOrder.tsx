@@ -7,11 +7,12 @@ import { AlertCircle, ArrowLeft, CalendarDays, CheckCircle2, CreditCard, Fish, L
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { formatDeliveryDate } from "@/lib/lfDelivery";
 import { buildLakeFreshPaymentRef, formatLakeFreshPaymentRef } from "@/lib/lfPayments";
 import { isOrderPaid, isOrderPayable } from "@/lib/paymentStatus";
 import { verifyOrderPayment } from "@/lib/paymentVerify";
+import { lfWhatsAppLink } from "@/lib/whatsapp";
+import { lfEmailHref } from "@/lib/lfContact";
 import { formatMWK } from "@/data/products";
 import { toast } from "@/hooks/use-toast";
 
@@ -22,10 +23,62 @@ const statusCopy: Record<string, { label: string; tone: string }> = {
   dispatched: { label: "Out for delivery", tone: "bg-[#EAF6FB] text-[#073B78] border-[#08A9E8]/30" },
   delivered: { label: "Delivered", tone: "bg-[#39B54A]/10 text-[#39B54A] border-[#39B54A]/30" },
   cancelled: { label: "Cancelled", tone: "bg-red-50 text-red-700 border-red-200" },
+  refunded: { label: "Refunded", tone: "bg-red-50 text-red-700 border-red-200" },
 };
 
 const prepLabel = (value: string) =>
   value === "whole" ? "Whole" : value === "cleaned" ? "Cleaned" : value === "portioned" ? "Cut in pieces" : value;
+
+type OrderRow = {
+  id: string;
+  status: string;
+  payment_status: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_location: string | null;
+  notes: string | null;
+  subtotal_mwk: number;
+  delivery_fee_mwk: number;
+  discount_mwk: number;
+  total_mwk: number;
+  payment_method: string | null;
+  payment_reference: string | null;
+  delivery_date: string | null;
+  delivery_window: string | null;
+  created_at: string;
+};
+
+type PrepRow = {
+  preparation_type: string;
+  requested_weight_kg: number | null;
+  packed_weight_kg: number | null;
+  price_per_kg_mwk: number | null;
+  final_price_mwk: number | null;
+};
+
+type ItemRow = {
+  id: string;
+  product_name: string;
+  unit_price_mwk: number;
+  quantity: number;
+  recipe_title: string | null;
+  preparation: PrepRow | null;
+};
+
+type ReconciliationRow = {
+  status: string;
+  estimated_total_mwk: number;
+  final_total_mwk: number | null;
+  difference_mwk: number | null;
+};
+
+type OrderDetail = {
+  ok: boolean;
+  reason?: string;
+  order: OrderRow;
+  items: ItemRow[];
+  reconciliation: ReconciliationRow | null;
+};
 
 const LakeFreshOrder = () => {
   const { id } = useParams();
@@ -39,37 +92,28 @@ const LakeFreshOrder = () => {
     queryKey: ["lf", "order", id],
     enabled: Boolean(id),
     queryFn: async () => {
-      const { data: order, error: orderError } = await supabase
-        .from("orders")
-        .select(
-          "id, status, payment_status, customer_name, customer_phone, customer_location, notes, subtotal_mwk, delivery_fee_mwk, discount_mwk, total_mwk, payment_method, payment_reference, delivery_date, delivery_window, created_at"
-        )
-        .eq("id", id as string)
-        .eq("brand_id", LF_BRAND_ID)
-        .maybeSingle();
+      // Guest orders are unlocked by the private token stored at checkout.
+      // A signed-in owner can load the same order without a token.
+      const accessToken = sessionStorage.getItem(`lf_order_access_${id}`);
+      const { data, error } = await supabase.rpc("lf_public_order_detail", {
+        p_order_id: id as string,
+        p_access_token: accessToken || null,
+      });
 
-      if (orderError) throw new Error(orderError.message);
-      if (!order) throw new Error("Order not found");
+      if (error) throw new Error(error.message);
+      const result = data as OrderDetail | null;
 
-      const { data: items, error: itemsError } = await supabase
-        .from("order_items")
-        .select("id, product_name, unit_price_mwk, quantity, recipe_title")
-        .eq("order_id", order.id);
-      if (itemsError) throw new Error(itemsError.message);
+      if (!result?.ok) {
+        throw new Error(result?.reason === "not_found" ? "Order not found" : "We could not load this order.");
+      }
 
-      const itemIds = (items || []).map((item) => item.id);
-      const { data: prep, error: prepError } = itemIds.length
-        ? await supabase
-            .from("order_preparation")
-            .select("order_item_id, preparation_type, requested_weight_kg, packed_weight_kg, price_per_kg_mwk, final_price_mwk")
-            .in("order_item_id", itemIds)
-        : { data: [], error: null };
-      if (prepError) throw new Error(prepError.message);
-
-      const prepByItem = new Map((prep || []).map((row) => [row.order_item_id, row]));
       return {
-        order,
-        items: (items || []).map((item) => ({ ...item, preparation: prepByItem.get(item.id) || null })),
+        order: result.order,
+        items: result.items.map((item) => ({
+          ...item,
+          preparation: item.preparation && item.preparation.preparation_type ? item.preparation : null,
+        })),
+        reconciliation: result.reconciliation || null,
       };
     },
   });
@@ -77,12 +121,12 @@ const LakeFreshOrder = () => {
   // PayChangu returns the browser here after checkout. Verify server-side so
   // the order flips to paid even when the webhook is delayed or dropped.
   useEffect(() => {
-    if (!paymentParam || !id || !user || verifiedRef.current) return;
+    if (!paymentParam || !id || verifiedRef.current) return;
     verifiedRef.current = true;
     let cancelled = false;
     setVerifyState("checking");
 
-    verifyOrderPayment(id).then((result) => {
+    verifyOrderPayment(id, buildLakeFreshPaymentRef(id)).then((result) => {
       if (cancelled) return;
 
       if (!result) {
@@ -104,7 +148,7 @@ const LakeFreshOrder = () => {
     return () => {
       cancelled = true;
     };
-  }, [paymentParam, id, user, refetch]);
+  }, [paymentParam, id, refetch]);
 
   if (isLoading) {
     return (
@@ -132,13 +176,16 @@ const LakeFreshOrder = () => {
     );
   }
 
-  const { order, items } = data;
+  const { order, items, reconciliation } = data;
   const status = statusCopy[order.status] || {
     label: order.status,
     tone: "bg-gray-50 text-[#073B78]/80 border-gray-200",
   };
   const paymentRef = order.payment_reference || buildLakeFreshPaymentRef(order.id);
   const isPaid = isOrderPaid(order.payment_status);
+  const supportWhatsApp = lfWhatsAppLink(
+    `Hi Lake Fresh, my order number is ${formatLakeFreshPaymentRef(paymentRef)}. Please help me track it.`,
+  );
   const canPay = isOrderPayable(order.payment_status);
 
   const handlePay = async () => {
@@ -200,7 +247,7 @@ const LakeFreshOrder = () => {
               { key: "dispatched", label: "On the way" },
               { key: "delivered", label: "Delivered" },
             ].map((stage, idx) => {
-              const orderRank = { new: 0, confirmed: 1, processing: 2, dispatched: 3, delivered: 4, cancelled: -1 }[order.status] ?? 0;
+              const orderRank = { new: 0, confirmed: 1, processing: 2, dispatched: 3, delivered: 4, cancelled: -1, refunded: -1 }[order.status] ?? 0;
               const done = orderRank >= idx + 1;
               const active = orderRank === idx + 1;
               return (
@@ -219,15 +266,27 @@ const LakeFreshOrder = () => {
           </ol>
         </div>
 
-        {/* WhatsApp tracking button */}
-        <a
-          href={`https://wa.me/?text=${encodeURIComponent(`Hi Lake Fresh, my order number is ${formatLakeFreshPaymentRef(paymentRef)}. Please help me track it.`)}`}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
-        >
-          Track or chat on WhatsApp
-        </a>
+        {/* Support channels are only shown when real contact details exist. */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {supportWhatsApp && (
+            <a
+              href={supportWhatsApp}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-white"
+            >
+              Track or chat on WhatsApp
+            </a>
+          )}
+          {lfEmailHref() && (
+            <a
+              href={lfEmailHref() as string}
+              className="inline-flex items-center gap-2 rounded-lg border border-[#073B78]/20 px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
+            >
+              Email us about this order
+            </a>
+          )}
+        </div>
 
         {verifyState === "paid" || (paymentParam && isPaid) ? (
           <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#39B54A]/30 bg-[#39B54A]/10 p-4 text-sm text-emerald-900">
@@ -250,7 +309,9 @@ const LakeFreshOrder = () => {
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <div>
               <p className="font-bold">That payment did not complete.</p>
-              <p className="mt-1 text-xs">No money was taken. You can try again with the Pay now button.</p>
+              <p className="mt-1 text-xs">
+                PayChangu did not confirm a payment. You can try again with the Pay now button.
+              </p>
             </div>
           </div>
         ) : paymentParam && !isPaid ? (
@@ -265,6 +326,16 @@ const LakeFreshOrder = () => {
             </div>
           </div>
         ) : null}
+
+        {order.status === "refunded" && (
+          <div className="mt-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <div>
+              <p className="font-bold">This order was refunded.</p>
+              <p className="mt-1 text-xs">The money was returned through the original payment route. Chat with us on WhatsApp if you need help.</p>
+            </div>
+          </div>
+        )}
 
         {canPay && (
           <div className="mt-5 flex flex-col gap-3 rounded-xl border border-[#08A9E8]/40 bg-[#EAF6FB]/60 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -299,7 +370,7 @@ const LakeFreshOrder = () => {
             <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">
               <PackageCheck className="h-3.5 w-3.5 text-[#08A9E8]" /> Cleaned and packed
             </p>
-            <p className="mt-2 text-sm font-bold text-[#073B78]">Kept at 0 to 4°C</p>
+            <p className="mt-2 text-sm font-bold text-[#073B78]">Packed fresh for your delivery window</p>
             <p className="mt-1 text-xs text-[#073B78]/60">Eat within 2 days of delivery. Rinse before you cook.</p>
           </div>
         </section>
@@ -357,9 +428,26 @@ const LakeFreshOrder = () => {
           </div>
 
           <p className="mt-3 text-xs text-[#073B78]/60">
-            We use the estimated weight at checkout. We weigh the fish when we pack it and tell you if the price
-            changes. We never charge more than you agreed.
+            You pay for the estimated weight at checkout. We weigh the fish again when we pack it and show the
+            final total here. We will contact you about any difference before delivery.
           </p>
+
+          {reconciliation && (
+            <div className="mt-4 rounded-xl border border-[#08A9E8]/30 bg-[#EAF6FB]/50 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#073B78]/60">Price check</p>
+              <p className="mt-2 text-sm font-bold text-[#073B78]">
+                Estimated {formatMWK(reconciliation.estimated_total_mwk)}.{" "}
+                {reconciliation.final_total_mwk == null
+                  ? "Final total is still being checked."
+                  : `Final total ${formatMWK(reconciliation.final_total_mwk)}.`}
+              </p>
+              {reconciliation.difference_mwk != null && (
+                <p className="mt-1 text-xs text-[#073B78]/70">
+                  Difference {formatMWK(reconciliation.difference_mwk)}. {reconciliation.status === "confirmed" ? "You agreed to this total." : "We will tell you before delivery."}
+                </p>
+              )}
+            </div>
+          )}
         </section>
 
         {order.notes && (
@@ -370,7 +458,8 @@ const LakeFreshOrder = () => {
         )}
 
         <p className="mt-6 text-center text-xs text-[#073B78]/50">
-          Paid with PayChangu. Reference {formatLakeFreshPaymentRef(paymentRef)}
+          {isPaid ? "Paid with PayChangu. " : "Payment status: "}
+          Reference {formatLakeFreshPaymentRef(paymentRef)}
         </p>
       </div>
     </div>

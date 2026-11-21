@@ -7,8 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Promotion } from "@/data/promotions";
 import { AIWritingButton } from "@/components/admin/AIWritingButton";
-import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
-import { Plus, Edit, Trash2, Image as ImageIcon, Loader2, Sparkles } from "lucide-react";
+import { Plus, Edit, Trash2, Image as ImageIcon, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const PAGES_OPTIONS = [
@@ -239,7 +238,7 @@ const AdminPromotions = () => {
                         promotion_focus: formData.title || "brand awareness",
                         tone_hint: formData.subtitle || "bold",
                       }}
-                      onGenerated={(type, content) => setFormData(p => ({ ...p, title: content }))}
+                      onGenerated={(_type, content) => setFormData(p => ({ ...p, title: content }))}
                     />
                   </div>
                   <Input value={formData.title} onChange={e => setFormData(p => ({ ...p, title: e.target.value }))} required />
@@ -254,7 +253,7 @@ const AdminPromotions = () => {
                         campaign_type: "promotion",
                         promotion_focus: formData.subtitle || "announcement",
                       }}
-                      onGenerated={(type, content) => setFormData(p => ({ ...p, subtitle: content }))}
+                      onGenerated={(_type, content) => setFormData(p => ({ ...p, subtitle: content }))}
                     />
                   </div>
                   <Input value={formData.subtitle} onChange={e => setFormData(p => ({ ...p, subtitle: e.target.value }))} />
@@ -271,7 +270,7 @@ const AdminPromotions = () => {
                       campaign_type: "promotion",
                       promotion_focus: formData.description || "announcement",
                     }}
-                    onGenerated={(type, content) => setFormData(p => ({ ...p, description: content }))}
+                    onGenerated={(_type, content) => setFormData(p => ({ ...p, description: content }))}
                   />
                 </div>
                 <Textarea value={formData.description} onChange={e => setFormData(p => ({ ...p, description: e.target.value }))} rows={2} />

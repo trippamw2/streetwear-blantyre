@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK } from "@/data/products";
 import { Link } from "react-router-dom";
-import { Package, DollarSign, TrendingUp, Users, ArrowUpRight, ArrowDownRight, Wallet, Banknote, Receipt } from "lucide-react";
+import { Package, DollarSign, TrendingUp, Users, ArrowUpRight, Wallet, Banknote, Receipt } from "lucide-react";
 import { adminBrandId, useAdminBrand } from "@/lib/adminBrand";
 
 interface Stats {
@@ -13,15 +13,6 @@ interface Stats {
   pendingOrders: number;
   paidOrders: number;
   totalCustomers: number;
-}
-
-interface StatCard {
-  label: string;
-  value: string;
-  icon: React.ElementType;
-  color: string;
-  bgColor: string;
-  note?: string;
 }
 
 const TRANSPORT_COST = 4000;
@@ -47,7 +38,7 @@ const AdminDashboard = () => {
   }, [brandId]);
 
   const fetchStats = async () => {
-    let ordersQuery = supabase
+    const ordersQuery = supabase
       .from("orders")
       .select("id, total_mwk, delivery_fee_mwk, payment_method, status, payment_status, customer_phone")
       .eq("brand_id", brandId);

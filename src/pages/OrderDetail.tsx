@@ -6,7 +6,7 @@ import { formatMWK } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { PageSkeleton } from "@/components/Skeletons";
-import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { redirectToPayChangu } from "@/lib/paychangu";
 import { buildSbPaymentRef } from "@/lib/paymentRefs";
 import { isOrderPayable } from "@/lib/paymentStatus";

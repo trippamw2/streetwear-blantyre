@@ -19,7 +19,7 @@ export const CompareProvider = ({ children }: { children: React.ReactNode }) => 
     if (saved) {
       try {
         setCompareList(JSON.parse(saved));
-      } catch {}
+      } catch { /* best-effort: ignore */ }
     }
   }, []);
 

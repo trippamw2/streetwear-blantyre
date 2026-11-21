@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { LFLink, useLFNavigate } from "@/components/lf/lfRouter";
 import { lfPath, lfUrl } from "@/lib/brandSite";
 import { z } from "zod";
-import { Loader2, Fish } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEO } from "@/components/SEO";

@@ -12,7 +12,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMWK, getKitPrice, getKitProducts, getKitSeparateTotal, getKitRealSaving, getKitDiscountPercent } from "@/data/products";
 import { buildSbGiftPaymentRef } from "@/lib/paymentRefs";
-import { Gift, Package, Heart, MessageCircle, ArrowRight, X, Check, Sparkles, Loader2, CreditCard } from "lucide-react";
+import { Gift, Package, Heart, ArrowRight, X, Sparkles, Loader2, CreditCard } from "lucide-react";
 
 interface GiftFormData {
   recipientName: string;
@@ -36,8 +36,6 @@ const GiftPacks = () => {
   const [selectedPack, setSelectedPack] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [giftToken, setGiftToken] = useState("");
   const [formData, setFormData] = useState<GiftFormData>({
     recipientName: "",
     recipientPhone: "",
@@ -56,7 +54,6 @@ const GiftPacks = () => {
     }
     setSelectedPack(kitId);
     setShowForm(true);
-    setSubmitted(false);
   };
 
   const handleSendGift = async () => {
@@ -136,7 +133,6 @@ const GiftPacks = () => {
   const resetForm = () => {
     setSelectedPack(null);
     setShowForm(false);
-    setSubmitted(false);
     setFormData({
       recipientName: "",
       recipientPhone: "",

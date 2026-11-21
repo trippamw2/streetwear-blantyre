@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 import { BRANDS, type BrandSlug } from "@/lib/brands";
+import { LF_CONTACT } from "@/lib/lfContact";
 
 interface SEOProps {
   title: string;
@@ -41,20 +43,54 @@ const BRAND_ICONS: Record<BrandSlug, { icon: string; apple: string; manifest: st
   },
 };
 
+/** Local `/lf` routes are for QA. Search engines only see clean brand URLs. */
+export const canonicalPathFor = (brand: BrandSlug, pathname: string) =>
+  brand === "lake-fresh" ? pathname.replace(/^\/lf(?=\/|$)/, "") || "/" : pathname;
+
 export const SEO = ({
   title,
   description,
-  path = "",
+  path,
   image,
   type = "website",
   brand = "sb",
 }: SEOProps) => {
+  const location = useLocation();
   const meta = BRAND_META[brand] ?? BRAND_META.sb;
   const icons = BRAND_ICONS[brand] ?? BRAND_ICONS.sb;
   const iconKey = brand === "lake-fresh" ? "lf" : "sb";
   const resolvedImage = image ?? meta.image;
   const fullTitle = title.includes(meta.siteName) ? title : `${title} | ${meta.siteName}`;
-  const url = `${meta.siteUrl}${path}`;
+
+  // LF pages often omit `path`. Derive a clean canonical from the current route
+  // so every page does not collapse to the home page.
+  const resolvedPath = path ?? canonicalPathFor(brand, location.pathname);
+  const url = `${meta.siteUrl}${resolvedPath}`;
+
+  const structuredData =
+    brand === "lake-fresh" && type === "website"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: meta.siteName,
+          description,
+          url,
+          image: resolvedImage,
+          areaServed: "Blantyre, Malawi",
+          ...(LF_CONTACT.phone ? { telephone: LF_CONTACT.phone } : {}),
+          ...(LF_CONTACT.email ? { email: LF_CONTACT.email } : {}),
+          ...(LF_CONTACT.address
+            ? { address: { "@type": "PostalAddress", streetAddress: LF_CONTACT.address, addressCountry: "MW" } }
+            : {}),
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": type === "product" ? "Product" : "WebSite",
+          name: title,
+          description,
+          url,
+          ...(type === "product" ? { image: resolvedImage } : {}),
+        };
 
   // Drop the other brand's bootstrap icons so a shared/local host never shows
   // the wrong tab icon after client-side navigation between storefronts.
@@ -90,16 +126,7 @@ export const SEO = ({
       <meta name="twitter:image" content={resolvedImage} />
 
       {/* JSON-LD Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": type === "product" ? "Product" : "WebSite",
-          name: title,
-          description,
-          url,
-          ...(type === "product" ? { image: resolvedImage } : {}),
-        })}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
     </Helmet>
   );
 };
@@ -188,11 +215,6 @@ export const defaultSEO = {
     title: "Refund Policy | Lake Fresh Fish Mart",
     description:
       "How Lake Fresh handles refunds, replacements and delivery problems for fresh fish orders in Blantyre, Malawi.",
-  },
-  lfPhotoCredits: {
-    title: "Photo Credits | Lake Fresh Fish Mart",
-    description:
-      "The photographers and photo terms for the fish and seasoning photos shown on Lake Fresh in Blantyre, Malawi.",
   },
   giftPacks: {
     title: "Gift Packs | SB Streetwear",

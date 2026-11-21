@@ -6,8 +6,8 @@ import { formatMWK } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { PageSkeleton } from "@/components/Skeletons";
-import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
-import { ArrowLeft, Package, Truck, Check, MapPin, Phone, MessageCircle, Clock, Home, Star } from "lucide-react";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
+import { ArrowLeft, Package, Truck, Check, MapPin, Phone, MessageCircle, Home, Star } from "lucide-react";
 import { format } from "date-fns";
 
 interface Order {
@@ -26,14 +26,6 @@ interface ItemRow {
   product_name: string;
   unit_price_mwk: number;
   quantity: number;
-}
-
-interface DeliveryStatus {
-  status: string;
-  updated_at: string;
-  tracking_number: string;
-  company_name: string;
-  estimated_delivery: string;
 }
 
 const TRACKING_STEPS = [
@@ -59,7 +51,6 @@ const DeliveryTracking = () => {
   const { user, loading: authLoading } = useAuth();
   const [order, setOrder] = useState<Order | null>(null);
   const [items, setItems] = useState<ItemRow[]>([]);
-  const [delivery, setDelivery] = useState<DeliveryStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

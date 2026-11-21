@@ -146,7 +146,7 @@ ${items.map(i => `  ${i.quantity}x ${i.name}`).join('\n')}
 Track: https://www.wearsb.com/track/${orderId}`;
 };
 
-export const statusCheck = (status: string, eta?: string) => {
+export const statusCheck = (status: string, _eta?: string) => {
   const statusMessages: Record<string, string> = {
     new: 'Just received. We are reviewing it now.',
     confirmed: 'Ready. We are preparing your order.',
@@ -157,7 +157,7 @@ export const statusCheck = (status: string, eta?: string) => {
   return statusMessages[status] || 'Checking on it for you.';
 };
 
-export const reminderMessage = (details: OrderDetails, daysOverdue: number) => {
+export const reminderMessage = (details: OrderDetails, _daysOverdue: number) => {
   return `Payment Reminder. ${details.customerName.split(' ')[0]}
 
 A friendly reminder about your Streetwear Blantyre order.
@@ -171,7 +171,7 @@ Please confirm payment to secure your items.
 Questions? Reply here.`;
 };
 
-export const thankYouMessage = (orderId: string, customerName: string) => {
+export const thankYouMessage = (_orderId: string, customerName: string) => {
   return `Thanks for your order, ${customerName.split(' ')[0]}.
 
 We appreciate you choosing Streetwear Blantyre.

@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { formatMWK } from "@/data/products";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { CheckCircle2, Phone, MapPin, Camera } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { BRANDS } from "@/lib/brands";
 
-const LF_BRAND_ID = "22222222-2222-2222-2222-222222222222";
+const LF_BRAND_ID = BRANDS["lake-fresh"].id;
 
 export default function LakeFreshDriver() {
   const { user } = useAuth();
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [orders, setOrders] = useState<any[]>([]);
+  const [proofs, setProofs] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
   const load = async () => {
@@ -25,7 +26,7 @@ export default function LakeFreshDriver() {
       .order("created_at", { ascending: true });
     const ords = data || [];
     const ids = ords.map((o: any) => o.id);
-    let itemsByOrder: Record<string, any[]> = {};
+    const itemsByOrder: Record<string, any[]> = {};
     if (ids.length) {
       const { data: items } = await supabase
         .from("order_items")
@@ -44,17 +45,31 @@ export default function LakeFreshDriver() {
     if (user) void load();
   }, [user, date]);
 
-  const markDelivered = async (id: string, proofUrl?: string) => {
-    const { error } = await supabase
-      .from("orders")
-      .update({ status: "delivered", delivery_proof_url: proofUrl || null })
-      .eq("id", id)
-      .eq("brand_id", LF_BRAND_ID)
-      .eq("status", "dispatched");
+  // Status changes go through the server RPC. A proof image is mandatory.
+  const markDelivered = async (id: string) => {
+    const proofUrl = proofs[id];
+    if (!proofUrl) {
+      toast({ title: "Proof required", description: "Add a delivery photo first.", variant: "destructive" });
+      return;
+    }
+    const { data, error } = await supabase.rpc("lf_mark_delivery_result", {
+      p_order_id: id,
+      p_proof_url: proofUrl,
+    });
     if (error) {
       toast({ title: "Update failed", description: error.message, variant: "destructive" });
       return;
     }
+    const result = data as { ok?: boolean; reason?: string } | null;
+    if (!result?.ok) {
+      toast({
+        title: "Update failed",
+        description: result?.reason === "no_access" ? "You do not have delivery access." : "This order could not be completed.",
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({ title: "Delivery recorded", description: "Proof and time saved." });
     void load();
   };
 
@@ -67,7 +82,8 @@ export default function LakeFreshDriver() {
     const { error } = await supabase.storage.from("product-images").upload(path, file, { contentType: file.type || undefined });
     if (error) { toast({ title: "Upload failed", description: error.message, variant: "destructive" }); return; }
     const { data } = supabase.storage.from("product-images").getPublicUrl(path);
-    await markDelivered(id, data.publicUrl);
+    setProofs((current) => ({ ...current, [id]: data.publicUrl }));
+    toast({ title: "Proof added", description: "Now mark this stop as delivered." });
   };
 
   const withCoords = orders.filter((o) => o.delivery_lat != null && o.delivery_lng != null);
@@ -140,9 +156,14 @@ export default function LakeFreshDriver() {
                       }}
                     />
                   </label>
+                  {proofs[o.id] && (
+                    <span className="text-[10px] font-bold text-[#39B54A]">Proof added</span>
+                  )}
                   <button
                     onClick={() => void markDelivered(o.id)}
-                    className="rounded-lg bg-[#39B54A] px-3 py-2 text-xs font-bold text-white"
+                    disabled={!proofs[o.id]}
+                    title={proofs[o.id] ? "Record this delivery" : "Add a delivery photo first"}
+                    className="rounded-lg bg-[#39B54A] px-3 py-2 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <CheckCircle2 className="inline h-3.5 w-3.5 mr-1" /> Mark delivered
                   </button>

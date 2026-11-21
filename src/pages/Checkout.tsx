@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,17 +12,16 @@ import { SEO, defaultSEO } from "@/components/SEO";
 import { useLoyalty } from "@/hooks/useLoyalty";
 import { useReferral } from "@/hooks/useReferral";
 import { DeliveryOptions } from "@/components/DeliveryOptions";
-import { type DeliveryOption, FREE_DELIVERY_THRESHOLD } from "@/lib/deliveryRules";
+import { type DeliveryOption } from "@/lib/deliveryRules";
 import { buildSbPaymentRef } from "@/lib/paymentRefs";
-import { ArrowLeft, Check, Loader2, CreditCard, Zap, Gift } from "lucide-react";
+import { ArrowLeft, Loader2, CreditCard, Zap, Gift } from "lucide-react";
 import { SB_BRAND_ID } from "@/lib/adminBrand";
 
 const Checkout = () => {
   const { user } = useAuth();
   const { items, subtotal, clear } = useCart();
-  const navigate = useNavigate();
-  const { loyalty, program, getRewardValue, redeemPoints } = useLoyalty(user?.id, user?.email);
-  const { stats: referralStats } = useReferral();
+  const { loyalty, program, redeemPoints } = useLoyalty(user?.id, user?.email);
+  useReferral();
 
   const [formData, setFormData] = useState(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("sb_shipping") : null;
@@ -193,6 +192,7 @@ const Checkout = () => {
           to: formData.phone ? `${formData.phone}@wearsb.com` : "customer@wearsb.com",
           toName: formData.name,
           orderId,
+          adminAction: "transactional" as const,
           items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
           total: finalTotal,
           location: formData.location,
@@ -227,7 +227,7 @@ const Checkout = () => {
           phone: formData.phone,
           location: formData.location,
         }));
-      } catch {}
+      } catch { /* best-effort: ignore */ }
 
       const orderRef = orderId.slice(0, 8).toUpperCase();
       const txRef = buildSbPaymentRef(orderId);

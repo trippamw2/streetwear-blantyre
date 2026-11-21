@@ -6,8 +6,8 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import {
-  Gift, Loader2, Eye, MessageCircle, Package, Truck, MapPin,
-  Check, Clock, X, Calendar, User, Mail, Phone,
+  Gift, Loader2, Eye,
+  Check, User, Mail, Phone,
 } from "lucide-react";
 import { format } from "date-fns";
 import { buildWhatsAppLink } from "@/lib/whatsapp";

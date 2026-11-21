@@ -8,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { toast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, Loader2, BookOpen, Eye, EyeOff, Star } from "lucide-react";
 import { AIWritingButton } from "@/components/admin/AIWritingButton";
-import { CONTENT_PROMPTS, type ContentKeyType } from "@/lib/ai-prompts";
 import { format } from "date-fns";
 
 interface CultureStory {
@@ -201,7 +200,7 @@ const AdminCultureStories = () => {
                   <AIWritingButton
                     contentTypes={["article_title"]}
                     variables={{ topic: formData.title || formData.excerpt || "African street culture", pillar: formData.culture_pillar }}
-                    onGenerated={(type, content) => setFormData(p => ({ ...p, title: content }))}
+                    onGenerated={(_type, content) => setFormData(p => ({ ...p, title: content }))}
                   />
                 </div>
                 <Input value={formData.title} onChange={(e) => setFormData(p => ({ ...p, title: e.target.value }))} placeholder="e.g., Why Hip Hop Still Shapes Streetwear" />
@@ -212,7 +211,7 @@ const AdminCultureStories = () => {
                   <AIWritingButton
                     contentTypes={["article_excerpt"]}
                     variables={{ title: formData.title, pillar: formData.culture_pillar }}
-                    onGenerated={(type, content) => setFormData(p => ({ ...p, excerpt: content }))}
+                    onGenerated={(_type, content) => setFormData(p => ({ ...p, excerpt: content }))}
                   />
                 </div>
                 <Input value={formData.excerpt} onChange={(e) => setFormData(p => ({ ...p, excerpt: e.target.value }))} placeholder="Short summary for cards and previews" />
@@ -223,7 +222,7 @@ const AdminCultureStories = () => {
                   <AIWritingButton
                     contentTypes={["article_content"]}
                     variables={{ title: formData.title, pillar: formData.culture_pillar }}
-                    onGenerated={(type, content) => setFormData(p => ({ ...p, content: content }))}
+                    onGenerated={(_type, content) => setFormData(p => ({ ...p, content: content }))}
                   />
                 </div>
                 <Textarea value={formData.content} onChange={(e) => setFormData(p => ({ ...p, content: e.target.value }))} rows={16} placeholder="Write your story..." className="font-mono text-sm" />

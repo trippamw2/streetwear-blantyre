@@ -3,13 +3,12 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { verifyGiftPayment } from "@/lib/paymentVerify";
 import {
   Gift, Package, Check, Truck, MapPin, Star,
-  MessageCircle, Calendar, Loader2, ArrowRight,
+  MessageCircle, Loader2,
 } from "lucide-react";
 
 const statusSteps = [
@@ -165,7 +164,6 @@ const GiftTrack = () => {
   }
 
   const currentStepIndex = statusSteps.findIndex(s => s.key === gift.status);
-  const latestTracking = gift.gift_tracking?.[0];
   const sortedTracking = [...(gift.gift_tracking || [])].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );

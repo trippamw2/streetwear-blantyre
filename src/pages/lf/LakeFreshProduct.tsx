@@ -21,6 +21,8 @@ import { LF_BRAND_ID } from "@/hooks/useLakeFresh";
 import { toast } from "@/hooks/use-toast";
 import { lfDisplayCopy } from "@/lib/lfCopy";
 import { LF_PILOT_DELIVERY_PROMISE } from "@/lib/lfPilot";
+import { lfWhatsAppLink } from "@/lib/whatsapp";
+import { lfEmailHref } from "@/lib/lfContact";
 
 const prepCopy: Record<string, { label: string; description: string }> = {
   whole: { label: "Whole, cleaned", description: "We scale and clean the whole fish for you." },
@@ -322,7 +324,8 @@ const LakeFreshProduct = () => {
                       </button>
                     </div>
                     <p className="mt-2 text-xs text-[#073B78]/60">
-                      We weigh the fish when we pack it and adjust the price before you pay.
+                      You pay for this estimated weight at checkout. We weigh the fish again when we pack it and
+                      show the final total on your order page.
                     </p>
                   </div>
 
@@ -384,10 +387,24 @@ const LakeFreshProduct = () => {
                       {overStock ? "Not enough stock" : extrasCount > 0 ? `Add fish + ${extrasCount} extras` : "Add to basket"}
                     </button>
                   </div>
-                  <div className="mt-4 rounded-xl border border-[#39B54A]/25 bg-[#F4FBF7] p-3 text-xs text-[#073B78]">
-                    <span className="font-extrabold">Need help?</span> If your fish is not right, message us on WhatsApp
-                    and we will help.
-                  </div>
+                  {(lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") || lfEmailHref()) && (
+                    <div className="mt-4 rounded-xl border border-[#39B54A]/25 bg-[#F4FBF7] p-3 text-xs text-[#073B78]">
+                      <span className="font-extrabold">Need help?</span> If your fish is not right,{" "}
+                      {lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") ? (
+                        <a
+                          href={lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") as string}
+                          className="font-bold underline"
+                        >
+                          message us on WhatsApp
+                        </a>
+                      ) : (
+                        <a href={lfEmailHref() as string} className="font-bold underline">
+                          email us
+                        </a>
+                      )}{" "}
+                      and we will help.
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -558,14 +575,7 @@ const LakeFreshProduct = () => {
                   {selectedRecipe ? `Free recipe: ${selectedRecipe.title}` : "choose one free recipe above"}
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={handleAdd}
-                disabled={overStock}
-                className="inline-flex items-center justify-center rounded-lg bg-[#39B54A] px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#2c8f38] disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {overStock ? "Not enough stock" : "Add fish + extras to basket"}
-              </button>
+              <p className="text-xs font-semibold text-[#39B54A]">Use the add button above.</p>
             </div>
           ) : null}
         </div>

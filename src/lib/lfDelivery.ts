@@ -130,7 +130,7 @@ export const getNextDeliveryDate = (
   config: LFDeliveryConfig = DEFAULT_LF_DELIVERY_CONFIG,
   nowUtc: Date = new Date()
 ): string => {
-  const { dateISO, minutes } = getBlantyreNow(nowUtc);
+  const { dateISO } = getBlantyreNow(nowUtc);
   const placedLocalMinutes = (() => {
     const local = new Date(placedAtUtc.getTime() + LF_TIMEZONE_OFFSET_MINUTES * 60_000);
     return local.getUTCHours() * 60 + local.getUTCMinutes();
