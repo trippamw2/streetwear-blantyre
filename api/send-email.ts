@@ -192,8 +192,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 }
 
+// Structural type keeps this compatible with the different Supabase client
+// typings used by local and Vercel build environments.
 async function callerIsAdmin(
-  client: ReturnType<typeof createClient>,
+  client: { from: (table: string) => any },
   userId: string,
   adminAction: string,
 ) {
