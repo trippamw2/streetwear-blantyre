@@ -8,9 +8,28 @@ export interface ProductType {
 export interface Product {
   id: string;
   name: string;
+  slug?: string;
+  sku?: string;
   benefit: string;
+  description?: string;
   price: number;
+  compare_at_price?: number | null;
+  cost_price?: number | null;
   category: Category;
+  collection_name?: string;
+  product_type_code?: string | null;
+  fit?: string;
+  material?: string;
+  gender_classification?: "unisex" | "men" | "women" | string;
+  status?: "draft" | "active" | "archived" | string;
+  featured?: boolean;
+  bestseller?: boolean;
+  new_arrival?: boolean;
+  limited_drop?: boolean;
+  release_date?: string | null;
+  care_instructions?: string;
+  model_fit_note?: string;
+  tags?: string[];
   image: string;
   brand?: string;
   types: ProductType[];
@@ -73,10 +92,10 @@ export const culturePillars: CulturePillar[] = [
 
 export const categories: { id: Category; label: string }[] = [
   { id: "all", label: "All Products" },
-  { id: "t-shirts", label: "T Shirts" },
-  { id: "jerseys", label: "Jerseys" },
-  { id: "short-sleeve-shirts", label: "Short Sleeve Shirts" },
+  { id: "t-shirts", label: "T-Shirts" },
   { id: "vests", label: "Vests" },
+  { id: "short-sleeve-shirts", label: "Short-Sleeve Shirts" },
+  { id: "shorts", label: "Shorts" },
 ];
 
 // ─── Products ───────────────────────────────────────────────────────

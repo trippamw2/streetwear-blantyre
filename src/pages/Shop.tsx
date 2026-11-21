@@ -25,7 +25,9 @@ const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
   const [selectedCulture, setSelectedCulture] = useState(searchParams.get("culture") || "");
   const [searchQuery, setSearchQuery] = useState(qParam);
-  const [sortBy, setSortBy] = useState<"newest" | "price-low" | "price-high" | "name">("newest");
+  const [sortBy, setSortBy] = useState<"newest" | "best" | "price-low" | "price-high" | "name">(
+    searchParams.get("sort") === "best" ? "best" : "newest",
+  );
   const [showFilters, setShowFilters] = useState(false);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedSize, setSelectedSize] = useState<string>("all");
@@ -105,6 +107,12 @@ const Shop = () => {
         return b.price - a.price;
       case "name":
         return a.name.localeCompare(b.name);
+      case "best":
+        return (
+          Number(Boolean(b.is_best_seller)) - Number(Boolean(a.is_best_seller)) ||
+          Number(Boolean(b.is_featured)) - Number(Boolean(a.is_featured)) ||
+          a.name.localeCompare(b.name)
+        );
       default:
         return Number(Boolean(b.is_new_arrival)) - Number(Boolean(a.is_new_arrival)) || a.name.localeCompare(b.name);
     }

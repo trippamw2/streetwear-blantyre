@@ -59,6 +59,12 @@ const SB_STATIC = [
   "/privacy",
   "/returns",
   "/warranty",
+  "/collections",
+  "/looks",
+  "/stories",
+  "/editorial",
+  "/loyalty",
+  "/gifts",
   "/lookbook",
 ];
 

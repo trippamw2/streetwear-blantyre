@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { Loader2 } from "lucide-react";
 import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
-import { useWearableCategories } from "@/hooks/useWearableCategories";
+import { SB_PRODUCT_TYPES } from "@/data/sbArchitecture";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -11,7 +11,7 @@ export const Footer = () => {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { categories } = useWearableCategories();
+  const categories = SB_PRODUCT_TYPES.map((type) => ({ id: type.slug, slug: type.slug, name: type.label }));
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,9 +90,9 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-24 sm:h-28 md:h-32 lg:h-40 xl:h-48" />
             <p className="text-white/50 max-w-sm text-sm leading-relaxed">
-              Born in Blantyre, Malawi. SB brings together T shirts, football jerseys, short sleeve shirts and vests for everyday life, sport and outdoor experiences.
+              SB is a Malawian streetwear wardrobe from Blantyre: tees, vests, short-sleeve shirts and shorts designed to work together.
             </p>
-            <p className="text-sm text-white/80 font-medium">SB Streetwear. Wear Your Identity.</p>
+            <p className="text-sm text-white/80 font-medium">SB / Malawian Streetwear. Wear What Speaks.</p>
 
             <div className="pt-4">
               <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">We accept</p>
@@ -120,6 +120,8 @@ export const Footer = () => {
                   </Link>
                 </li>
               ))}
+              <li><Link to="/collections" className="hover:text-white transition-colors">Collections</Link></li>
+              <li><Link to="/shop?sort=best" className="hover:text-white transition-colors">Best Sellers</Link></li>
               <li><Link to="/combos" className="hover:text-white transition-colors">Kits & Bundles</Link></li>
             </ul>
           </div>
@@ -127,7 +129,9 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold text-sm text-white mb-4">Connect</h4>
             <ul className="space-y-2.5 text-sm text-white/50">
-              <li><Link to="/about" className="hover:text-white transition-colors">Our Story</Link></li>
+              <li><Link to="/looks" className="hover:text-white transition-colors">Looks</Link></li>
+              <li><Link to="/stories" className="hover:text-white transition-colors">Stories</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">About SB</Link></li>
               <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>
               <li><Link to="/orders" className="hover:text-white transition-colors">Track Order</Link></li>
@@ -147,7 +151,7 @@ export const Footer = () => {
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row gap-4 items-center justify-between">
           <p className="text-xs text-white/40 text-center md:text-left">
-            &copy; {new Date().getFullYear()} SB Streetwear. Wear Your Identity. Blantyre, Malawi.
+            &copy; {new Date().getFullYear()} SB / Malawian Streetwear. Wear What Speaks. Blantyre, Malawi.
           </p>
           <p className="text-xs text-white/40 uppercase tracking-wider">Blantyre, Malawi</p>
         </div>

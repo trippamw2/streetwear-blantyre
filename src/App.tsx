@@ -65,6 +65,16 @@ import EditorialPost from "./pages/EditorialPost";
 import Culture from "./pages/Culture";
 import Lookbooks from "./pages/Lookbooks";
 import LookbookDetail from "./pages/LookbookDetail";
+import Collections from "./pages/Collections";
+import CollectionDetail from "./pages/CollectionDetail";
+import Looks from "./pages/Looks";
+import LookDetail from "./pages/LookDetail";
+import AdminSbProductTypes from "./pages/admin/SbProductTypes";
+import AdminSbCollections from "./pages/admin/SbCollections";
+import AdminSbLooks from "./pages/admin/SbLooks";
+import AdminSbCampaigns from "./pages/admin/SbCampaigns";
+import AdminSbAnalytics from "./pages/admin/SbAnalytics";
+import AdminSbReturns from "./pages/admin/SbReturns";
 import Scan from "./pages/Scan";
 import LakeFreshHome from "./pages/lf/LakeFreshHome";
 import LakeFreshCatalog from "./pages/lf/LakeFreshCatalog";
@@ -206,8 +216,14 @@ const App = () => {
                         <Route path="/editorial" element={<Editorial />} />
                         <Route path="/editorial/:slug" element={<EditorialPost />} />
                         <Route path="/culture/:pillar" element={<Culture />} />
-                        <Route path="/lookbook" element={<Lookbooks />} />
+                        <Route path="/lookbook" element={<Navigate to="/looks" replace />} />
                         <Route path="/lookbook/:slug" element={<LookbookDetail />} />
+                        <Route path="/collections" element={<Collections />} />
+                        <Route path="/collections/:slug" element={<CollectionDetail />} />
+                        <Route path="/looks" element={<Looks />} />
+                        <Route path="/looks/:slug" element={<LookDetail />} />
+                        <Route path="/stories" element={<Editorial />} />
+                        <Route path="/stories/:slug" element={<EditorialPost />} />
                       </Route>
                     )}
 
@@ -255,11 +271,16 @@ const App = () => {
                         <Route path="referrals" element={<AdminReferrals />} />
                         <Route path="communications" element={<AdminCommunications />} />
                         <Route path="authentication" element={<AdminAuthentication />} />
-                        <Route path="customers" element={<Navigate to="/admin/orders" replace />} />
-                        <Route path="analytics" element={<Navigate to="/admin" replace />} />
+                        <Route path="customers" element={<AdminCRM />} />
+                        <Route path="analytics" element={<AdminSbAnalytics />} />
+                        <Route path="returns" element={<AdminSbReturns />} />
                         <Route path="gifts" element={<AdminGifts />} />
                         <Route path="culture-stories" element={<AdminCultureStories />} />
                         <Route path="lookbooks" element={<AdminLookbooks />} />
+                        <Route path="product-types" element={<AdminSbProductTypes />} />
+                        <Route path="collections" element={<AdminSbCollections />} />
+                        <Route path="looks" element={<AdminSbLooks />} />
+                        <Route path="campaigns" element={<AdminSbCampaigns />} />
                       </Route>
                     )}
 

@@ -25,6 +25,13 @@ import {
   Fish,
   Send,
   Star,
+  CreditCard,
+  RotateCcw,
+  PieChart,
+  Home,
+  Megaphone,
+  Percent,
+  UserCog,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { cn } from "@/lib/utils";
@@ -41,29 +48,92 @@ interface AdminLink {
   tab?: string;
 }
 
-const SB_LINKS: AdminLink[] = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/products", label: "Products", icon: Package },
-  { to: "/categories", label: "Categories", icon: LayoutGrid },
-  { to: "/combos", label: "Combos", icon: Package },
-  { to: "/orders", label: "Orders", icon: ShoppingCart },
-  { to: "/gifts", label: "Gifts", icon: Gift },
-  { to: "/suppliers", label: "Suppliers", icon: Truck },
-  { to: "/promotions", label: "Promotions", icon: Zap },
-  { to: "/promos", label: "Promo Codes", icon: Tag },
-  { to: "/crm", label: "CRM", icon: Users },
-  { to: "/testimonials", label: "Testimonials", icon: MessageCircle },
-  { to: "/business", label: "Business", icon: Building2 },
-  { to: "/inventory", label: "Inventory", icon: Warehouse },
-  { to: "/authentication", label: "Authentication", icon: Shield },
-  { to: "/culture-stories", label: "Culture Stories", icon: BookOpen },
-  { to: "/lookbooks", label: "Lookbooks", icon: Camera },
-  { to: "/delivery", label: "Delivery", icon: Truck },
-  { to: "/loyalty", label: "Rewards", icon: Star },
-  { to: "/referrals", label: "Referrals", icon: Users },
-  { to: "/communications", label: "Communications", icon: Send },
-  { to: "/settings", label: "Settings", icon: Settings },
+interface AdminLinkGroup {
+  heading: string;
+  links: AdminLink[];
+}
+
+const SB_LINK_GROUPS: AdminLinkGroup[] = [
+  {
+    heading: "Dashboard",
+    links: [{ to: "/", label: "Dashboard", icon: LayoutDashboard, end: true }],
+  },
+  {
+    heading: "Catalog",
+    links: [
+      { to: "/products", label: "Products", icon: Package },
+      { to: "/categories", label: "Categories", icon: LayoutGrid },
+      { to: "/collections", label: "Collections", icon: Package },
+      { to: "/collections?kind=drop", label: "Drops", icon: Tag },
+      { to: "/looks", label: "Looks", icon: Camera },
+      { to: "/inventory", label: "Inventory", icon: Warehouse },
+      { to: "/product-types", label: "Product Types", icon: LayoutGrid },
+    ],
+  },
+  {
+    heading: "Orders",
+    links: [
+      { to: "/orders", label: "Orders", icon: ShoppingCart },
+      { to: "/settings?tab=payments", label: "Payments", icon: CreditCard, tab: "payments" },
+      { to: "/delivery", label: "Shipping", icon: Truck },
+      { to: "/returns", label: "Returns", icon: RotateCcw },
+    ],
+  },
+  {
+    heading: "Customers",
+    links: [
+      { to: "/customers", label: "Customers", icon: Users },
+      { to: "/crm?view=segments", label: "Segments", icon: Users },
+    ],
+  },
+  {
+    heading: "Content",
+    links: [
+      { to: "/campaigns", label: "Homepage", icon: Home },
+      { to: "/campaigns", label: "Campaigns", icon: Megaphone },
+      { to: "/culture-stories", label: "Stories", icon: BookOpen },
+      { to: "/lookbooks", label: "Lookbooks", icon: Camera },
+      { to: "/promotions", label: "Banners", icon: Zap },
+    ],
+  },
+  {
+    heading: "Analytics",
+    links: [
+      { to: "/analytics?view=revenue", label: "Revenue", icon: PieChart },
+      { to: "/analytics?view=products", label: "Products", icon: Package },
+      { to: "/analytics?view=customers", label: "Customers", icon: Users },
+      { to: "/analytics?view=campaigns", label: "Campaigns", icon: Megaphone },
+    ],
+  },
+  {
+    heading: "Settings",
+    links: [
+      { to: "/settings?tab=store", label: "Store", icon: Settings, tab: "store" },
+      { to: "/settings?tab=payments", label: "Payments", icon: CreditCard, tab: "payments" },
+      { to: "/settings?tab=shipping", label: "Shipping", icon: Truck, tab: "shipping" },
+      { to: "/settings?tab=taxes", label: "Taxes", icon: Percent, tab: "taxes" },
+      { to: "/settings?tab=users", label: "Users", icon: UserCog, tab: "users" },
+      { to: "/settings?tab=permissions", label: "Permissions", icon: Shield, tab: "permissions" },
+    ],
+  },
+  {
+    heading: "More",
+    links: [
+      { to: "/combos", label: "Combos", icon: Gift },
+      { to: "/customers", label: "CRM", icon: Users },
+      { to: "/testimonials", label: "Testimonials", icon: MessageCircle },
+      { to: "/business", label: "Business", icon: Building2 },
+      { to: "/suppliers", label: "Suppliers", icon: Truck },
+      { to: "/authentication", label: "Authentication", icon: Shield },
+      { to: "/loyalty", label: "Rewards", icon: Star },
+      { to: "/referrals", label: "Referrals", icon: Users },
+      { to: "/communications", label: "Communications", icon: Send },
+      { to: "/promos", label: "Promo Codes", icon: Tag },
+    ],
+  },
 ];
+
+const SB_LINKS = SB_LINK_GROUPS.flatMap((group) => group.links);
 
 const LF_LINKS: AdminLink[] = [
   { to: "/", label: "Operations", icon: Fish, end: true },
@@ -101,6 +171,7 @@ export const AdminLayout = () => {
   const authPath = isLfAdmin ? lfPath("/auth") : "/auth";
   const brandName = isLfAdmin ? "Lake Fresh Admin" : "SB Admin";
   const activeTab = searchParams.get("tab") || "";
+  const activeView = searchParams.get("view") || "";
 
   const PageIcon = isLfAdmin ? Fish : LayoutDashboard;
 
@@ -173,11 +244,16 @@ export const AdminLayout = () => {
 
   const linkTarget = (link: AdminLink) => adminPath(brand, link.to);
   const isActive = (link: AdminLink) => {
+    const linkView = new URLSearchParams(link.to.split("?")[1] || "").get("view");
+    if (linkView) {
+      const linkPath = adminPath(brand, link.to.split("?")[0] || "/");
+      return location.pathname === linkPath && activeView === linkView;
+    }
     if (link.tab) {
       const linkPath = adminPath(brand, link.to.split("?")[0] || "/");
       return location.pathname === linkPath && activeTab === link.tab;
     }
-    if (link.end) return location.pathname === base && !activeTab;
+    if (link.end) return location.pathname === base && !activeTab && !activeView;
     return location.pathname === adminPath(brand, link.to) ||
       location.pathname.startsWith(`${adminPath(brand, link.to)}/`);
   };
@@ -216,34 +292,43 @@ export const AdminLayout = () => {
             </div>
           </div>
 
-          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-            {links.map((link) => {
-              const active = isActive(link);
-              const target = linkTarget(link);
+          <nav className="flex-1 overflow-y-auto p-4 space-y-4">
+            {(isLfAdmin ? [{ heading: "", links }] : SB_LINK_GROUPS).map((group) => (
+              <div key={group.heading || "links"} className="space-y-1">
+                {group.heading && (
+                  <p className="px-4 pt-2 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                    {group.heading}
+                  </p>
+                )}
+                {group.links.map((link) => {
+                  const active = isActive(link);
+                  const target = linkTarget(link);
 
-              return (
-                <a
-                  key={`${link.to}-${link.label}`}
-                  href={target}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate(target);
-                    setSidebarOpen(false);
-                  }}
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                    active
-                      ? isLfAdmin
-                        ? "bg-[#073B78] text-white"
-                        : "bg-navy text-white"
-                      : "text-gray-600 hover:bg-gray-100",
-                  )}
-                >
-                  <link.icon className="h-5 w-5" />
-                  {link.label}
-                </a>
-              );
-            })}
+                  return (
+                    <a
+                      key={`${link.to}-${link.label}`}
+                      href={target}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(target);
+                        setSidebarOpen(false);
+                      }}
+                      className={cn(
+                        "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors",
+                        active
+                          ? isLfAdmin
+                            ? "bg-[#073B78] text-white"
+                            : "bg-navy text-white"
+                          : "text-gray-600 hover:bg-gray-100",
+                      )}
+                    >
+                      <link.icon className="h-5 w-5" />
+                      {link.label}
+                    </a>
+                  );
+                })}
+              </div>
+            ))}
           </nav>
 
           <div className="p-4 border-t border-gray-100 space-y-2">

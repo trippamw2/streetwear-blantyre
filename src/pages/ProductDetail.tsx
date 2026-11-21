@@ -34,9 +34,30 @@ import {
   Package,
 } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
+import { fetchSbVariants, useSbMerchandising, type SbVariant } from "@/hooks/useSbMerchandising";
+import {
+  getCompleteLookProducts,
+  getProductTypeLabel,
+  getRelatedProducts,
+  getTypeOptions,
+  getVariantColorOptions,
+} from "@/data/sbArchitecture";
 import { buildWhatsAppLink, productMessage } from "@/lib/whatsapp";
 import { toast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+
+const COLOR_SWATCHES: Record<string, string> = {
+  black: "#111827",
+  white: "#ffffff",
+  blue: "#2563eb",
+  navy: "#0a0a0a",
+  grey: "#6b7280",
+  gray: "#6b7280",
+  green: "#16a34a",
+  red: "#dc2626",
+};
+
+const colorToCss = (color: string) => COLOR_SWATCHES[color.toLowerCase()] || color;
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -47,6 +68,9 @@ const ProductDetail = () => {
   const { isInCompare, addToCompare, removeFromCompare } = useCompare();
   const [qty, setQty] = useState(1);
   const [selectedType, setSelectedType] = useState("");
+  const [variants, setVariants] = useState<SbVariant[]>([]);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
   const [selectedImage, setSelectedImage] = useState(0);
   const { isWishlisted, toggle: toggleWishlist } = useWishlist(product?.id);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -55,6 +79,7 @@ const ProductDetail = () => {
   >([]);
   const [reviewsLoading, setReviewsLoading] = useState(true);
   const combos = useCombos();
+  const { completeLookRules, relations } = useSbMerchandising();
   const [userRating, setUserRating] = useState(0);
   const [userRatingHover, setUserRatingHover] = useState(0);
   const [userName, setUserName] = useState("");
@@ -89,10 +114,38 @@ const ProductDetail = () => {
   }, [id]);
 
   useEffect(() => {
-    if (product?.types?.length > 0) {
+    if (!product?.id) {
+      setVariants([]);
+      setSelectedSize("");
+      setSelectedColor("");
+      return;
+    }
+    let cancelled = false;
+    fetchSbVariants(product.id)
+      .then((rows) => {
+        if (cancelled) return;
+        const initial = rows.find((variant) => variant.stockQty > variant.reservedQty) || rows[0];
+        setVariants(rows);
+        setSelectedSize(initial?.sizeLabel || "");
+        setSelectedColor(initial?.color || "");
+        setSelectedType(product.types[0]?.id || "");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setVariants([]);
+        setSelectedSize("");
+        setSelectedColor("");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [product?.id]);
+
+  useEffect(() => {
+    if (variants.length === 0 && product?.types?.length > 0) {
       setSelectedType(product.types[0].id);
     }
-  }, [product]);
+  }, [product, variants.length]);
 
   useEffect(() => {
     fetchReviews();
@@ -123,12 +176,21 @@ const ProductDetail = () => {
     reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : 0;
   const reviewCount = reviews.length;
 
-  const isOnSale = product.is_on_sale && (product.discount_percent ?? 0) > 0;
-  const displayPrice = isOnSale
-    ? product.price * (1 - (product.discount_percent ?? 0) / 100)
-    : product.price;
-  const stock = product.stock ?? 0;
+  const selectedVariant =
+    variants.find(
+      (variant) => variant.sizeLabel === selectedSize && variant.color === selectedColor,
+    ) || variants.find((variant) => variant.sizeLabel === selectedSize);
+  const legacyCompareAt = product.compare_at_price || product.price;
+  const compareAtPrice = selectedVariant?.compareAtPrice ?? legacyCompareAt;
+  const displayPrice = selectedVariant?.price ?? product.price;
+  const isOnSale = displayPrice < compareAtPrice || (product.is_on_sale && (product.discount_percent ?? 0) > 0);
+  const stock = selectedVariant
+    ? Math.max(0, selectedVariant.stockQty - selectedVariant.reservedQty)
+    : product.stock ?? 0;
   const inStock = stock > 0;
+  const sizeOptions = getTypeOptions(variants, product.types);
+  const colorOptions = getVariantColorOptions(variants, selectedSize);
+  const galleryLabels = ["Product photo", "Model photo", "Front view", "Back view", "Detail"];
 
   const submitReview = async () => {
     if (!id) {
@@ -180,20 +242,19 @@ const ProductDetail = () => {
     }
   };
 
-  const recommended = products
-    .filter(
-      (p) => p.category?.toLowerCase() === product.category?.toLowerCase() && p.id !== product.id,
-    )
-    .slice(0, 4);
+  const completeLook = getCompleteLookProducts(product, products, completeLookRules, relations, 4);
+  const related = getRelatedProducts(product, products, relations, 4);
 
-  const selectedTypeName =
-    product.types.find((t) => t.id === selectedType)?.name || product.types[0]?.name || "";
+  const selectedTypeName = selectedVariant?.sizeLabel ||
+    (variants.length === 0
+      ? product.types.find((t) => t.id === selectedType)?.name || product.types[0]?.name || ""
+      : selectedSize);
 
   const handleAdd = () => {
     const fullName = selectedTypeName ? `${product.name} (${selectedTypeName})` : product.name;
     add(
       {
-        productKey: `${product.id}-${selectedType}`,
+        productKey: `${product.id}-${selectedVariant?.id || selectedType}`,
         productId: product.id,
         name: fullName,
         price: displayPrice,
@@ -219,7 +280,7 @@ const ProductDetail = () => {
 
   const handleShare = (platform: string) => {
     const shareUrl = `${window.location.origin}/product/${product.id}`;
-    const shareText = `${product.name}, ${formatMWK(displayPrice)}. Wear Your Identity.`;
+    const shareText = `${product.name}, ${formatMWK(displayPrice)}. Wear What Speaks.`;
 
     let url = "";
     if (platform === "whatsapp") {
@@ -241,9 +302,12 @@ const ProductDetail = () => {
 
   const specs = [
     { label: "Brand", value: getBrandName(product.brand) },
-    { label: "Category", value: getCategoryLabel(product.category) },
+    { label: "Category", value: getProductTypeLabel(product) },
+    { label: "Fit", value: product.fit || "Relaxed fit" },
+    { label: "Material", value: product.material || "Cotton blend" },
+    { label: "Gender", value: product.gender_classification || "Unisex" },
+    { label: "SKU", value: selectedVariant?.sku || product.sku || product.id.toUpperCase() },
     { label: "Quality", value: "Checked before dispatch" },
-    { label: "SKU", value: product.id.toUpperCase() },
     ...(product.specs
       ? Object.entries(product.specs).map(([key, value]) => ({ label: key, value }))
       : []),
@@ -433,13 +497,17 @@ const ProductDetail = () => {
                 <button
                   key={i}
                   onClick={() => setSelectedImage(i)}
-                  className={`h-20 w-20 overflow-hidden rounded-xl border-2 transition-all ${
+                  title={galleryLabels[i] || `Photo ${i + 1}`}
+                  className={`relative h-20 w-20 overflow-hidden rounded-xl border-2 transition-all ${
                     selectedImage === i
                       ? "border-primary"
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <img src={img} alt="" className="h-full w-full object-cover" />
+                  <img src={img} alt={galleryLabels[i] || `Photo ${i + 1}`} className="h-full w-full object-cover" />
+                  <span className="absolute inset-x-0 bottom-0 truncate bg-gray-950/70 px-1 py-0.5 text-[8px] font-bold uppercase text-white">
+                    {galleryLabels[i] || `Photo ${i + 1}`}
+                  </span>
                 </button>
               ))}
             </div>
@@ -454,7 +522,7 @@ const ProductDetail = () => {
                 </span>
               )}
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
-                {getCategoryLabel(product.category)}
+                {getProductTypeLabel(product)}
               </p>
               <h1 className="font-display text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
                 {product.name}
@@ -498,9 +566,37 @@ const ProductDetail = () => {
               </p>
               {isOnSale && (
                 <p className="pb-1 text-base text-gray-400 line-through">
-                  {formatMWK(product.price)}
+                  {formatMWK(compareAtPrice)}
                 </p>
               )}
+            </div>
+
+            {/* Fit, fabric and care — required wardrobe information */}
+            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600 sm:p-5">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-gray-900">
+                Fit &amp; Details
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <p>
+                  <span className="font-semibold text-gray-900">Fit:</span> {product.fit || "Relaxed fit"}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-900">Material:</span>{" "}
+                  {product.material || "Cotton blend"}
+                </p>
+              </div>
+              <p className="mt-3">{product.model_fit_note || 'Model is 6\'0" and wears size L'}</p>
+              {product.description && product.description !== product.benefit && (
+                <p className="mt-3 leading-relaxed">{product.description}</p>
+              )}
+              {product.care_instructions && (
+                <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
+                  <span className="font-semibold text-gray-900">Care:</span> {product.care_instructions}
+                </p>
+              )}
+              <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
+                <span className="font-semibold text-gray-900">Shipping:</span> Delivery across Malawi in 3–5 working days. Blantyre delivery is same day or 1–3 days; store pickup is available.
+              </p>
             </div>
 
             {(product.reward_points ?? 0) > 0 && (
@@ -605,26 +701,82 @@ const ProductDetail = () => {
               </button>
             </div>
 
-            {product.types.length > 0 && (
-              <div className="space-y-2">
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-900">
-                  Select Size
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {product.types.map((type) => (
-                    <button
-                      key={type.id}
-                      onClick={() => setSelectedType(type.id)}
-                      className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
-                        selectedType === type.id
-                          ? "border-primary bg-primary text-white"
-                          : "border-gray-200 bg-white text-gray-600 hover:border-primary/40 hover:text-primary"
-                      }`}
-                    >
-                      {type.name}
-                    </button>
-                  ))}
-                </div>
+            {(sizeOptions.length > 0 || colorOptions.length > 0) && (
+              <div className="space-y-4">
+                {sizeOptions.length > 0 && (
+                  <div className="space-y-2">
+                    <div className="flex items-baseline justify-between">
+                      <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-900">
+                        Select Size
+                      </p>
+                      {selectedVariant && (
+                        <p className="text-[11px] text-gray-400">
+                          SKU {selectedVariant.sku} · {selectedVariant.color}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {sizeOptions.map((option, optionIndex) => {
+                        const isSelected =
+                          variants.length > 0 ? option.name === selectedSize : option.id === selectedType;
+                        const available =
+                          variants.length === 0 ||
+                          variants.some(
+                            (variant) =>
+                              variant.sizeLabel === option.name &&
+                              variant.isActive &&
+                              variant.stockQty > variant.reservedQty,
+                          );
+                        return (
+                          <button
+                            key={`${option.id}-${optionIndex}`}
+                            disabled={!available}
+                            onClick={() => {
+                              if (variants.length > 0) {
+                                setSelectedSize(option.name);
+                                const colors = getVariantColorOptions(variants, option.name);
+                                setSelectedColor(colors.includes(selectedColor) ? selectedColor : colors[0] || "");
+                              } else {
+                                setSelectedType(option.id);
+                              }
+                            }}
+                            className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-35 disabled:line-through ${
+                              isSelected
+                                ? "border-primary bg-primary text-white"
+                                : "border-gray-200 bg-white text-gray-600 hover:border-primary/40 hover:text-primary"
+                            }`}
+                          >
+                            {option.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {variants.length > 0 && colorOptions.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-900">
+                      Color: {selectedColor}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {colorOptions.map((color) => (
+                        <button
+                          key={color}
+                          onClick={() => setSelectedColor(color)}
+                          title={color}
+                          aria-label={color}
+                          className={`h-9 w-9 rounded-full border-2 transition-all ${
+                            color === selectedColor
+                              ? "border-primary ring-2 ring-primary/20"
+                              : "border-gray-200 hover:border-gray-400"
+                          }`}
+                          style={{ backgroundColor: colorToCss(color) }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -943,14 +1095,33 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Recommended */}
-        {recommended.length > 0 && (
+        {/* Automatic complete-the-look recommendations */}
+        {completeLook.length > 0 && (
           <div className="mt-16">
-            <h2 className="mb-6 font-display text-2xl font-bold text-gray-900">
-              Complete the Look
-            </h2>
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <div>
+                <p className="eyebrow mb-2 text-primary">Style it with</p>
+                <h2 className="font-display text-2xl font-bold text-gray-900">
+                  Complete the Look
+                </h2>
+              </div>
+              <Link to="/looks" className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-gray-500 hover:text-primary">
+                All looks <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
             <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-              {recommended.map((p, i) => (
+              {completeLook.map((p, i) => (
+                <ProductCard key={p.id} product={p} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {related.length > 0 && (
+          <div className="mt-16">
+            <h2 className="mb-6 font-display text-2xl font-bold text-gray-900">You may also like</h2>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+              {related.map((p, i) => (
                 <ProductCard key={p.id} product={p} index={i} />
               ))}
             </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Product, culturePillars } from "@/data/products";
+import { SB_BRAND_ID } from "@/data/sbArchitecture";
 
 interface InventoryRecord {
   product_id: string;
@@ -23,6 +24,7 @@ export function useProducts() {
       const { data: productsArray, error: fetchError } = await supabase
         .from("products")
         .select("*")
+        .eq("brand_id", SB_BRAND_ID)
         .or("is_active.eq.true,is_active.is.null");
 
       if (fetchError) {
@@ -40,15 +42,33 @@ export function useProducts() {
         return;
       }
 
+      const productIds = productsArray.map((product) => product.id);
+
       // Fetch inventory for stock levels
       const { data: inventory } = await supabase
         .from("inventory")
-        .select("product_id, quantity, reserved_quantity");
+        .select("product_id, quantity, reserved_quantity")
+        .in("product_id", productIds);
 
-      // Fetch product variants (sizes)
+      // Fetch product variants (sizes). Legacy product_types remain as a
+      // fallback until every product has a proper sb_product_variants row.
       const { data: productTypes } = await supabase
         .from("product_types")
         .select("id, product_id, name, sort_order")
+        .in("product_id", productIds)
+        .order("sort_order", { ascending: true });
+
+      const { data: structuredVariants } = await supabase
+        .from("sb_product_variants")
+        .select("id, product_id, size_label, price_mwk, stock_qty, reserved_qty, availability")
+        .eq("brand_id", SB_BRAND_ID)
+        .eq("is_active", true)
+        .order("size_label", { ascending: true });
+
+      const { data: tagRows } = await supabase
+        .from("sb_product_tags")
+        .select("product_id, tag, sort_order")
+        .eq("brand_id", SB_BRAND_ID)
         .order("sort_order", { ascending: true });
 
       // Build inventory map
@@ -57,35 +77,80 @@ export function useProducts() {
         inventoryMap.set(inv.product_id, inv as InventoryRecord);
       });
 
-      // Build variants map
+      const tagMap = new Map<string, string[]>();
+      tagRows?.forEach((row) => {
+        const tags = tagMap.get(row.product_id) || [];
+        tags.push(row.tag);
+        tagMap.set(row.product_id, tags);
+      });
+
+      // Build variants map from structured variants, falling back to legacy labels.
       const typesMap = new Map<string, { id: string; name: string }[]>();
+      const variantStockMap = new Map<string, number>();
+      structuredVariants?.forEach((variant) => {
+        if (!variant?.product_id) return;
+        const list = typesMap.get(variant.product_id) || [];
+        if (!list.some((item) => item.name === variant.size_label)) {
+          list.push({ id: variant.id, name: variant.size_label });
+          typesMap.set(variant.product_id, list);
+        }
+        if (variant.availability !== "disabled") {
+          variantStockMap.set(
+            variant.product_id,
+            (variantStockMap.get(variant.product_id) || 0) +
+              Math.max(0, (variant.stock_qty || 0) - (variant.reserved_qty || 0)),
+          );
+        }
+      });
       productTypes?.forEach((t: any) => {
-        if (!t?.product_id || !t?.name) return;
-        const list = typesMap.get(t.product_id) || [];
-        list.push({ id: t.id, name: t.name });
-        typesMap.set(t.product_id, list);
+        if (!t?.product_id || !t?.name || typesMap.has(t.product_id)) return;
+        typesMap.set(t.product_id, [{ id: t.id, name: t.name }]);
       });
 
       // Map database products to frontend format
       const mappedProducts: Product[] = productsArray.map((p: any) => {
         const inventoryRecord = inventoryMap.get(p.id);
-        const availableStock = inventoryRecord
-          ? Math.max(0, (inventoryRecord.quantity || 0) - (inventoryRecord.reserved_quantity || 0))
-          : Math.max(0, p.stock_quantity || 0);
+        const availableStock = variantStockMap.has(p.id)
+          ? variantStockMap.get(p.id)!
+          : inventoryRecord
+            ? Math.max(0, (inventoryRecord.quantity || 0) - (inventoryRecord.reserved_quantity || 0))
+            : Math.max(0, p.stock_quantity || 0);
+        const isFeatured = p.featured ?? p.is_featured ?? false;
+        const isBestSeller = p.bestseller ?? p.is_best_seller ?? false;
+        const isNewArrival = p.new_arrival ?? p.is_new_arrival ?? false;
 
         return {
           id: p.id,
           name: p.name,
+          slug: p.slug || undefined,
+          sku: p.sku || undefined,
           benefit: p.description || p.benefit || "",
+          description: p.description || p.benefit || "",
           price: p.price,
+          compare_at_price: p.compare_at_price ?? null,
+          cost_price: p.cost_price ?? null,
           category: (p.category || "all") as any,
+          collection_name: p.collection_name || undefined,
+          product_type_code: p.product_type_code || undefined,
+          fit: p.fit || undefined,
+          material: p.material || undefined,
+          gender_classification: p.gender_classification || "unisex",
+          status: p.status || "active",
+          featured: isFeatured,
+          bestseller: isBestSeller,
+          new_arrival: isNewArrival,
+          limited_drop: p.limited_drop || false,
+          release_date: p.release_date || null,
+          care_instructions: p.care_instructions || undefined,
+          model_fit_note: p.model_fit_note || undefined,
+          tags: tagMap.get(p.id) || [],
           image: p.image || "",
           brand: p.brand || "SB Streetwear",
           types: typesMap.get(p.id) || [],
           stock: availableStock,
-          is_featured: p.is_featured || false,
-          is_best_seller: p.is_best_seller || false,
-          is_new_arrival: p.is_new_arrival || false,
+          is_featured: isFeatured,
+          is_best_seller: isBestSeller,
+          is_new_arrival: isNewArrival,
           is_on_sale: p.is_on_sale || false,
           discount_percent: p.discount_percent || 0,
           gallery_images: p.gallery_images || [],
@@ -113,10 +178,24 @@ export function useProducts() {
     fetchProducts();
   }, [fetchProducts]);
 
-  // Get single product by ID
-  const getProduct = useCallback((id: string) => {
-    return products.find((p) => p.id === id);
-  }, [products]);
+  // Get single product by ID or SEO slug
+  const getProduct = useCallback(
+    (idOrSlug: string) => {
+      return (
+        products.find((p) => p.id === idOrSlug || p.slug === idOrSlug) ||
+        products.find((p) => p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") === idOrSlug)
+      );
+    },
+    [products],
+  );
+
+  // Get single product by slug or id
+  const getProductBySlug = useCallback(
+    (slugOrId: string) =>
+      products.find((p) => p.slug === slugOrId || p.id === slugOrId) ||
+      products.find((p) => p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") === slugOrId),
+    [products],
+  );
 
   // Get products by category
   const getProductsByCategory = useCallback((category: string) => {
@@ -255,6 +334,7 @@ export function useProducts() {
     error,
     refresh: fetchProducts,
     getProduct,
+    getProductBySlug,
     getProductsByCategory,
     getProductsByCulture,
     checkAndReserveStock,

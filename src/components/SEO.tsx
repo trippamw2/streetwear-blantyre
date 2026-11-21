@@ -20,7 +20,7 @@ interface SEOProps {
 
 const SITE_NAME = "Streetwear Blantyre";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "SB Streetwear - T shirts, football jerseys, short sleeve shirts and vests for everyday life, sport and outdoor experiences. Blantyre, Malawi. Wear Your Identity.";
+const DEFAULT_DESC = "SB / Malawian Streetwear from Blantyre. A full wardrobe of tees, vests, short-sleeve shirts and shorts. Wear What Speaks.";
 const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Streetwear+Blantyre";
 
 const BRAND_META: Record<BrandSlug, { siteName: string; siteUrl: string; image: string }> = {
@@ -210,13 +210,13 @@ export const SEO = ({
 
 export const defaultSEO = {
   home: {
-    title: "Streetwear Blantyre | Wear Your Identity",
+    title: "SB / Malawian Streetwear | Wear What Speaks",
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop All | T Shirts, Jerseys, Short Sleeve Shirts & Vests",
+    title: "Shop the Wardrobe | T-Shirts, Vests, Shirts & Shorts",
     description:
-      "Shop T shirts, football jerseys, short sleeve shirts and vests from SB Streetwear. Everyday pieces for the street, the pitch and everything in between. Delivery across Malawi.",
+      "Shop the full SB wardrobe from Blantyre: graphic tees, vests, short-sleeve shirts and shorts made to mix into complete looks.",
   },
   combos: {
     title: "Kits & Bundles | Streetwear Blantyre",
