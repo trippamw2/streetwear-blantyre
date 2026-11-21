@@ -4,7 +4,8 @@
     { "source": "/(.*)", "destination": "/" }
   ],
   "crons": [
-    { "path": "/api/cron/charge-subscriptions", "schedule": "0 6 * * *" }
+    { "path": "/api/cron/charge-subscriptions", "schedule": "0 6 * * *" },
+    { "path": "/api/cron/support-sla", "schedule": "0 * * * *" }
   ]
 }
 

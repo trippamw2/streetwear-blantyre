@@ -54,6 +54,7 @@ const LakeFreshHeader = () => {
           <LFNavLink to="/lf/subscribe" className={navLinkClass}>Subscribe</LFNavLink>
           <LFNavLink to="/lf/loyalty" className={navLinkClass}>Rewards</LFNavLink>
           <LFNavLink to="/lf/pro" className={navLinkClass}>PRO</LFNavLink>
+          <LFNavLink to="/lf/support" className={navLinkClass}>Help</LFNavLink>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -113,6 +114,7 @@ const LakeFreshHeader = () => {
             <LFNavLink to="/lf/loyalty" className={navLinkClass}>Rewards</LFNavLink>
             <LFNavLink to="/lf/subscribe" className={navLinkClass}>Subscribe</LFNavLink>
             <LFNavLink to="/lf/pro" className={navLinkClass}>PRO</LFNavLink>
+            <LFNavLink to="/lf/support" className={navLinkClass}>Help</LFNavLink>
             {!user && <LFNavLink to="/lf/auth" className={navLinkClass}>Sign in</LFNavLink>}
           </div>
         </div>
@@ -148,6 +150,7 @@ const LakeFreshFooter = () => (
           <LFLink to="/lf/loyalty" className="hover:text-[#073B78]">Rewards</LFLink>
           <LFLink to="/lf/subscribe" className="hover:text-[#073B78]">Subscribe</LFLink>
           <LFLink to="/lf/pro" className="hover:text-[#073B78]">LakeFresh PRO</LFLink>
+          <LFLink to="/lf/support" className="hover:text-[#073B78]">Get Help</LFLink>
         </div>
       </div>
       <div>

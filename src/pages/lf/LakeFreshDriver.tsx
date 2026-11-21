@@ -5,6 +5,7 @@ import { LeafletMap } from "@/components/lf/LeafletMap";
 import { CheckCircle2, Phone, MapPin, Camera } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { BRANDS } from "@/lib/brands";
+import { buildLfProofPath, LF_PROOF_BUCKET } from "@/lib/lfStorage";
 
 const LF_BRAND_ID = BRANDS["lake-fresh"].id;
 
@@ -64,7 +65,12 @@ export default function LakeFreshDriver() {
     if (!result?.ok) {
       toast({
         title: "Update failed",
-        description: result?.reason === "no_access" ? "You do not have delivery access." : "This order could not be completed.",
+        description:
+          result?.reason === "no_access"
+            ? "You do not have delivery access."
+            : result?.reason === "confirmation_required"
+              ? "Wait for the customer to agree to the final total."
+              : "This order could not be completed.",
         variant: "destructive",
       });
       return;
@@ -74,15 +80,17 @@ export default function LakeFreshDriver() {
   };
 
   const uploadProof = async (id: string, file: File) => {
-    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-    const uuid = (typeof crypto !== "undefined" && typeof (crypto as any).randomUUID === "function")
-      ? (crypto as any).randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    const path = `lf/delivery-proof/${uuid}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file, { contentType: file.type || undefined });
+    const path = buildLfProofPath(id, file.name);
+    if (!path) {
+      toast({ title: "Photo not accepted", description: "Use a JPG, PNG or WebP photo.", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.storage.from(LF_PROOF_BUCKET).upload(path, file, {
+      contentType: file.type || undefined,
+      upsert: false,
+    });
     if (error) { toast({ title: "Upload failed", description: error.message, variant: "destructive" }); return; }
-    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
-    setProofs((current) => ({ ...current, [id]: data.publicUrl }));
+    setProofs((current) => ({ ...current, [id]: path }));
     toast({ title: "Proof added", description: "Now mark this stop as delivered." });
   };
 

@@ -389,20 +389,22 @@ const LakeFreshProduct = () => {
                   </div>
                   {(lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") || lfEmailHref()) && (
                     <div className="mt-4 rounded-xl border border-[#39B54A]/25 bg-[#F4FBF7] p-3 text-xs text-[#073B78]">
-                      <span className="font-extrabold">Need help?</span> If your fish is not right,{" "}
-                      {lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") ? (
-                        <a
-                          href={lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") as string}
-                          className="font-bold underline"
-                        >
-                          message us on WhatsApp
-                        </a>
-                      ) : (
-                        <a href={lfEmailHref() as string} className="font-bold underline">
-                          email us
-                        </a>
-                      )}{" "}
-                      and we will help.
+                      <span className="font-extrabold">Need help?</span>{" "}
+                      <LFLink to="/lf/support" className="font-bold underline">
+                        Tell us here
+                      </LFLink>
+                      {lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") && (
+                        <>
+                          {" or "}
+                          <a
+                            href={lfWhatsAppLink("Hi Lake Fresh, I need help with my fish order.") as string}
+                            className="font-bold underline"
+                          >
+                            message us on WhatsApp
+                          </a>
+                        </>
+                      )}
+                      . We will help.
                     </div>
                   )}
                 </div>

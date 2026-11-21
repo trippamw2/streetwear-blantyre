@@ -159,3 +159,16 @@
 -- where grantee='anon' and table_name like 'lf\_%' and table_name in
 --   ('lf_lot_records','lf_qa_checks','lf_recall_events','lf_recall_lots'); -- expect 0
 
+-- 24. P2 private proof and support (20261123000000)
+-- select public = false from storage.buckets where id='lf-delivery-proof'; -- expect false
+-- select count(*) from storage.objects where bucket_id='lf-delivery-proof'
+--   and name not like 'lf/%'; -- expect 0
+-- select count(*) from information_schema.role_table_grants
+-- where grantee='anon' and table_name like 'lf\_support\_%'; -- expect 0
+-- select has_function_privilege('anon', 'public.lf_staff_reply_ticket(uuid, text)', 'EXECUTE'); -- expect false
+-- select has_function_privilege('anon', 'public.lf_public_order_proof(uuid, text)', 'EXECUTE'); -- expect true
+-- select tgname from pg_trigger t join pg_class c on c.oid=t.tgrelid
+-- where c.relname in ('lf_support_messages','lf_support_events')
+--   and t.tgname like '%append_only%'; -- expect 2 rows
+-- select public.lf_mark_support_sla_breaches(); -- expect ok true, service role only
+

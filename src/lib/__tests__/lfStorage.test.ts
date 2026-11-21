@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { lfStoragePathFromUrl } from "../lfStorage";
+import {
+  buildLfProofPath,
+  isLfProofPath,
+  lfStoragePathFromUrl,
+} from "../lfStorage";
 
 describe("Lake Fresh storage paths", () => {
   it("resolves a Lake Fresh public URL to a storage path", () => {
@@ -23,5 +27,21 @@ describe("Lake Fresh storage paths", () => {
     expect(lfStoragePathFromUrl("https://example.com/photo.jpg")).toBeNull();
     expect(lfStoragePathFromUrl("/brand/lake-fresh/fish-chambo.jpg")).toBeNull();
     expect(lfStoragePathFromUrl(null)).toBeNull();
+  });
+
+  it("accepts only private delivery proof paths", () => {
+    expect(isLfProofPath("lf/11111111-1111-4111-8111-111111111111/22222222-2222-4222-8222-222222222222.jpg")).toBe(true);
+    expect(isLfProofPath("lf/11111111-1111-4111-8111-111111111111/proof.jpg")).toBe(false);
+    expect(isLfProofPath("https://example.com/proof.jpg")).toBe(false);
+  });
+
+  it("builds a proof path under the order folder", () => {
+    const path = buildLfProofPath(
+      "11111111-1111-4111-8111-111111111111",
+      "delivery.PNG",
+    );
+    expect(path).toMatch(/^lf\/11111111-1111-4111-8111-111111111111\/[0-9a-f-]{36}\.png$/i);
+    expect(buildLfProofPath("not-an-order", "proof.jpg")).toBeNull();
+    expect(buildLfProofPath("11111111-1111-4111-8111-111111111111", "proof.pdf")).toBeNull();
   });
 });

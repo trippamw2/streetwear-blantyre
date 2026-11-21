@@ -307,8 +307,14 @@ const LakeFreshOrder = () => {
           </ol>
         </div>
 
-        {/* Support channels are only shown when real contact details exist. */}
         <div className="mt-4 flex flex-wrap gap-2">
+          <LFLink
+            to={`/lf/support?order=${order.id}`}
+            className="inline-flex items-center gap-2 rounded-lg border border-[#08A9E8]/30 bg-[#EAF6FB] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
+          >
+            Get help with this order
+          </LFLink>
+          {/* Other channels are only shown when real contact details exist. */}
           {supportWhatsApp && (
             <a
               href={supportWhatsApp}

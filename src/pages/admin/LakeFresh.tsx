@@ -12,7 +12,7 @@ import LFImageGalleryInput from "@/components/admin/LFImageGalleryInput";
 import LFFileManager from "@/components/admin/LFFileManager";
 import LakeFreshImage from "@/components/lf/LakeFreshImage";
 import { lfGalleryImages } from "@/lib/lfImages";
-import { deleteLfStorageAsset } from "@/lib/lfStorage";
+import { deleteLfStorageAsset, isLfProofPath, lfProofSignedUrl } from "@/lib/lfStorage";
 import { BRANDS } from "@/lib/brands";
 import { LeafletMap } from "@/components/lf/LeafletMap";
 import { formatMWK } from "@/data/products";
@@ -31,6 +31,7 @@ import {
   AlertCircle,
   Image as ImageIcon,
   FileText,
+  MessageCircle,
 } from "lucide-react";
 
 const LF_BRAND_ID = BRANDS["lake-fresh"].id;
@@ -47,7 +48,7 @@ const escapeHtml = (value: unknown) =>
     return entities[char] || char;
   });
 
-type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery" | "route" | "customers" | "settings";
+type Tab = "catalog" | "spices" | "recipes" | "media" | "pro" | "subscriptions" | "analytics" | "batches" | "slots" | "orders" | "preparation" | "delivery" | "route" | "support" | "customers" | "settings";
 
 const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "catalog", label: "Catalog", icon: Fish },
@@ -64,6 +65,7 @@ const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "preparation", label: "Preparation", icon: Package },
   { key: "delivery", label: "Delivery", icon: Truck },
   { key: "route", label: "Route Map", icon: MapPin },
+  { key: "support", label: "Support", icon: MessageCircle },
   { key: "customers", label: "Customers", icon: Users },
 ];
 
@@ -224,7 +226,7 @@ const AssetField = ({
   );
 };
 
-const VALID_TABS: Tab[] = ["catalog", "settings", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery", "route", "customers"];
+const VALID_TABS: Tab[] = ["catalog", "settings", "spices", "recipes", "media", "pro", "subscriptions", "analytics", "batches", "slots", "orders", "preparation", "delivery", "route", "support", "customers"];
 
 const SETTING_FIELDS: { key: string; label: string; defaultValue: string; kind: "time" | "number" }[] = [
   { key: "delivery.cutoff", label: "Order cutoff", defaultValue: "20:00", kind: "time" },
@@ -380,6 +382,12 @@ const AdminLakeFresh = () => {
   const [brandSettings, setBrandSettings] = useState<Record<string, string>>({});
   const [reconciliations, setReconciliations] = useState<any[]>([]);
   const [refunds, setRefunds] = useState<any[]>([]);
+
+  // ---- Support state ----
+  const [supportTickets, setSupportTickets] = useState<any[]>([]);
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
+  const [ticketReply, setTicketReply] = useState("");
+  const [proofUrls, setProofUrls] = useState<Record<string, string>>({});
 
   const [loading, setLoading] = useState(false);
   const pendingAssetDeletes = useRef<Set<string>>(new Set());
@@ -1095,6 +1103,91 @@ const AdminLakeFresh = () => {
     return true;
   };
 
+  const loadSupportTickets = async () => {
+    const { data, error } = await supabase
+      .from("lf_support_tickets")
+      .select("*, lf_support_messages(id, actor_role, body, created_at)")
+      .eq("brand_id", LF_BRAND_ID)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) {
+      loadFailed("Support requests", error);
+      return false;
+    }
+    setSupportTickets(data || []);
+    return true;
+  };
+
+  const replyToTicket = async (ticketId: string) => {
+    if (!ticketReply.trim()) return;
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.rpc("lf_staff_reply_ticket", {
+        p_ticket_id: ticketId,
+        p_body: ticketReply.trim(),
+      });
+      if (error) throw error;
+      const result = data as { ok?: boolean; reason?: string };
+      if (!result?.ok) throw new Error(result?.reason || "We could not save that reply.");
+      setTicketReply("");
+      await loadSupportTickets();
+      toast({ title: "Reply saved", description: "The customer can now see it on their help page." });
+    } catch (error: any) {
+      toast({
+        title: "Reply not saved",
+        description: error?.message || "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const changeTicketStatus = async (ticketId: string, status: string) => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.rpc("lf_set_ticket_status", {
+        p_ticket_id: ticketId,
+        p_status: status,
+      });
+      if (error) throw error;
+      const result = data as { ok?: boolean; reason?: string };
+      if (!result?.ok) throw new Error(result?.reason || "We could not change that status.");
+      await loadSupportTickets();
+      toast({ title: "Status updated" });
+    } catch (error: any) {
+      toast({
+        title: "Status not changed",
+        description: error?.message || "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const viewDeliveryProof = async (order: any) => {
+    if (!isLfProofPath(order?.delivery_proof_url)) {
+      toast({
+        title: "Old proof photo",
+        description: "This order uses an older photo link. Open it from the order record.",
+      });
+      if (order?.delivery_proof_url) window.open(order.delivery_proof_url, "_blank", "noopener");
+      return;
+    }
+    try {
+      const url = proofUrls[order.id] || (await lfProofSignedUrl(order.delivery_proof_url, 60));
+      setProofUrls((current) => ({ ...current, [order.id]: url }));
+      window.open(url, "_blank", "noopener");
+    } catch (error: any) {
+      toast({
+        title: "Photo not available",
+        description: error?.message || "Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
     loadSpecies();
     loadProducts();
@@ -1114,6 +1207,7 @@ const AdminLakeFresh = () => {
     loadSubscriptionCharges();
     loadReconciliations();
     loadRefunds();
+    loadSupportTickets();
   }, []);
 
   useEffect(() => {
@@ -1141,6 +1235,7 @@ const AdminLakeFresh = () => {
       loadSubscriptionCharges(),
       loadReconciliations(),
       loadRefunds(),
+      loadSupportTickets(),
     ]);
     setLoading(false);
     const failed = results.filter((result) => result === false).length;
@@ -3374,6 +3469,14 @@ const AdminLakeFresh = () => {
                         >
                           {expandedOrder === o.id ? "Hide" : "Items"}
                         </button>
+                        {o.delivery_proof_url && (
+                          <button
+                            onClick={() => void viewDeliveryProof(o)}
+                            className="text-xs font-bold text-[#08A9E8]"
+                          >
+                            Proof
+                          </button>
+                        )}
                         {o.payment_status !== "paid" && (
                           <button
                             onClick={() => markOrderPaid(o.id)}
@@ -3811,6 +3914,118 @@ const AdminLakeFresh = () => {
               No orders loaded. Choose a date and click "Load orders".
             </div>
           )}
+        </div>
+      )}
+
+      {/* SUPPORT */}
+      {tab === "support" && (
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+          <div className="rounded-xl border bg-white overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th className="px-4 py-3 text-left">Customer</th>
+                  <th className="px-4 py-3 text-left">Request</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-left">Opened</th>
+                </tr>
+              </thead>
+              <tbody>
+                {supportTickets.map((ticket) => (
+                  <tr
+                    key={ticket.id}
+                    onClick={() => setSelectedTicketId(ticket.id)}
+                    className={`cursor-pointer border-t ${selectedTicketId === ticket.id ? "bg-[#EAF6FB]" : "hover:bg-gray-50"}`}
+                  >
+                    <td className="px-4 py-3">
+                      <div className="font-medium">{ticket.customer_name}</div>
+                      <div className="text-xs text-gray-500">{ticket.customer_phone || ticket.customer_email || "Guest"}</div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="font-medium">{ticket.subject}</div>
+                      <div className="text-xs text-gray-500">{ticket.category} | {ticket.priority}</div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`text-xs font-bold ${ticket.sla_breached_at ? "text-red-600" : ticket.status === "waiting" ? "text-amber-600" : "text-[#39B54A]"}`}>
+                        {ticket.sla_breached_at ? "Late" : ticket.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-xs">{new Date(ticket.created_at).toLocaleString()}</td>
+                  </tr>
+                ))}
+                {supportTickets.length === 0 && (
+                  <tr><td colSpan={4} className="px-4 py-6 text-center text-gray-500">No help requests yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="rounded-xl border bg-white p-5">
+            {selectedTicketId ? (
+              (() => {
+                const ticket = supportTickets.find((item) => item.id === selectedTicketId);
+                if (!ticket) return <p className="text-sm text-gray-500">Choose a request.</p>;
+                return (
+                  <div className="space-y-4">
+                    <div>
+                      <h2 className="font-display text-lg font-bold">{ticket.subject}</h2>
+                      <p className="text-xs text-gray-500">
+                        {ticket.customer_name} | {ticket.category} | {ticket.priority}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500">
+                        Reply due {new Date(ticket.sla_due_at).toLocaleString()}
+                      </p>
+                    </div>
+
+                    <div className="max-h-72 space-y-2 overflow-y-auto rounded-lg bg-gray-50 p-3">
+                      {(ticket.lf_support_messages || []).map((message: any) => (
+                        <div
+                          key={message.id}
+                          className={`rounded-lg p-2 text-xs ${message.actor_role === "staff" ? "bg-[#073B78] text-white" : "bg-white text-gray-700"}`}
+                        >
+                          <p className="font-bold opacity-70">{message.actor_role === "staff" ? "You" : "Customer"}</p>
+                          <p className="mt-1 whitespace-pre-wrap">{message.body}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {["open", "waiting", "resolved", "closed"].map((status) => (
+                        <Button
+                          key={status}
+                          size="sm"
+                          variant={ticket.status === status ? "default" : "outline"}
+                          disabled={loading}
+                          onClick={() => void changeTicketStatus(ticket.id, status)}
+                        >
+                          {status}
+                        </Button>
+                      ))}
+                    </div>
+
+                    <div>
+                      <Label>Your reply</Label>
+                      <Textarea
+                        value={ticketReply}
+                        onChange={(event) => setTicketReply(event.target.value)}
+                        rows={4}
+                        maxLength={4000}
+                        placeholder="Write a clear answer"
+                        className="mt-1"
+                      />
+                      <Button className="mt-3" disabled={loading || !ticketReply.trim()} onClick={() => void replyToTicket(ticket.id)}>
+                        <MessageCircle className="mr-2 h-4 w-4" /> Send reply
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })()
+            ) : (
+              <div className="py-10 text-center text-sm text-gray-500">
+                Choose a help request to read and answer it.
+              </div>
+            )}
+          </div>
         </div>
       )}
 

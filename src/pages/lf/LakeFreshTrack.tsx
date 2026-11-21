@@ -264,8 +264,19 @@ const LakeFreshTrack = () => {
           </div>
         )}
 
+        {order && (
+          <div className="mt-6 text-center">
+            <LFLink
+              to={`/lf/support?order=${order.id}`}
+              className="inline-flex items-center justify-center rounded-lg border border-[#08A9E8]/30 bg-[#EAF6FB] px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]"
+            >
+              Get help with this order
+            </LFLink>
+          </div>
+        )}
+
         {(lfWhatsAppLink("Hi Lake Fresh, please help me track my order.") || lfEmailHref()) && (
-          <p className="mt-6 text-center text-xs text-[#073B78]/60">
+          <p className="mt-4 text-center text-xs text-[#073B78]/60">
             Need help?{" "}
             {lfWhatsAppLink("Hi Lake Fresh, please help me track my order.") ? (
               <a
