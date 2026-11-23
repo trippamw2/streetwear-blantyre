@@ -13,7 +13,8 @@ import {
 } from "@/data/sbArchitecture";
 import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
 import { ArrowRight, ArrowUpRight, Shirt, Sparkles, Truck } from "lucide-react";
-import hero from "@/assets/hero-lifestyle.jpg";
+
+const hero = "/images/sb/home-menu.jpg";
 
 const LOOK_COMBINATIONS: { label: string; types: [SbProductTypeCode, SbProductTypeCode] }[] = [
   { label: "Tee + Shorts", types: ["TEE", "SHORTS"] },
