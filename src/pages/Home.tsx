@@ -74,42 +74,39 @@ const Home = () => {
 
       {/* HERO — editorial campaign */}
       <section className="bg-gray-950">
-        <div className="relative w-full">
+        <div className="w-full">
           <img
             src={heroImage}
             alt="Streetwear campaign with Malawian models"
             className="block h-auto w-full"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-950/85 via-gray-950/10 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0">
-            <div className="container pb-8 sm:pb-12 lg:pb-16">
-              <div className="max-w-3xl space-y-4 rounded-xl bg-gray-950/55 p-5 backdrop-blur-sm sm:space-y-5 sm:p-8">
-                <p className="font-display text-xl font-black uppercase tracking-[0.35em] text-white sm:text-2xl">Streetwear Blantyre</p>
-                <h1 className="font-display text-[2.5rem] font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-6xl lg:text-7xl">
-                  {heroPlacement?.headline || heroCampaign?.headline || "Wear What Speaks."}
-                </h1>
-                <p className="max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
-                  {heroPlacement?.body ||
-                    heroCampaign?.description ||
-                    "A full streetwear wardrobe from Blantyre, Malawi. Built to layer, mix and speak for itself."}
-                </p>
-                <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:gap-4">
-                  <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
-                    <Link to={heroHref}>
-                      {heroPlacement?.ctaLabel || heroCampaign?.ctaLabel || "Shop all"} <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="border-white/40 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white"
-                  >
-                    <Link to="/looks">Explore the looks</Link>
-                  </Button>
-                </div>
-              </div>
+        </div>
+        <div className="container py-8 sm:py-12 lg:py-16">
+          <div className="max-w-3xl space-y-4 sm:space-y-5">
+            <p className="font-display text-xl font-black uppercase tracking-[0.35em] text-white sm:text-2xl">Streetwear Blantyre</p>
+            <h1 className="font-display text-[2.5rem] font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-6xl lg:text-7xl">
+              {heroPlacement?.headline || heroCampaign?.headline || "Wear What Speaks."}
+            </h1>
+            <p className="max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
+              {heroPlacement?.body ||
+                heroCampaign?.description ||
+                "A full streetwear wardrobe from Blantyre, Malawi. Built to layer, mix and speak for itself."}
+            </p>
+            <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:gap-4">
+              <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
+                <Link to={heroHref}>
+                  {heroPlacement?.ctaLabel || heroCampaign?.ctaLabel || "Shop all"} <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-white/40 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white"
+              >
+                <Link to="/looks">Explore the looks</Link>
+              </Button>
             </div>
           </div>
         </div>
