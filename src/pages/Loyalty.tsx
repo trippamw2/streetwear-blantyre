@@ -29,7 +29,7 @@ const Loyalty = () => {
         <div className="container py-6 sm:py-12">
           <div className="max-w-2xl mx-auto text-center space-y-4">
             <Gift className="h-12 w-12 mx-auto text-gray-600" />
-            <h1 className="font-display font-bold text-2xl sm:text-3xl text-gray-900">Join Streetwear Blantyre Rewards</h1>
+            <h1 className="font-display font-bold text-2xl sm:text-3xl text-gray-900">Join Wear What Speaks Rewards</h1>
             <p className="text-gray-600">Your loyalty deserves more than empty points. Sign in and start earning toward culture that represents you.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild variant="hero" size="lg">
@@ -68,7 +68,7 @@ const Loyalty = () => {
         </div>
 
         <div className="max-w-2xl space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-gray-900">Streetwear Blantyre Rewards</h1>
+          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-gray-900">Wear What Speaks Rewards</h1>
           <p className="text-gray-600 text-sm sm:text-base">
             Most rewards programs forget why you shop. Points without purpose go nowhere.
             Every purchase here earns points toward what actually matters, culture that represents you.

@@ -18,10 +18,7 @@ interface Lookbook {
 }
 
 const PILLAR_COLORS: Record<string, string> = {
-  music: "bg-purple-100 text-purple-700",
-  sports: "bg-green-100 text-green-700",
-  faith: "bg-amber-100 text-amber-700",
-  hustle: "bg-red-100 text-red-700",
+  "hip-hop": "bg-gray-900 text-white", street: "bg-gray-900 text-white", music: "bg-gray-900 text-white", sports: "bg-gray-900 text-white", faith: "bg-gray-900 text-white", hustle: "bg-gray-900 text-white",
 };
 
 const Lookbooks = () => {
@@ -48,7 +45,7 @@ const Lookbooks = () => {
 
   return (
     <>
-      <SEO title="Lookbooks | Streetwear Blantyre" description="Curated collections. Editorial vision. The culture, styled." />
+      <SEO title="Lookbooks | Wear What Speaks" description="Curated collections. Editorial vision. The culture, styled." />
 
       <div className="min-h-screen bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">

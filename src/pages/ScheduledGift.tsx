@@ -96,7 +96,7 @@ const ScheduledGift = () => {
         txRef,
         callbackUrl: `${window.location.origin}/gift-track/${trackingToken}?payment=callback`,
         returnUrl: `${window.location.origin}/gift-track/${trackingToken}?payment=complete`,
-        title: `Streetwear Blantyre Gift | ${selectedProduct.name}`,
+        title: `Wear What Speaks Gift | ${selectedProduct.name}`,
         description: `Gift for ${recipientName}`,
       });
     } catch (err: any) {
@@ -119,7 +119,7 @@ const ScheduledGift = () => {
   return (
     <div>
       <SEO
-        title="Schedule a Gift | Streetwear Blantyre"
+        title="Schedule a Gift | Wear What Speaks"
         description="Gift a Streetwear Piece with a personal message. Schedule delivery for any occasion."
       />
 

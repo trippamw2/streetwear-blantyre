@@ -147,7 +147,7 @@ export function useProducts() {
           model_fit_note: displayCopy(p.model_fit_note) || undefined,
           tags: displayCopyList(tagMap.get(p.id) || []),
           image: p.image || "",
-          brand: displayCopy(p.brand) || "Streetwear Blantyre",
+          brand: displayCopy(p.brand) || "Wear What Speaks",
           types: typesMap.get(p.id) || [],
           stock: availableStock,
           is_featured: isFeatured,

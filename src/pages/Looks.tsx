@@ -131,8 +131,8 @@ const Looks = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title="Looks | Streetwear Blantyre"
-        description="Shoppable streetwear looks from Streetwear Blantyre. See the pieces, the styling notes and the full look, then add what you love to your bag."
+        title="Looks | Wear What Speaks"
+        description="Shoppable streetwear looks from Wear What Speaks. See the pieces, the styling notes and the full look, then add what you love to your bag."
       />
 
       <section className="border-b border-gray-200 bg-gray-50">
@@ -145,8 +145,7 @@ const Looks = () => {
               Looks
             </h1>
             <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
-              Editorial styling for real life in Blantyre. Every look is built from pieces you can
-              actually wear, and actually buy.
+              Full fits for the Hip Hop and street lifestyle. Every look is built from pieces you can wear, style your way, and buy right now.
             </p>
           </div>
         </div>

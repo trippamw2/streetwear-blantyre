@@ -10,7 +10,7 @@
 const PHRASE_REPLACEMENTS: Array<[RegExp, string]> = [
   [/\bSB is a streetwear wardrobe\b/gi, "This is a streetwear wardrobe"],
   [/\bSB Street is\b/gi, "This streetwear label is"],
-  [/\bSB Streetwear\b/gi, "Streetwear Blantyre"],
+  [/\bSB Streetwear\b/gi, "Wear What Speaks"],
   [/\bSB Original\b/gi, "Original"],
   [/\bSB Collection\b/gi, "Collection"],
   [/\bSB Campaigns\b/gi, "Campaigns"],

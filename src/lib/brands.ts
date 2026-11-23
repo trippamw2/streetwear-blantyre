@@ -7,7 +7,7 @@ export const BRANDS = {
   sb: {
     id: "11111111-1111-1111-1111-111111111111",
     slug: "sb",
-    name: "Streetwear Blantyre",
+    name: "Wear What Speaks",
     domain: "wearsb.com",
     tagline: "Wear What Speaks",
     currency: "MWK" as const,

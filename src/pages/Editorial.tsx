@@ -22,18 +22,17 @@ interface CultureStory {
 }
 
 const PILLARS = [
-  { value: "all", label: "All" },
-  { value: "music", label: "Music" },
-  { value: "sports", label: "Sports" },
-  { value: "faith", label: "Faith" },
-  { value: "hustle", label: "Hustle" },
+  { value: "all", label: "All Stories" },
+  { value: "hip-hop", label: "Hip Hop & Street" },
 ];
 
 const PILLAR_COLORS: Record<string, string> = {
-  music: "bg-purple-500/20 text-purple-300",
-  sports: "bg-green-500/20 text-green-300",
-  faith: "bg-amber-500/20 text-amber-300",
-  hustle: "bg-red-500/20 text-red-300",
+  "hip-hop": "bg-white/15 text-white",
+  street: "bg-white/15 text-white",
+  music: "bg-white/15 text-white",
+  sports: "bg-white/15 text-white",
+  faith: "bg-white/15 text-white",
+  hustle: "bg-white/15 text-white",
 };
 
 const Editorial = () => {
@@ -56,13 +55,13 @@ const Editorial = () => {
     fetchStories();
   }, []);
 
-  const filtered = filter === "all" ? stories : stories.filter((s) => s.culture_pillar === filter);
+  const filtered = filter === "all" ? stories : stories.filter((s) => s.culture_pillar === filter || (filter === "hip-hop" && ["music","sports","faith","hustle","street","hip-hop"].includes(s.culture_pillar)));
   const featured = filtered.filter((s) => s.is_featured);
   const regular = filtered.filter((s) => !s.is_featured);
 
   return (
     <>
-      <SEO title="The Culture Journal | Streetwear Blantyre" description="Stories, editorial, and culture from the streets of Africa. Music, sport, faith, hustle, told through the people building the culture." />
+      <SEO title="The Culture Journal | Wear What Speaks" description="Stories from the Hip Hop and street lifestyle. Style, movement, and the people living the culture." />
 
       <div className="min-h-screen bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
@@ -71,8 +70,7 @@ const Editorial = () => {
             <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.3em] mb-3">Publication</p>
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-4 text-gray-900">The Culture Journal</h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Not a blog. A publication. Stories about music, sport, faith, hustle, and the people
-              building African culture. Read. Learn. Wear your story.
+              Stories from the Hip Hop and street lifestyle. The people, the style, and the culture behind every fit. Read it. Live it. Wear it.
             </p>
           </div>
 

@@ -333,28 +333,10 @@ const ProductDetail = () => {
     },
   ];
 
-  const pillarLabel =
-    {
-      street: "Street Culture",
-      music: "Music & Entertainment",
-      sports: "Football & Sport",
-      hustle: "Everyday Hustle",
-      faith: "Faith Culture",
-    }[product.culture_pillar || ""] || product.culture_pillar;
-
-  const pillarCopy =
-    {
-      music:
-        "Music is more than sound. It is the rhythm of the city, the voice of a generation and the story of where we come from. This piece carries that energy.",
-      sports:
-        "Sport is not just competition. It is discipline, showing up when no one is watching and pushing further than yesterday. This piece carries that spirit.",
-      faith:
-        "Faith is the foundation. The quiet confidence that you are part of something bigger, and the belief that grounds you when everything else shifts.",
-      hustle:
-        "The hustle is in our blood. Late nights, early mornings and the refusal to accept no as the final answer. This piece is for everyone building something from nothing.",
-      street:
-        "Street culture is about where you come from and how you carry it. Your neighbourhood, your city and your story shaped this piece.",
-    }[product.culture_pillar || ""] || "";
+  const pillarLabel = product.culture_pillar ? "Hip Hop & Street Lifestyle" : "";
+  const pillarCopy = product.culture_pillar
+    ? "Hip Hop is more than music. It is how you move, how you speak and how you show up. This piece is made for that lifestyle, built to match your confidence and your voice."
+    : "";
 
   return (
     <div className="bg-white">
@@ -879,7 +861,7 @@ const ProductDetail = () => {
               </span>
             </div>
             <h2 className="mb-3 font-display text-xl font-bold text-gray-900 sm:text-2xl">
-              What inspired this piece
+              Made for the culture
             </h2>
             <p className="max-w-3xl leading-relaxed text-gray-600">{pillarCopy}</p>
           </div>

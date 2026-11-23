@@ -65,7 +65,7 @@ const STATUS_MESSAGES: Record<string, string> = {
   confirmed: "Your order has been confirmed! We're preparing it for you.",
   processing: "Your order is being prepared and will be dispatched soon.",
   dispatched: "Great news! Your order is on its way.",
-  delivered: "Your order has been delivered! Enjoy your Streetwear Blantyre pieces.",
+  delivered: "Your order has been delivered! Enjoy your Wear What Speaks pieces.",
   cancelled: "We're sorry, your order has been cancelled.",
 };
 

@@ -62,7 +62,7 @@ const titleCase = (value: string) =>
     .trim();
 
 export const getBrandName = (id?: string | null): string => {
-  if (!id) return "Streetwear Blantyre";
+  if (!id) return "Wear What Speaks";
   return BRANDS.find((brand) => brand.id === id)?.name || titleCase(id);
 };
 
@@ -82,11 +82,7 @@ export interface CulturePillar {
 }
 
 export const culturePillars: CulturePillar[] = [
-  { id: "street", label: "Street Culture", description: "Proud of where you come from. Your neighbourhood, your city, your story.", icon: "MapPin", color: "#102C54" },
-  { id: "music", label: "Music & Entertainment", description: "Feel the rhythm of the city in every stitch. Beats, lyrics, style.", icon: "Music", color: "#7C3AED" },
-  { id: "sports", label: "Football & Sport", description: "Match day energy, discipline and the love of the game.", icon: "Trophy", color: "#0F766E" },
-  { id: "hustle", label: "Everyday Hustle", description: "Build what matters. Wear what you earned. Discipline, vision, legacy.", icon: "Zap", color: "#B45309" },
-  { id: "faith", label: "Faith Culture", description: "Walk by purpose, not by sight. Quiet confidence in every step.", icon: "Heart", color: "#059669" },
+  { id: "hip-hop", label: "Hip Hop & Street", description: "The sound, the style, the movement. Streetwear for the culture that raised you.", icon: "Mic2", color: "#111827" },
 ];
 
 // ─── Wearable Categories ────────────────────────────────────────────

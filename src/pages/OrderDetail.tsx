@@ -114,7 +114,7 @@ const OrderDetailPage = () => {
 
   return (
     <div className="container py-12 max-w-3xl">
-      <SEO title={"Order " + (order?.id?.slice(0,8).toUpperCase() || "")} description="Track your Streetwear Blantyre order" />
+      <SEO title={"Order " + (order?.id?.slice(0,8).toUpperCase() || "")} description="Track your Wear What Speaks order" />
       <Link to="/orders" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
         <ArrowLeft className="h-4 w-4" /> All orders
       </Link>
@@ -206,7 +206,7 @@ const OrderDetailPage = () => {
                   callbackUrl: `${window.location.origin}/orders/${order.id}?payment=callback`,
                   returnUrl: `${window.location.origin}/orders/${order.id}?payment=complete`,
                   title: `Order #${order.id.slice(0, 8).toUpperCase()}`,
-                  description: "Streetwear Blantyre order payment",
+                  description: "Wear What Speaks order payment",
                 })
               }
               className="w-full  rounded-full py-3 font-semibold"
@@ -223,9 +223,9 @@ const OrderDetailPage = () => {
         {order.status === "delivered" && (
           <div className="rounded-2xl bg-gradient-brand-soft border border-primary/30 p-5 space-y-3">
             <p className="font-display font-bold text-lg">Stay Fresh</p>
-            <p className="text-sm text-muted-foreground">Thanks for choosing Streetwear Blantyre. Loved it? Send us a quick photo or feedback on WhatsApp. Repeat customers get exclusive discounts.</p>
+            <p className="text-sm text-muted-foreground">Thanks for choosing Wear What Speaks. Loved it? Send us a quick photo or feedback on WhatsApp. Repeat customers get exclusive discounts.</p>
             <Button asChild variant="whatsapp" size="sm">
-              <a href={buildWhatsAppLink(`Hi Streetwear Blantyre, I just received order #${order.id.slice(0,8).toUpperCase()}. Here's my feedback:`)} target="_blank" rel="noopener noreferrer">
+              <a href={buildWhatsAppLink(`Hi Wear What Speaks, I just received order #${order.id.slice(0,8).toUpperCase()}. Here's my feedback:`)} target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="h-4 w-4" /> Share feedback
               </a>
             </Button>
@@ -249,7 +249,7 @@ const OrderDetailPage = () => {
         </div>
 
         <Button asChild variant="outlineGlow" className="w-full">
-              <a href={buildWhatsAppLink(`Hi Streetwear Blantyre, I'm checking on order #${order.id.slice(0,8).toUpperCase()}.`)} target="_blank" rel="noopener noreferrer">
+              <a href={buildWhatsAppLink(`Hi Wear What Speaks, I'm checking on order #${order.id.slice(0,8).toUpperCase()}.`)} target="_blank" rel="noopener noreferrer">
             <MessageCircle className="h-4 w-4" /> Chat about this order
           </a>
         </Button>

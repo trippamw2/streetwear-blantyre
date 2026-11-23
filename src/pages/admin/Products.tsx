@@ -36,10 +36,7 @@ const BRANDS = [
 
 const CULTURE_PILLARS = [
   { id: "", label: "None" },
-  { id: "music", label: "Music Culture" },
-  { id: "sports", label: "Sports Culture" },
-  { id: "faith", label: "Faith Culture" },
-  { id: "hustle", label: "Hustle Culture" },
+  { id: "hip-hop", label: "Hip Hop & Street" },
 ];
 
 interface Supplier {

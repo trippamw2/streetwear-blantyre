@@ -404,7 +404,7 @@ const SbProductTypes = () => {
           <h1 className="font-display font-bold text-3xl flex items-center gap-2">
             <Tag className="h-7 w-7" /> Product Types
           </h1>
-          <p className="text-gray-500">Manage the Streetwear Blantyre product type taxonomy</p>
+          <p className="text-gray-500">Manage the Wear What Speaks product type taxonomy</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={resetDialog}>
           <DialogTrigger asChild>

@@ -34,7 +34,7 @@ export const redirectToPayChangu = (params: PayChanguPaymentParams): void => {
     email: params.email,
     first_name: params.firstName,
     last_name: params.lastName,
-    title: params.title || "Streetwear Blantyre Order",
+    title: params.title || "Wear What Speaks Order",
     description: params.description || "Order payment",
   };
 

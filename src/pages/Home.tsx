@@ -67,8 +67,8 @@ const Home = () => {
   return (
     <div className="bg-white">
       <SEO
-        title="Streetwear Blantyre | Wear What Speaks"
-        description="A Malawian streetwear wardrobe from Blantyre. Shop tees, vests, short sleeve shirts, shorts, collections and complete looks."
+        title="Wear What Speaks | Hip Hop Streetwear"
+        description="Streetwear built for the Hip Hop and street lifestyle. Shop tees, vests, shirts, shorts, collections and complete looks from Blantyre, Malawi."
         path="/"
       />
 
@@ -84,14 +84,14 @@ const Home = () => {
         </div>
         <div className="container py-8 sm:py-12 lg:py-16">
           <div className="max-w-3xl space-y-4 sm:space-y-5">
-            <p className="font-display text-xl font-black uppercase tracking-[0.35em] text-white sm:text-2xl">Streetwear Blantyre</p>
+            <p className="font-display text-sm font-bold uppercase tracking-[0.3em] text-white/70 sm:text-base">Hip Hop. Street. Lifestyle.</p>
             <h1 className="font-display text-[2.5rem] font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-6xl lg:text-7xl">
               {heroPlacement?.headline || heroCampaign?.headline || "Wear What Speaks."}
             </h1>
             <p className="max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
               {heroPlacement?.body ||
                 heroCampaign?.description ||
-                "A full streetwear wardrobe from Blantyre, Malawi. Built to layer, mix and speak for itself."}
+                "You live the culture. Your fit should say it loud. Shop streetwear built for the Hip Hop and street lifestyle, ready to wear from Blantyre."}
             </p>
             <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:gap-4">
               <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
@@ -323,12 +323,12 @@ const Home = () => {
               <div className="max-w-2xl">
                 <p className="eyebrow mb-3 text-primary">Campaign</p>
                 <h2 className="font-display text-3xl font-extrabold uppercase leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
-                  {streetPlacement?.headline || streetCampaign?.headline || "Made for the streets of Blantyre."}
+                  {streetPlacement?.headline || streetCampaign?.headline || "Built for the Street."}
                 </h2>
                 <p className="mt-4 text-sm leading-relaxed text-gray-600 sm:text-base">
                   {streetPlacement?.body ||
                     streetCampaign?.description ||
-                    "Music, movement and everyday hustle. This is the full wardrobe for the city, not just a tee."}
+                    "From the block to the stage, your style is your voice. We make streetwear for the Hip Hop lifestyle so you can show up confident, every day."}
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:shrink-0 sm:flex-row">

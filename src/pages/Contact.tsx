@@ -17,11 +17,10 @@ const Contact = () => (
             Talk to Us
           </h1>
           <p className="text-sm leading-relaxed text-gray-600 sm:text-lg">
-            Questions about sizes, stock or delivery? Message us on WhatsApp and a real person will
-            help you out.
+            Need the right size or want to check stock? Message us on WhatsApp and we will help you get the fit that speaks for you.
           </p>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
-            Streetwear Blantyre. Wear What Speaks.
+            Wear What Speaks.
           </p>
         </div>
       </div>

@@ -107,7 +107,7 @@ const AdminLoyalty = () => {
       <div>
         <h1 className="font-display font-bold text-3xl">Loyalty & Rewards</h1>
         <p className="text-gray-500">
-          {brand === "lf" ? "Lake Fresh" : "Streetwear Blantyre"} rewards programs and tiers
+          {brand === "lf" ? "Lake Fresh" : "Wear What Speaks"} rewards programs and tiers
         </p>
       </div>
 

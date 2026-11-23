@@ -12,16 +12,16 @@ interface SEOProps {
   path?: string;
   image?: string;
   type?: "website" | "product";
-  /** Brand whose name/domain/metadata should be used. Defaults to Streetwear Blantyre. */
+  /** Brand whose name/domain/metadata should be used. Defaults to Wear What Speaks. */
   brand?: BrandSlug;
   /** Extra structured data, for example a recipe or breadcrumb trail. */
   jsonLd?: SchemaObject | SchemaObject[];
 }
 
-const SITE_NAME = "Streetwear Blantyre";
+const SITE_NAME = "Wear What Speaks";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "Streetwear Blantyre from Blantyre. A full wardrobe of tees, vests, short sleeve shirts and shorts. Wear What Speaks.";
-const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Streetwear+Blantyre";
+const DEFAULT_DESC = "Streetwear built for the Hip Hop and street lifestyle. Shop tees, vests, shirts and shorts from Blantyre, Malawi. Wear What Speaks.";
+const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Wear+What+Speaks";
 
 const BRAND_META: Record<BrandSlug, { siteName: string; siteUrl: string; image: string }> = {
   sb: { siteName: SITE_NAME, siteUrl: SITE_URL, image: DEFAULT_IMAGE },
@@ -210,71 +210,71 @@ export const SEO = ({
 
 export const defaultSEO = {
   home: {
-    title: "Streetwear Blantyre | Wear What Speaks",
+    title: "Wear What Speaks | Hip Hop Streetwear",
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop the Wardrobe | T Shirts, Vests, Shirts & Shorts",
+    title: "Shop Streetwear | Tees, Vests, Shirts & Shorts",
     description:
-      "Shop the full wardrobe from Blantyre: graphic tees, vests, short sleeve shirts and shorts made to mix into complete looks.",
+      "Find the pieces that match your voice. Shop tees, vests, short sleeve shirts and shorts made for the Hip Hop and street lifestyle.",
   },
   combos: {
-    title: "Kits & Bundles | Streetwear Blantyre",
+    title: "Kits & Bundles | Wear What Speaks",
     description:
-      "Curated streetwear kits that put a full look together. Better value, one delivery. Free delivery over MK 50,000.",
+      "Get a full look in one move. Curated streetwear kits with better value and one delivery. Free delivery over MK 50,000.",
   },
   about: {
-    title: "Our Story | Inspired by Blantyre",
+    title: "Our Story | Wear What Speaks",
     description:
-      "Streetwear Blantyre brings together T shirts, football jerseys, short sleeve shirts and vests for everyday life in Blantyre, Malawi. Wear What Speaks.",
+      "We make streetwear for people who live the Hip Hop and street lifestyle. Built in Blantyre, Malawi for everyday confidence.",
   },
   contact: {
-    title: "Contact | Streetwear Blantyre",
+    title: "Contact | Wear What Speaks",
     description:
-      "Reach Streetwear Blantyre on WhatsApp for orders, sizing and availability. Delivery across Malawi and store pickup in Blantyre.",
+      "Need help with sizing, stock or delivery? Message us on WhatsApp for fast support. Delivery across Malawi and store pickup in Blantyre.",
   },
   auth: {
-    title: "Sign In | Streetwear Blantyre",
+    title: "Sign In | Wear What Speaks",
     description: "Sign in to check out faster, track your orders and save your favourite pieces.",
   },
   checkout: {
-    title: "Checkout | Streetwear Blantyre",
+    title: "Checkout | Wear What Speaks",
     description:
       "Complete your order securely with Airtel Money, TNM Mpamba, and bank transfer. Delivery across Malawi.",
   },
   orders: {
-    title: "My Orders | Streetwear Blantyre",
+    title: "My Orders | Wear What Speaks",
     description: "Track your orders and deliveries.",
   },
   rewards: {
-    title: "Rewards | Earn Points with Streetwear Blantyre",
+    title: "Rewards | Wear What Speaks",
     description:
-      "Earn points on every purchase, redeem them for discounts and refer friends to Streetwear Blantyre.",
+      "Earn points on every purchase, redeem them for discounts and refer friends.",
   },
   compare: {
-    title: "Compare Pieces | Streetwear Blantyre",
+    title: "Compare Pieces | Wear What Speaks",
     description: "Compare pieces side by side and find the fit that feels like you.",
   },
   faq: {
-    title: "FAQ | Streetwear Blantyre",
+    title: "FAQ | Wear What Speaks",
     description:
-      "Answers about ordering, delivery, sizing, payments, returns and quality cover at Streetwear Blantyre.",
+      "Answers about ordering, delivery, sizing, payments, returns and quality cover.",
   },
   terms: {
-    title: "Terms & Conditions | Streetwear Blantyre",
-    description: "The terms and conditions that apply when you shop with Streetwear Blantyre.",
+    title: "Terms & Conditions | Wear What Speaks",
+    description: "The terms and conditions that apply when you shop with us.",
   },
   privacy: {
-    title: "Privacy Policy | Streetwear Blantyre",
-    description: "How Streetwear Blantyre collects, uses and protects your personal information.",
+    title: "Privacy Policy | Wear What Speaks",
+    description: "How we collect, use and protect your personal information.",
   },
   returns: {
-    title: "Returns & Exchanges | Streetwear Blantyre",
+    title: "Returns & Exchanges | Wear What Speaks",
     description:
       "Our clothing returns and size exchange policy. Unworn items with tags can be returned within 14 days.",
   },
   warranty: {
-    title: "Quality Cover | Streetwear Blantyre",
+    title: "Quality Cover | Wear What Speaks",
     description:
       "Our 30 day quality cover on clothing faults. We repair, replace or refund faulty items.",
   },
@@ -294,12 +294,12 @@ export const defaultSEO = {
       "How Lake Fresh handles refunds, replacements and delivery problems for fresh fish orders in Blantyre, Malawi.",
   },
   giftPacks: {
-    title: "Gift Packs | Streetwear Blantyre",
+    title: "Gift Packs | Wear What Speaks",
     description:
       "Gift a curated pack with a personal message and delivery in Blantyre.",
   },
   scheduledGift: {
-    title: "Schedule a Gift | Streetwear Blantyre",
+    title: "Schedule a Gift | Wear What Speaks",
     description:
       "Send a piece for any occasion. Add a personal message and choose the delivery date.",
   },

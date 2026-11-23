@@ -191,7 +191,7 @@ async function downloadQRLabel(record: ProductAuthRecord) {
   ctx.fillStyle = "#ffffff";
   ctx.font = "600 11px 'DM Sans', Helvetica, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("www.wearsb.com  \u2022  Streetwear Blantyre  \u2022  Authentic Streetwear", W / 2, H - 20);
+  ctx.fillText("www.wearsb.com  \u2022  Wear What Speaks  \u2022  Authentic Streetwear", W / 2, H - 20);
 
   // Download
   return new Promise<void>((resolve) => {
@@ -308,7 +308,7 @@ const AdminAuthentication = () => {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  // Streetwear Blantyre original line products only
+  // Original line products only
   const sbOriginalProducts = products.filter((p) => p.brand === "sb-original");
 
   // Products that don't have auth records yet (for bulk generation)

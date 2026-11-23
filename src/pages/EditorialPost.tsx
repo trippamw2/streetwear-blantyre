@@ -25,10 +25,7 @@ interface CultureStory {
 }
 
 const PILLAR_COLORS: Record<string, string> = {
-  music: "bg-purple-100 text-purple-700",
-  sports: "bg-green-100 text-green-700",
-  faith: "bg-amber-100 text-amber-700",
-  hustle: "bg-red-100 text-red-700",
+  "hip-hop": "bg-gray-900 text-white", street: "bg-gray-900 text-white", music: "bg-gray-900 text-white", sports: "bg-gray-900 text-white", faith: "bg-gray-900 text-white", hustle: "bg-gray-900 text-white",
 };
 
 const EditorialPost = () => {
@@ -70,7 +67,7 @@ const EditorialPost = () => {
           price: p.price,
           category: p.category || "all",
           image: p.image || "",
-          brand: p.brand || "Streetwear Blantyre",
+          brand: p.brand || "Wear What Speaks",
           types: [],
           stock: p.stock_quantity || 0,
           is_featured: p.is_featured || false,
@@ -110,7 +107,7 @@ const EditorialPost = () => {
 
   return (
     <>
-      <SEO title={`${story.title} | Streetwear Blantyre`} description={story.excerpt || story.title} />
+      <SEO title={`${story.title} | Wear What Speaks`} description={story.excerpt || story.title} />
 
       <article className="min-h-screen bg-white">
         {/* Hero Image */}

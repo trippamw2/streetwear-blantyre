@@ -1,5 +1,5 @@
 // Multi-brand WhatsApp helpers.
-// `brand` is optional and defaults to Streetwear Blantyre so existing callers keep working.
+// `brand` is optional and defaults to Wear What Speaks so existing callers keep working.
 
 import { getBrandConfig, normalizeBrandSlug, type BrandSlug } from "@/lib/brands";
 
@@ -15,7 +15,7 @@ export const STORE_URLS: Record<BrandSlug, string> = {
   "lake-fresh": "https://lakefreshmw.com",
 };
 
-export const WHATSAPP_NUMBER = WHATSAPP_NUMBERS.sb; // default (Streetwear Blantyre)
+export const WHATSAPP_NUMBER = WHATSAPP_NUMBERS.sb; // default (Wear What Speaks)
 export const STORE_URL = STORE_URLS.sb;
 
 const brandOf = (brand?: BrandSlug) => normalizeBrandSlug(brand);
@@ -45,7 +45,7 @@ export const lfWhatsAppLink = (message: string): string | null => {
   return number ? buildWhatsAppLink(message, number, "lake-fresh") : null;
 };
 
-export const defaultMessage = "Hi Streetwear Blantyre, I want to order.";
+export const defaultMessage = "Hi Wear What Speaks, I want to order.";
 export const defaultMessageFor = (brand?: BrandSlug) =>
   `Hi ${getBrandConfig(brand).name}, I want to order.`;
 

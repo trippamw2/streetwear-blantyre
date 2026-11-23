@@ -35,10 +35,7 @@ interface LookbookItem {
 }
 
 const PILLAR_COLORS: Record<string, string> = {
-  music: "bg-purple-100 text-purple-700",
-  sports: "bg-green-100 text-green-700",
-  faith: "bg-amber-100 text-amber-700",
-  hustle: "bg-red-100 text-red-700",
+  "hip-hop": "bg-gray-900 text-white", street: "bg-gray-900 text-white", music: "bg-gray-900 text-white", sports: "bg-gray-900 text-white", faith: "bg-gray-900 text-white", hustle: "bg-gray-900 text-white",
 };
 
 const LookbookDetail = () => {
@@ -100,7 +97,7 @@ const LookbookDetail = () => {
 
   return (
     <>
-      <SEO title={`${lookbook.title} | Streetwear Blantyre`} description={lookbook.description || lookbook.title} />
+      <SEO title={`${lookbook.title} | Wear What Speaks`} description={lookbook.description || lookbook.title} />
 
       <div className="min-h-screen bg-white">
         {/* Hero */}

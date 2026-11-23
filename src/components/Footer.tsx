@@ -90,9 +90,9 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-24 sm:h-28 md:h-32 lg:h-40 xl:h-48" />
             <p className="text-white/75 max-w-sm text-sm leading-relaxed">
-              A Malawian streetwear wardrobe from Blantyre: tees, vests, short sleeve shirts and shorts designed to work together.
+              Streetwear built for the Hip Hop and street lifestyle. Tees, vests, shirts and shorts designed to move with you and speak for you.
             </p>
-            <p className="text-sm text-white/80 font-medium">Streetwear Blantyre. Wear What Speaks.</p>
+            <p className="text-sm text-white/80 font-medium">Wear What Speaks.</p>
 
             <div className="pt-4">
               <p className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">We accept</p>
@@ -151,7 +151,7 @@ export const Footer = () => {
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row gap-4 items-center justify-between">
           <p className="text-xs text-white/70 text-center md:text-left">
-            &copy; {new Date().getFullYear()} Streetwear Blantyre. Wear What Speaks. Blantyre, Malawi.
+            &copy; {new Date().getFullYear()} Wear What Speaks. Blantyre, Malawi.
           </p>
           <p className="text-xs text-white/70 uppercase tracking-wider">Blantyre, Malawi</p>
         </div>

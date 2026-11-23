@@ -146,14 +146,14 @@ const AdminGifts = () => {
       if (gift && newStatus === "dispatched") {
         const phone = gift.recipient_phone.replace(/[^0-9]/g, "");
         const waPhone = phone.startsWith("0") ? `265${phone.slice(1)}` : phone;
-        const message = `Hi ${gift.recipient_name}! 🎁\n\nYour gift from ${gift.sender_name} is on its way!\n\nTrack it here: https://wearsb.com/gift-track/${gift.tracking_token}\n\n- Streetwear Blantyre`;
+        const message = `Hi ${gift.recipient_name}! 🎁\n\nYour gift from ${gift.sender_name} is on its way!\n\nTrack it here: https://wearsb.com/gift-track/${gift.tracking_token}\n\n- Wear What Speaks`;
         window.open(buildWhatsAppLink(message, waPhone), "_blank");
       }
 
       if (gift && newStatus === "delivered") {
         const phone = gift.recipient_phone.replace(/[^0-9]/g, "");
         const waPhone = phone.startsWith("0") ? `265${phone.slice(1)}` : phone;
-        const message = `Hi ${gift.recipient_name}! 🎁\n\nYour gift from ${gift.sender_name} has been delivered! We hope you love it.\n\nLeave a review: https://wearsb.com/gift-track/${gift.tracking_token}\n\n- Streetwear Blantyre`;
+        const message = `Hi ${gift.recipient_name}! 🎁\n\nYour gift from ${gift.sender_name} has been delivered! We hope you love it.\n\nLeave a review: https://wearsb.com/gift-track/${gift.tracking_token}\n\n- Wear What Speaks`;
         window.open(buildWhatsAppLink(message, waPhone), "_blank");
       }
 

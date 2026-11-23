@@ -128,7 +128,7 @@ export default function AdminReferrals() {
           <div>
             <h1 className="text-2xl font-bold">Referral Management</h1>
             <p className="text-muted-foreground">
-              {brand === "lf" ? "Lake Fresh" : "Streetwear Blantyre"} referrals, rewards and codes
+              {brand === "lf" ? "Lake Fresh" : "Wear What Speaks"} referrals, rewards and codes
             </p>
           </div>
           <Button onClick={loadData} variant="outline">Refresh</Button>

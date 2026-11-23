@@ -1,5 +1,5 @@
 /**
- * Delivery Rules Engine for Streetwear Blantyre
+ * Delivery Rules Engine for Wear What Speaks
  * 
  * Rules:
  * - Orders ≥ MWK 50,000 = FREE delivery (anywhere in Malawi)

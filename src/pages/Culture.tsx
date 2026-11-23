@@ -6,34 +6,14 @@ import { ProductCard } from "@/components/ProductCard";
 import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 
-const VALID_PILLARS = ["music", "sports", "faith", "hustle"] as const;
+const VALID_PILLARS = ["music", "sports", "faith", "hustle", "street", "hip-hop"] as const;
 type Pillar = typeof VALID_PILLARS[number];
 
-const PILLAR_INFO: Record<Pillar, { name: string; description: string; color: string; bg: string }> = {
-  music: {
-    name: "Music Culture",
-    description: "From Blantyre beats to global sound. The rhythm that moves us.",
-    color: "text-purple-300",
-    bg: "bg-purple-500/10",
-  },
-  sports: {
-    name: "Sports Culture",
-    description: "Game day energy. The grind that builds champions.",
-    color: "text-green-300",
-    bg: "bg-green-500/10",
-  },
-  faith: {
-    name: "Faith Culture",
-    description: "Rooted in purpose. Faith is the foundation.",
-    color: "text-amber-300",
-    bg: "bg-amber-500/10",
-  },
-  hustle: {
-    name: "Hustle Culture",
-    description: "Built from nothing. Every piece tells the come up story.",
-    color: "text-red-300",
-    bg: "bg-red-500/10",
-  },
+const CULTURE_INFO = {
+  name: "Hip Hop & Street Lifestyle",
+  description: "The sound, the style, the movement. Streetwear built for people who live the culture.",
+  color: "text-white",
+  bg: "bg-gray-950",
 };
 
 interface CultureStory {
@@ -80,7 +60,7 @@ const Culture = () => {
 
   useEffect(() => {
     if (!validPillar) {
-      navigate("/shop");
+      navigate("/editorial");
       return;
     }
 
@@ -89,13 +69,11 @@ const Culture = () => {
         supabase
           .from("culture_stories")
           .select("id, title, slug, excerpt, hero_image, culture_pillar, author_name, read_time_minutes, published_at")
-          .eq("culture_pillar", validPillar)
           .eq("is_published", true)
           .order("published_at", { ascending: false }),
         supabase
           .from("products")
           .select("*")
-          .eq("culture_pillar", validPillar)
           .eq("is_active", true)
           .order("is_featured", { ascending: false }),
       ]);
@@ -120,26 +98,25 @@ const Culture = () => {
 
   if (!validPillar) return null;
 
-  const info = PILLAR_INFO[validPillar];
+  const info = CULTURE_INFO;
 
   return (
     <>
-      <SEO title={`${info.name} | Streetwear Blantyre`} description={info.description} />
+      <SEO title={`${info.name} | Wear What Speaks`} description={info.description} />
 
       <div className="min-h-screen bg-white">
         {/* Hero */}
         <div className={`${info.bg} py-16 sm:py-24`}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <Link to="/editorial" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium mb-8">
+            <Link to="/editorial" className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm font-medium mb-8">
               <ArrowLeft className="h-4 w-4" />
-              The Culture Edit
+              The Culture Journal
             </Link>
             <h1 className={`font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight ${info.color}`}>{info.name}</h1>
-            <p className="text-gray-600 text-lg mt-4 max-w-xl">
-              The pieces that mean the most carry a sense of place. Discover the stories and silhouettes
-              shaped by the city, and wear what feels like you.
+            <p className="text-white/75 text-lg mt-4 max-w-xl">
+              Hip Hop is more than music. It is how you move, how you dress and how you show up. Find pieces that match your voice.
             </p>
-            <div className="flex gap-6 mt-8 text-sm text-gray-600">
+            <div className="flex gap-6 mt-8 text-sm text-white/70">
               <span>{stories.length} stor{stories.length !== 1 ? "ies" : "y"}</span>
               <span>{products.length} piece{products.length !== 1 ? "s" : ""}</span>
             </div>

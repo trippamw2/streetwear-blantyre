@@ -1,4 +1,4 @@
-// Streetwear Blantyre AI WhatsApp Message Templates
+// Wear What Speaks AI WhatsApp Message Templates
 
 export interface OrderDetails {
   orderId: string;
@@ -32,7 +32,7 @@ export const orderConfirmation = (details: OrderDetails) => {
 
   return `Order Confirmed. ${customerName.split(' ')[0]}
 
-Your Streetwear Blantyre order has been received.
+Your Wear What Speaks order has been received.
 
 ORDER DETAILS
 ${itemsList}
@@ -81,7 +81,7 @@ export const orderDispatched = (update: StatusUpdate) => {
 
   return `Order On The Way. ${customerName.split(' ')[0]}
 
-Your Streetwear Blantyre order is out for delivery.
+Your Wear What Speaks order is out for delivery.
 
 ITEMS
 ${itemsList}
@@ -103,14 +103,14 @@ export const orderDelivered = (update: StatusUpdate) => {
 
   return `Order Delivered. ${customerName.split(' ')[0]}
 
-Your Streetwear Blantyre order has arrived.
+Your Wear What Speaks order has arrived.
 
 DELIVERED ITEMS
 ${itemsList}
 
 Ref: ${trackingCode}
 
-Thank you for choosing Streetwear Blantyre.
+Thank you for choosing Wear What Speaks.
 
 Please leave a review to help other customers:
 https://www.wearsb.com/product/powerbank-001
@@ -160,7 +160,7 @@ export const statusCheck = (status: string, _eta?: string) => {
 export const reminderMessage = (details: OrderDetails, _daysOverdue: number) => {
   return `Payment Reminder. ${details.customerName.split(' ')[0]}
 
-A friendly reminder about your Streetwear Blantyre order.
+A friendly reminder about your Wear What Speaks order.
 
 Order: ${generateTrackingCode(details.orderId)}
 Outstanding: ${formatMWK(details.total)}
@@ -174,7 +174,7 @@ Questions? Reply here.`;
 export const thankYouMessage = (_orderId: string, customerName: string) => {
   return `Thanks for your order, ${customerName.split(' ')[0]}.
 
-We appreciate you choosing Streetwear Blantyre.
+We appreciate you choosing Wear What Speaks.
 
 As a returning customer, you will get an exclusive discount on your next order. Just ask.
 
@@ -194,4 +194,4 @@ export const buildWhatsAppLink = (message: string, phone?: string) => {
 
 export const STORE_PHONE = "265991234567";
 export const STORE_URL = "https://www.wearsb.com";
-export const defaultMessage = "Hi Streetwear Blantyre. I want to order.";
+export const defaultMessage = "Hi Wear What Speaks. I want to order.";

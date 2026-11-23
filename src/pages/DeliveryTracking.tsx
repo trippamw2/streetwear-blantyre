@@ -85,7 +85,7 @@ const DeliveryTracking = () => {
 
   return (
     <div className="container py-12 max-w-3xl">
-      <SEO title="Track Delivery" description="Track your Streetwear Blantyre delivery status" />
+      <SEO title="Track Delivery" description="Track your Wear What Speaks delivery status" />
       <Link to="/orders" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
         <ArrowLeft className="h-4 w-4" /> All orders
       </Link>
@@ -181,7 +181,7 @@ const DeliveryTracking = () => {
         {/* Actions */}
         <div className="flex flex-wrap gap-3">
           <Button asChild variant="whatsapp" className="flex-1">
-            <a href={buildWhatsAppLink(`Hi Streetwear Blantyre, I'm checking on order #${order.id.slice(0,8).toUpperCase()}.`)} target="_blank" rel="noopener noreferrer">
+            <a href={buildWhatsAppLink(`Hi Wear What Speaks, I'm checking on order #${order.id.slice(0,8).toUpperCase()}.`)} target="_blank" rel="noopener noreferrer">
               <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
             </a>
           </Button>

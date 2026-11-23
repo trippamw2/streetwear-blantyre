@@ -28,17 +28,12 @@ interface CultureStory {
 }
 
 const PILLARS = [
-  { value: "music", label: "Music Culture" },
-  { value: "sports", label: "Sports Culture" },
-  { value: "faith", label: "Faith Culture" },
-  { value: "hustle", label: "Hustle Culture" },
+  { value: "hip-hop", label: "Hip Hop & Street" },
+  { value: "street", label: "Street Lifestyle" },
 ];
 
 const PILLAR_COLORS: Record<string, string> = {
-  music: "bg-purple-100 text-purple-700",
-  sports: "bg-green-100 text-green-700",
-  faith: "bg-amber-100 text-amber-700",
-  hustle: "bg-red-100 text-red-700",
+  "hip-hop": "bg-gray-900 text-white", street: "bg-gray-900 text-white", music: "bg-gray-900 text-white", sports: "bg-gray-900 text-white", faith: "bg-gray-900 text-white", hustle: "bg-gray-900 text-white",
 };
 
 const AdminCultureStories = () => {
@@ -58,7 +53,7 @@ const AdminCultureStories = () => {
     tags: "",
     is_published: false,
     is_featured: false,
-    author_name: "Streetwear Blantyre",
+    author_name: "Wear What Speaks",
     read_time_minutes: 5,
   });
 
@@ -149,7 +144,7 @@ const AdminCultureStories = () => {
     setFormData({
       title: "", excerpt: "", content: "", hero_image: "",
       culture_pillar: "music", tags: "", is_published: false,
-      is_featured: false, author_name: "Streetwear Blantyre", read_time_minutes: 5,
+      is_featured: false, author_name: "Wear What Speaks", read_time_minutes: 5,
     });
   };
 

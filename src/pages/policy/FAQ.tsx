@@ -103,7 +103,7 @@ const FAQ = () => {
       seo="faq"
       eyebrow="Good to Know"
       title="Frequently Asked Questions"
-      intro="Quick answers about ordering, sizing, delivery, payments and returns at Streetwear Blantyre."
+      intro="Quick answers about ordering, sizing, delivery, payments and returns at Wear What Speaks."
     >
       <div className="space-y-8">
         <section id="size-guide" className="scroll-mt-24 space-y-3">

@@ -45,7 +45,7 @@ const Warranty = () => (
       </ol>
       <p>
         We aim to resolve quality claims within 7 working days of approving them. Delivery costs
-        for approved claims are covered by Streetwear Blantyre.
+        for approved claims are covered by Wear What Speaks.
       </p>
     </PolicySection>
 

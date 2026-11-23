@@ -170,7 +170,7 @@ const AdminPromos = () => {
         <div>
           <h1 className="font-display font-bold text-3xl">Promo Codes</h1>
           <p className="text-gray-500">
-            {brand === "lf" ? "Lake Fresh" : "Streetwear Blantyre"} discount codes
+            {brand === "lf" ? "Lake Fresh" : "Wear What Speaks"} discount codes
           </p>
         </div>
 

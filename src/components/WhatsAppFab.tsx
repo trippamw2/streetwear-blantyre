@@ -21,7 +21,7 @@ export const WhatsAppFab = () => {
                 <MessageCircle className="h-4 sm:h-5 w-4 sm:w-5 text-gray-900" />
               </div>
               <div>
-                <p className="font-semibold text-gray-900 text-sm sm:text-base">Streetwear Blantyre Support</p>
+                <p className="font-semibold text-gray-900 text-sm sm:text-base">Wear What Speaks Support</p>
                 <p className="text-xs text-green-600">Replies quickly</p>
               </div>
             </div>

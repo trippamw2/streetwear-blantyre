@@ -245,7 +245,7 @@ const Checkout = () => {
         txRef,
         callbackUrl: `${window.location.origin}/orders/${orderId}?payment=callback`,
         returnUrl: `${window.location.origin}/orders/${orderId}?payment=complete`,
-        title: "Streetwear Blantyre Order",
+        title: "Wear What Speaks Order",
         description: `Order #${orderRef}`,
       });
       // Browser navigates to PayChangu via form submit, no code after this runs

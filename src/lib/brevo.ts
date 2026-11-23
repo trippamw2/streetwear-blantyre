@@ -1,4 +1,4 @@
-// Streetwear Blantyre Brevo Email Integration
+// Wear What Speaks Brevo Email Integration
 // All Brevo API calls are proxied through /api/send-email (serverless)
 // The API key is NEVER exposed to the client bundle
 
@@ -22,12 +22,12 @@ interface BrandConfig {
 
 const BRANDS: Record<EmailBrand, BrandConfig> = {
   sb: {
-    name: "Streetwear Blantyre",
+    name: "Wear What Speaks",
     tagline: "Wear What Speaks",
     email: "orders@wearsb.com",
     website: "https://www.wearsb.com",
     primaryColor: "${primary}",
-    businessName: "Streetwear Blantyre",
+    businessName: "Wear What Speaks",
     address: "Blantyre, Malawi",
     whatsapp: import.meta.env.VITE_WHATSAPP_BUSINESS
       ? `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS}`

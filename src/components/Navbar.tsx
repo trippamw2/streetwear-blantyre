@@ -69,7 +69,7 @@ export const Navbar = () => {
   return (
     <>
       <div className="bg-navy text-white text-xs font-semibold tracking-widest uppercase text-center py-2 px-4">
-        Streetwear Blantyre. Wear What Speaks.
+        Wear What Speaks. Streetwear for the Hip Hop lifestyle.
       </div>
       <header className="sticky top-0 z-40 bg-navy border-b border-white/10">
         <nav className="container flex h-16 items-center justify-between gap-2 sm:gap-4 px-2 sm:px-4">

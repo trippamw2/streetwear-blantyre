@@ -120,7 +120,7 @@ const GiftPacks = () => {
         txRef,
         callbackUrl: `${window.location.origin}/gift-track/${trackingToken}?payment=callback`,
         returnUrl: `${window.location.origin}/gift-track/${trackingToken}?payment=complete`,
-        title: `Streetwear Blantyre Gift | ${selectedKit.name}`,
+        title: `Wear What Speaks Gift | ${selectedKit.name}`,
         description: `Gift for ${formData.recipientName}`,
       });
       // Browser navigates to PayChangu, no code after this runs
