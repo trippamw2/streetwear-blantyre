@@ -207,8 +207,8 @@ export function useSbMerchandising() {
         relations,
       });
     } catch (fetchError) {
-      console.error("SB merchandising fetch error:", fetchError);
-      setError("Failed to load SB merchandising data");
+      console.error("Streetwear merchandising fetch error:", fetchError);
+      setError("Failed to load merchandising data");
     } finally {
       setLoading(false);
     }

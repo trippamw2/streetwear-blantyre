@@ -1,4 +1,4 @@
-﻿/* SB Streetwear | Wear Your Identity */
+﻿/* Streetwear Blantyre | Wear What Speaks */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
@@ -80,7 +80,7 @@ html {
 
 @layer base {
   :root {
-    /* SB light theme */
+    /* Light theme */
     --background: 0 0% 100%;
     --foreground: 0 0% 9%;
     --card: 0 0% 100%;
@@ -88,7 +88,7 @@ html {
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
 
-    /* Primary: SB navy #102C54 */
+    /* Primary: navy #102C54 */
     --primary: 215 68% 20%;
     --primary-foreground: 0 0% 100%;
     --secondary: 220 14% 96%;

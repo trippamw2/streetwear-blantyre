@@ -14,8 +14,8 @@ export const adminBrandId = (brand: AdminBrand): string =>
  * Which admin panel owns a path.
  *
  * The dedicated Lake Fresh deployment keeps its admin at `/admin` (its own
- * deployment is already a separate URL). The SB deployment only ever serves
- * the SB admin. On a dual host, Lake Fresh admin lives at `/lf/admin`.
+ * deployment is already a separate URL). The Streetwear Blantyre deployment only ever serves
+ * the Streetwear Blantyre admin. On a dual host, Lake Fresh admin lives at `/lf/admin`.
  */
 export const adminBrandFromPath = (pathname: string): AdminBrand => {
   if (IS_LF_SITE) return "lf";

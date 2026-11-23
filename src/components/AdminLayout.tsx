@@ -169,7 +169,7 @@ export const AdminLayout = () => {
   const base = adminPath(brand);
   const storeHome = isLfAdmin ? storefrontHome(true) : "/";
   const authPath = isLfAdmin ? lfPath("/auth") : "/auth";
-  const brandName = isLfAdmin ? "Lake Fresh Admin" : "SB Admin";
+  const brandName = isLfAdmin ? "Lake Fresh Admin" : "Streetwear Admin";
   const activeTab = searchParams.get("tab") || "";
   const activeView = searchParams.get("view") || "";
 

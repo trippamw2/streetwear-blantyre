@@ -2,10 +2,10 @@
  * Which storefront this build/host is serving.
  *
  * - "lf"   → Lake Fresh only. LF pages live at the root (`/fish`, `/spices`, …).
- * - "sb"   → SB Streetwear only. LF storefront is not mounted.
- * - "dual" → local development / QA. SB at `/`, LF at `/lf`.
+ * - "sb"   → Streetwear Blantyre only. LF storefront is not mounted.
+ * - "dual" → local development / QA. Streetwear Blantyre at `/`, LF at `/lf`.
  *
- * Resolution order: `VITE_BRAND_SITE` → hostname → localhost → SB.
+ * Resolution order: `VITE_BRAND_SITE` → hostname → localhost → Streetwear Blantyre.
  */
 export type BrandSite = "sb" | "lf" | "dual";
 
@@ -46,7 +46,7 @@ export const SHOWS_LF = BRAND_SITE !== "sb";
 
 /**
  * Prefix for LF storefront routes on this host.
- * `""` on the dedicated LF domain, `"/lf"` on SB / dev.
+ * `""` on the dedicated LF domain, `"/lf"` on Streetwear Blantyre / dev.
  */
 export const LF_BASE = IS_LF_SITE ? "" : "/lf";
 

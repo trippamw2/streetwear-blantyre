@@ -21,8 +21,8 @@ import { useSbMerchandising } from "@/hooks/useSbMerchandising";
 import { generateProductBarcode, downloadBarcodeLabel, printBarcodeLabel } from "@/lib/barcode";
 
 const BRANDS = [
-  { id: "sb-original", name: "SB Original", color: "#2563eb" },
-  { id: "sb-street", name: "SB Street", color: "#1a1a1a" },
+  { id: "sb-original", name: "Original", color: "#2563eb" },
+  { id: "sb-street", name: "Street", color: "#1a1a1a" },
   { id: "oppo", name: "OPPO", color: "#00B5AD" },
   { id: "vivo", name: "Vivo", color: "#415FFF" },
   { id: "realme", name: "realme", color: "#FFB700" },
@@ -611,7 +611,7 @@ const AdminProducts = () => {
       variants: [
         ...prev.variants,
         {
-          sku: `SB-${Date.now().toString(36).toUpperCase()}`,
+          sku: `STB-${Date.now().toString(36).toUpperCase()}`,
           size_label: "M",
           color: "Black",
           price_mwk: prev.price,
@@ -681,7 +681,7 @@ const AdminProducts = () => {
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  placeholder="e.g., SB Classic Logo Tee"
+                  placeholder="e.g., Classic Logo Tee"
                   required
                 />
               </div>

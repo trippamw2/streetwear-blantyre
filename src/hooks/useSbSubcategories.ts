@@ -29,7 +29,7 @@ export function useSbSubcategories() {
 
       if (!active) return;
       if (error) {
-        console.error("SB subcategory fetch error:", error);
+        console.error("Subcategory fetch error:", error);
       } else {
         setSubcategories(
           (data || []).map((row) => ({

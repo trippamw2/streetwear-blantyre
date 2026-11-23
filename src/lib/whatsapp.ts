@@ -1,5 +1,5 @@
 // Multi-brand WhatsApp helpers.
-// `brand` is optional and defaults to SB Streetwear so existing SB callers keep working.
+// `brand` is optional and defaults to Streetwear Blantyre so existing callers keep working.
 
 import { getBrandConfig, normalizeBrandSlug, type BrandSlug } from "@/lib/brands";
 
@@ -15,7 +15,7 @@ export const STORE_URLS: Record<BrandSlug, string> = {
   "lake-fresh": "https://lakefreshmw.com",
 };
 
-export const WHATSAPP_NUMBER = WHATSAPP_NUMBERS.sb; // default (SB)
+export const WHATSAPP_NUMBER = WHATSAPP_NUMBERS.sb; // default (Streetwear Blantyre)
 export const STORE_URL = STORE_URLS.sb;
 
 const brandOf = (brand?: BrandSlug) => normalizeBrandSlug(brand);

@@ -12,7 +12,7 @@ export const BRANDS = {
     tagline: "Wear What Speaks",
     currency: "MWK" as const,
     storefrontPath: "/",
-    envPrefix: "SB",
+    envPrefix: "STB",
   },
   "lake-fresh": {
     id: "22222222-2222-2222-2222-222222222222",

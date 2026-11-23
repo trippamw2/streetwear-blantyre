@@ -122,7 +122,7 @@ const SbLooks = () => {
 
     const failed = [lookRes, itemRes, productRes].find((result) => result.error);
     if (failed?.error) {
-      toast({ title: "Error loading SB looks", description: failed.error.message, variant: "destructive" });
+      toast({ title: "Error loading looks", description: failed.error.message, variant: "destructive" });
     } else {
       setLooks(lookRes.data || []);
       setLookItems(itemRes.data || []);
@@ -359,7 +359,7 @@ const SbLooks = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display font-bold text-3xl flex items-center gap-2">
-            <Sparkles className="h-7 w-7" /> SB Looks
+            <Sparkles className="h-7 w-7" /> Looks
           </h1>
           <p className="text-gray-500">Build styled looks and shoppable item lists</p>
         </div>

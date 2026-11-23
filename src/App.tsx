@@ -125,7 +125,7 @@ const ReferralLoader = () => {
 
 // On the dedicated Lake Fresh domain the storefront lives at the root. Any
 // legacy `/lf/...` link is sent to its root equivalent so old emails and
-// bookmarks keep working without exposing the SB storefront.
+// bookmarks keep working without exposing the Streetwear Blantyre storefront.
 const LFBaseRedirect = () => {
   const location = useLocation();
   const stripped = location.pathname.replace(/^\/lf(?=\/|$)/, "") || "/";
@@ -133,7 +133,7 @@ const LFBaseRedirect = () => {
 };
 
 // Shared Lake Fresh storefront tree. Mounted at the root on the LF domain and
-// under `/lf` for local QA; never mounted on the SB domain.
+// under `/lf` for local QA; never mounted on the Streetwear Blantyre domain.
 const lakeFreshRouteChildren = (
   <>
     <Route index element={<LakeFreshHome />} />
@@ -182,7 +182,7 @@ const App = () => {
                 <BrowserRouter>
                   <ScrollToTop />
                   <Routes>
-                    {/* SB Streetwear storefront, never mounted on the LF domain */}
+                    {/* Streetwear Blantyre storefront, never mounted on the LF domain */}
                     {SHOWS_SB && (
                       <Route element={<Layout />}>
                         <Route path="/" element={<Home />} />
@@ -250,7 +250,7 @@ const App = () => {
                     <Route path="/passport/:token" element={<Passport />} />
                     <Route path="/scan/:barcode" element={<Scan />} />
 
-                    {/* SB Streetwear admin. Lake Fresh data is never shown here. */}
+                    {/* Streetwear Blantyre admin. Lake Fresh data is never shown here. */}
                     {SHOWS_SB && (
                       <Route path="/admin" element={<AdminLayout />}>
                         <Route index element={<AdminDashboard />} />
@@ -285,7 +285,7 @@ const App = () => {
                     )}
 
                     {/* Lake Fresh admin. Its own deployment keeps `/admin`; on a
-                        dual host it lives at `/lf/admin`. No SB modules or data. */}
+                        dual host it lives at `/lf/admin`. No Streetwear Blantyre modules or data. */}
                     {SHOWS_LF && (
                       <Route
                         path={IS_LF_SITE ? "/admin" : "/lf/admin"}

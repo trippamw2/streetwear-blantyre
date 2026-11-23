@@ -12,7 +12,7 @@ interface SEOProps {
   path?: string;
   image?: string;
   type?: "website" | "product";
-  /** Brand whose name/domain/metadata should be used. Defaults to SB. */
+  /** Brand whose name/domain/metadata should be used. Defaults to Streetwear Blantyre. */
   brand?: BrandSlug;
   /** Extra structured data, for example a recipe or breadcrumb trail. */
   jsonLd?: SchemaObject | SchemaObject[];

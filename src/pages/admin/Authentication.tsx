@@ -25,7 +25,7 @@ function generateSerialNumber(): string {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("")
     .toUpperCase();
-  return `SB-${year}-${rand}`;
+  return `STB-${year}-${rand}`;
 }
 
 function generateQrToken(): string {
@@ -53,7 +53,7 @@ async function downloadQRLabel(record: ProductAuthRecord) {
   ctx.fillStyle = "#0f172a";
   ctx.fillRect(0, 0, W, 100);
 
-  // SB text
+  // Brand text
   ctx.fillStyle = "#ffffff";
   ctx.font = "bold 42px 'Cormorant Garamond', Georgia, serif";
   ctx.textAlign = "center";
@@ -199,7 +199,7 @@ async function downloadQRLabel(record: ProductAuthRecord) {
       if (blob) {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `SB-QR-${record.product_name.replace(/\s+/g, "-")}-${record.serial_number}.png`;
+        a.download = `QR-${record.product_name.replace(/\s+/g, "-")}-${record.serial_number}.png`;
         a.click();
         URL.revokeObjectURL(a.href);
       }
@@ -308,7 +308,7 @@ const AdminAuthentication = () => {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  // SB Original products only
+  // Streetwear Blantyre original line products only
   const sbOriginalProducts = products.filter((p) => p.brand === "sb-original");
 
   // Products that don't have auth records yet (for bulk generation)
@@ -340,7 +340,7 @@ const AdminAuthentication = () => {
 
   const handleCreate = async () => {
     if (!form.product_id) {
-      toast({ title: "Error", description: "Please select an SB Original product" });
+      toast({ title: "Error", description: "Please select an Original product" });
       return;
     }
     setSaving(true);
@@ -537,7 +537,7 @@ const AdminAuthentication = () => {
         <div>
           <h1 className="font-display font-bold text-3xl">Authentication</h1>
           <p className="text-muted-foreground">
-            Manage SB Original product authentication, QR codes, and scan history.
+            Manage Original product authentication, QR codes, and scan history.
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -565,7 +565,7 @@ const AdminAuthentication = () => {
       {/* Stats */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={Shield} label="Total Authenticated" value={records.length.toString()} color="text-gray-900" bg="bg-gray-100" />
-        <StatCard icon={Package} label="SB Original Only" value={sbOriginalCount.toString()} color="text-blue-600" bg="bg-blue-600/10" />
+        <StatCard icon={Package} label="Original Only" value={sbOriginalCount.toString()} color="text-blue-600" bg="bg-blue-600/10" />
         <StatCard icon={Eye} label="Total Scans" value={totalScans.toString()} color="text-gray-900" bg="bg-gray-100" />
         <StatCard icon={CheckCircle} label="Active" value={activeCount.toString()} color="text-green-600" bg="bg-green-600/10" />
       </div>
@@ -683,16 +683,16 @@ const AdminAuthentication = () => {
         )}
       </div>
 
-      {/* ─── Create Dialog (SB Original only) ─────────────────────── */}
+      {/* ─── Create Dialog (Original only) ─────────────────────── */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="font-display">Authenticate SB Original Product</DialogTitle>
+            <DialogTitle className="font-display">Authenticate Original Product</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
               <p className="text-xs text-blue-700 font-medium">
-                Only SB Original products appear here. SB Street products are not eligible for authentication tags.
+                Only Original products appear here. Street products are not eligible for authentication tags.
               </p>
             </div>
             <div>
@@ -702,7 +702,7 @@ const AdminAuthentication = () => {
                 onChange={(e) => setForm({ ...form, product_id: e.target.value })}
                 className="w-full mt-1 px-3 py-2 rounded-lg border border-input bg-background text-sm"
               >
-                <option value="">Select an SB Original product...</option>
+                <option value="">Select an Original product...</option>
                 {sbOriginalProducts.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name} ({p.category})
@@ -711,7 +711,7 @@ const AdminAuthentication = () => {
                 ))}
               </select>
               {sbOriginalProducts.length === 0 && (
-                <p className="text-xs text-muted-foreground mt-1">No SB Original products found. Create products with brand "SB Original" first.</p>
+                <p className="text-xs text-muted-foreground mt-1">No Original products found. Create products with the Original brand first.</p>
               )}
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -750,7 +750,7 @@ const AdminAuthentication = () => {
           <div className="space-y-4 mt-4">
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
               <p className="text-xs text-blue-700">
-                Generate authentication records and QR codes for multiple SB Original products at once.
+                Generate authentication records and QR codes for multiple Original products at once.
                 Each product receives a unique serial number and verification URL.
               </p>
             </div>
@@ -758,7 +758,7 @@ const AdminAuthentication = () => {
             {unauthenticatedSbOriginal.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <CheckCircle className="h-10 w-10 mx-auto mb-3 text-green-500 opacity-50" />
-                <p className="font-medium text-green-700">All SB Original products are authenticated</p>
+                <p className="font-medium text-green-700">All Original products are authenticated</p>
                 <p className="text-sm mt-1">No pending products to generate QR codes for.</p>
               </div>
             ) : (
@@ -869,7 +869,7 @@ const AdminAuthentication = () => {
                 </Button>
               </div>
               <p className="text-[10px] text-muted-foreground">
-                Label includes SB branding, product details, and QR code for printing on clothing tags.
+                Label includes branding, product details, and QR code for printing on clothing tags.
               </p>
             </div>
           )}

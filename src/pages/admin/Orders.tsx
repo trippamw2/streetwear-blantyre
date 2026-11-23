@@ -269,7 +269,7 @@ Track: https://www.wearsb.com/track/${order.id}`;
 
   const markAsPaid = async (orderId: string) => {
     // Single transactional transition: marks paid, confirms LF reservations,
-    // commits SB inventory exactly once, and records the audit trail.
+    // commits inventory exactly once, and records the audit trail.
     const { error } = await supabase.rpc("mark_order_paid", { p_order_id: orderId });
 
     if (error) {

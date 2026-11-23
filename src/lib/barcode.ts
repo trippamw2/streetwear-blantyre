@@ -5,7 +5,7 @@
 
 /**
  * Generate a unique barcode for a product
- * Format: SB-{year}-{random8chars}
+ * Format: STB-{year}-{random8chars}
  */
 export function generateProductBarcode(_productId: string): string {
   const year = new Date().getFullYear();
@@ -13,7 +13,7 @@ export function generateProductBarcode(_productId: string): string {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("")
     .toUpperCase();
-  return `SB-${year}-${rand}`;
+  return `STB-${year}-${rand}`;
 }
 
 /**
@@ -35,7 +35,7 @@ export function generateQRCodeSVG(value: string, size: number = 200): string {
 
 /**
  * Download a QR code label as PNG
- * Includes SB branding, product details, and QR code
+ * Includes branding, product details, and QR code
  */
 export async function downloadBarcodeLabel(options: {
   productName: string;
@@ -61,7 +61,7 @@ export async function downloadBarcodeLabel(options: {
   ctx.fillStyle = "#0f172a";
   ctx.fillRect(0, 0, W, 100);
 
-  // SB text
+  // Brand text
   ctx.fillStyle = "#ffffff";
   ctx.font = "bold 42px 'Cormorant Garamond', Georgia, serif";
   ctx.textAlign = "center";
@@ -194,7 +194,7 @@ export async function downloadBarcodeLabel(options: {
       if (blob) {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `SB-Barcode-${productName.replace(/\s+/g, "-")}-${barcode}.png`;
+        a.download = `Barcode-${productName.replace(/\s+/g, "-")}-${barcode}.png`;
         a.click();
         URL.revokeObjectURL(a.href);
       }

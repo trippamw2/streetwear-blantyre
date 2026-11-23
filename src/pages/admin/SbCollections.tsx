@@ -106,7 +106,7 @@ const SbCollections = () => {
 
     const failed = [collectionRes, membershipRes, productRes].find((result) => result.error);
     if (failed?.error) {
-      toast({ title: "Error loading SB collections", description: failed.error.message, variant: "destructive" });
+      toast({ title: "Error loading collections", description: failed.error.message, variant: "destructive" });
     } else {
       setCollections(collectionRes.data || []);
       setMemberships(membershipRes.data || []);
@@ -323,7 +323,7 @@ const SbCollections = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display font-bold text-3xl flex items-center gap-2">
-            <Layers className="h-7 w-7" /> SB Collections &amp; Drops
+            <Layers className="h-7 w-7" /> Collections &amp; Drops
           </h1>
           <p className="text-gray-500">Manage collections, drops and their product membership</p>
         </div>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 interface LogoProps {
   className?: string;
-  /** Brand the mark belongs to. Defaults to SB for backwards compatibility. */
+  /** Brand the mark belongs to. Defaults to Streetwear Blantyre for backwards compatibility. */
   brand?: "sb" | "lf";
 }
 

@@ -126,7 +126,7 @@ const SbProductTypes = () => {
     const failed = [typesRes, rulesRes, subcategoriesRes].find((result) => result.error);
     if (failed?.error) {
       toast({
-        title: "Error loading SB taxonomy",
+        title: "Error loading taxonomy",
         description: failed.error.message,
         variant: "destructive",
       });
@@ -402,7 +402,7 @@ const SbProductTypes = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display font-bold text-3xl flex items-center gap-2">
-            <Tag className="h-7 w-7" /> SB Product Types
+            <Tag className="h-7 w-7" /> Product Types
           </h1>
           <p className="text-gray-500">Manage the Streetwear Blantyre product type taxonomy</p>
         </div>
