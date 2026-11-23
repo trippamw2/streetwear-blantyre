@@ -15,6 +15,7 @@ import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
 import { ArrowRight, ArrowUpRight, Shirt, Sparkles, Truck } from "lucide-react";
 
 const hero = "/images/sb/home-menu.jpg";
+const streetHero = "/images/sb/home-street.jpg";
 
 const LOOK_COMBINATIONS: { label: string; types: [SbProductTypeCode, SbProductTypeCode] }[] = [
   { label: "Tee + Shorts", types: ["TEE", "SHORTS"] },
@@ -312,7 +313,7 @@ const Home = () => {
         <div className="grid lg:grid-cols-2">
           <div className="relative min-h-[22rem] overflow-hidden bg-gray-900 lg:min-h-full">
             <img
-              src={streetPlacement?.imageOverride || streetCampaign?.heroImage || hero}
+              src={streetPlacement?.imageOverride || streetCampaign?.heroImage || streetHero}
               alt="SB Street lifestyle campaign in Blantyre"
               className="absolute inset-0 h-full w-full object-cover"
               loading="lazy"
