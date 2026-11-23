@@ -41,7 +41,7 @@ export const DeliveryOptions = ({ selectedOption, onSelect, location, subtotal }
           <span className="text-gray-900 font-medium">
             {zone === "blantyre" ? "Blantyre" : "Outside Blantyre"}
           </span>
-          <span className="text-gray-500 ml-1.5">
+          <span className="text-gray-600 ml-1.5">
             detected from "{location}"
           </span>
         </div>
@@ -93,7 +93,7 @@ export const DeliveryOptions = ({ selectedOption, onSelect, location, subtotal }
                   ) : option.id === "express" ? (
                     <Zap className={cn("h-5 w-5", isSelected ? "text-gray-900" : "text-amber-500")} />
                   ) : (
-                    <Truck className={cn("h-5 w-5", isSelected ? "text-gray-900" : "text-gray-500")} />
+                    <Truck className={cn("h-5 w-5", isSelected ? "text-gray-900" : "text-gray-600")} />
                   )}
                 </div>
 
@@ -107,8 +107,8 @@ export const DeliveryOptions = ({ selectedOption, onSelect, location, subtotal }
                       {formatDeliveryFee(option.fee)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">{option.description}</p>
-                  <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500">
+                  <p className="text-sm text-gray-600 mt-1">{option.description}</p>
+                  <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-600">
                     <Clock className="h-3.5 w-3.5" />
                     <span>{option.estimatedDays}</span>
                   </div>

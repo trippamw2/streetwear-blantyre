@@ -163,7 +163,7 @@ const ProductDetail = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="space-y-3 text-center">
-          <p className="text-lg text-gray-500">Product not found</p>
+          <p className="text-lg text-gray-600">Product not found</p>
           <Link to="/shop" className="font-semibold text-primary hover:underline">
             Back to shop
           </Link>
@@ -262,7 +262,7 @@ const ProductDetail = () => {
       },
       qty,
     );
-    toast({ title: "Added to cart", description: `${qty} x ${fullName}` });
+    toast({ title: "Added to bag", description: `${qty} x ${fullName}` });
   };
 
   const handleBuyNow = () => {
@@ -372,7 +372,7 @@ const ProductDetail = () => {
         />
         <Link
           to="/shop"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-primary"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-primary"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Collection
         </Link>
@@ -392,7 +392,7 @@ const ProductDetail = () => {
                   <span className="font-display text-4xl font-extrabold uppercase tracking-[0.24em] text-primary/20">
                     WARDROBE
                   </span>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">
                     {getCategoryLabel(product.category)}
                   </span>
                 </div>
@@ -481,7 +481,7 @@ const ProductDetail = () => {
                     </div>
                     <button
                       onClick={() => setShowShareModal(false)}
-                      className="mt-4 w-full py-3 text-sm font-medium text-gray-500 hover:text-gray-900"
+                      className="mt-4 w-full py-3 text-sm font-medium text-gray-600 hover:text-gray-900"
                     >
                       Cancel
                     </button>
@@ -528,7 +528,7 @@ const ProductDetail = () => {
               <h1 className="font-display text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
                 {product.name}
               </h1>
-              <p className="text-base leading-relaxed text-gray-500">{product.benefit}</p>
+              <p className="text-base leading-relaxed text-gray-600">{product.benefit}</p>
 
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-1">
@@ -542,7 +542,7 @@ const ProductDetail = () => {
                       }`}
                     />
                   ))}
-                  <span className="ml-1 text-sm text-gray-500">
+                  <span className="ml-1 text-sm text-gray-600">
                     {reviewCount > 0 ? `(${reviewCount} reviews)` : "(No reviews yet)"}
                   </span>
                 </div>
@@ -566,7 +566,7 @@ const ProductDetail = () => {
                 {formatMWK(displayPrice)}
               </p>
               {isOnSale && (
-                <p className="pb-1 text-base text-gray-400 line-through">
+                <p className="pb-1 text-base text-gray-500 line-through">
                   {formatMWK(compareAtPrice)}
                 </p>
               )}
@@ -648,7 +648,7 @@ const ProductDetail = () => {
                             <p className="text-sm font-medium text-gray-900 group-hover:text-primary">
                               {kit.name}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-600">
                               Save {formatMWK(getKitRealSaving(kit, products))} ·{" "}
                               {kit.productIds.length} items
                             </p>
@@ -658,12 +658,12 @@ const ProductDetail = () => {
                           <span className="text-sm font-bold text-gray-900">
                             {formatMWK(getKitPrice(kit, products))}
                           </span>
-                          <ArrowRight className="h-4 w-4 text-gray-400 transition-transform group-hover:translate-x-0.5" />
+                          <ArrowRight className="h-4 w-4 text-gray-500 transition-transform group-hover:translate-x-0.5" />
                         </div>
                       </Link>
                     ))}
                   </div>
-                  <p className="text-center text-xs text-gray-500">
+                  <p className="text-center text-xs text-gray-600">
                     Better value. One delivery. The full look.
                   </p>
                 </div>
@@ -716,7 +716,7 @@ const ProductDetail = () => {
                       </p>
                       <div className="flex items-center gap-3">
                         <Link
-                          to="/faq"
+                          to="/faq#size-guide"
                           className="text-xs font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
                         >
                           Size guide
@@ -874,7 +874,7 @@ const ProductDetail = () => {
               <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
                 {pillarLabel}
               </span>
-              <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+              <span className="text-xs font-semibold uppercase tracking-widest text-gray-600">
                 The belief
               </span>
             </div>
@@ -887,7 +887,7 @@ const ProductDetail = () => {
 
         {product.culture_story && (
           <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
-            <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+            <span className="text-xs font-semibold uppercase tracking-widest text-gray-600">
               The story
             </span>
             <h2 className="mb-3 mt-2 font-display text-xl font-bold text-gray-900 sm:text-2xl">
@@ -898,7 +898,7 @@ const ProductDetail = () => {
             </p>
             {product.culture_context && (
               <div className="mt-4 border-t border-gray-200 pt-4">
-                <p className="text-sm italic text-gray-500">{product.culture_context}</p>
+                <p className="text-sm italic text-gray-600">{product.culture_context}</p>
               </div>
             )}
           </div>
@@ -911,7 +911,7 @@ const ProductDetail = () => {
             <div className="divide-y divide-gray-200 md:hidden">
               {specs.map((spec) => (
                 <div key={spec.label} className="flex items-center justify-between px-4 py-3">
-                  <span className="text-sm font-medium text-gray-500">{spec.label}</span>
+                  <span className="text-sm font-medium text-gray-600">{spec.label}</span>
                   <span className="text-right text-sm font-medium text-gray-900">{spec.value}</span>
                 </div>
               ))}
@@ -920,7 +920,7 @@ const ProductDetail = () => {
               <tbody>
                 {specs.map((spec, i) => (
                   <tr key={spec.label} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                    <td className="px-6 py-4 font-medium text-gray-500">{spec.label}</td>
+                    <td className="px-6 py-4 font-medium text-gray-600">{spec.label}</td>
                     <td className="px-6 py-4 text-gray-900">{spec.value}</td>
                   </tr>
                 ))}
@@ -953,7 +953,7 @@ const ProductDetail = () => {
             <div className="rounded-2xl border border-gray-200 bg-gray-50 p-8 text-center">
               <Star className="mx-auto mb-4 h-12 w-12 text-gray-300" />
               <p className="font-medium text-gray-900">No reviews yet</p>
-              <p className="mt-1 text-sm text-gray-500">Be the first to share your experience.</p>
+              <p className="mt-1 text-sm text-gray-600">Be the first to share your experience.</p>
             </div>
           ) : (
             <>
@@ -975,7 +975,7 @@ const ProductDetail = () => {
                         />
                       ))}
                     </div>
-                    <p className="mt-1 text-xs text-gray-500 sm:text-sm">
+                    <p className="mt-1 text-xs text-gray-600 sm:text-sm">
                       {reviewCount} review{reviewCount !== 1 ? "s" : ""}
                     </p>
                   </div>
@@ -985,14 +985,14 @@ const ProductDetail = () => {
                       const pct = reviewCount > 0 ? Math.round((count / reviewCount) * 100) : 0;
                       return (
                         <div key={stars} className="flex items-center gap-2">
-                          <span className="w-8 text-sm text-gray-500">{stars}★</span>
+                          <span className="w-8 text-sm text-gray-600">{stars}★</span>
                           <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200">
                             <div
                               className="h-full rounded-full bg-amber-400"
                               style={{ width: `${pct}%` }}
                             />
                           </div>
-                          <span className="w-8 text-sm text-gray-500">{pct}%</span>
+                          <span className="w-8 text-sm text-gray-600">{pct}%</span>
                         </div>
                       );
                     })}
@@ -1026,7 +1026,7 @@ const ProductDetail = () => {
                           </div>
                         </div>
                       </div>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-600">
                         {review.created_at ? new Date(review.created_at).toLocaleDateString() : ""}
                       </span>
                     </div>
@@ -1080,7 +1080,7 @@ const ProductDetail = () => {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="Your name"
-                  className="max-w-md border-gray-200 bg-white text-gray-900 placeholder:text-gray-400"
+                  className="max-w-md border-gray-200 bg-white text-gray-900 placeholder:text-gray-500"
                 />
               </div>
 
@@ -1092,7 +1092,7 @@ const ProductDetail = () => {
                   value={userReview}
                   onChange={(e) => setUserReview(e.target.value)}
                   placeholder="How does this piece fit into your style?"
-                  className="min-h-[100px] max-w-lg border-gray-200 bg-white text-gray-900 placeholder:text-gray-400"
+                  className="min-h-[100px] max-w-lg border-gray-200 bg-white text-gray-900 placeholder:text-gray-500"
                 />
               </div>
 
@@ -1118,7 +1118,7 @@ const ProductDetail = () => {
                   Complete the Look
                 </h2>
               </div>
-              <Link to="/looks" className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-gray-500 hover:text-primary">
+              <Link to="/looks" className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-gray-600 hover:text-primary">
                 All looks <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
@@ -1156,9 +1156,9 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
       >
         <span className="font-medium text-gray-900">{question}</span>
         {isOpen ? (
-          <ChevronUp className="h-5 w-5 text-gray-500" />
+          <ChevronUp className="h-5 w-5 text-gray-600" />
         ) : (
-          <ChevronDown className="h-5 w-5 text-gray-500" />
+          <ChevronDown className="h-5 w-5 text-gray-600" />
         )}
       </button>
       <AnimatePresence>
@@ -1169,7 +1169,7 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <p className="px-6 pb-4 text-gray-500">{answer}</p>
+            <p className="px-6 pb-4 text-gray-600">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>

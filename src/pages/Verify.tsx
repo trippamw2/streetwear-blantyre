@@ -81,7 +81,7 @@ const Verify = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-10 w-10 animate-spin text-gray-900 mx-auto mb-4" />
-          <p className="text-gray-500">Authenticating product...</p>
+          <p className="text-gray-600">Authenticating product...</p>
         </div>
       </div>
     );
@@ -102,11 +102,11 @@ const Verify = () => {
           <h1 className="font-display text-2xl font-bold text-gray-900 mb-3">
             Authentication Failed
           </h1>
-          <p className="text-gray-500 mb-6 leading-relaxed">
+          <p className="text-gray-600 mb-6 leading-relaxed">
             This product cannot be verified by Streetwear Blantyre.
             The Product ID or Serial Number does not exist in our database.
           </p>
-          <p className="text-sm text-gray-500 mb-8">
+          <p className="text-sm text-gray-600 mb-8">
             This item may be counterfeit or unauthorized.
           </p>
           <a
@@ -119,7 +119,7 @@ const Verify = () => {
           <div className="mt-6 pt-6 border-t border-gray-100">
             <Link
               to="/"
-              className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
             >
               Return to Streetwear Blantyre
             </Link>
@@ -144,12 +144,12 @@ const Verify = () => {
           <h1 className="font-display text-2xl font-bold text-gray-900 mb-3">
             Product Retired
           </h1>
-          <p className="text-gray-500 mb-6 leading-relaxed">
+          <p className="text-gray-600 mb-6 leading-relaxed">
             This Streetwear Blantyre product has been retired from our active collection.
           </p>
           <div className="bg-gray-50 rounded-2xl p-4 mb-6">
             <p className="text-sm text-gray-600 font-medium">{product.product_name}</p>
-            <p className="text-xs text-gray-500 mt-1">Serial: {product.serial_number}</p>
+            <p className="text-xs text-gray-600 mt-1">Serial: {product.serial_number}</p>
           </div>
           <a
             href="mailto:support@wearsb.com?subject=Counterfeit%20Report"
@@ -195,7 +195,7 @@ const Verify = () => {
           <h1 className="font-display text-2xl font-bold text-gray-900 mt-4 mb-2">
             Authentic Streetwear Blantyre Product
           </h1>
-          <p className="text-sm text-gray-500">Verified and authenticated</p>
+          <p className="text-sm text-gray-600">Verified and authenticated</p>
         </motion.div>
 
         {/* Product Card */}
@@ -234,7 +234,7 @@ const Verify = () => {
             <div className="grid grid-cols-2 gap-3 mt-4">
               {product.category && (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Package className="h-4 w-4 text-gray-500" />
+                  <Package className="h-4 w-4 text-gray-600" />
                   <span>{product.category}</span>
                 </div>
               )}
@@ -246,13 +246,13 @@ const Verify = () => {
               )}
               {product.size && (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="text-xs font-medium text-gray-500">SIZE</span>
+                  <span className="text-xs font-medium text-gray-600">SIZE</span>
                   <span>{product.size}</span>
                 </div>
               )}
               {product.material && (
                 <div className="text-sm text-gray-600">
-                  <span className="text-xs font-medium text-gray-500">MATERIAL</span>
+                  <span className="text-xs font-medium text-gray-600">MATERIAL</span>
                   <span className="ml-1">{product.material}</span>
                 </div>
               )}
@@ -261,20 +261,20 @@ const Verify = () => {
             {/* Passport Info */}
             <div className="mt-6 pt-4 border-t border-gray-100 space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500 flex items-center gap-1.5">
+                <span className="text-gray-600 flex items-center gap-1.5">
                   <Hash className="h-3.5 w-3.5" /> Product ID
                 </span>
                 <span className="font-mono text-gray-700">{product.product_id}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500 flex items-center gap-1.5">
+                <span className="text-gray-600 flex items-center gap-1.5">
                   <Hash className="h-3.5 w-3.5" /> Serial Number
                 </span>
                 <span className="font-mono text-gray-700">{product.serial_number}</span>
               </div>
               {product.edition_number && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Edition</span>
+                  <span className="text-gray-600">Edition</span>
                   <span className="font-mono text-gray-700">
                     #{product.edition_number}{product.quantity_produced ? ` of ${product.quantity_produced}` : ""}
                   </span>
@@ -282,7 +282,7 @@ const Verify = () => {
               )}
               {product.manufacturing_date && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500 flex items-center gap-1.5">
+                  <span className="text-gray-600 flex items-center gap-1.5">
                     <Calendar className="h-3.5 w-3.5" /> Manufactured
                   </span>
                   <span className="text-gray-700">{product.manufacturing_date}</span>
@@ -290,14 +290,14 @@ const Verify = () => {
               )}
               {product.country_of_manufacture && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500 flex items-center gap-1.5">
+                  <span className="text-gray-600 flex items-center gap-1.5">
                     <MapPin className="h-3.5 w-3.5" /> Origin
                   </span>
                   <span className="text-gray-700">{product.country_of_manufacture}</span>
                 </div>
               )}
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">Total Verifications</span>
+                <span className="text-gray-600">Total Verifications</span>
                 <span className="text-gray-700">{product.total_scans}</span>
               </div>
             </div>
@@ -341,7 +341,7 @@ const Verify = () => {
             className="bg-white rounded-3xl shadow-sm p-6 mb-6"
           >
             <h3 className="font-display text-lg font-bold text-gray-900 mb-1">Register Your Product</h3>
-            <p className="text-sm text-gray-500 mb-4">Claim ownership of this authentic piece.</p>
+            <p className="text-sm text-gray-600 mb-4">Claim ownership of this authentic piece.</p>
             <div className="space-y-3">
               <input
                 type="text"
@@ -395,27 +395,27 @@ const Verify = () => {
             className="flex items-center justify-between w-full p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
           >
             <span className="text-sm font-medium text-gray-900">Explore More from This Collection</span>
-            <ChevronRight className="h-4 w-4 text-gray-500" />
+            <ChevronRight className="h-4 w-4 text-gray-600" />
           </Link>
           <button
             onClick={handleShare}
             className="flex items-center justify-between w-full p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
           >
             <span className="text-sm font-medium text-gray-900">Share This Verification</span>
-            <Share2 className="h-4 w-4 text-gray-500" />
+            <Share2 className="h-4 w-4 text-gray-600" />
           </button>
           <a
             href="mailto:support@wearsb.com?subject=Counterfeit%20Report"
             className="flex items-center justify-between w-full p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
           >
             <span className="text-sm font-medium text-gray-600">Report Suspected Counterfeit</span>
-            <AlertTriangle className="h-4 w-4 text-gray-500" />
+            <AlertTriangle className="h-4 w-4 text-gray-600" />
           </a>
         </motion.div>
 
         {/* Footer */}
         <div className="text-center pb-8">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-600">
             Powered by Streetwear Blantyre Authentication
           </p>
         </div>

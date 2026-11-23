@@ -97,7 +97,7 @@ const Home = () => {
                 <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:gap-4">
                   <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
                     <Link to={heroHref}>
-                      {heroPlacement?.ctaLabel || heroCampaign?.ctaLabel || "Shop the collection"} <ArrowRight className="h-4 w-4" />
+                      {heroPlacement?.ctaLabel || heroCampaign?.ctaLabel || "Shop all"} <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>
                   <Button
@@ -117,7 +117,7 @@ const Home = () => {
 
       {/* CATEGORY PILLARS */}
       <section className="border-b border-gray-200 bg-white">
-        <div className="container flex flex-wrap items-center justify-center gap-x-6 gap-y-3 py-5 text-[10px] font-bold uppercase tracking-[0.22em] text-gray-500 sm:gap-x-10">
+        <div className="container flex flex-wrap items-center justify-center gap-x-6 gap-y-3 py-5 text-[10px] font-bold uppercase tracking-[0.22em] text-gray-600 sm:gap-x-10">
           {SB_PRODUCT_TYPES.map((type) => (
             <Link key={type.code} to={`/shop?category=${type.slug}`} className="hover:text-primary">
               {type.label}
@@ -142,7 +142,7 @@ const Home = () => {
                   ? newArrivalsPlacement?.body || "Fresh from the wardrobe"
                   : "New drops are landing soon"}
               </h2>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-600">
                 Tees, vests, shirts and shorts. The latest pieces across all four categories.
               </p>
             </div>
@@ -175,7 +175,7 @@ const Home = () => {
           ) : (
             <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center sm:p-12">
               <Shirt className="mx-auto mb-4 h-10 w-10 text-primary" />
-              <p className="mx-auto max-w-md text-sm text-gray-500">
+              <p className="mx-auto max-w-md text-sm text-gray-600">
                 Message us on WhatsApp to hear about new stock first, or visit the kiosk in Blantyre.
               </p>
               <Button asChild className="mt-5" variant="hero">
@@ -195,7 +195,7 @@ const Home = () => {
               <h2 className="font-display text-3xl font-extrabold uppercase text-gray-900 sm:text-5xl">
                 {teePlacement?.headline || "The Graphic Tee"}
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-gray-500 sm:text-base">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-gray-600 sm:text-base">
                 {teePlacement?.body || "The piece that started the conversation."}
               </p>
             </div>
@@ -216,7 +216,7 @@ const Home = () => {
                 <img
                   src={heroTee.image}
                   alt={heroTee.name}
-                  className="h-full min-h-[22rem] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full min-h-[22rem] w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 to-transparent" />
@@ -228,7 +228,7 @@ const Home = () => {
             ) : (
               <div className="col-span-1 flex min-h-[22rem] items-center justify-center rounded-2xl bg-gray-900 p-8 text-center sm:col-span-2">
                 <div>
-                  <Sparkles className="mx-auto mb-4 h-10 w-10 text-white/40" />
+                  <Sparkles className="mx-auto mb-4 h-10 w-10 text-white/70" />
                   <p className="font-display text-2xl font-extrabold uppercase text-white">The Graphic Tee</p>
                   <p className="mt-2 text-sm text-white/75">The piece that started the conversation.</p>
                 </div>
@@ -328,7 +328,7 @@ const Home = () => {
                 <h2 className="font-display text-3xl font-extrabold uppercase leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
                   {streetPlacement?.headline || streetCampaign?.headline || "Made for the streets of Blantyre."}
                 </h2>
-                <p className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base">
+                <p className="mt-4 text-sm leading-relaxed text-gray-600 sm:text-base">
                   {streetPlacement?.body ||
                     streetCampaign?.description ||
                     "Music, movement and everyday hustle. This is the full wardrobe for the city, not just a tee."}

@@ -48,7 +48,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     add({ productKey: `${product.id}-${selectedType}`, productId: product.id, name: fullName, price: finalPrice, image: product.image });
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 1600);
-    toast({ title: "Added to cart", description: fullName });
+    toast({ title: "Added to bag", description: fullName });
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -108,14 +108,14 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               src={product.image}
               alt={product.name}
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
             />
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-100 to-gray-200 px-4 text-center">
               <span className="font-display text-2xl font-extrabold uppercase tracking-[0.24em] text-primary/25">
                 WARDROBE
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">
                 {getCategoryLabel(product.category)}
               </span>
             </div>
@@ -143,7 +143,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             >
               <Heart
                 className={`h-4 w-4 transition-colors ${
-                  isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"
+                  isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
                 }`}
               />
             </button>
@@ -155,7 +155,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             >
               <GitCompare
                 className={`h-4 w-4 transition-colors ${
-                  isInCompare(product.id) ? "text-primary" : "text-gray-500"
+                  isInCompare(product.id) ? "text-primary" : "text-gray-600"
                 }`}
               />
             </button>
@@ -184,7 +184,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
         <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
           <div className="flex items-center justify-between gap-2">
-            <span className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+            <span className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-600">
               {getBrandName(product.brand)}
             </span>
             {rating > 0 && (
@@ -220,7 +220,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                 </button>
               ))}
               {hiddenTypes > 0 && (
-                <span className="flex items-center gap-0.5 rounded-full border border-gray-200 px-2.5 py-1 text-[10px] font-semibold text-gray-500">
+                <span className="flex items-center gap-0.5 rounded-full border border-gray-200 px-2.5 py-1 text-[10px] font-semibold text-gray-600">
                   <Plus className="h-3 w-3" /> {hiddenTypes}
                 </span>
               )}
@@ -230,7 +230,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           <div className="mt-auto flex items-end gap-2 pt-1">
             <span className="text-base font-bold text-gray-900 sm:text-lg">{formatMWK(displayPrice)}</span>
             {isOnSale && discountPercent > 0 && (
-              <span className="pb-0.5 text-[11px] text-gray-400 line-through">{formatMWK(product.price)}</span>
+              <span className="pb-0.5 text-[11px] text-gray-500 line-through">{formatMWK(product.price)}</span>
             )}
           </div>
 
@@ -241,7 +241,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             className="h-9 w-full"
             disabled={!isInStock}
           >
-            {justAdded ? "Added to Cart" : isInStock ? "Add to Cart" : "Sold Out"}
+            {justAdded ? "Added to bag" : isInStock ? "Add to bag" : "Sold Out"}
           </Button>
         </div>
       </Link>

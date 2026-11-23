@@ -117,7 +117,7 @@ const Checkout = () => {
       toast({ title: "Please fill all fields", variant: "destructive" });
       return;
     }
-    if (items.length === 0) { toast({ title: "Your cart is empty", variant: "destructive" }); return; }
+    if (items.length === 0) { toast({ title: "Your bag is empty", variant: "destructive" }); return; }
 
     // Validate phone number
     const cleanPhone = formData.phone.replace(/[^0-9]/g, "");
@@ -259,9 +259,9 @@ const Checkout = () => {
   if (items.length === 0) {
     return (
       <div className="container py-12 text-center">
-        <CreditCard className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-        <h2 className="font-display text-xl font-bold mb-2 text-gray-900">Your cart is empty</h2>
-        <p className="text-gray-500 mb-6">Add a piece to your cart before checking out.</p>
+        <CreditCard className="h-12 w-12 mx-auto text-gray-500 mb-4" />
+        <h2 className="font-display text-xl font-bold mb-2 text-gray-900">Your bag is empty</h2>
+        <p className="text-gray-600 mb-6">Add a piece to your bag before checking out.</p>
         <div className="flex gap-3 justify-center">
           <Button asChild><Link to="/shop">Shop all</Link></Button>
           <Button asChild variant="outline"><Link to="/combos">View kits</Link></Button>
@@ -273,7 +273,7 @@ const Checkout = () => {
   return (
     <div className="container py-4 sm:py-8 max-w-2xl">
       <SEO {...defaultSEO.checkout} />
-      <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-gray-500 mb-4">
+      <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-gray-600 mb-4">
         <ArrowLeft className="h-4 w-4" /> Back to shop
       </Link>
 
@@ -331,7 +331,7 @@ const Checkout = () => {
               />
             )}
             {formData.location.trim().length < 3 && (
-              <p className="text-xs text-gray-500 text-center py-3">
+              <p className="text-xs text-gray-600 text-center py-3">
                 Enter your location to see delivery options
               </p>
             )}
@@ -350,10 +350,10 @@ const Checkout = () => {
               </div>
               <div>
                 <p className="font-semibold">Pay Online via PayChangu</p>
-                <p className="text-xs text-gray-500">Airtel Money, TNM Mpamba, Visa, Mastercard</p>
+                <p className="text-xs text-gray-600">Airtel Money, TNM Mpamba, Visa, Mastercard</p>
               </div>
             </div>
-            <ul className="text-xs text-gray-500 space-y-1.5">
+            <ul className="text-xs text-gray-600 space-y-1.5">
               <li>After placing your order, you will be redirected to PayChangu.</li>
               <li>Pay with Airtel Money, TNM Mpamba, Visa or Mastercard.</li>
               <li>You will return to your order page once payment is complete.</li>
@@ -419,7 +419,7 @@ const Checkout = () => {
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="truncate">{item.quantity} x {item.name}</span>
                     {lowStock && (
-                      <span className="shrink-0 text-[10px] text-gray-500 font-medium">Only {stock} left</span>
+                      <span className="shrink-0 text-[10px] text-gray-600 font-medium">Only {stock} left</span>
                     )}
                   </div>
                   <span className="shrink-0 ml-2">{formatMWK(item.price * item.quantity)}</span>

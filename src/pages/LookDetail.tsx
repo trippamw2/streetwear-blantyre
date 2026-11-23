@@ -55,7 +55,7 @@ const LookDetail = () => {
           <h1 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
             We couldn&apos;t find that look
           </h1>
-          <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-500">
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-600">
             It may have been archived, or the link might be out of date. There are plenty of other
             edits to explore.
           </p>
@@ -85,7 +85,7 @@ const LookDetail = () => {
       <section className="relative isolate overflow-hidden bg-gray-900">
         <div className="absolute inset-0">
           {heroImage ? (
-            <img src={heroImage} alt="" className="h-full w-full object-cover" />
+            <img src={heroImage} alt="" className="h-full w-full object-cover object-top" />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700" />
           )}
@@ -93,12 +93,13 @@ const LookDetail = () => {
         </div>
 
         <div className="container relative py-20 sm:py-28">
-          <Link
-            to="/looks"
-            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70 transition-colors hover:text-white"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> All looks
-          </Link>
+          <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70">
+            <Link to="/" className="hover:text-white">Home</Link>
+            <span>/</span>
+            <Link to="/looks" className="hover:text-white">Looks</Link>
+            <span>/</span>
+            <span className="text-white">{look.title}</span>
+          </nav>
 
           <div className="mt-12 max-w-2xl">
             <p className="eyebrow mb-3 text-white/70">Shoppable Look</p>
@@ -122,9 +123,9 @@ const LookDetail = () => {
           <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-3xl">
             Shop this look
           </h2>
-          <p className="mt-2 max-w-lg text-sm leading-relaxed text-gray-500">
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-gray-600">
             Every piece below is available on its own. Tap through for sizing, or add it straight to
-            your cart.
+            your bag.
           </p>
         </div>
 
@@ -133,7 +134,7 @@ const LookDetail = () => {
             <p className="font-display text-xl font-extrabold uppercase text-gray-900">
               This look is still being styled
             </p>
-            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-gray-500">
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-gray-600">
               No pieces are available to shop here just yet. Explore the other looks or browse the
               full range.
             </p>
@@ -142,7 +143,7 @@ const LookDetail = () => {
                 <Link to="/looks">More Looks</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link to="/shop">Shop All Pieces</Link>
+                <Link to="/shop">Shop all</Link>
               </Button>
             </div>
           </div>
@@ -181,7 +182,7 @@ const LookDetail = () => {
                         src={product.image}
                         alt={product.name}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                        className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.05]"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
@@ -218,7 +219,7 @@ const LookDetail = () => {
                     )}
 
                     {item.stylingNote && (
-                      <p className="mt-3 border-l-2 border-primary/30 pl-3 text-sm italic leading-relaxed text-gray-500">
+                      <p className="mt-3 border-l-2 border-primary/30 pl-3 text-sm italic leading-relaxed text-gray-600">
                         {item.stylingNote}
                       </p>
                     )}
@@ -233,7 +234,7 @@ const LookDetail = () => {
                         </Link>
                       </Button>
                       {!product && (
-                        <span className="text-xs text-gray-500">This piece is no longer available.</span>
+                        <span className="text-xs text-gray-600">This piece is no longer available.</span>
                       )}
                     </div>
                   </div>

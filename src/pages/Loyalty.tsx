@@ -28,9 +28,9 @@ const Loyalty = () => {
       <div className="bg-white min-h-screen">
         <div className="container py-6 sm:py-12">
           <div className="max-w-2xl mx-auto text-center space-y-4">
-            <Gift className="h-12 w-12 mx-auto text-gray-500" />
+            <Gift className="h-12 w-12 mx-auto text-gray-600" />
             <h1 className="font-display font-bold text-2xl sm:text-3xl text-gray-900">Join Streetwear Blantyre Rewards</h1>
-            <p className="text-gray-500">Your loyalty deserves more than empty points. Sign in and start earning toward culture that represents you.</p>
+            <p className="text-gray-600">Your loyalty deserves more than empty points. Sign in and start earning toward culture that represents you.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild variant="hero" size="lg">
                 <Link to="/auth">Sign In</Link>
@@ -69,7 +69,7 @@ const Loyalty = () => {
 
         <div className="max-w-2xl space-y-2 sm:space-y-3 mb-6 sm:mb-8">
           <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-gray-900">Streetwear Blantyre Rewards</h1>
-          <p className="text-gray-500 text-sm sm:text-base">
+          <p className="text-gray-600 text-sm sm:text-base">
             Most rewards programs forget why you shop. Points without purpose go nowhere.
             Every purchase here earns points toward what actually matters, culture that represents you.
           </p>
@@ -87,14 +87,14 @@ const Loyalty = () => {
               <tierInfo.icon className="h-6 sm:h-8 w-6 sm:w-8 text-gray-900" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm text-gray-500 uppercase">Current Tier</p>
+              <p className="text-xs sm:text-sm text-gray-600 uppercase">Current Tier</p>
               <p className={`font-display font-bold text-xl sm:text-2xl ${tierInfo.text} capitalize`}>{currentTier}</p>
             </div>
           </div>
           <div className="text-center sm:text-right">
-            <p className="text-xs sm:text-sm text-gray-500">Available Points</p>
+            <p className="text-xs sm:text-sm text-gray-600">Available Points</p>
             <p className="font-display font-bold text-3xl sm:text-4xl text-gray-900">{redeemablePoints.toLocaleString()}</p>
-            <p className="text-xs sm:text-sm text-gray-500">Worth {formatMWK(rewardValue)}</p>
+            <p className="text-xs sm:text-sm text-gray-600">Worth {formatMWK(rewardValue)}</p>
           </div>
         </div>
 
@@ -102,7 +102,7 @@ const Loyalty = () => {
         {nextTier && (
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="flex justify-between text-xs sm:text-sm mb-2">
-              <span className="text-gray-500">Progress to {nextTier.name}</span>
+              <span className="text-gray-600">Progress to {nextTier.name}</span>
               <span className="font-medium text-gray-900">{pointsToNext.toLocaleString()} pts to go</span>
             </div>
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -154,7 +154,7 @@ const Loyalty = () => {
           <div key={step.title} className="text-center p-3 sm:p-4 bg-gray-100 rounded-xl">
             <step.icon className="h-5 sm:h-6 w-5 sm:w-6 mx-auto mb-1 text-gray-900" />
             <p className="font-semibold text-xs sm:text-sm text-gray-900">{step.title}</p>
-            <p className="text-xs text-gray-500">{step.desc}</p>
+            <p className="text-xs text-gray-600">{step.desc}</p>
           </div>
         ))}
       </div>
@@ -172,7 +172,7 @@ const Loyalty = () => {
                 <config.icon className="h-4 w-4 text-gray-900" />
               </div>
               <p className="font-semibold text-sm capitalize text-gray-900">{tier.name}</p>
-              <p className="text-xs text-gray-500">{tier.min_lifetime_points.toLocaleString()}+ pts</p>
+              <p className="text-xs text-gray-600">{tier.min_lifetime_points.toLocaleString()}+ pts</p>
               {tier.discount_percent > 0 && (
                 <p className="text-xs font-medium text-green-400">{tier.discount_percent}% off</p>
               )}
@@ -191,7 +191,7 @@ const Loyalty = () => {
       <div className="rounded-2xl border-2 border-gray-200 bg-gradient-to-br from-white/5 to-transparent p-4 sm:p-6 mb-6">
         <div className="flex flex-col sm:flex-row gap-4 sm:items-start">
           <div className="flex-1">
-            <p className="text-sm text-gray-500 mb-3">Share your code. Earn 500 points per friend who signs up.</p>
+            <p className="text-sm text-gray-600 mb-3">Share your code. Earn 500 points per friend who signs up.</p>
             {referralCode ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
@@ -207,7 +207,7 @@ const Loyalty = () => {
                     <Share2 className="h-5 w-5 mr-2" /> Share Link
                   </Button>
                 </div>
-                <p className="text-xs text-center text-gray-500">
+                <p className="text-xs text-center text-gray-600">
                   Your friend gets K200 off • You earn 500 pts
                 </p>
               </div>
@@ -218,11 +218,11 @@ const Loyalty = () => {
           <div className="flex sm:flex-col gap-3">
             <div className="bg-gray-100 rounded-xl p-4 text-center min-w-[80px]">
               <p className="text-3xl font-bold text-gray-900">{stats.totalReferrals}</p>
-              <p className="text-xs font-medium text-gray-500">Friends</p>
+              <p className="text-xs font-medium text-gray-600">Friends</p>
             </div>
             <div className="bg-gray-100 rounded-xl p-4 text-center min-w-[80px]">
               <p className="text-3xl font-bold text-green-400">{stats.totalEarned}</p>
-              <p className="text-xs font-medium text-gray-500">Points</p>
+              <p className="text-xs font-medium text-gray-600">Points</p>
             </div>
           </div>
         </div>
@@ -241,15 +241,15 @@ const Loyalty = () => {
                   {tx.points > 0 ? (
                     <TrendingUp className="h-4 w-4 text-green-400" />
                   ) : (
-                    <Gift className="h-4 w-4 text-gray-500" />
+                    <Gift className="h-4 w-4 text-gray-600" />
                   )}
                 </div>
                 <div>
                   <p className="font-medium text-sm capitalize text-gray-900">{tx.type}</p>
-                  <p className="text-xs text-gray-500">{tx.description}</p>
+                  <p className="text-xs text-gray-600">{tx.description}</p>
                 </div>
               </div>
-              <p className={`font-semibold text-sm ${tx.points > 0 ? "text-green-400" : "text-gray-500"}`}>
+              <p className={`font-semibold text-sm ${tx.points > 0 ? "text-green-400" : "text-gray-600"}`}>
                 {tx.points > 0 ? "+" : ""}{tx.points} pts
               </p>
             </div>
@@ -257,8 +257,8 @@ const Loyalty = () => {
         ) : (
           <div className="p-6 sm:p-8 text-center">
             <Clock className="h-8 sm:h-10 w-8 sm:w-10 mx-auto text-gray-600 mb-3" />
-            <p className="text-gray-500">No activity yet</p>
-            <p className="text-sm text-gray-500">Start your culture journey to earn points!</p>
+            <p className="text-gray-600">No activity yet</p>
+            <p className="text-sm text-gray-600">Start your culture journey to earn points!</p>
           </div>
         )}
       </div>
@@ -269,7 +269,7 @@ const Loyalty = () => {
         </Link>
       </Button>
 
-      <p className="text-center text-gray-500 text-sm mt-4 italic">
+      <p className="text-center text-gray-600 text-sm mt-4 italic">
         Don't let your loyalty go unrecognized. Earn points toward culture that speaks for you.
       </p>
     </div>

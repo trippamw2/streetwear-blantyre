@@ -33,7 +33,7 @@ const Combos = () => {
               <br />
               One order.
             </h1>
-            <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-500 sm:text-base">
+            <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
               Not sure what goes together? Our kits put a full look in one place, chosen for the
               street, the pitch and everyday life.
             </p>
@@ -63,7 +63,7 @@ const Combos = () => {
           {benefits.map((item) => (
             <div key={item.title} className="rounded-xl border border-gray-200 p-4">
               <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-gray-500">{item.desc}</p>
+              <p className="mt-1 text-xs leading-relaxed text-gray-600">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -76,7 +76,7 @@ const Combos = () => {
           <h2 className="font-display text-3xl font-extrabold text-gray-900 sm:text-4xl">
             Kits & Bundles
           </h2>
-          <p className="mx-auto mt-2 max-w-md text-sm text-gray-500">
+          <p className="mx-auto mt-2 max-w-md text-sm text-gray-600">
             Each kit solves a style problem. No filler, just pieces your wardrobe will use.
           </p>
         </div>
@@ -90,7 +90,7 @@ const Combos = () => {
         ) : (
           <div className="rounded-2xl border border-gray-200 bg-gray-50 px-6 py-14 text-center">
             <p className="font-display text-xl font-bold text-gray-900">New kits are on the way</p>
-            <p className="mx-auto mt-2 max-w-sm text-sm text-gray-500">
+            <p className="mx-auto mt-2 max-w-sm text-sm text-gray-600">
               In the meantime, shop individual pieces or ask us on WhatsApp what is available.
             </p>
             <Button asChild className="mt-6" variant="hero">
@@ -107,7 +107,7 @@ const Combos = () => {
           <h2 className="font-display text-2xl font-extrabold text-gray-900 sm:text-3xl">
             Shop by Category
           </h2>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-gray-600">
             Every piece is also available on its own.
           </p>
 

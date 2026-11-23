@@ -32,13 +32,13 @@ const Compare = () => {
     return (
       <div className="container py-12 text-center space-y-6">
         <h1 className="font-display font-bold text-2xl mb-4">Compare Products</h1>
-        <p className="text-gray-500 mb-6">Nothing to compare yet.</p>
+        <p className="text-gray-600 mb-6">Nothing to compare yet.</p>
         
         {/* Kit upsell */}
         <div className="max-w-md mx-auto bg-gradient-to-r from-gray-50 to-amber-50 rounded-2xl border border-gray-200 p-6">
           <Package className="h-10 w-10 text-gray-900 mx-auto mb-3" />
           <h3 className="font-display font-bold text-lg mb-2">Compare Kits Instead</h3>
-          <p className="text-sm text-gray-500 mb-4">Curated kits. Better value. One delivery.</p>
+          <p className="text-sm text-gray-600 mb-4">Curated kits. Better value. One delivery.</p>
           <Link to="/combos">
             <Button className=" rounded-full">
               View kits <ArrowRight className="h-4 w-4 ml-1" />
@@ -46,7 +46,7 @@ const Compare = () => {
           </Link>
         </div>
 
-        <div className="text-sm text-gray-500 mt-4">
+        <div className="text-sm text-gray-600 mt-4">
           <Link to="/shop" className="text-gray-900 hover:underline">Browse individual items &rarr;</Link>
         </div>
       </div>
@@ -58,7 +58,7 @@ const Compare = () => {
       <SEO {...defaultSEO.compare} />
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <Link to="/shop" className="flex items-center gap-2 text-gray-500 hover:text-gray-900">
+          <Link to="/shop" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
           <h1 className="font-display font-bold text-2xl">Compare Components</h1>
@@ -105,7 +105,7 @@ const Compare = () => {
                 {p.is_on_sale ? (
                   <div className="flex items-center gap-2">
                     <span className="text-red-500 font-bold">{formatMWK(Math.round(p.price * (1 - p.discount_percent / 100)))}</span>
-                    <span className="text-gray-500 line-through text-xs">{formatMWK(p.price)}</span>
+                    <span className="text-gray-600 line-through text-xs">{formatMWK(p.price)}</span>
                   </div>
                 ) : (
                   <p className="font-bold">{formatMWK(p.price)}</p>
@@ -115,24 +115,24 @@ const Compare = () => {
 
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div className="bg-gray-50 rounded-lg p-2.5">
-                <p className="text-gray-500 text-xs mb-0.5">Brand</p>
+                <p className="text-gray-600 text-xs mb-0.5">Brand</p>
                 <p className="font-medium">{getBrandName(p.brand)}</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-2.5">
-                <p className="text-gray-500 text-xs mb-0.5">Rating</p>
+                <p className="text-gray-600 text-xs mb-0.5">Rating</p>
                 <div className="flex items-center gap-1">
                   <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{p.rating || "N/A"}</span>
                 </div>
               </div>
               <div className="bg-gray-50 rounded-lg p-2.5">
-                <p className="text-gray-500 text-xs mb-0.5">Stock</p>
+                <p className="text-gray-600 text-xs mb-0.5">Stock</p>
                 <span className={p.stock && p.stock > 0 ? "text-green-600 font-medium" : "text-red-500 font-medium"}>
                   {p.stock && p.stock > 0 ? `${p.stock} available` : "Out of stock"}
                 </span>
               </div>
               <div className="bg-gray-50 rounded-lg p-2.5">
-                <p className="text-gray-500 text-xs mb-0.5">Benefit</p>
+                <p className="text-gray-600 text-xs mb-0.5">Benefit</p>
                 <p className="font-medium text-xs line-clamp-2">{p.benefit}</p>
               </div>
             </div>
@@ -182,7 +182,7 @@ const Compare = () => {
           </thead>
           <tbody>
             <tr className="border-t">
-              <td className="p-3 font-medium text-gray-500">Price</td>
+              <td className="p-3 font-medium text-gray-600">Price</td>
               {compareList.map((p) => (
                 <td key={p.id} className="p-3 text-center">
                   {p.is_on_sale ? (
@@ -190,7 +190,7 @@ const Compare = () => {
                       <span className="text-red-500 font-bold">
                         {formatMWK(Math.round(p.price * (1 - p.discount_percent / 100)))}
                       </span>
-                      <span className="text-gray-500 line-through ml-2 text-sm">
+                      <span className="text-gray-600 line-through ml-2 text-sm">
                         {formatMWK(p.price)}
                       </span>
                     </>
@@ -204,7 +204,7 @@ const Compare = () => {
               ))}
             </tr>
             <tr className="border-t">
-              <td className="p-3 font-medium text-gray-500">Brand</td>
+              <td className="p-3 font-medium text-gray-600">Brand</td>
               {compareList.map((p) => (
                 <td key={p.id} className="p-3 text-center">{getBrandName(p.brand)}</td>
               ))}
@@ -213,7 +213,7 @@ const Compare = () => {
               ))}
             </tr>
             <tr className="border-t">
-              <td className="p-3 font-medium text-gray-500">Rating</td>
+              <td className="p-3 font-medium text-gray-600">Rating</td>
               {compareList.map((p) => (
                 <td key={p.id} className="p-3 text-center">
                   <div className="flex items-center justify-center gap-1">
@@ -227,7 +227,7 @@ const Compare = () => {
               ))}
             </tr>
             <tr className="border-t">
-              <td className="p-3 font-medium text-gray-500">Stock</td>
+              <td className="p-3 font-medium text-gray-600">Stock</td>
               {compareList.map((p) => (
                 <td key={p.id} className="p-3 text-center">
                   <span className={p.stock && p.stock > 0 ? "text-green-600" : "text-red-500"}>
@@ -240,7 +240,7 @@ const Compare = () => {
               ))}
             </tr>
             <tr className="border-t">
-              <td className="p-3 font-medium text-gray-500">Benefit</td>
+              <td className="p-3 font-medium text-gray-600">Benefit</td>
               {compareList.map((p) => (
                 <td key={p.id} className="p-3 text-sm text-gray-600">
                   {p.benefit}

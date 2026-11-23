@@ -260,14 +260,14 @@ const Shop = () => {
               <h1 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-5xl">
                 {categoryName || "Shop All"}
               </h1>
-              <p className="text-sm leading-relaxed text-gray-500 sm:text-base">
+              <p className="text-sm leading-relaxed text-gray-600 sm:text-base">
                 {selectedCategory === "all"
                   ? "Tees, vests, short sleeve shirts and shorts from Blantyre. A full streetwear wardrobe built to layer, mix and speak for itself."
                   : selectedType?.description ||
                     "Explore the category and find the fit that feels like you."}
               </p>
             </div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-600">
               {sorted.length} {sorted.length === 1 ? "piece" : "pieces"} available
             </p>
           </div>
@@ -282,7 +282,7 @@ const Shop = () => {
         {/* SEARCH + TOOLBAR */}
         <div className="mb-4 flex flex-col gap-2 sm:mb-6 sm:flex-row sm:items-center sm:gap-3">
           <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
             <Input
               placeholder="Search pieces, brands, styles..."
               value={searchQuery}
@@ -290,7 +290,7 @@ const Shop = () => {
                 setSearchQuery(e.target.value);
                 updateParam("q", e.target.value);
               }}
-              className="h-11 rounded-full border-gray-200 bg-gray-50 pl-11 pr-10 text-sm text-gray-900 placeholder:text-gray-400"
+              className="h-11 rounded-full border-gray-200 bg-gray-50 pl-11 pr-10 text-sm text-gray-900 placeholder:text-gray-500"
             />
             {searchQuery && (
               <button
@@ -300,7 +300,7 @@ const Shop = () => {
                   updateParam("q", "");
                 }}
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:text-gray-900"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-500 hover:text-gray-900"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -328,7 +328,7 @@ const Shop = () => {
             </Button>
 
             <div className="relative flex-1 sm:flex-none">
-              <ArrowUpDown className="pointer-events-none absolute left-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+              <ArrowUpDown className="pointer-events-none absolute left-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
@@ -340,14 +340,14 @@ const Shop = () => {
                 <option value="price-high">Price: high to low</option>
                 <option value="name">Name</option>
               </select>
-              <ChevronRight className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rotate-90 text-gray-400" />
+              <ChevronRight className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rotate-90 text-gray-500" />
             </div>
 
             {activeFilterCount > 0 && (
               <button
                 type="button"
                 onClick={clearFilters}
-                className="hidden items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-500 hover:text-primary sm:inline-flex"
+                className="hidden items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-600 hover:text-primary sm:inline-flex"
               >
                 <RotateCcw className="h-3.5 w-3.5" /> Clear all
               </button>
@@ -384,7 +384,25 @@ const Shop = () => {
 
         {/* FILTER PANEL */}
         {showFilters && (
-          <div className="mb-5 space-y-5 rounded-2xl border border-gray-200 bg-gray-50 p-4 shadow-sm sm:mb-6 sm:p-6 lg:sticky lg:top-24 lg:z-20">
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+              onClick={() => setShowFilters(false)}
+              aria-hidden="true"
+            />
+            <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-3xl border border-gray-200 bg-white p-4 shadow-2xl sm:p-6 lg:static lg:z-20 lg:mb-6 lg:max-h-none lg:overflow-visible lg:rounded-2xl lg:bg-gray-50 lg:p-6 lg:shadow-sm lg:sticky lg:top-24">
+              <div className="mb-4 flex items-center justify-between lg:hidden">
+                <h2 className="font-display text-lg font-bold text-gray-900">Filters</h2>
+                <button
+                  type="button"
+                  onClick={() => setShowFilters(false)}
+                  className="rounded-full p-2 text-gray-600 hover:bg-gray-100"
+                  aria-label="Close filters"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="space-y-5">
             <div>
               <h3 className="mb-2.5 text-xs font-bold uppercase tracking-[0.12em] text-gray-900">Brand</h3>
               <div className="flex flex-wrap gap-2">
@@ -404,7 +422,7 @@ const Shop = () => {
                     </button>
                   ))
                 ) : (
-                  <p className="text-xs text-gray-500">Brands appear as stock is added.</p>
+                  <p className="text-xs text-gray-600">Brands appear as stock is added.</p>
                 )}
               </div>
             </div>
@@ -452,7 +470,7 @@ const Shop = () => {
                   onChange={(e) => setPriceMin(Number(e.target.value))}
                   placeholder="Min"
                   aria-label="Minimum price"
-                  className="h-10 w-24 rounded-full border border-gray-200 bg-white px-3 text-xs text-gray-900 placeholder:text-gray-400 focus:border-primary focus:outline-none"
+                  className="h-10 w-24 rounded-full border border-gray-200 bg-white px-3 text-xs text-gray-900 placeholder:text-gray-500 focus:border-primary focus:outline-none"
                 />
                 <span className="text-gray-600">to</span>
                 <input
@@ -462,7 +480,7 @@ const Shop = () => {
                   onChange={(e) => setPriceMax(Number(e.target.value))}
                   placeholder="Max"
                   aria-label="Maximum price"
-                  className="h-10 w-28 rounded-full border border-gray-200 bg-white px-3 text-xs text-gray-900 placeholder:text-gray-400 focus:border-primary focus:outline-none"
+                  className="h-10 w-28 rounded-full border border-gray-200 bg-white px-3 text-xs text-gray-900 placeholder:text-gray-500 focus:border-primary focus:outline-none"
                 />
                 {[
                   { label: "Under 20K", min: 0, max: 20000 },
@@ -498,7 +516,13 @@ const Shop = () => {
               />
               <span className="text-xs font-semibold text-gray-700">In stock only</span>
             </label>
-          </div>
+              </div>
+              <div className="mt-5 flex gap-3 lg:hidden">
+                <Button variant="outline" className="flex-1" onClick={clearFilters}>Clear all</Button>
+                <Button className="flex-1" onClick={() => setShowFilters(false)}>Show results</Button>
+              </div>
+            </div>
+          </>
         )}
 
         {/* CATEGORY CHIPS */}
@@ -631,7 +655,7 @@ const Shop = () => {
           <div className="rounded-2xl border border-gray-200 bg-gray-50 px-6 py-16 text-center">
             <Search className="mx-auto mb-4 h-9 w-9 text-primary" />
             <h2 className="font-display text-xl font-bold text-gray-900">No pieces match those filters</h2>
-            <p className="mx-auto mt-2 max-w-sm text-sm text-gray-500">
+            <p className="mx-auto mt-2 max-w-sm text-sm text-gray-600">
               Try a different size, brand or price range. Your next favourite piece is close.
             </p>
             <Button onClick={clearFilters} className="mt-6" variant="hero">

@@ -80,7 +80,7 @@ const Privacy = () => (
 
     <PolicySection title="Cookies">
       <p>
-        We use essential cookies and local storage to keep your cart, wishlist and session working.
+        We use essential cookies and local storage to keep your bag, wishlist and session working.
         Analytics, where used, help us understand which pages are useful so we can improve the store.
         You can clear cookies in your browser settings, though some features may stop working.
       </p>

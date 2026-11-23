@@ -23,7 +23,7 @@ const shoppablePoints = [
   },
   {
     icon: ShoppingBag,
-    title: "Add it straight to cart",
+    title: "Add it straight to bag",
     description: "See how the look works, then add only the pieces you want to your order.",
   },
   {
@@ -55,7 +55,7 @@ const LookCard = ({
             <img
               src={cover}
               alt={look.title}
-              className="h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.04]"
+              className="h-full w-full object-cover object-top transition-all duration-500 group-hover:scale-[1.04]"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
@@ -91,7 +91,7 @@ const LookCard = ({
             src={cover}
             alt={look.title}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+            className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.05]"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
@@ -110,7 +110,7 @@ const LookCard = ({
         <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-gray-900">
           {look.title}
         </h3>
-        {look.subtitle && <p className="mt-2 text-sm text-gray-500">{look.subtitle}</p>}
+        {look.subtitle && <p className="mt-2 text-sm text-gray-600">{look.subtitle}</p>}
         <span className="mt-auto inline-flex items-center gap-2 pt-6 text-[11px] font-bold uppercase tracking-[0.14em] text-gray-900 group-hover:text-primary">
           View the look <ArrowRight className="h-3.5 w-3.5" />
         </span>
@@ -132,7 +132,7 @@ const Looks = () => {
     <div className="min-h-screen bg-white">
       <SEO
         title="Looks | Streetwear Blantyre"
-        description="Shoppable streetwear looks from Streetwear Blantyre. See the pieces, the styling notes and the full look, then add what you love to your cart."
+        description="Shoppable streetwear looks from Streetwear Blantyre. See the pieces, the styling notes and the full look, then add what you love to your bag."
       />
 
       <section className="border-b border-gray-200 bg-gray-50">
@@ -144,7 +144,7 @@ const Looks = () => {
             <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
               Looks
             </h1>
-            <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-500 sm:text-base">
+            <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
               Editorial styling for real life in Blantyre. Every look is built from pieces you can
               actually wear, and actually buy.
             </p>
@@ -163,7 +163,7 @@ const Looks = () => {
             <h2 className="font-display text-2xl font-extrabold uppercase text-gray-900 sm:text-3xl">
               New looks are on the way
             </h2>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-500">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-600">
               Our stylists are putting the next edits together. Check back soon, or shop the pieces
               in the meantime.
             </p>
@@ -202,7 +202,7 @@ const Looks = () => {
                 <p className="font-display text-base font-extrabold uppercase text-gray-900">
                   More looks are being styled
                 </p>
-                <p className="mx-auto mt-2 max-w-sm text-sm text-gray-500">
+                <p className="mx-auto mt-2 max-w-sm text-sm text-gray-600">
                   Explore the featured look above while the rest of the edit is on its way.
                 </p>
               </div>
@@ -218,9 +218,9 @@ const Looks = () => {
             <h2 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
               Every look is shoppable
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-gray-500 sm:text-base">
+            <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
               Nothing here is just for the camera. Open any look to see the exact pieces, why each one
-              is in the edit, and add your favourites straight to the cart.
+              is in the edit, and add your favourites straight to the bag.
             </p>
             <Button asChild variant="hero" size="lg" className="mt-7">
               <Link to="/shop">
@@ -240,7 +240,7 @@ const Looks = () => {
                   <h3 className="mt-4 font-display text-sm font-extrabold uppercase tracking-tight text-gray-900">
                     {point.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-500">{point.description}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-600">{point.description}</p>
                 </div>
               );
             })}

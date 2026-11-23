@@ -54,9 +54,9 @@ const Lookbooks = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
           {/* Header */}
           <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.3em] mb-3">Collections</p>
+            <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.3em] mb-3">Collections</p>
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-4">Lookbooks</h1>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">Curated collections. Editorial vision. The culture, styled.</p>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">Curated collections. Editorial vision. The culture, styled.</p>
           </div>
 
           {/* Loading */}
@@ -69,7 +69,7 @@ const Lookbooks = () => {
           {/* Empty State */}
           {!loading && lookbooks.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-gray-500 text-lg">No lookbooks yet.</p>
+              <p className="text-gray-600 text-lg">No lookbooks yet.</p>
               <p className="text-gray-600 text-sm mt-2">Collections are in the works. Stay tuned.</p>
             </div>
           )}
@@ -137,7 +137,7 @@ const Lookbooks = () => {
                       )}
                     </div>
                     <h3 className="font-display font-bold text-xl mb-2 group-hover:text-gray-700 transition-colors">{lb.title}</h3>
-                    {lb.description && <p className="text-gray-500 text-sm line-clamp-2">{lb.description}</p>}
+                    {lb.description && <p className="text-gray-600 text-sm line-clamp-2">{lb.description}</p>}
                   </div>
                 </Link>
               ))}

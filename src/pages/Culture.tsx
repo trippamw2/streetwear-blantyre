@@ -130,7 +130,7 @@ const Culture = () => {
         {/* Hero */}
         <div className={`${info.bg} py-16 sm:py-24`}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <Link to="/editorial" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium mb-8">
+            <Link to="/editorial" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium mb-8">
               <ArrowLeft className="h-4 w-4" />
               The Culture Edit
             </Link>
@@ -139,7 +139,7 @@ const Culture = () => {
               The pieces that mean the most carry a sense of place. Discover the stories and silhouettes
               shaped by the city, and wear what feels like you.
             </p>
-            <div className="flex gap-6 mt-8 text-sm text-gray-500">
+            <div className="flex gap-6 mt-8 text-sm text-gray-600">
               <span>{stories.length} stor{stories.length !== 1 ? "ies" : "y"}</span>
               <span>{products.length} piece{products.length !== 1 ? "s" : ""}</span>
             </div>
@@ -169,8 +169,8 @@ const Culture = () => {
                     </div>
                     <div className="p-5">
                       <h3 className="font-display font-bold text-lg mb-2 text-gray-900 group-hover:text-gray-200 transition-colors">{story.title}</h3>
-                      {story.excerpt && <p className="text-gray-500 text-sm line-clamp-2 mb-3">{story.excerpt}</p>}
-                      <div className="flex items-center gap-3 text-gray-500 text-xs">
+                      {story.excerpt && <p className="text-gray-600 text-sm line-clamp-2 mb-3">{story.excerpt}</p>}
+                      <div className="flex items-center gap-3 text-gray-600 text-xs">
                         <span>{story.author_name}</span>
                         {story.published_at && <span>{format(new Date(story.published_at), "MMM d, yyyy")}</span>}
                         <span>{story.read_time_minutes} min</span>
@@ -197,7 +197,7 @@ const Culture = () => {
           {/* Empty State */}
           {!loading && stories.length === 0 && products.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-gray-500 text-lg">Nothing here yet.</p>
+              <p className="text-gray-600 text-lg">Nothing here yet.</p>
               <p className="text-sm mt-2 italic text-gray-600">New stories are on the way. Check back soon.</p>
             </div>
           )}

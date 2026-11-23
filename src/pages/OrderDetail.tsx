@@ -235,7 +235,7 @@ const OrderDetailPage = () => {
         {/* Post purchase upsell */}
         <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-3">
           <p className="font-semibold text-sm">Complete your look.</p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-600">
             Another tee, different cap, or a fresh bundle. Every order benefits from our 30 day guarantee.
           </p>
           <div className="flex gap-2">

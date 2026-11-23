@@ -9,7 +9,7 @@ const faqGroups = [
     items: [
       {
         q: "How do I place an order?",
-        a: "Browse the shop, choose your size and add the piece to your cart. Then head to checkout, enter your delivery details and pay with the options shown. You will get a confirmation once your order is placed.",
+        a: "Browse the shop, choose your size and add the piece to your bag. Then head to checkout, enter your delivery details and pay with the options shown. You will get a confirmation once your order is placed.",
       },
       {
         q: "Can I order without an account?",
@@ -106,6 +106,29 @@ const FAQ = () => {
       intro="Quick answers about ordering, sizing, delivery, payments and returns at Streetwear Blantyre."
     >
       <div className="space-y-8">
+        <section id="size-guide" className="scroll-mt-24 space-y-3">
+          <h2 className="font-display text-lg font-bold text-gray-900 sm:text-xl">Size Guide</h2>
+          <p className="text-sm leading-relaxed text-gray-600">
+            Use your usual streetwear size for a relaxed fit. If you prefer a closer fit, size down. Compare a favourite item laid flat across the chest for the best match.
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-gray-700">
+                <tr>
+                  <th className="px-4 py-3 text-left font-semibold">Size</th>
+                  <th className="px-4 py-3 text-left font-semibold">Chest (cm)</th>
+                  <th className="px-4 py-3 text-left font-semibold">Length (cm)</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600">
+                <tr className="border-t border-gray-200"><td className="px-4 py-3">S</td><td className="px-4 py-3">96 to 101</td><td className="px-4 py-3">68</td></tr>
+                <tr className="border-t border-gray-200"><td className="px-4 py-3">M</td><td className="px-4 py-3">101 to 106</td><td className="px-4 py-3">71</td></tr>
+                <tr className="border-t border-gray-200"><td className="px-4 py-3">L</td><td className="px-4 py-3">106 to 112</td><td className="px-4 py-3">74</td></tr>
+                <tr className="border-t border-gray-200"><td className="px-4 py-3">XL</td><td className="px-4 py-3">112 to 117</td><td className="px-4 py-3">76</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
         {faqGroups.map((group, groupIndex) => (
           <section key={group.category} className="space-y-3">
             <h2 className="font-display text-lg font-bold text-gray-900 sm:text-xl">
@@ -126,7 +149,7 @@ const FAQ = () => {
                         {item.q}
                       </span>
                       <ChevronDown
-                        className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${
+                        className={`h-5 w-5 shrink-0 text-gray-500 transition-transform ${
                           isOpen ? "rotate-180" : ""
                         }`}
                       />
@@ -139,7 +162,7 @@ const FAQ = () => {
                           exit={{ height: 0, opacity: 0 }}
                           className="overflow-hidden"
                         >
-                          <p className="px-5 pb-4 text-sm leading-relaxed text-gray-500">
+                          <p className="px-5 pb-4 text-sm leading-relaxed text-gray-600">
                             {item.a}
                           </p>
                         </motion.div>

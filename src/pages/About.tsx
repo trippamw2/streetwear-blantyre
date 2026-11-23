@@ -33,11 +33,11 @@ const About = () => (
             <br />
             <span className="text-primary">Built for everyday style.</span>
           </h1>
-          <p className="max-w-2xl text-base leading-relaxed text-gray-500 sm:text-lg">
+          <p className="max-w-2xl text-base leading-relaxed text-gray-600 sm:text-lg">
             Style is not just about what you wear. It is about how you live, where you go and how you
             express yourself.
           </p>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
             Streetwear Blantyre. Wear What Speaks.
           </p>
         </div>
@@ -53,7 +53,7 @@ const About = () => (
             Clothing that moves with you.
           </h2>
         </div>
-        <div className="space-y-4 text-sm leading-relaxed text-gray-500 sm:text-base">
+        <div className="space-y-4 text-sm leading-relaxed text-gray-600 sm:text-base">
           <p>
             Born in Blantyre, Malawi, this is a retail clothing brand inspired by everyday life, urban
             culture, sport and the freedom of personal style.
@@ -86,7 +86,7 @@ const About = () => (
           <h2 className="font-display text-3xl font-extrabold text-gray-900 sm:text-4xl">
             More Than Clothing
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-gray-500 sm:text-base">
+          <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
             Life happens outdoors, in the city, on the pitch and everywhere in between.
           </p>
         </div>
@@ -102,7 +102,7 @@ const About = () => (
                   <Icon className="h-5 w-5" />
                 </span>
                 <h3 className="font-display text-base font-bold text-gray-900">{pillar.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-500">{pillar.copy}</p>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{pillar.copy}</p>
               </div>
             );
           })}
@@ -122,7 +122,7 @@ const About = () => (
         {reasons.map((reason) => (
           <div key={reason.title} className="rounded-2xl border border-gray-200 p-6">
             <h3 className="font-display text-base font-bold text-gray-900">{reason.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-gray-500">{reason.desc}</p>
+            <p className="mt-2 text-sm leading-relaxed text-gray-600">{reason.desc}</p>
           </div>
         ))}
       </div>

@@ -37,7 +37,7 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
             src={cover}
             alt={collection.name}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+            className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.05]"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
@@ -54,15 +54,15 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <p className="eyebrow mb-2 text-primary">{isDrop ? "Limited Drop" : "Collection"}</p>
+        <p className="eyebrow mb-2 text-primary">{isDrop ? "Drop" : "Collection"}</p>
         <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-gray-900">
           {collection.name}
         </h3>
         {collection.description && (
-          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-500">{collection.description}</p>
+          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-600">{collection.description}</p>
         )}
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-gray-600">
             {items.length} {items.length === 1 ? "piece" : "pieces"}
             {released ? ` · ${released}` : ""}
           </span>
@@ -78,7 +78,7 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
 const EmptySection = ({ title, message }: { title: string; message: string }) => (
   <div className="rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-12 text-center">
     <p className="font-display text-lg font-extrabold uppercase text-gray-900">{title}</p>
-    <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-gray-500">{message}</p>
+    <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-gray-600">{message}</p>
   </div>
 );
 
@@ -113,7 +113,7 @@ const Collections = () => {
             <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
               Collections &amp; Drops
             </h1>
-            <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-500 sm:text-base">
+            <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
               Every release is built as a wardrobe, not a one off. Explore the collections that
               define the street, and the limited drops that move fast.
             </p>
@@ -142,7 +142,7 @@ const Collections = () => {
             <h2 className="font-display text-2xl font-extrabold uppercase text-gray-900 sm:text-3xl">
               New collections are being curated
             </h2>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-500">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-600">
               Nothing is live here just yet. In the meantime, explore the pieces already in the shop.
             </p>
             <Button asChild variant="hero" size="lg" className="mt-7">
@@ -174,7 +174,7 @@ const Collections = () => {
               <h2 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
                 Collections
               </h2>
-              <p className="mt-2 max-w-md text-sm leading-relaxed text-gray-500">
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-gray-600">
                 Core lines made to mix, match and wear every day.
               </p>
             </div>
@@ -199,7 +199,7 @@ const Collections = () => {
                 <h2 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
                   Limited Drops
                 </h2>
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-gray-500">
+                <p className="mt-2 max-w-md text-sm leading-relaxed text-gray-600">
                   Small runs, released with intention. When they are gone, they are gone.
                 </p>
               </div>

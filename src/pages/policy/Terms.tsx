@@ -25,7 +25,7 @@ const Terms = () => (
         from screen to screen, and measurements can vary a little between production runs.
       </p>
       <p>
-        Stock is limited. An item in your cart is not reserved until payment is confirmed. If an item
+        Stock is limited. An item in your bag is not reserved until payment is confirmed. If an item
         becomes unavailable after you order, we will contact you to offer an alternative, store credit
         or a refund.
       </p>

@@ -63,7 +63,7 @@ export const Navbar = () => {
   const navItemClass = ({ isActive }: { isActive: boolean }) =>
     cn(
       "px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] transition-colors",
-      isActive ? "text-white" : "text-white/60 hover:text-white",
+      isActive ? "text-white" : "text-white/80 hover:text-white",
     );
 
   return (
@@ -78,7 +78,7 @@ export const Navbar = () => {
           <div className="hidden lg:flex items-center gap-0.5">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-1 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white/60 transition-colors hover:text-white">
+                <button className="flex items-center gap-1 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white/80 transition-colors hover:text-white">
                   Shop <ChevronDown className="h-3.5 w-3.5" />
                 </button>
               </DropdownMenuTrigger>
@@ -107,11 +107,11 @@ export const Navbar = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search the wardrobe..."
-                    className="w-32 sm:w-40 md:w-64 px-3 sm:px-4 py-1.5 sm:py-2 border border-white/20 bg-white/10 focus:outline-none focus:border-white/40 text-sm text-white placeholder:text-white/40"
+                    className="w-32 sm:w-40 md:w-64 px-3 sm:px-4 py-1.5 sm:py-2 border border-white/20 bg-white/10 focus:outline-none focus:border-white/40 text-sm text-white placeholder:text-white/70"
                     autoFocus
                   />
                   <button type="button" onClick={() => setSearchOpen(false)} className="absolute right-3">
-                    <X className="h-4 w-4 text-white/40" />
+                    <X className="h-4 w-4 text-white/70" />
                   </button>
                 </form>
               ) : (
@@ -166,7 +166,7 @@ export const Navbar = () => {
         {open && (
           <div className="lg:hidden border-t border-white/10 bg-navy">
             <div className="container py-4 flex flex-col gap-1">
-              <p className="px-4 pt-2 pb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Shop</p>
+              <p className="px-4 pt-2 pb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">Shop</p>
               {SHOP_LINKS.map((link) => (
                 <Link
                   key={link.to}
@@ -177,7 +177,7 @@ export const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              <p className="px-4 pt-4 pb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Explore</p>
+              <p className="px-4 pt-4 pb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">Explore</p>
               {TOP_LINKS.map((link) => (
                 <Link
                   key={link.to}
@@ -189,7 +189,7 @@ export const Navbar = () => {
                 </Link>
               ))}
               {!user && (
-                <Link to="/auth" onClick={() => setOpen(false)} className="px-4 py-3 text-base font-medium text-white/60 hover:text-white">
+                <Link to="/auth" onClick={() => setOpen(false)} className="px-4 py-3 text-base font-medium text-white/80 hover:text-white">
                   Sign in
                 </Link>
               )}

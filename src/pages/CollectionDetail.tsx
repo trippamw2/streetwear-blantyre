@@ -53,7 +53,7 @@ const CollectionDetail = () => {
           <h1 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
             We couldn&apos;t find that collection
           </h1>
-          <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-500">
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-600">
             It may have been renamed, retired, or the link might be out of date. The current lines are
             all waiting for you.
           </p>
@@ -82,7 +82,7 @@ const CollectionDetail = () => {
       <section className="relative isolate overflow-hidden bg-gray-900">
         <div className="absolute inset-0">
           {heroImage ? (
-            <img src={heroImage} alt="" className="h-full w-full object-cover" />
+            <img src={heroImage} alt="" className="h-full w-full object-cover object-top" />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700" />
           )}
@@ -90,12 +90,13 @@ const CollectionDetail = () => {
         </div>
 
         <div className="container relative py-20 sm:py-28">
-          <Link
-            to="/collections"
-            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70 transition-colors hover:text-white"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> All collections
-          </Link>
+          <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70">
+            <Link to="/" className="hover:text-white">Home</Link>
+            <span>/</span>
+            <Link to="/collections" className="hover:text-white">Collections</Link>
+            <span>/</span>
+            <span className="text-white">{collection.name}</span>
+          </nav>
 
           <div className="mt-12 max-w-2xl">
             <p className="eyebrow mb-3 text-white/70">
@@ -111,14 +112,9 @@ const CollectionDetail = () => {
             )}
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              {collection.limitedDrop && (
-                <span className="rounded-full bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-900">
-                  Limited Drop
-                </span>
-              )}
               {released && (
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/35 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/85">
-                  <CalendarDays className="h-3.5 w-3.5" /> Released {released}
+                  <CalendarDays className="h-3.5 w-3.5" /> {isDrop ? "Drops" : "Released"} {released}
                 </span>
               )}
               <span className="rounded-full border border-white/25 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/70">
@@ -137,7 +133,7 @@ const CollectionDetail = () => {
               Pieces in this {isDrop ? "drop" : "collection"}
             </h2>
           </div>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-600">
             {collectionProducts.length} {collectionProducts.length === 1 ? "piece" : "pieces"}
           </span>
         </div>
@@ -153,7 +149,7 @@ const CollectionDetail = () => {
             <p className="font-display text-xl font-extrabold uppercase text-gray-900">
               This {isDrop ? "drop" : "collection"} is being curated
             </p>
-            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-gray-500">
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-gray-600">
               The pieces are on their way. Until then, explore everything else in the shop.
             </p>
             <Button asChild variant="hero" size="lg" className="mt-7">

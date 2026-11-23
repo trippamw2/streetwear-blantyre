@@ -30,7 +30,7 @@ const KitDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 mb-2">Kit not found</p>
+          <p className="text-gray-600 mb-2">Kit not found</p>
           <Link to="/combos" className="text-gray-900 font-medium hover:underline">
             Back to Kits
           </Link>
@@ -63,7 +63,7 @@ const KitDetail = () => {
       <div className="container pt-4 sm:pt-6">
         <button
           onClick={() => navigate("/combos")}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Kits
         </button>
@@ -99,7 +99,7 @@ const KitDetail = () => {
               {kit.name}
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 font-medium">{kit.hook}</p>
-            <p className="text-sm text-gray-500 leading-relaxed">{kit.description}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{kit.description}</p>
 
             {/* === Price Block === */}
             <div className="bg-gray-50 rounded-xl p-5 sm:p-6 space-y-4">
@@ -108,7 +108,7 @@ const KitDetail = () => {
                   <span className="font-bold text-3xl sm:text-4xl text-gray-900">
                     {formatMWK(kitPrice)}
                   </span>
-                  <span className="text-sm line-through text-gray-500">
+                  <span className="text-sm line-through text-gray-600">
                     {formatMWK(separateTotal)}
                   </span>
                 </div>
@@ -135,7 +135,7 @@ const KitDetail = () => {
                     "Added!"
                   ) : (
                     <>
-                      <ShoppingBag className="h-4 w-4 mr-2" /> Wear What Speaks
+                      <ShoppingBag className="h-4 w-4 mr-2" /> Add to bag
                     </>
                   )}
                 </Button>
@@ -151,18 +151,18 @@ const KitDetail = () => {
                     size="lg"
                     className="text-sm w-full border-green-300 text-green-700 hover:bg-green-50"
                   >
-                    <MessageCircle className="h-4 w-4 mr-2" /> Order on WhatsApp
+                    <MessageCircle className="h-4 w-4 mr-2" /> Ask on WhatsApp
                   </Button>
                 </a>
               </div>
 
               {/* Guarantees */}
-              <div className="grid grid-cols-2 gap-3 text-xs text-gray-500 pt-1">
+              <div className="grid grid-cols-2 gap-3 text-xs text-gray-600 pt-1">
                 <div className="flex items-center gap-2">
-                  <Truck className="h-4 w-4 text-gray-500 shrink-0" /> Free delivery over MK 50,000
+                  <Truck className="h-4 w-4 text-gray-600 shrink-0" /> Free delivery over MK 50,000
                 </div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-gray-500 shrink-0" /> 30 day quality cover
+                  <ShieldCheck className="h-4 w-4 text-gray-600 shrink-0" /> 30 day quality cover
                 </div>
               </div>
             </div>
@@ -215,7 +215,7 @@ const KitDetail = () => {
                       <p className="font-bold text-base sm:text-lg lg:text-xl text-gray-900">
                         {product.name}
                       </p>
-                      <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">
+                      <p className="text-sm text-gray-600 mt-1.5 leading-relaxed">
                         {product.benefit}
                       </p>
                       <p className="font-bold text-xl sm:text-2xl text-gray-900 mt-3">
@@ -228,7 +228,7 @@ const KitDetail = () => {
 
               {/* === Price Breakdown === */}
               <div className="mt-6 pt-6 border-t border-gray-100 space-y-2 text-sm">
-                <div className="flex justify-between text-gray-500">
+                <div className="flex justify-between text-gray-600">
                   <span>Separate total</span>
                   <span>{formatMWK(separateTotal)}</span>
                 </div>

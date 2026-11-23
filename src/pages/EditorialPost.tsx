@@ -101,7 +101,7 @@ const EditorialPost = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 text-lg">Story not found</p>
+          <p className="text-gray-600 text-lg">Story not found</p>
           <Link to="/editorial" className="text-gray-900 font-medium hover:underline mt-2 inline-block">Back to Editorial</Link>
         </div>
       </div>
@@ -142,7 +142,7 @@ const EditorialPost = () => {
                   {story.culture_pillar}
                 </Link>
               )}
-              <span className="text-gray-500 text-xs">{story.read_time_minutes} min read</span>
+              <span className="text-gray-600 text-xs">{story.read_time_minutes} min read</span>
             </div>
 
             {/* Title */}
@@ -156,7 +156,7 @@ const EditorialPost = () => {
               <div>
                 <p className="font-medium text-sm">{story.author_name}</p>
                 {story.published_at && (
-                  <p className="text-gray-500 text-xs">{format(new Date(story.published_at), "MMMM d, yyyy")}</p>
+                  <p className="text-gray-600 text-xs">{format(new Date(story.published_at), "MMMM d, yyyy")}</p>
                 )}
               </div>
             </div>

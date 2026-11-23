@@ -16,11 +16,11 @@ const Contact = () => (
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
             Talk to Us
           </h1>
-          <p className="text-sm leading-relaxed text-gray-500 sm:text-lg">
+          <p className="text-sm leading-relaxed text-gray-600 sm:text-lg">
             Questions about sizes, stock or delivery? Message us on WhatsApp and a real person will
             help you out.
           </p>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
             Streetwear Blantyre. Wear What Speaks.
           </p>
         </div>
@@ -51,11 +51,11 @@ const Contact = () => (
         <div className="rounded-2xl border border-gray-200 bg-white p-7 sm:p-8">
           <MapPin className="h-7 w-7 text-primary" />
           <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Store pickup</h2>
-          <p className="mt-2 text-sm leading-relaxed text-gray-500">
+          <p className="mt-2 text-sm leading-relaxed text-gray-600">
             Collect your order in Blantyre. Choose pickup at checkout and we will message you when it
             is ready.
           </p>
-          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
             Exact pickup details are shared on WhatsApp
           </p>
         </div>
@@ -63,7 +63,7 @@ const Contact = () => (
         <div className="rounded-2xl border border-gray-200 bg-white p-7 sm:p-8">
           <Truck className="h-7 w-7 text-primary" />
           <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Delivery</h2>
-          <p className="mt-2 text-sm leading-relaxed text-gray-500">
+          <p className="mt-2 text-sm leading-relaxed text-gray-600">
             We deliver across Malawi. Blantyre orders usually arrive same day or within 1 to 3 days.
             Other areas take 3 to 5 working days.
           </p>
@@ -80,7 +80,7 @@ const Contact = () => (
 
       <div className="mt-8 rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
         <h2 className="font-display text-lg font-bold text-gray-900">Payments</h2>
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-gray-600">
           We accept{" "}
           <span className="font-semibold text-gray-900">Airtel Money</span>,{" "}
           <span className="font-semibold text-gray-900">TNM Mpamba</span> and{" "}

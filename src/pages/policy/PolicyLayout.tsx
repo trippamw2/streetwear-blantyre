@@ -30,7 +30,7 @@ export const PolicyLayout = ({
       <div className="container max-w-3xl py-10 sm:py-14">
         <Link
           to="/"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-primary"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-primary"
         >
           <ArrowLeft className="h-4 w-4" /> Back to home
         </Link>
@@ -38,8 +38,8 @@ export const PolicyLayout = ({
         <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           {title}
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-500 sm:text-base">{intro}</p>
-        <p className="mt-4 text-xs font-medium uppercase tracking-[0.14em] text-gray-400">
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">{intro}</p>
+        <p className="mt-4 text-xs font-medium uppercase tracking-[0.14em] text-gray-500">
           Last updated: {updated}
         </p>
       </div>
@@ -50,7 +50,7 @@ export const PolicyLayout = ({
 
       <div className="mt-12 rounded-2xl border border-gray-200 bg-gray-50 p-6">
         <p className="font-display text-lg font-bold text-gray-900">Still need help?</p>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-gray-600">
           Message us on WhatsApp and we will get back to you as soon as we can.
         </p>
         <a

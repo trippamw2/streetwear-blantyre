@@ -110,7 +110,7 @@ const ScheduledGift = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-10 w-10 animate-spin text-gray-900 mx-auto mb-4" />
-          <p className="text-gray-500">Creating your gift...</p>
+          <p className="text-gray-600">Creating your gift...</p>
         </div>
       </div>
     );
@@ -134,7 +134,7 @@ const ScheduledGift = () => {
               <br />
               <span className="text-primary">ON THEIR DAY.</span>
             </h1>
-            <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
+            <p className="text-gray-600 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
               Pick a Streetwear Piece. Pay online. We deliver it on the perfect day, with your message inside.
             </p>
           </div>
@@ -152,11 +152,11 @@ const ScheduledGift = () => {
               <div key={s.num} className="flex items-center">
                 <div className="flex items-center gap-2">
                   <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                    step >= s.num ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-500"
+                    step >= s.num ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-600"
                   }`}>
                     {step > s.num ? <Check className="h-4 w-4" /> : s.num}
                   </div>
-                  <span className={`text-xs font-medium hidden sm:block ${step >= s.num ? "text-gray-900" : "text-gray-500"}`}>
+                  <span className={`text-xs font-medium hidden sm:block ${step >= s.num ? "text-gray-900" : "text-gray-600"}`}>
                     {s.label}
                   </span>
                 </div>
@@ -171,9 +171,9 @@ const ScheduledGift = () => {
         <section className="container py-16 sm:py-20">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-10">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Step 1</p>
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.2em] mb-3">Step 1</p>
               <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Pick a Streetwear Piece</h2>
-              <p className="text-gray-500 text-sm mt-2">Search by name or category to find the perfect gift.</p>
+              <p className="text-gray-600 text-sm mt-2">Search by name or category to find the perfect gift.</p>
             </div>
 
             <div className="relative mb-6">
@@ -183,7 +183,7 @@ const ScheduledGift = () => {
                 placeholder="Search Shop All..."
                 className="pl-10 rounded-full"
               />
-              <Package className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+              <Package className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[50vh] overflow-y-auto pr-1">
@@ -204,13 +204,13 @@ const ScheduledGift = () => {
                   <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden mb-2">
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   </div>
-                  <p className="text-[11px] text-gray-500 uppercase tracking-wider">{product.category}</p>
+                  <p className="text-[11px] text-gray-600 uppercase tracking-wider">{product.category}</p>
                   <p className="text-sm font-semibold text-gray-900 leading-tight mt-0.5">{product.name}</p>
                   <p className="text-sm font-bold text-gray-900 mt-1">{formatMWK(product.price)}</p>
                 </button>
               ))}
               {filteredProducts.length === 0 && (
-                <div className="col-span-full text-center py-12 text-gray-500 text-sm">No pieces found. Try a different search.</div>
+                <div className="col-span-full text-center py-12 text-gray-600 text-sm">No pieces found. Try a different search.</div>
               )}
             </div>
           </div>
@@ -221,18 +221,18 @@ const ScheduledGift = () => {
         <section className="container py-16 sm:py-20">
           <div className="max-w-lg mx-auto">
             <div className="text-center mb-10">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Step 2</p>
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.2em] mb-3">Step 2</p>
               <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Gift Details</h2>
             </div>
 
             <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl mb-8">
               <img src={selectedProduct.image} alt={selectedProduct.name} className="h-16 w-16 rounded-lg object-cover border border-gray-100" />
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider">{selectedProduct.category}</p>
+                <p className="text-[10px] text-gray-600 uppercase tracking-wider">{selectedProduct.category}</p>
                 <p className="text-sm font-semibold text-gray-900 truncate">{selectedProduct.name}</p>
                 <p className="text-sm font-bold text-gray-900">{formatMWK(selectedProduct.price)}</p>
               </div>
-              <button onClick={() => setStep(1)} className="text-xs text-gray-500 hover:text-gray-600 underline">Change</button>
+              <button onClick={() => setStep(1)} className="text-xs text-gray-600 hover:text-gray-600 underline">Change</button>
             </div>
 
             <div className="space-y-5">
@@ -306,7 +306,7 @@ const ScheduledGift = () => {
         <section className="container py-16 sm:py-20">
           <div className="max-w-lg mx-auto">
             <div className="text-center mb-10">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Step 3</p>
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.2em] mb-3">Step 3</p>
               <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Pay now</h2>
             </div>
 
@@ -320,30 +320,30 @@ const ScheduledGift = () => {
               </div>
               <div className="border-t border-gray-200 pt-3 space-y-1.5 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Recipient</span>
+                  <span className="text-gray-600">Recipient</span>
                   <span className="font-medium text-gray-900">{recipientName}</span>
                 </div>
                 {occasion && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Occasion</span>
+                    <span className="text-gray-600">Occasion</span>
                     <span className="font-medium text-gray-900">{occasion}</span>
                   </div>
                 )}
                 {deliveryDate && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Delivery Date</span>
+                    <span className="text-gray-600">Delivery Date</span>
                     <span className="font-medium text-gray-900">{new Date(deliveryDate).toLocaleDateString()}</span>
                   </div>
                 )}
                 {deliveryLocation && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Location</span>
+                    <span className="text-gray-600">Location</span>
                     <span className="font-medium text-gray-900">{deliveryLocation}</span>
                   </div>
                 )}
                 {giftMessage && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Message</span>
+                    <span className="text-gray-600">Message</span>
                     <span className="font-medium text-gray-900 text-right max-w-[60%] truncate">"{giftMessage}"</span>
                   </div>
                 )}
@@ -355,7 +355,7 @@ const ScheduledGift = () => {
                 <CreditCard className="h-5 w-5 text-gray-900" />
                 <p className="font-semibold text-sm">Secure Online Payment</p>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-600">
                 You'll be redirected to PayChangu to complete payment. After payment, the recipient will receive a tracking link via email.
               </p>
             </div>
@@ -395,7 +395,7 @@ const ScheduledGift = () => {
                   <item.icon className="h-5 w-5 text-gray-900" />
                 </div>
                 <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-                <p className="text-xs text-gray-500 mt-1">{item.desc}</p>
+                <p className="text-xs text-gray-600 mt-1">{item.desc}</p>
               </div>
             ))}
           </div>

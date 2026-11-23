@@ -61,8 +61,8 @@ const Orders = () => {
         <PageSkeleton />
       ) : orders.length === 0 ? (
         <div className="text-center py-20 space-y-4 rounded-3xl bg-gray-50 border border-gray-100">
-          <Package className="h-12 w-12 mx-auto text-gray-500" />
-          <p className="text-gray-500">No orders yet.</p>
+          <Package className="h-12 w-12 mx-auto text-gray-600" />
+          <p className="text-gray-600">No orders yet.</p>
           <Button asChild variant="hero"><Link to="/shop">Discover Culture</Link></Button>
         </div>
       ) : (

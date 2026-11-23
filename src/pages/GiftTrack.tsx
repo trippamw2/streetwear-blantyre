@@ -151,10 +151,10 @@ const GiftTrack = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-            <Gift className="h-8 w-8 text-gray-500" />
+            <Gift className="h-8 w-8 text-gray-600" />
           </div>
           <h1 className="font-display font-extrabold text-2xl text-gray-900 mb-2">Gift Not Found</h1>
-          <p className="text-gray-500 text-sm">{error || "This tracking link is invalid or has expired."}</p>
+          <p className="text-gray-600 text-sm">{error || "This tracking link is invalid or has expired."}</p>
           <Button asChild className="mt-6  rounded-full px-6">
             <a href="/">Back to Home</a>
           </Button>
@@ -184,7 +184,7 @@ const GiftTrack = () => {
             <h1 className="font-display font-extrabold text-3xl sm:text-4xl leading-tight mb-3">
               YOU'VE RECEIVED A GIFT.
             </h1>
-            <p className="text-gray-500 text-base sm:text-lg">
+            <p className="text-gray-600 text-base sm:text-lg">
               {gift.sender_name} sent you a Streetwear Piece{gift.occasion ? ` for ${gift.occasion.toLowerCase()}` : ""}.
             </p>
           </div>
@@ -195,21 +195,21 @@ const GiftTrack = () => {
         <div className="max-w-2xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
             <div className="p-5 bg-white rounded-xl border border-gray-100 shadow-sm">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.15em] mb-3">Gift Details</p>
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.15em] mb-3">Gift Details</p>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">From</span>
+                  <span className="text-gray-600">From</span>
                   <span className="font-medium text-gray-900">{gift.sender_name}</span>
                 </div>
                 {gift.occasion && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Occasion</span>
+                    <span className="text-gray-600">Occasion</span>
                     <span className="font-medium text-gray-900">{gift.occasion}</span>
                   </div>
                 )}
                 {gift.preferred_delivery_date && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Delivery Date</span>
+                    <span className="text-gray-600">Delivery Date</span>
                     <span className="font-medium text-gray-900">
                       {new Date(gift.preferred_delivery_date).toLocaleDateString()}
                     </span>
@@ -217,7 +217,7 @@ const GiftTrack = () => {
                 )}
                 {gift.delivery_location && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Location</span>
+                    <span className="text-gray-600">Location</span>
                     <span className="font-medium text-gray-900">{gift.delivery_location}</span>
                   </div>
                 )}
@@ -225,13 +225,13 @@ const GiftTrack = () => {
             </div>
 
             <div className="p-5 bg-white rounded-xl border border-gray-100 shadow-sm">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.15em] mb-3">Item</p>
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.15em] mb-3">Item</p>
               {gift.gift_items?.map((item, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <img src={item.product_image} alt={item.product_name} className="h-12 w-12 rounded-lg object-cover border border-gray-100" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-900 truncate">{item.product_name}</p>
-                    <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                    <p className="text-xs text-gray-600">Qty: {item.quantity}</p>
                   </div>
                 </div>
               ))}
@@ -241,9 +241,9 @@ const GiftTrack = () => {
           {gift.gift_message && (
             <div className="p-5 bg-gray-50 rounded-xl mb-10 border border-gray-100">
               <div className="flex items-start gap-3">
-                <MessageCircle className="h-5 w-5 text-gray-500 mt-0.5 shrink-0" />
+                <MessageCircle className="h-5 w-5 text-gray-600 mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.15em] mb-1">Personal Message</p>
+                  <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.15em] mb-1">Personal Message</p>
                   <p className="text-sm text-gray-700 italic leading-relaxed">"{gift.gift_message}"</p>
                 </div>
               </div>
@@ -264,23 +264,23 @@ const GiftTrack = () => {
                   return (
                     <div key={step.key} className="relative flex items-start gap-4">
                       <div className={`relative z-10 h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                        isComplete ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-500"
+                        isComplete ? "bg-gray-100 text-gray-900" : "bg-gray-100 text-gray-600"
                       } ${isCurrent ? "ring-4 ring-gray-900/10" : ""}`}>
                         {isComplete && i < currentStepIndex ? <Check className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
                       </div>
                       <div className="flex-1 pb-2">
                         <div className="flex items-center gap-2">
-                          <p className={`text-sm font-semibold ${isComplete ? "text-gray-900" : "text-gray-500"}`}>
+                          <p className={`text-sm font-semibold ${isComplete ? "text-gray-900" : "text-gray-600"}`}>
                             {step.label}
                           </p>
                           {isCurrent && (
-                            <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider bg-gray-100 px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] font-semibold text-gray-600 uppercase tracking-wider bg-gray-100 px-2 py-0.5 rounded-full">
                               Current
                             </span>
                           )}
                         </div>
                         {trackingEvent && (
-                          <p className="text-xs text-gray-500 mt-0.5">
+                          <p className="text-xs text-gray-600 mt-0.5">
                             {new Date(trackingEvent.created_at).toLocaleDateString("en-US", {
                               month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit",
                             })}

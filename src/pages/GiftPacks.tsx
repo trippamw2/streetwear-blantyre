@@ -159,7 +159,7 @@ const GiftPacks = () => {
               <br />
               <span className="text-primary">A FRESH FIT.</span>
             </h1>
-            <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
+            <p className="text-gray-600 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
               The best gifts become part of someone's everyday rotation.
               Pick a Kit, pay online, and we'll wrap it and deliver it, 
               with your personal message inside.
@@ -184,12 +184,12 @@ const GiftPacks = () => {
                 </div>
                 <div>
                   <p className="font-semibold text-sm text-gray-900">{item.title}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
+                  <p className="text-xs text-gray-600 mt-0.5">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-500 italic mt-4 text-center">
+          <p className="text-xs text-gray-600 italic mt-4 text-center">
             Finding the perfect gift that means something is hard. We made it easy.
           </p>
         </div>
@@ -198,9 +198,9 @@ const GiftPacks = () => {
       {/* ─── GIFT PACKS GRID ─── */}
       <section className="bg-white container py-16 sm:py-20 lg:py-24">
         <div className="text-center mb-10 sm:mb-12">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Curated for Them</p>
+          <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.2em] mb-3">Curated for Them</p>
           <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Kits</h2>
-          <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
+          <p className="text-gray-600 text-sm mt-2 max-w-md mx-auto">
             Each pack is a complete look, styled, coordinated, and ready to gift.
           </p>
         </div>
@@ -244,16 +244,16 @@ const GiftPacks = () => {
                     <p className="text-sm font-medium text-gray-600 mt-0.5">{kit.hook}</p>
 
                     <div className="mt-3 space-y-1.5">
-                      <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Includes</p>
+                      <p className="text-[10px] font-medium text-gray-600 uppercase tracking-wider">Includes</p>
                       <div className="space-y-1">
                         {kitProducts.slice(0, 3).map((p) => (
                           <div key={p.id} className="flex items-center gap-2 text-[11px]">
                             <img src={p.image} alt={p.name} className="h-7 w-7 rounded-lg object-cover shrink-0 border border-gray-200" />
-                            <span className="text-gray-500 truncate">{p.name}</span>
+                            <span className="text-gray-600 truncate">{p.name}</span>
                           </div>
                         ))}
                         {kitProducts.length > 3 && (
-                          <span className="text-[10px] text-gray-500 font-medium">+{kitProducts.length - 3} more</span>
+                          <span className="text-[10px] text-gray-600 font-medium">+{kitProducts.length - 3} more</span>
                         )}
                       </div>
                     </div>
@@ -262,7 +262,7 @@ const GiftPacks = () => {
                       <div>
                         <p className="font-bold text-lg sm:text-xl text-gray-900">{formatMWK(kitPrice)}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[11px] text-gray-500 line-through">{formatMWK(separateTotal)}</span>
+                          <span className="text-[11px] text-gray-600 line-through">{formatMWK(separateTotal)}</span>
                           <span className="text-[11px] font-medium text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded">
                             Save {formatMWK(realSaving)}
                           </span>
@@ -308,10 +308,10 @@ const GiftPacks = () => {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="font-display font-bold text-xl text-gray-900">Gift Details</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">For: {selectedKit?.name}, {selectedKit && formatMWK(getKitPrice(selectedKit, products))}</p>
+                    <p className="text-sm text-gray-600 mt-0.5">For: {selectedKit?.name}, {selectedKit && formatMWK(getKitPrice(selectedKit, products))}</p>
                   </div>
                   <button onClick={resetForm} className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-white/20 transition-colors">
-                    <X className="h-4 w-4 text-gray-500" />
+                    <X className="h-4 w-4 text-gray-600" />
                   </button>
                 </div>
 
@@ -322,7 +322,7 @@ const GiftPacks = () => {
                       value={formData.recipientName}
                       onChange={(e) => setFormData({ ...formData, recipientName: e.target.value })}
                       placeholder="Who's this for?"
-                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
+                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-600"
                     />
                   </div>
 
@@ -332,7 +332,7 @@ const GiftPacks = () => {
                       value={formData.recipientPhone}
                       onChange={(e) => setFormData({ ...formData, recipientPhone: e.target.value })}
                       placeholder="For delivery coordination"
-                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
+                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-600"
                     />
                   </div>
 
@@ -343,7 +343,7 @@ const GiftPacks = () => {
                       value={formData.recipientEmail}
                       onChange={(e) => setFormData({ ...formData, recipientEmail: e.target.value })}
                       placeholder="They'll receive a tracking link here"
-                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
+                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-600"
                     />
                   </div>
 
@@ -353,7 +353,7 @@ const GiftPacks = () => {
                       value={formData.deliveryLocation}
                       onChange={(e) => setFormData({ ...formData, deliveryLocation: e.target.value })}
                       placeholder="e.g., Area 9, Blantyre"
-                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
+                      className="mt-1.5 bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-600"
                     />
                   </div>
 
@@ -368,7 +368,7 @@ const GiftPacks = () => {
                           className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                             formData.occasion === occ
                               ? "bg-white text-gray-900 border-white"
-                              : "bg-gray-100 text-gray-500 border-gray-200 hover:border-white/30"
+                              : "bg-gray-100 text-gray-600 border-gray-200 hover:border-white/30"
                           }`}
                         >
                           {occ}
@@ -384,7 +384,7 @@ const GiftPacks = () => {
                       onChange={(e) => setFormData({ ...formData, giftMessage: e.target.value })}
                       placeholder="Write something personal..."
                       rows={3}
-                      className="mt-1.5 resize-none bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-500"
+                      className="mt-1.5 resize-none bg-gray-100 border-gray-200 text-gray-900 placeholder:text-gray-600"
                     />
                   </div>
                 </div>
@@ -405,7 +405,7 @@ const GiftPacks = () => {
                   )}
                 </Button>
 
-                <p className="text-[11px] text-gray-500 text-center mt-3">
+                <p className="text-[11px] text-gray-600 text-center mt-3">
                   Secure payment via PayChangu. Recipient gets a tracking link after payment.
                 </p>
               </div>
@@ -417,9 +417,9 @@ const GiftPacks = () => {
       {/* ─── CTA ─── */}
       <section className="bg-gray-100 py-16 sm:py-20">
         <div className="container text-center">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-2">Want Something Custom?</p>
+          <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.2em] mb-2">Want Something Custom?</p>
           <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900">Schedule a Single Gift</h2>
-          <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
+          <p className="text-gray-600 text-sm mt-2 max-w-md mx-auto">
             Gift a specific Streetwear Piece with a scheduled delivery date.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">

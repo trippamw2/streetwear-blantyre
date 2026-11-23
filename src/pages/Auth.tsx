@@ -101,7 +101,7 @@ const Auth = () => {
         <div className="space-y-2 mb-6 text-center">
           <p className="text-sm font-semibold text-gradient uppercase tracking-widest">{mode === "signin" ? "Welcome back" : "Join Streetwear Blantyre"}</p>
           <h1 className="font-display font-bold text-3xl">{mode === "signin" ? "Sign in" : "Create account"}</h1>
-          <p className="text-sm text-gray-500">{mode === "signin" ? "Sign in to checkout and track orders." : "Sign up to earn rewards on every purchase."}</p>
+          <p className="text-sm text-gray-600">{mode === "signin" ? "Sign in to checkout and track orders." : "Sign up to earn rewards on every purchase."}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

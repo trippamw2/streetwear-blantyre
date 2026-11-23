@@ -77,7 +77,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
             <div className={`h-5 w-5 rounded-md bg-gradient-to-br ${cfg.color} flex items-center justify-center`}>
               <Icon className="h-3 w-3 text-white" />
             </div>
-            <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
+            <span className="text-[10px] font-medium text-gray-600 uppercase tracking-wider">
               {cfg.label}
             </span>
           </div>
@@ -86,12 +86,12 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
           <p className="text-sm font-medium text-gray-900 mt-0.5">{kit.hook}</p>
 
           {!compact && (
-            <p className="text-xs text-gray-500 mt-2 leading-relaxed line-clamp-2">{kit.description}</p>
+            <p className="text-xs text-gray-600 mt-2 leading-relaxed line-clamp-2">{kit.description}</p>
           )}
 
           {/* What's Inside */}
           <div className="mt-3 space-y-1.5">
-            <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Includes</p>
+            <p className="text-[10px] font-medium text-gray-600 uppercase tracking-wider">Includes</p>
             <div className="space-y-1">
               {kitProducts.slice(0, compact ? 2 : 4).map((p) => (
                 <div key={p.id} className="flex items-center gap-2 text-[11px]">
@@ -100,16 +100,16 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
                     alt={p.name}
                     className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg object-cover shrink-0 border border-gray-100"
                   />
-                  <span className="text-gray-500 truncate">{p.name}</span>
+                  <span className="text-gray-600 truncate">{p.name}</span>
                   {!compact && (
-                    <span className="text-gray-500 line-through ml-auto shrink-0 text-[10px]">
+                    <span className="text-gray-600 line-through ml-auto shrink-0 text-[10px]">
                       {formatMWK(p.price)}
                     </span>
                   )}
                 </div>
               ))}
               {kitProducts.length > (compact ? 2 : 4) && (
-                <span className="text-[10px] text-gray-500 font-medium">+{kitProducts.length - (compact ? 2 : 4)} more</span>
+                <span className="text-[10px] text-gray-600 font-medium">+{kitProducts.length - (compact ? 2 : 4)} more</span>
               )}
             </div>
           </div>
@@ -119,7 +119,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
             <div>
               <p className="font-bold text-lg sm:text-xl text-gray-900">{formatMWK(kitPrice)}</p>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-[11px] text-gray-500 line-through">{formatMWK(separateTotal)}</span>
+                <span className="text-[11px] text-gray-600 line-through">{formatMWK(separateTotal)}</span>
                 <span className="text-[11px] font-medium text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
                   Save {formatMWK(realSaving)}
                 </span>

@@ -20,7 +20,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
         <div className="px-4 sm:px-6 py-4 border-b border-border/60 flex items-center justify-between shrink-0">
           <SheetTitle className="font-display text-lg sm:text-xl flex items-center gap-2">
             <ShoppingBag className="h-5 w-5" />
-            Cart ({count})
+            Bag ({count})
           </SheetTitle>
         </div>
 
@@ -30,11 +30,11 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
               <ShoppingBag className="h-8 w-8 text-gray-600" />
             </div>
             <div>
-              <p className="font-display text-lg font-bold">Your cart is empty</p>
+              <p className="font-display text-lg font-bold">Your bag is empty</p>
               <p className="text-sm text-muted-foreground mt-1">Add a piece to get started</p>
             </div>
             <Button asChild variant="hero" size="lg" onClick={() => setOpen(false)}>
-              <Link to="/shop">Shop the Collection</Link>
+              <Link to="/shop">Shop all</Link>
             </Button>
           </div>
         ) : (
@@ -51,7 +51,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
                       <p className="text-sm font-medium leading-tight line-clamp-2">{i.name}</p>
                       <button
                         onClick={() => remove(i.productKey)}
-                        className="p-2 -mt-1 -mr-1 rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-500 transition-colors shrink-0"
+                        className="p-2 -mt-1 -mr-1 rounded-lg hover:bg-red-50 text-gray-600 hover:text-red-500 transition-colors shrink-0"
                         aria-label="Remove item"
                       >
                         <Trash2 className="h-4 w-4" />

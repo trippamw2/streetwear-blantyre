@@ -91,7 +91,7 @@ const LookbookDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 text-lg">Lookbook not found</p>
+          <p className="text-gray-600 text-lg">Lookbook not found</p>
           <Link to="/lookbook" className="text-gray-900 font-medium hover:underline mt-2 inline-block">Back to Lookbooks</Link>
         </div>
       </div>
@@ -139,7 +139,7 @@ const LookbookDetail = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           {items.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">This collection is being curated.</p>
+              <p className="text-gray-600 text-lg">This collection is being curated.</p>
               <p className="text-gray-600 text-sm mt-2">Pieces coming soon.</p>
             </div>
           ) : (
@@ -161,9 +161,9 @@ const LookbookDetail = () => {
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Piece {index + 1}</span>
+                        <span className="text-xs text-gray-600 font-medium uppercase tracking-wider">Piece {index + 1}</span>
                         {item.products?.category && (
-                          <span className="px-2 py-0.5 bg-gray-100 text-gray-500 rounded text-xs">{item.products.category}</span>
+                          <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">{item.products.category}</span>
                         )}
                       </div>
                       <h3 className="font-display font-bold text-xl mb-1">{item.products?.name || "Untitled"}</h3>
@@ -173,7 +173,7 @@ const LookbookDetail = () => {
                     </div>
 
                     {item.editorial_note && (
-                      <p className="text-gray-500 italic text-sm mt-3 leading-relaxed border-l-2 border-gray-200 pl-4">{item.editorial_note}</p>
+                      <p className="text-gray-600 italic text-sm mt-3 leading-relaxed border-l-2 border-gray-200 pl-4">{item.editorial_note}</p>
                     )}
 
                     {item.products?.id && (
