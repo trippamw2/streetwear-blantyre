@@ -116,7 +116,7 @@ export function getDeliveryOptions(location: string, subtotal: number): Delivery
     return [
       {
         id: "same_day",
-        label: "Same-Day Delivery",
+        label: "Same Day Delivery",
         description: isFree
           ? "Delivered today, free on orders over K50,000!"
           : "Delivered today to your door in Blantyre",
@@ -146,8 +146,8 @@ export function getDeliveryOptions(location: string, subtotal: number): Delivery
       label: "Express Delivery",
       description: isFree
         ? "Fast delivery, K2,000 express surcharge on orders over K50,000"
-        : "Get it fast, delivered in 2-3 working days",
-      estimatedDays: "2-3 working days",
+        : "Get it fast, delivered in 2 to 3 working days",
+      estimatedDays: "2 to 3 working days",
       fee: calculateDeliveryFee(zone, "express", subtotal),
       isAvailable: true,
       zone,

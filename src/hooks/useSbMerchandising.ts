@@ -12,6 +12,7 @@ import {
   type SbProductType,
   type SbVariant,
 } from "@/data/sbArchitecture";
+import { displayCopy } from "@/lib/storefrontCopy";
 
 export type { SbCampaign, SbCollection, SbLook, SbPlacement, SbProductType, SbVariant };
 
@@ -108,8 +109,8 @@ export function useSbMerchandising() {
       const productTypes: SbProductType[] = (typesRes.data || []).map((row) => ({
         id: row.id,
         code: row.code,
-        label: row.label,
-        description: row.description,
+        label: displayCopy(row.label),
+        description: displayCopy(row.description),
         sortOrder: row.sort_order,
         isActive: row.is_active,
       }));
@@ -117,9 +118,9 @@ export function useSbMerchandising() {
       const collections: SbCollection[] = (collectionsRes.data || []).map((row) => ({
         id: row.id,
         kind: row.kind as SbCollection["kind"],
-        name: row.name,
+        name: displayCopy(row.name),
         slug: row.slug,
-        description: row.description,
+        description: displayCopy(row.description),
         heroImage: row.hero_image,
         isActive: row.is_active,
         isFeatured: row.is_featured,
@@ -133,10 +134,10 @@ export function useSbMerchandising() {
 
       const looks: SbLook[] = (looksRes.data || []).map((row) => ({
         id: row.id,
-        title: row.title,
+        title: displayCopy(row.title),
         slug: row.slug,
-        subtitle: row.subtitle,
-        description: row.description,
+        subtitle: displayCopy(row.subtitle),
+        description: displayCopy(row.description),
         heroImage: row.hero_image,
         isPublished: row.is_published,
         isFeatured: row.is_featured,
@@ -147,8 +148,8 @@ export function useSbMerchandising() {
             id: item.id,
             productId: item.product_id,
             variantId: item.variant_id,
-            role: item.role,
-            stylingNote: item.styling_note,
+            role: displayCopy(item.role),
+            stylingNote: displayCopy(item.styling_note),
             isPurchasable: item.is_purchasable,
             sortOrder: item.sort_order,
           })),
@@ -156,12 +157,12 @@ export function useSbMerchandising() {
 
       const campaigns: SbCampaign[] = (campaignsRes.data || []).map((row) => ({
         id: row.id,
-        name: row.name,
+        name: displayCopy(row.name),
         slug: row.slug,
-        headline: row.headline,
-        description: row.description,
+        headline: displayCopy(row.headline),
+        description: displayCopy(row.description),
         heroImage: row.hero_image,
-        ctaLabel: row.cta_label,
+        ctaLabel: displayCopy(row.cta_label),
         ctaHref: row.cta_href,
         isActive: row.is_active,
       }));
@@ -173,9 +174,9 @@ export function useSbMerchandising() {
         productId: row.product_id,
         lookId: row.look_id,
         collectionId: row.collection_id,
-        headline: row.headline,
-        body: row.body,
-        ctaLabel: row.cta_label,
+        headline: displayCopy(row.headline),
+        body: displayCopy(row.body),
+        ctaLabel: displayCopy(row.cta_label),
         ctaHref: row.cta_href,
         imageOverride: row.image_override,
         sortOrder: row.sort_order,

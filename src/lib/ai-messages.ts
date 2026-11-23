@@ -26,7 +26,7 @@ const generateTrackingCode = (orderId: string) => `PP-${orderId.slice(0, 6).toUp
 const formatMWK = (amount: number) => `MK ${amount.toLocaleString('en-US')}`;
 
 export const orderConfirmation = (details: OrderDetails) => {
-  const { customerName, items, total, location, deliveryMethod, eta = '1-2 days' } = details;
+  const { customerName, items, total, location, deliveryMethod, eta = '1 to 2 days' } = details;
   const trackingCode = generateTrackingCode(details.orderId);
   const itemsList = items.map(i => `  ${i.quantity}x ${i.name}`).join('\n');
 
@@ -52,7 +52,7 @@ Track: https://www.wearsb.com/track/${details.orderId}`;
 };
 
 export const paymentReceived = (details: OrderDetails) => {
-  const { orderId, customerName, items, total, location, deliveryMethod, eta = '1-2 days' } = details;
+  const { orderId, customerName, items, total, location, deliveryMethod, eta = '1 to 2 days' } = details;
   const trackingCode = generateTrackingCode(orderId);
   const itemsList = items.map(i => `  ${i.quantity}x ${i.name}`).join('\n');
 

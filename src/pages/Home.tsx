@@ -4,6 +4,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { useSbMerchandising } from "@/hooks/useSbMerchandising";
 import { SEO } from "@/components/SEO";
 import { ProductCard } from "@/components/ProductCard";
+import { StorefrontTrustStrip } from "@/components/StorefrontTrustStrip";
 import {
   SB_PRODUCT_TYPES,
   getCompleteLookProducts,
@@ -12,7 +13,7 @@ import {
   type SbProductTypeCode,
 } from "@/data/sbArchitecture";
 import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
-import { ArrowRight, ArrowUpRight, Shirt, Sparkles, Truck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Shirt, Sparkles } from "lucide-react";
 
 const hero = "/images/sb/home-menu.jpg";
 const streetHero = "/images/sb/home-street.jpg";
@@ -66,8 +67,8 @@ const Home = () => {
   return (
     <div className="bg-white">
       <SEO
-        title="SB / Malawian Streetwear | Wear What Speaks"
-        description="SB is a Malawian streetwear wardrobe from Blantyre. Shop tees, vests, short-sleeve shirts, shorts, collections and complete looks."
+        title="Streetwear Blantyre | Wear What Speaks"
+        description="A Malawian streetwear wardrobe from Blantyre. Shop tees, vests, short sleeve shirts, shorts, collections and complete looks."
         path="/"
       />
 
@@ -76,7 +77,7 @@ const Home = () => {
         <div className="relative w-full">
           <img
             src={heroImage}
-            alt="SB streetwear campaign with Malawian models"
+            alt="Streetwear campaign with Malawian models"
             className="block h-auto w-full"
             loading="eager"
           />
@@ -84,7 +85,7 @@ const Home = () => {
           <div className="absolute inset-x-0 bottom-0">
             <div className="container pb-8 sm:pb-12 lg:pb-16">
               <div className="max-w-3xl space-y-4 rounded-xl bg-gray-950/55 p-5 backdrop-blur-sm sm:space-y-5 sm:p-8">
-                <p className="font-display text-2xl font-black uppercase tracking-[0.35em] text-white sm:text-3xl">SB</p>
+                <p className="font-display text-xl font-black uppercase tracking-[0.35em] text-white sm:text-2xl">Streetwear Blantyre</p>
                 <h1 className="font-display text-[2.5rem] font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-6xl lg:text-7xl">
                   {heroPlacement?.headline || heroCampaign?.headline || "Wear What Speaks."}
                 </h1>
@@ -142,7 +143,7 @@ const Home = () => {
                   : "New drops are landing soon"}
               </h2>
               <p className="mt-2 text-sm text-gray-500">
-                Tees, vests, shirts and shorts — the latest pieces across all four categories.
+                Tees, vests, shirts and shorts. The latest pieces across all four categories.
               </p>
             </div>
             <Link
@@ -185,12 +186,12 @@ const Home = () => {
         </div>
       </section>
 
-      {/* THE SB TEE */}
+      {/* THE ESSENTIAL TEE */}
       <section className="bg-white py-16 sm:py-24">
         <div className="container">
           <div className="mb-8 flex items-end justify-between gap-4 sm:mb-10">
             <div>
-              <p className="eyebrow mb-2 text-primary">The SB Tee</p>
+              <p className="eyebrow mb-2 text-primary">The Essential Tee</p>
               <h2 className="font-display text-3xl font-extrabold uppercase text-gray-900 sm:text-5xl">
                 {teePlacement?.headline || "The Graphic Tee"}
               </h2>
@@ -202,7 +203,7 @@ const Home = () => {
               to={teeHref}
               className="hidden shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-gray-900 hover:text-primary sm:inline-flex"
             >
-              {teePlacement?.ctaLabel || "Shop T-Shirts"} <ArrowRight className="h-3.5 w-3.5" />
+              {teePlacement?.ctaLabel || "Shop T Shirts"} <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
@@ -220,7 +221,7 @@ const Home = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">The Graphic Tee</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/75">The Graphic Tee</p>
                   <h3 className="font-display text-2xl font-extrabold uppercase">{heroTee.name}</h3>
                 </div>
               </Link>
@@ -229,7 +230,7 @@ const Home = () => {
                 <div>
                   <Sparkles className="mx-auto mb-4 h-10 w-10 text-white/40" />
                   <p className="font-display text-2xl font-extrabold uppercase text-white">The Graphic Tee</p>
-                  <p className="mt-2 text-sm text-white/60">The piece that started the conversation.</p>
+                  <p className="mt-2 text-sm text-white/75">The piece that started the conversation.</p>
                 </div>
               </div>
             )}
@@ -240,7 +241,7 @@ const Home = () => {
 
           <div className="mt-8 flex justify-center sm:hidden">
             <Button asChild variant="hero">
-              <Link to={teeHref}>{teePlacement?.ctaLabel || "Shop T-Shirts"} <ArrowRight className="h-4 w-4" /></Link>
+              <Link to={teeHref}>{teePlacement?.ctaLabel || "Shop T Shirts"} <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </div>
         </div>
@@ -251,11 +252,11 @@ const Home = () => {
         <div className="container">
           <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="eyebrow mb-2 text-white/45">Shop the outfit</p>
+              <p className="eyebrow mb-2 text-white/75">Shop the outfit</p>
               <h2 className="font-display text-3xl font-extrabold uppercase text-white sm:text-4xl">
                 {completeLookPlacement?.headline || "Complete the Look"}
               </h2>
-              <p className="mt-2 max-w-lg text-sm text-white/60">
+              <p className="mt-2 max-w-lg text-sm text-white/75">
                 {completeLookPlacement?.body ||
                   "The wardrobe is made to mix. Start with one piece, build the full fit."}
               </p>
@@ -273,7 +274,7 @@ const Home = () => {
             {completeLooks.map((combination) => (
               <div key={combination.label} className="overflow-hidden rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
                 <div className="mb-4 flex items-center justify-between">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">Complete the Look</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/75">Complete the Look</p>
                   <h3 className="font-display text-lg font-extrabold uppercase text-white">{combination.label}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -288,7 +289,7 @@ const Home = () => {
                         />
                       </div>
                       <p className="mt-2 truncate text-xs font-bold text-white">{product.name}</p>
-                      <p className="text-[11px] text-white/50">MK {product.price.toLocaleString("en-US")}</p>
+                      <p className="text-[11px] text-white/75">MK {product.price.toLocaleString("en-US")}</p>
                     </Link>
                   ))}
                 </div>
@@ -298,8 +299,8 @@ const Home = () => {
 
           {suggestions.length > 0 && (
             <div className="mt-10">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-white/50">
-                Pairs well with the SB tee
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-white/75">
+                Pairs well with the essential tee
               </p>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5">
                 {suggestions.map((product, index) => (
@@ -311,13 +312,13 @@ const Home = () => {
         </div>
       </section>
 
-      {/* SB STREET */}
+      {/* STREET CAMPAIGN */}
       <section className="bg-white py-16 sm:py-24">
         <div className="container">
           <div className="overflow-hidden rounded-2xl bg-gray-900">
             <img
               src={streetImage}
-              alt="SB Street lifestyle campaign in Blantyre"
+              alt="Streetwear lifestyle campaign in Blantyre"
               className="block h-auto w-full"
               loading="lazy"
             />
@@ -330,7 +331,7 @@ const Home = () => {
                 <p className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base">
                   {streetPlacement?.body ||
                     streetCampaign?.description ||
-                    "Music, movement and everyday hustle. SB Street is the full wardrobe for the city — not just a tee."}
+                    "Music, movement and everyday hustle. This is the full wardrobe for the city, not just a tee."}
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:shrink-0 sm:flex-row">
@@ -346,24 +347,16 @@ const Home = () => {
         </div>
       </section>
 
-      {/* BRAND PROMISE */}
+      {/* SHOPPING ASSURANCE */}
       <section className="border-t border-gray-200 bg-gray-50 py-14 sm:py-20">
-        <div className="container grid gap-6 text-center sm:grid-cols-3">
-          <div>
-            <Shirt className="mx-auto mb-3 h-7 w-7 text-primary" />
-            <p className="font-display text-lg font-extrabold text-gray-900">A Full Wardrobe</p>
-            <p className="mt-1 text-sm text-gray-500">Tees, vests, shirts and shorts made to work together.</p>
+        <div className="container">
+          <div className="mb-6 max-w-2xl">
+            <p className="eyebrow mb-2 text-primary">Shop With Confidence</p>
+            <h2 className="font-display text-2xl font-extrabold text-gray-900 sm:text-3xl">
+              A better experience from checkout to delivery.
+            </h2>
           </div>
-          <div>
-            <Sparkles className="mx-auto mb-3 h-7 w-7 text-primary" />
-            <p className="font-display text-lg font-extrabold text-gray-900">Rooted in Blantyre</p>
-            <p className="mt-1 text-sm text-gray-500">Malawian street culture in every piece.</p>
-          </div>
-          <div>
-            <Truck className="mx-auto mb-3 h-7 w-7 text-primary" />
-            <p className="font-display text-lg font-extrabold text-gray-900">Shop Online or In Store</p>
-            <p className="mt-1 text-sm text-gray-500">Delivery across Malawi and Blantyre pickup.</p>
-          </div>
+          <StorefrontTrustStrip />
         </div>
       </section>
     </div>

@@ -60,18 +60,18 @@ export const Footer = () => {
       <div className="border-b border-white/10">
         <div className="container py-12">
           {subscribed ? (
-            <p className="text-sm text-white/60">Thanks for joining. Keep an eye on your inbox for new drops.</p>
+            <p className="text-sm text-white/75">Thanks for joining. Keep an eye on your inbox for new drops.</p>
           ) : (
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-lg">
               <div className="flex-1 w-full">
-                <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2 block">Join the list</p>
+                <p className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-2 block">Join the list</p>
                 <input
                   id="footer-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email"
-                  className="w-full px-0 py-2 border-0 border-b border-white/20 bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/50 transition-colors"
+                  className="w-full px-0 py-2 border-0 border-b border-white/20 bg-transparent text-sm text-white placeholder:text-white/70 focus:outline-none focus:border-white/50 transition-colors"
                   required
                   disabled={loading}
                 />
@@ -89,16 +89,16 @@ export const Footer = () => {
         <div className="grid md:grid-cols-5 gap-10">
           <div className="md:col-span-2 space-y-4">
             <Logo className="h-24 sm:h-28 md:h-32 lg:h-40 xl:h-48" />
-            <p className="text-white/50 max-w-sm text-sm leading-relaxed">
-              SB is a Malawian streetwear wardrobe from Blantyre: tees, vests, short-sleeve shirts and shorts designed to work together.
+            <p className="text-white/75 max-w-sm text-sm leading-relaxed">
+              A Malawian streetwear wardrobe from Blantyre: tees, vests, short sleeve shirts and shorts designed to work together.
             </p>
-            <p className="text-sm text-white/80 font-medium">SB / Malawian Streetwear. Wear What Speaks.</p>
+            <p className="text-sm text-white/80 font-medium">Streetwear Blantyre. Wear What Speaks.</p>
 
             <div className="pt-4">
-              <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">We accept</p>
+              <p className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">We accept</p>
               <div className="flex gap-3 flex-wrap">
                 {paymentMethods.map((name) => (
-                  <span key={name} className="px-3 py-1.5 text-xs font-medium text-white/60 bg-white/5">
+                  <span key={name} className="px-3 py-1.5 text-xs font-medium text-white/75 bg-white/5">
                     {name}
                   </span>
                 ))}
@@ -108,7 +108,7 @@ export const Footer = () => {
 
           <div>
             <h4 className="font-semibold text-sm text-white mb-4">Shop</h4>
-            <ul className="space-y-2.5 text-sm text-white/50">
+            <ul className="space-y-2.5 text-sm text-white/75">
               <li><Link to="/shop" className="hover:text-white transition-colors">Shop All</Link></li>
               {categories.map((category) => (
                 <li key={category.id}>
@@ -128,10 +128,10 @@ export const Footer = () => {
 
           <div>
             <h4 className="font-semibold text-sm text-white mb-4">Connect</h4>
-            <ul className="space-y-2.5 text-sm text-white/50">
+            <ul className="space-y-2.5 text-sm text-white/75">
               <li><Link to="/looks" className="hover:text-white transition-colors">Looks</Link></li>
               <li><Link to="/stories" className="hover:text-white transition-colors">Stories</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors">About SB</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a></li>
               <li><Link to="/orders" className="hover:text-white transition-colors">Track Order</Link></li>
@@ -140,7 +140,7 @@ export const Footer = () => {
 
           <div>
             <h4 className="font-semibold text-sm text-white mb-4">Info</h4>
-            <ul className="space-y-2.5 text-sm text-white/50">
+            <ul className="space-y-2.5 text-sm text-white/75">
               <li><Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
               <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link to="/returns" className="hover:text-white transition-colors">Returns</Link></li>
@@ -150,10 +150,10 @@ export const Footer = () => {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row gap-4 items-center justify-between">
-          <p className="text-xs text-white/40 text-center md:text-left">
-            &copy; {new Date().getFullYear()} SB / Malawian Streetwear. Wear What Speaks. Blantyre, Malawi.
+          <p className="text-xs text-white/70 text-center md:text-left">
+            &copy; {new Date().getFullYear()} Streetwear Blantyre. Wear What Speaks. Blantyre, Malawi.
           </p>
-          <p className="text-xs text-white/40 uppercase tracking-wider">Blantyre, Malawi</p>
+          <p className="text-xs text-white/70 uppercase tracking-wider">Blantyre, Malawi</p>
         </div>
       </div>
     </footer>

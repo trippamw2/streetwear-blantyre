@@ -223,7 +223,7 @@ export function printBarcodeLabel(options: {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>SB Barcode - ${productName}</title>
+      <title>Product barcode: ${productName}</title>
       <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'DM Sans', Helvetica, sans-serif; background: #fff; }

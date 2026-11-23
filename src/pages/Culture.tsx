@@ -136,8 +136,8 @@ const Culture = () => {
             </Link>
             <h1 className={`font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight ${info.color}`}>{info.name}</h1>
             <p className="text-gray-600 text-lg mt-4 max-w-xl">
-              Generic brands don't know your culture. They sell what sells, not what represents you.
-              Without cultural pieces, your identity stays generic. These are the stories and pieces that speak to you.
+              The pieces that mean the most carry a sense of place. Discover the stories and silhouettes
+              shaped by the city, and wear what feels like you.
             </p>
             <div className="flex gap-6 mt-8 text-sm text-gray-500">
               <span>{stories.length} stor{stories.length !== 1 ? "ies" : "y"}</span>
@@ -198,7 +198,7 @@ const Culture = () => {
           {!loading && stories.length === 0 && products.length === 0 && (
             <div className="text-center py-20">
               <p className="text-gray-500 text-lg">Nothing here yet.</p>
-              <p className="text-gray-500 text-sm mt-2 italic">Without cultural pieces, identity stays generic. The culture is building. Check back soon.</p>
+              <p className="text-sm mt-2 italic text-gray-600">New stories are on the way. Check back soon.</p>
             </div>
           )}
 

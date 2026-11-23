@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SB_BRAND_ID } from "@/data/sbArchitecture";
+import { displayCopy } from "@/lib/storefrontCopy";
 
 export interface SbSubcategory {
   id: string;
@@ -34,7 +35,7 @@ export function useSbSubcategories() {
           (data || []).map((row) => ({
             id: row.id,
             productTypeCode: row.product_type_code,
-            name: row.name,
+            name: displayCopy(row.name),
             slug: row.slug,
             sortOrder: row.sort_order,
           })),

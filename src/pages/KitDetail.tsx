@@ -135,7 +135,7 @@ const KitDetail = () => {
                     "Added!"
                   ) : (
                     <>
-                      <ShoppingBag className="h-4 w-4 mr-2" /> Wear Your Identity
+                      <ShoppingBag className="h-4 w-4 mr-2" /> Wear What Speaks
                     </>
                   )}
                 </Button>
@@ -234,7 +234,7 @@ const KitDetail = () => {
                 </div>
                 <div className="flex justify-between text-green-600 font-medium">
                   <span>Kit savings</span>
-                  <span>-{formatMWK(realSaving)}</span>
+                  <span>{formatMWK(realSaving)} off</span>
                 </div>
                 <div className="flex justify-between font-bold text-base border-t border-gray-200 pt-2">
                   <span>Kit price</span>

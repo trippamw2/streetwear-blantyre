@@ -12,6 +12,7 @@ import { SEO, defaultSEO } from "@/components/SEO";
 import { useLoyalty } from "@/hooks/useLoyalty";
 import { useReferral } from "@/hooks/useReferral";
 import { DeliveryOptions } from "@/components/DeliveryOptions";
+import { StorefrontTrustStrip } from "@/components/StorefrontTrustStrip";
 import { type DeliveryOption } from "@/lib/deliveryRules";
 import { buildSbPaymentRef } from "@/lib/paymentRefs";
 import { ArrowLeft, Loader2, CreditCard, Zap, Gift } from "lucide-react";
@@ -96,7 +97,7 @@ const Checkout = () => {
       
       const disc = Math.round(subtotal * (data.discount_percent / 100));
       setPromoApplied({ code: data.name, discount: disc });
-      toast({ title: "Promo applied!", description: `-${formatMWK(disc)}` });
+      toast({ title: "Promo applied!", description: `${formatMWK(disc)} saved` });
     } catch { toast({ title: "Invalid code", variant: "destructive" }); }
   };
 
@@ -262,8 +263,8 @@ const Checkout = () => {
         <h2 className="font-display text-xl font-bold mb-2 text-gray-900">Your cart is empty</h2>
         <p className="text-gray-500 mb-6">Add a piece to your cart before checking out.</p>
         <div className="flex gap-3 justify-center">
-          <Button asChild><Link to="/shop">Shop the Collection</Link></Button>
-          <Button asChild variant="outline"><Link to="/combos">View Kits</Link></Button>
+          <Button asChild><Link to="/shop">Shop all</Link></Button>
+          <Button asChild variant="outline"><Link to="/combos">View kits</Link></Button>
         </div>
       </div>
     );
@@ -434,25 +435,23 @@ const Checkout = () => {
             {promoDiscount > 0 && (
               <div className="flex justify-between text-green-600">
                 <span>Promo ({promoApplied?.code})</span>
-                <span>-{formatMWK(promoDiscount)}</span>
+                <span>{formatMWK(promoDiscount)} off</span>
               </div>
             )}
             {loyaltyDiscount > 0 && (
               <div className="flex justify-between text-green-600">
                 <span>Rewards Points</span>
-                <span>-{formatMWK(loyaltyDiscount)}</span>
+                <span>{formatMWK(loyaltyDiscount)} off</span>
               </div>
             )}
             <div className="flex justify-between">
               <span>
                 Delivery
                 {selectedDelivery && (
-                  <span className="text-xs text-gray-500 ml-1">
-                    ({selectedDelivery.label}
-                    {selectedDelivery.id === "same_day"
-                    ? " - same day"
-                    : ` - ${selectedDelivery.estimatedDays}`}
-                    )
+                  <span className="ml-1 text-xs text-gray-600">
+                    ({selectedDelivery.label}: {selectedDelivery.id === "same_day"
+                      ? "today"
+                      : selectedDelivery.estimatedDays})
                   </span>
                 )}
               </span>
@@ -464,6 +463,8 @@ const Checkout = () => {
             </div>
           </div>
         </div>
+
+        <StorefrontTrustStrip compact />
 
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-center text-xs sm:text-sm text-gray-600">
           30 day quality cover on faults. See our{" "}

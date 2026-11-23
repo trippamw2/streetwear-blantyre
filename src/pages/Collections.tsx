@@ -42,7 +42,7 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
             <span className="font-display text-3xl font-extrabold uppercase tracking-[0.24em] text-white/70">
-              SB
+              WARDROBE
             </span>
           </div>
         )}
@@ -102,19 +102,19 @@ const Collections = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <SEO {...defaultSEO.shop} title="Collections | SB Streetwear" />
+      <SEO {...defaultSEO.shop} title="Collections | Streetwear Blantyre" />
 
       <section className="border-b border-gray-200 bg-gray-50">
         <div className="container py-16 text-center sm:py-24">
           <div className="mx-auto max-w-2xl space-y-5">
             <span className="eyebrow inline-block rounded-full border border-gray-300 bg-white px-4 py-1.5 text-primary">
-              Curated by SB
+              Curated with care
             </span>
             <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
               Collections &amp; Drops
             </h1>
             <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-500 sm:text-base">
-              Every SB release is built as a wardrobe, not a one-off. Explore the collections that
+              Every release is built as a wardrobe, not a one off. Explore the collections that
               define the street, and the limited drops that move fast.
             </p>
             <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
@@ -123,7 +123,7 @@ const Collections = () => {
               </Button>
               <Button asChild size="lg" variant="outline">
                 <Link to="/shop">
-                  Shop All Pieces <ArrowRight />
+                  Shop all <ArrowRight />
                 </Link>
               </Button>
             </div>
@@ -147,7 +147,7 @@ const Collections = () => {
             </p>
             <Button asChild variant="hero" size="lg" className="mt-7">
               <Link to="/shop">
-                Shop the Range <ArrowRight />
+                Shop collection <ArrowRight />
               </Link>
             </Button>
           </div>
@@ -212,7 +212,7 @@ const Collections = () => {
               ) : (
                 <EmptySection
                   title="No drops live right now"
-                  message="The next SB drop is in the works. Follow along and catch it when it lands."
+                  message="The next drop is in the works. Follow along and catch it when it lands."
                 />
               )}
             </div>

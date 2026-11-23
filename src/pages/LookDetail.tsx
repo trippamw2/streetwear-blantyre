@@ -47,8 +47,8 @@ const LookDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <SEO
-          title="Look Not Found | SB Streetwear"
-          description="We couldn't find that SB Streetwear look. Explore the current looks and shoppable edits instead."
+          title="Look Not Found | Streetwear Blantyre"
+          description="We couldn't find that look. Explore the current looks and shoppable edits instead."
         />
         <div className="container flex min-h-[65vh] flex-col items-center justify-center py-20 text-center">
           <p className="eyebrow mb-3 text-primary">404 · Look</p>
@@ -72,11 +72,11 @@ const LookDetail = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title={`${look.title} | SB Streetwear`}
+        title={`${look.title} | Streetwear Blantyre`}
         description={
           look.description ||
           look.subtitle ||
-          `Shop the ${look.title} look from SB Streetwear. Every piece in the edit is available to buy.`
+          `Shop the ${look.title} look from Streetwear Blantyre. Every piece in the edit is available to buy.`
         }
         path={`/looks/${look.slug}`}
         image={heroImage || undefined}
@@ -186,7 +186,7 @@ const LookDetail = () => {
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
                         <span className="font-display text-3xl font-extrabold uppercase tracking-[0.2em] text-primary/30">
-                          SB
+                          LOOK
                         </span>
                       </div>
                     )}
@@ -225,7 +225,7 @@ const LookDetail = () => {
 
                     <div className="mt-4 flex flex-wrap items-center gap-3">
                       <Button onClick={handleAdd} variant="hero" size="sm" disabled={!product || soldOut}>
-                        Add to Cart
+                        Add to bag
                       </Button>
                       <Button asChild variant="link" size="sm">
                         <Link to={`/product/${item.productId}`}>

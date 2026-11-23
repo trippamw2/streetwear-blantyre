@@ -317,7 +317,7 @@ const ProductDetail = () => {
   const faqs = [
     {
       q: "Is this genuine?",
-      a: "Yes. Every piece is sourced from trusted brands and suppliers. SB is a retailer and does not manufacture the items it sells.",
+      a: "Yes. Every piece is sourced from trusted brands and suppliers. We are a retailer and do not manufacture the items we sell.",
     },
     {
       q: "What if there is a fault?",
@@ -390,7 +390,7 @@ const ProductDetail = () => {
               ) : (
                 <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-gray-100 to-gray-200 px-4 text-center">
                   <span className="font-display text-4xl font-extrabold uppercase tracking-[0.24em] text-primary/20">
-                    SB
+                    WARDROBE
                   </span>
                   <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
                     {getCategoryLabel(product.category)}
@@ -572,7 +572,7 @@ const ProductDetail = () => {
               )}
             </div>
 
-            {/* Fit, fabric and care — required wardrobe information */}
+            {/* Fit, fabric and care information */}
             <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600 sm:p-5">
               <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-gray-900">
                 Fit &amp; Details
@@ -585,6 +585,10 @@ const ProductDetail = () => {
                   <span className="font-semibold text-gray-900">Material:</span>{" "}
                   {product.material || "Cotton blend"}
                 </p>
+                <p>
+                  <span className="font-semibold text-gray-900">Cut:</span>{" "}
+                  {product.gender_classification === "unisex" ? "Unisex" : product.gender_classification || "Unisex"}
+                </p>
               </div>
               <p className="mt-3">{product.model_fit_note || 'Model is 6\'0" and wears size L'}</p>
               {product.description && product.description !== product.benefit && (
@@ -596,7 +600,7 @@ const ProductDetail = () => {
                 </p>
               )}
               <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
-                <span className="font-semibold text-gray-900">Shipping:</span> Delivery across Malawi in 3–5 working days. Blantyre delivery is same day or 1–3 days; store pickup is available.
+                <span className="font-semibold text-gray-900">Shipping:</span> Delivery across Malawi in 3 to 5 working days. Blantyre delivery is same day or 1 to 3 days. Store pickup is available.
               </p>
             </div>
 
@@ -710,11 +714,19 @@ const ProductDetail = () => {
                       <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-900">
                         Select Size
                       </p>
-                      {selectedVariant && (
-                        <p className="text-[11px] text-gray-400">
-                          SKU {selectedVariant.sku} · {selectedVariant.color}
-                        </p>
-                      )}
+                      <div className="flex items-center gap-3">
+                        <Link
+                          to="/faq"
+                          className="text-xs font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
+                        >
+                          Size guide
+                        </Link>
+                        {selectedVariant && (
+                          <p className="text-[11px] text-gray-600">
+                            SKU {selectedVariant.sku} · {selectedVariant.color}
+                          </p>
+                        )}
+                      </div>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {sizeOptions.map((option, optionIndex) => {
@@ -827,7 +839,7 @@ const ProductDetail = () => {
                   className="w-full"
                   disabled={!inStock}
                 >
-                  <ShoppingBag className="h-5 w-5" /> {inStock ? "Add to Cart" : "Sold Out"}
+                  <ShoppingBag className="h-5 w-5" /> {inStock ? "Add to bag" : "Sold Out"}
                 </Button>
                 <Button
                   onClick={handleBuyNow}
@@ -836,7 +848,7 @@ const ProductDetail = () => {
                   className="w-full"
                   disabled={!inStock}
                 >
-                  Buy Now <ArrowRight className="h-4 w-4" />
+                  Checkout <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
             </div>

@@ -17,7 +17,7 @@ const Passport = () => {
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({
-        title: `SB Passport: ${product?.product_name}`,
+        title: `Streetwear Blantyre product passport: ${product?.product_name}`,
         text: `Digital Product Passport, ${product?.product_name} (${product?.serial_number})`,
         url: window.location.href,
       });

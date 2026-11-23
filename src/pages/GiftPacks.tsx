@@ -160,7 +160,7 @@ const GiftPacks = () => {
               <span className="text-primary">A FRESH FIT.</span>
             </h1>
             <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-lg mx-auto leading-relaxed">
-              Generic gifts get forgotten. Real gifts get worn.
+              The best gifts become part of someone's everyday rotation.
               Pick a Kit, pay online, and we'll wrap it and deliver it, 
               with your personal message inside.
             </p>
@@ -427,7 +427,7 @@ const GiftPacks = () => {
               <Link to="/gift">Schedule a Gift</Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full px-8 py-3 font-semibold border-white/20 text-gray-900 hover:bg-gray-200">
-              <Link to="/shop">Browse Shop All</Link>
+              <Link to="/shop">Shop all</Link>
             </Button>
           </div>
         </div>

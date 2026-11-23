@@ -14,14 +14,14 @@ const Contact = () => (
         <div className="max-w-2xl space-y-4">
           <p className="eyebrow text-primary">Connect</p>
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Talk to SB
+            Talk to Us
           </h1>
           <p className="text-sm leading-relaxed text-gray-500 sm:text-lg">
             Questions about sizes, stock or delivery? Message us on WhatsApp and a real person will
             help you out.
           </p>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">
-            SB Streetwear. Wear Your Identity.
+            Streetwear Blantyre. Wear What Speaks.
           </p>
         </div>
       </div>

@@ -51,8 +51,8 @@ export interface Product {
 }
 
 export const BRANDS = [
-  { id: "sb-original", name: "SB Original", color: "#102C54" },
-  { id: "sb-street", name: "SB Street", color: "#1a1a1a" },
+  { id: "sb-original", name: "Original", color: "#102C54" },
+  { id: "sb-street", name: "Street", color: "#1a1a1a" },
 ] as const;
 
 const titleCase = (value: string) =>
@@ -62,7 +62,7 @@ const titleCase = (value: string) =>
     .trim();
 
 export const getBrandName = (id?: string | null): string => {
-  if (!id) return "SB Streetwear";
+  if (!id) return "Streetwear Blantyre";
   return BRANDS.find((brand) => brand.id === id)?.name || titleCase(id);
 };
 
@@ -93,9 +93,9 @@ export const culturePillars: CulturePillar[] = [
 
 export const categories: { id: Category; label: string }[] = [
   { id: "all", label: "All Products" },
-  { id: "t-shirts", label: "T-Shirts" },
+  { id: "t-shirts", label: "T Shirts" },
   { id: "vests", label: "Vests" },
-  { id: "short-sleeve-shirts", label: "Short-Sleeve Shirts" },
+  { id: "short-sleeve-shirts", label: "Short Sleeve Shirts" },
   { id: "shorts", label: "Shorts" },
 ];
 

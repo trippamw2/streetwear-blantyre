@@ -20,7 +20,7 @@ interface SEOProps {
 
 const SITE_NAME = "Streetwear Blantyre";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "SB / Malawian Streetwear from Blantyre. A full wardrobe of tees, vests, short-sleeve shirts and shorts. Wear What Speaks.";
+const DEFAULT_DESC = "Streetwear Blantyre from Blantyre. A full wardrobe of tees, vests, short sleeve shirts and shorts. Wear What Speaks.";
 const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Streetwear+Blantyre";
 
 const BRAND_META: Record<BrandSlug, { siteName: string; siteUrl: string; image: string }> = {
@@ -210,13 +210,13 @@ export const SEO = ({
 
 export const defaultSEO = {
   home: {
-    title: "SB / Malawian Streetwear | Wear What Speaks",
+    title: "Streetwear Blantyre | Wear What Speaks",
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop the Wardrobe | T-Shirts, Vests, Shirts & Shorts",
+    title: "Shop the Wardrobe | T Shirts, Vests, Shirts & Shorts",
     description:
-      "Shop the full SB wardrobe from Blantyre: graphic tees, vests, short-sleeve shirts and shorts made to mix into complete looks.",
+      "Shop the full wardrobe from Blantyre: graphic tees, vests, short sleeve shirts and shorts made to mix into complete looks.",
   },
   combos: {
     title: "Kits & Bundles | Streetwear Blantyre",
@@ -226,55 +226,55 @@ export const defaultSEO = {
   about: {
     title: "Our Story | Inspired by Blantyre",
     description:
-      "SB Streetwear brings together T shirts, football jerseys, short sleeve shirts and vests for everyday life in Blantyre, Malawi. Wear Your Identity.",
+      "Streetwear Blantyre brings together T shirts, football jerseys, short sleeve shirts and vests for everyday life in Blantyre, Malawi. Wear What Speaks.",
   },
   contact: {
-    title: "Contact | SB Streetwear",
+    title: "Contact | Streetwear Blantyre",
     description:
-      "Reach SB Streetwear on WhatsApp for orders, sizing and availability. Delivery across Malawi and store pickup in Blantyre.",
+      "Reach Streetwear Blantyre on WhatsApp for orders, sizing and availability. Delivery across Malawi and store pickup in Blantyre.",
   },
   auth: {
-    title: "Sign In | SB Streetwear",
+    title: "Sign In | Streetwear Blantyre",
     description: "Sign in to check out faster, track your orders and save your favourite pieces.",
   },
   checkout: {
-    title: "Checkout | SB Streetwear",
+    title: "Checkout | Streetwear Blantyre",
     description:
       "Complete your order securely with Airtel Money, TNM Mpamba, and bank transfer. Delivery across Malawi.",
   },
   orders: {
-    title: "My Orders | SB Streetwear",
-    description: "Track your SB Streetwear orders and deliveries.",
+    title: "My Orders | Streetwear Blantyre",
+    description: "Track your orders and deliveries.",
   },
   rewards: {
-    title: "Rewards | Earn Points with SB Streetwear",
+    title: "Rewards | Earn Points with Streetwear Blantyre",
     description:
-      "Earn points on every purchase, redeem them for discounts and refer friends to SB Streetwear.",
+      "Earn points on every purchase, redeem them for discounts and refer friends to Streetwear Blantyre.",
   },
   compare: {
-    title: "Compare Pieces | SB Streetwear",
-    description: "Compare SB Streetwear pieces side by side and find the fit that feels like you.",
+    title: "Compare Pieces | Streetwear Blantyre",
+    description: "Compare pieces side by side and find the fit that feels like you.",
   },
   faq: {
-    title: "FAQ | SB Streetwear",
+    title: "FAQ | Streetwear Blantyre",
     description:
-      "Answers about ordering, delivery, sizing, payments, returns and quality cover at SB Streetwear.",
+      "Answers about ordering, delivery, sizing, payments, returns and quality cover at Streetwear Blantyre.",
   },
   terms: {
-    title: "Terms & Conditions | SB Streetwear",
-    description: "The terms and conditions that apply when you shop with SB Streetwear.",
+    title: "Terms & Conditions | Streetwear Blantyre",
+    description: "The terms and conditions that apply when you shop with Streetwear Blantyre.",
   },
   privacy: {
-    title: "Privacy Policy | SB Streetwear",
-    description: "How SB Streetwear collects, uses and protects your personal information.",
+    title: "Privacy Policy | Streetwear Blantyre",
+    description: "How Streetwear Blantyre collects, uses and protects your personal information.",
   },
   returns: {
-    title: "Returns & Exchanges | SB Streetwear",
+    title: "Returns & Exchanges | Streetwear Blantyre",
     description:
       "Our clothing returns and size exchange policy. Unworn items with tags can be returned within 14 days.",
   },
   warranty: {
-    title: "Quality Cover | SB Streetwear",
+    title: "Quality Cover | Streetwear Blantyre",
     description:
       "Our 30 day quality cover on clothing faults. We repair, replace or refund faulty items.",
   },
@@ -294,13 +294,13 @@ export const defaultSEO = {
       "How Lake Fresh handles refunds, replacements and delivery problems for fresh fish orders in Blantyre, Malawi.",
   },
   giftPacks: {
-    title: "Gift Packs | SB Streetwear",
+    title: "Gift Packs | Streetwear Blantyre",
     description:
-      "Gift a curated SB Streetwear pack with a personal message and delivery in Blantyre.",
+      "Gift a curated pack with a personal message and delivery in Blantyre.",
   },
   scheduledGift: {
-    title: "Schedule a Gift | SB Streetwear",
+    title: "Schedule a Gift | Streetwear Blantyre",
     description:
-      "Send an SB Streetwear piece for any occasion. Add a personal message and choose the delivery date.",
+      "Send a piece for any occasion. Add a personal message and choose the delivery date.",
   },
 };

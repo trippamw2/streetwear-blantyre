@@ -79,7 +79,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
   const badges: { key: string; label: string; className: string }[] = [];
   if (isOnSale && discountPercent > 0) {
-    badges.push({ key: "sale", label: `-${discountPercent}%`, className: "bg-red-600 text-white" });
+    badges.push({ key: "sale", label: `${discountPercent}% off`, className: "bg-red-600 text-white" });
   }
   if (isNew) {
     badges.push({ key: "new", label: "NEW", className: "bg-primary text-white" });
@@ -113,7 +113,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-100 to-gray-200 px-4 text-center">
               <span className="font-display text-2xl font-extrabold uppercase tracking-[0.24em] text-primary/25">
-                SB
+                WARDROBE
               </span>
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
                 {getCategoryLabel(product.category)}

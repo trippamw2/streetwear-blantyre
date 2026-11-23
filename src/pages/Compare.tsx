@@ -41,7 +41,7 @@ const Compare = () => {
           <p className="text-sm text-gray-500 mb-4">Curated kits. Better value. One delivery.</p>
           <Link to="/combos">
             <Button className=" rounded-full">
-              View Kits <ArrowRight className="h-4 w-4 ml-1" />
+              View kits <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </Link>
         </div>
@@ -79,7 +79,7 @@ const Compare = () => {
         </div>
         <Link to="/combos">
           <Button className="bg-white text-gray-900 hover:bg-gray-100 rounded-full text-sm px-4 py-2 h-auto">
-            See Kits <ArrowRight className="h-3 w-3 ml-1" />
+            View kits <ArrowRight className="h-3 w-3 ml-1" />
           </Button>
         </Link>
       </div>
@@ -143,7 +143,7 @@ const Compare = () => {
               className="w-full mt-4 "
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
-              Wear Your Identity
+              Wear What Speaks
             </Button>
           </div>
         ))}
@@ -261,7 +261,7 @@ const Compare = () => {
                     className=""
                   >
                     <ShoppingBag className="h-4 w-4 mr-2" />
-                    Wear Your Identity
+                    Wear What Speaks
                   </Button>
                 </td>
               ))}

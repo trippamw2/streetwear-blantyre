@@ -18,7 +18,7 @@ export const DELIVERY_ZONES: Record<DeliveryZone, DeliveryZoneConfig> = {
     name: "Blantyre",
     regions: ["blantyre", "chitimukulu", "limbe", "makata", "nancholi", "bangwe", "tchete"],
     expressEta: "Same day",
-    standardEta: "1-2 days",
+    standardEta: "1 to 2 days",
   },
   southern: {
     id: "southern",
@@ -29,7 +29,7 @@ export const DELIVERY_ZONES: Record<DeliveryZone, DeliveryZoneConfig> = {
       "liwonde", "namaka", "ntcheu", "mozambique"
     ],
     expressEta: "Next day",
-    standardEta: "2-3 days",
+    standardEta: "2 to 3 days",
   },
   central: {
     id: "central",
@@ -38,8 +38,8 @@ export const DELIVERY_ZONES: Record<DeliveryZone, DeliveryZoneConfig> = {
       "lilongwe", "dedza", "salima", "kasungu", "ntcheu", "dowa", "mchinji",
       "Nkhotakota", "central"
     ],
-    expressEta: "1-2 days",
-    standardEta: "2-4 days",
+    expressEta: "1 to 2 days",
+    standardEta: "2 to 4 days",
   },
   northern: {
     id: "northern",
@@ -47,8 +47,8 @@ export const DELIVERY_ZONES: Record<DeliveryZone, DeliveryZoneConfig> = {
     regions: [
       "mzuzu", "rumphi", "karonga", "nkhata bay", "chitipa", "likuni", "Mzuzu"
     ],
-    expressEta: "2-3 days",
-    standardEta: "4-6 days",
+    expressEta: "2 to 3 days",
+    standardEta: "4 to 6 days",
   },
 };
 

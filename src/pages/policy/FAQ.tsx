@@ -89,7 +89,7 @@ const faqGroups = [
       },
       {
         q: "Are your items genuine?",
-        a: "Yes. We source from trusted brands and suppliers. SB Streetwear is a retailer and does not manufacture the branded items it sells.",
+        a: "Yes. We source from trusted brands and suppliers. We are a retailer and do not manufacture the branded items we sell.",
       },
     ],
   },
@@ -103,7 +103,7 @@ const FAQ = () => {
       seo="faq"
       eyebrow="Good to Know"
       title="Frequently Asked Questions"
-      intro="Quick answers about ordering, sizing, delivery, payments and returns at SB Streetwear."
+      intro="Quick answers about ordering, sizing, delivery, payments and returns at Streetwear Blantyre."
     >
       <div className="space-y-8">
         {faqGroups.map((group, groupIndex) => (

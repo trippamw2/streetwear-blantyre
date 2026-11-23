@@ -1006,13 +1006,13 @@ const LakeFreshCheckout = () => {
                   {loyaltyPreview > 0 && (
                     <div className="flex justify-between text-[#39B54A]">
                       <span>Rewards ({pointsToUse} points)</span>
-                      <span>-{formatMWK(loyaltyPreview)}</span>
+                      <span>{formatMWK(loyaltyPreview)} off</span>
                     </div>
                   )}
                   {promoDiscount > 0 && (
                     <div className="flex justify-between text-[#39B54A]">
                       <span>Promo ({promoPreview?.code})</span>
-                      <span>-{formatMWK(promoDiscount)}</span>
+                      <span>{formatMWK(promoDiscount)} off</span>
                     </div>
                   )}
                   <div className="flex justify-between border-t border-gray-100 pt-3 text-lg font-extrabold text-[#073B78]">

@@ -38,7 +38,7 @@ const About = () => (
             express yourself.
           </p>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">
-            SB Streetwear. Wear Your Identity.
+            Streetwear Blantyre. Wear What Speaks.
           </p>
         </div>
       </div>
@@ -55,7 +55,7 @@ const About = () => (
         </div>
         <div className="space-y-4 text-sm leading-relaxed text-gray-500 sm:text-base">
           <p>
-            Born in Blantyre, Malawi, SB is a retail clothing brand inspired by everyday life, urban
+            Born in Blantyre, Malawi, this is a retail clothing brand inspired by everyday life, urban
             culture, sport and the freedom of personal style.
           </p>
           <p>
@@ -110,10 +110,10 @@ const About = () => (
       </div>
     </section>
 
-    {/* WHY SHOP SB */}
+    {/* WHY SHOP WITH US */}
     <section className="container py-16 sm:py-24">
       <div className="mx-auto mb-10 max-w-2xl text-center sm:mb-14">
-        <p className="eyebrow mb-3 text-primary">Why Shop SB?</p>
+        <p className="eyebrow mb-3 text-primary">Why Shop With Us?</p>
         <h2 className="font-display text-3xl font-extrabold text-gray-900 sm:text-4xl">
           Built for Everyday Style
         </h2>
@@ -131,7 +131,7 @@ const About = () => (
     {/* CTA */}
     <section className="container pb-16 sm:pb-24">
       <div className="rounded-2xl bg-primary px-6 py-14 text-center sm:px-12 sm:py-20">
-        <p className="eyebrow mb-3 text-white/55">Wear Your Identity</p>
+        <p className="eyebrow mb-3 text-white/70">Wear What Speaks</p>
         <h2 className="font-display text-3xl font-extrabold uppercase leading-tight text-white sm:text-4xl md:text-5xl">
           Find Your Fit.
         </h2>
@@ -141,7 +141,7 @@ const About = () => (
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
             <Link to="/shop">
-              Shop the Collection <ArrowRight className="h-4 w-4" />
+              Shop all <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
           <Button

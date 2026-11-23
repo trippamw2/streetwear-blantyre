@@ -5,11 +5,11 @@ const Terms = () => (
     seo="terms"
     eyebrow="The Fine Print"
     title="Terms & Conditions"
-    intro="These terms apply when you browse or shop with SB Streetwear. By using the site, you agree to them."
+    intro="These terms apply when you browse or shop with Streetwear Blantyre. By using the site, you agree to them."
   >
     <PolicySection title="1. About us">
       <p>
-        SB Streetwear is a clothing retailer based in Blantyre, Malawi. We sell T shirts, football
+        Streetwear Blantyre is a clothing retailer based in Blantyre, Malawi. We sell T shirts, football
         jerseys and short sleeve shirts, along with other wearable categories we may add from time to
         time.
       </p>
@@ -81,7 +81,7 @@ const Terms = () => (
         reviews that are abusive, misleading or unrelated to the product.
       </p>
       <p>
-        All site content, branding and photography belong to SB Streetwear or are used with
+        All site content, branding and photography belong to Streetwear Blantyre or are used with
         permission. Do not reuse them without written consent.
       </p>
     </PolicySection>

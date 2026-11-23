@@ -44,7 +44,7 @@ const Combos = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <MessageCircle className="h-4 w-4" /> Ask Which Kit
+                  <MessageCircle className="h-4 w-4" /> Find my kit
                 </a>
               </Button>
               <Button asChild size="lg" variant="outline">
@@ -94,7 +94,7 @@ const Combos = () => {
               In the meantime, shop individual pieces or ask us on WhatsApp what is available.
             </p>
             <Button asChild className="mt-6" variant="hero">
-              <Link to="/shop">Shop the Collection</Link>
+              <Link to="/shop">Shop all</Link>
             </Button>
           </div>
         )}

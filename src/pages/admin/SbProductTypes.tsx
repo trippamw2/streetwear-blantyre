@@ -431,7 +431,7 @@ const SbProductTypes = () => {
                   <Input
                     value={form.label}
                     onChange={(e) => setForm((p) => ({ ...p, label: e.target.value }))}
-                    placeholder="T-Shirts"
+                    placeholder="T Shirts"
                   />
                 </div>
               </div>

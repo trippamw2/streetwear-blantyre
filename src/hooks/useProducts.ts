@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Product, culturePillars } from "@/data/products";
 import { SB_BRAND_ID } from "@/data/sbArchitecture";
+import { displayCopy, displayCopyList } from "@/lib/storefrontCopy";
 
 interface InventoryRecord {
   product_id: string;
@@ -121,20 +122,20 @@ export function useProducts() {
 
         return {
           id: p.id,
-          name: p.name,
+          name: displayCopy(p.name),
           slug: p.slug || undefined,
           sku: p.sku || undefined,
-          benefit: p.description || p.benefit || "",
-          description: p.description || p.benefit || "",
+          benefit: displayCopy(p.description || p.benefit || ""),
+          description: displayCopy(p.description || p.benefit || ""),
           price: p.price,
           compare_at_price: p.compare_at_price ?? null,
           cost_price: p.cost_price ?? null,
           category: (p.category || "all") as any,
-          subcategory: p.subcategory || undefined,
-          collection_name: p.collection_name || undefined,
+          subcategory: displayCopy(p.subcategory) || undefined,
+          collection_name: displayCopy(p.collection_name) || undefined,
           product_type_code: p.product_type_code || undefined,
-          fit: p.fit || undefined,
-          material: p.material || undefined,
+          fit: displayCopy(p.fit) || undefined,
+          material: displayCopy(p.material) || undefined,
           gender_classification: p.gender_classification || "unisex",
           status: p.status || "active",
           featured: isFeatured,
@@ -142,11 +143,11 @@ export function useProducts() {
           new_arrival: isNewArrival,
           limited_drop: p.limited_drop || false,
           release_date: p.release_date || null,
-          care_instructions: p.care_instructions || undefined,
-          model_fit_note: p.model_fit_note || undefined,
-          tags: tagMap.get(p.id) || [],
+          care_instructions: displayCopy(p.care_instructions) || undefined,
+          model_fit_note: displayCopy(p.model_fit_note) || undefined,
+          tags: displayCopyList(tagMap.get(p.id) || []),
           image: p.image || "",
-          brand: p.brand || "SB Streetwear",
+          brand: displayCopy(p.brand) || "Streetwear Blantyre",
           types: typesMap.get(p.id) || [],
           stock: availableStock,
           is_featured: isFeatured,
@@ -155,13 +156,18 @@ export function useProducts() {
           is_on_sale: p.is_on_sale || false,
           discount_percent: p.discount_percent || 0,
           gallery_images: p.gallery_images || [],
-          specs: p.specs || {},
+          specs: Object.fromEntries(
+            Object.entries((p.specs || {}) as Record<string, unknown>).map(([key, value]) => [
+              displayCopy(key),
+              displayCopy(typeof value === "string" ? value : String(value ?? "")),
+            ]),
+          ),
           reward_points: p.reward_points || Math.round(p.price / 100),
           rating: p.rating || 0,
           culture_pillar: p.culture_pillar || "",
           culture_pillar_color: culturePillars.find((cp) => cp.id === p.culture_pillar)?.color || "#102C54",
-          culture_story: p.culture_story || "",
-          culture_context: p.culture_context || "",
+          culture_story: displayCopy(p.culture_story) || "",
+          culture_context: displayCopy(p.culture_context) || "",
         };
       });
 

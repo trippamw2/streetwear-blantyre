@@ -169,7 +169,7 @@ const Verify = () => {
       {/* Minimal header */}
       <div className="bg-gray-100 text-gray-900 py-4">
         <div className="max-w-lg mx-auto px-4 flex items-center justify-between">
-          <span className="font-display font-bold text-lg tracking-wide">SB</span>
+          <span className="font-display font-bold text-lg tracking-wide">STREETWEAR BLANTYRE</span>
           <span className="text-xs text-gray-900/50 uppercase tracking-widest">Verification</span>
         </div>
       </div>

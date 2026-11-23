@@ -70,7 +70,7 @@ const EditorialPost = () => {
           price: p.price,
           category: p.category || "all",
           image: p.image || "",
-          brand: p.brand || "SB Streetwear",
+          brand: p.brand || "Streetwear Blantyre",
           types: [],
           stock: p.stock_quantity || 0,
           is_featured: p.is_featured || false,

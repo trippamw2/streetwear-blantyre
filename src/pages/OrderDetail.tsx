@@ -240,10 +240,10 @@ const OrderDetailPage = () => {
           </p>
           <div className="flex gap-2">
             <Button asChild variant="outline" size="sm" className="text-xs">
-              <Link to="/combos">View Kits</Link>
+              <Link to="/combos">View kits</Link>
             </Button>
             <Button asChild variant="outline" size="sm" className="text-xs">
-              <Link to="/shop">Browse Shop All</Link>
+              <Link to="/shop">Shop all</Link>
             </Button>
           </div>
         </div>

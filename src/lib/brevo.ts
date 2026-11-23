@@ -23,7 +23,7 @@ interface BrandConfig {
 const BRANDS: Record<EmailBrand, BrandConfig> = {
   sb: {
     name: "Streetwear Blantyre",
-    tagline: "Wear Your Identity",
+    tagline: "Wear What Speaks",
     email: "orders@wearsb.com",
     website: "https://www.wearsb.com",
     primaryColor: "${primary}",
@@ -32,7 +32,7 @@ const BRANDS: Record<EmailBrand, BrandConfig> = {
     whatsapp: import.meta.env.VITE_WHATSAPP_BUSINESS
       ? `https://wa.me/${import.meta.env.VITE_WHATSAPP_BUSINESS}`
       : "",
-    logoText: "SB",
+    logoText: "STB",
   },
   "lake-fresh": {
     name: "Lake Fresh Fish Mart",

@@ -29,7 +29,7 @@ const SHOP_LINKS = [
 const TOP_LINKS = [
   { to: "/looks", label: "Looks" },
   { to: "/stories", label: "Stories" },
-  { to: "/about", label: "About SB" },
+  { to: "/about", label: "About Us" },
 ];
 
 export const Navbar = () => {
@@ -69,7 +69,7 @@ export const Navbar = () => {
   return (
     <>
       <div className="bg-navy text-white text-xs font-semibold tracking-widest uppercase text-center py-2 px-4">
-        SB / Malawian Streetwear — Wear What Speaks.
+        Streetwear Blantyre. Wear What Speaks.
       </div>
       <header className="sticky top-0 z-40 bg-navy border-b border-white/10">
         <nav className="container flex h-16 items-center justify-between gap-2 sm:gap-4 px-2 sm:px-4">

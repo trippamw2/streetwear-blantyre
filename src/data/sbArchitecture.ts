@@ -5,10 +5,10 @@ export const SB_BRAND_ID = "11111111-1111-1111-1111-111111111111";
 export const SB_PRODUCT_TYPES = [
   {
     code: "TEE",
-    label: "T-Shirts",
+    label: "T Shirts",
     slug: "t-shirts",
     description:
-      "Graphic, oversized, statement, essential and limited-drop tees. The piece that started the conversation.",
+      "Graphic, oversized, statement, essential and limited drop tees. The piece that started the conversation.",
   },
   {
     code: "VEST",
@@ -20,7 +20,7 @@ export const SB_PRODUCT_TYPES = [
     code: "SHORT_SLEEVE_SHIRT",
     label: "Shirts",
     slug: "short-sleeve-shirts",
-    description: "Graphic, printed, relaxed-fit and statement shirts for a lighter layer.",
+    description: "Graphic, printed, relaxed fit and statement shirts for a lighter layer.",
   },
   {
     code: "SHORTS",
@@ -35,9 +35,9 @@ export type SbProductTypeCode = (typeof SB_PRODUCT_TYPES)[number]["code"];
 export const CORE_CATEGORY_SLUGS = SB_PRODUCT_TYPES.map((type) => type.slug);
 
 export const SB_PRODUCT_TYPE_LABELS: Record<string, string> = {
-  TEE: "T-Shirts",
+  TEE: "T Shirts",
   VEST: "Vests",
-  SHORT_SLEEVE_SHIRT: "Short-Sleeve Shirts",
+  SHORT_SLEEVE_SHIRT: "Short Sleeve Shirts",
   SHORTS: "Shorts",
   HOODIES: "Hoodies",
   SWEATSHIRTS: "Sweatshirts",

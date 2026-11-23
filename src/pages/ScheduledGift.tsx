@@ -147,7 +147,7 @@ const ScheduledGift = () => {
             {[
               { num: 1, label: "Pick a Piece" },
               { num: 2, label: "Add Details" },
-              { num: 3, label: "Pay & Send" },
+              { num: 3, label: "Pay now" },
             ].map((s, i) => (
               <div key={s.num} className="flex items-center">
                 <div className="flex items-center gap-2">
@@ -307,7 +307,7 @@ const ScheduledGift = () => {
           <div className="max-w-lg mx-auto">
             <div className="text-center mb-10">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em] mb-3">Step 3</p>
-              <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Pay & Send</h2>
+              <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-gray-900">Pay now</h2>
             </div>
 
             <div className="p-5 bg-gray-50 rounded-xl mb-6 space-y-3">

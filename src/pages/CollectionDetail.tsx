@@ -45,8 +45,8 @@ const CollectionDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <SEO
-          title="Collection Not Found | SB Streetwear"
-          description="We couldn't find that SB Streetwear collection. Explore the current collections and drops instead."
+          title="Collection Not Found | Streetwear Blantyre"
+          description="We couldn't find that collection. Explore the current collections and drops instead."
         />
         <div className="container flex min-h-[65vh] flex-col items-center justify-center py-20 text-center">
           <p className="eyebrow mb-3 text-primary">404 · Collection</p>
@@ -70,10 +70,10 @@ const CollectionDetail = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title={`${collection.name} | SB Streetwear`}
+        title={`${collection.name} | Streetwear Blantyre`}
         description={
           collection.description ||
-          `Shop the ${collection.name} ${isDrop ? "limited drop" : "collection"} from SB Streetwear in Blantyre, Malawi.`
+          `Shop the ${collection.name} ${isDrop ? "limited drop" : "collection"} from Streetwear Blantyre in Blantyre, Malawi.`
         }
         path={`/collections/${collection.slug}`}
         image={heroImage || undefined}
@@ -99,7 +99,7 @@ const CollectionDetail = () => {
 
           <div className="mt-12 max-w-2xl">
             <p className="eyebrow mb-3 text-white/70">
-              {isDrop ? "Limited Drop" : "SB Collection"}
+              {isDrop ? "Limited Drop" : "Curated Collection"}
             </p>
             <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-white sm:text-5xl lg:text-6xl">
               {collection.name}
@@ -157,7 +157,7 @@ const CollectionDetail = () => {
               The pieces are on their way. Until then, explore everything else in the shop.
             </p>
             <Button asChild variant="hero" size="lg" className="mt-7">
-              <Link to="/shop">Shop All Pieces</Link>
+              <Link to="/shop">Shop all</Link>
             </Button>
           </div>
         )}

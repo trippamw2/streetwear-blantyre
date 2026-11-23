@@ -60,7 +60,7 @@ const LookCard = ({
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
               <span className="font-display text-5xl font-extrabold uppercase tracking-[0.2em] text-white/70">
-                SB
+                LOOK
               </span>
             </div>
           )}
@@ -96,7 +96,7 @@ const LookCard = ({
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
             <span className="font-display text-4xl font-extrabold uppercase tracking-[0.2em] text-white/70">
-              SB
+              LOOK
             </span>
           </div>
         )}
@@ -106,7 +106,7 @@ const LookCard = ({
         </span>
       </div>
       <div className="flex flex-1 flex-col p-5">
-        <p className="eyebrow mb-2 text-primary">SB Look</p>
+        <p className="eyebrow mb-2 text-primary">Styled Look</p>
         <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-gray-900">
           {look.title}
         </h3>
@@ -131,15 +131,15 @@ const Looks = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title="Looks | SB Streetwear"
-        description="Shoppable streetwear looks from SB Streetwear. See the pieces, the styling notes and the full look, then add what you love to your cart."
+        title="Looks | Streetwear Blantyre"
+        description="Shoppable streetwear looks from Streetwear Blantyre. See the pieces, the styling notes and the full look, then add what you love to your cart."
       />
 
       <section className="border-b border-gray-200 bg-gray-50">
         <div className="container py-16 text-center sm:py-24">
           <div className="mx-auto max-w-2xl space-y-5">
             <span className="eyebrow inline-block rounded-full border border-gray-300 bg-white px-4 py-1.5 text-primary">
-              Styled by SB
+              Styled with intention
             </span>
             <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
               Looks
@@ -169,7 +169,7 @@ const Looks = () => {
             </p>
             <Button asChild variant="hero" size="lg" className="mt-7">
               <Link to="/shop">
-                Shop All Pieces <ArrowRight />
+                Shop all <ArrowRight />
               </Link>
             </Button>
           </div>
@@ -224,7 +224,7 @@ const Looks = () => {
             </p>
             <Button asChild variant="hero" size="lg" className="mt-7">
               <Link to="/shop">
-                Shop All Pieces <ArrowRight />
+                Shop all <ArrowRight />
               </Link>
             </Button>
           </div>

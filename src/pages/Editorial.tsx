@@ -104,7 +104,7 @@ const Editorial = () => {
           {!loading && filtered.length === 0 && (
             <div className="text-center py-20">
               <p className="text-gray-500 text-lg">No stories yet{filter !== "all" ? ` in ${filter} culture` : ""}.</p>
-              <p className="text-gray-500 text-sm mt-2 italic">Without stories, culture dies. Check back soon, the culture is always growing.</p>
+              <p className="mt-2 text-sm italic text-gray-600">New stories are on the way. Check back soon.</p>
             </div>
           )}
 

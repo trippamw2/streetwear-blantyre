@@ -25,7 +25,7 @@ const PENDING_KEY = "brand_pending_referral";
 /** The brand a referral belongs to on this storefront. */
 export const currentReferralBrandId = (): string => (IS_LF_SITE ? LF_BRAND_ID : SB_BRAND_ID);
 
-const brandPrefix = (isLf: boolean) => (isLf ? "LF" : "SB");
+const brandPrefix = (isLf: boolean) => (isLf ? "LF" : "STB");
 
 const referralLinkFor = (code: string, isLf: boolean) => {
   const base = isLf ? lfUrl("/") : window.location.origin + "/";

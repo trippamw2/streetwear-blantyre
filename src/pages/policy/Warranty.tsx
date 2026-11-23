@@ -5,7 +5,7 @@ const Warranty = () => (
     seo="warranty"
     eyebrow="Quality Cover"
     title="Quality Cover"
-    intro="Every SB Streetwear piece is checked before it leaves us. If something is wrong with the item itself, we will put it right."
+    intro="Every piece is checked before it leaves us. If something is wrong with the item itself, we will put it right."
   >
     <PolicySection title="What is covered">
       <PolicyList
@@ -45,7 +45,7 @@ const Warranty = () => (
       </ol>
       <p>
         We aim to resolve quality claims within 7 working days of approving them. Delivery costs
-        for approved claims are covered by SB Streetwear.
+        for approved claims are covered by Streetwear Blantyre.
       </p>
     </PolicySection>
 

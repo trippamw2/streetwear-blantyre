@@ -152,6 +152,71 @@ const Shop = () => {
     (inStockOnly ? 1 : 0) +
     (priceMin > priceFloor || priceMax < priceCeiling ? 1 : 0);
 
+  const activeFilters: { label: string; clear: () => void }[] = [];
+  if (categoryName) {
+    activeFilters.push({
+      label: categoryName,
+      clear: () => {
+        setSelectedCategory("all");
+        updateParam("category", "all");
+      },
+    });
+  }
+  if (selectedStyle) {
+    activeFilters.push({
+      label: subcategories.find((sub) => sub.slug === selectedStyle)?.name || selectedStyle,
+      clear: () => {
+        setSelectedStyle("");
+        updateParam("style", "");
+      },
+    });
+  }
+  if (selectedCulture) {
+    activeFilters.push({
+      label: culturePillars.find((pillar) => pillar.id === selectedCulture)?.label || selectedCulture,
+      clear: () => {
+        setSelectedCulture("");
+        updateParam("culture", "");
+      },
+    });
+  }
+  if (searchQuery) {
+    activeFilters.push({
+      label: `Search: ${searchQuery}`,
+      clear: () => {
+        setSearchQuery("");
+        updateParam("q", "");
+      },
+    });
+  }
+  selectedBrands.forEach((brand) => {
+    activeFilters.push({
+      label: brand,
+      clear: () => setSelectedBrands((prev) => prev.filter((item) => item !== brand)),
+    });
+  });
+  if (selectedSize !== "all") {
+    activeFilters.push({
+      label: `Size ${selectedSize}`,
+      clear: () => setSelectedSize("all"),
+    });
+  }
+  if (inStockOnly) {
+    activeFilters.push({
+      label: "In stock only",
+      clear: () => setInStockOnly(false),
+    });
+  }
+  if (priceMin > priceFloor || priceMax < priceCeiling) {
+    activeFilters.push({
+      label: `Price ${priceMin.toLocaleString("en-US")} to ${priceMax.toLocaleString("en-US")}`,
+      clear: () => {
+        setPriceMin(priceFloor);
+        setPriceMax(priceCeiling);
+      },
+    });
+  }
+
   const clearFilters = () => {
     setSelectedCategory("all");
     setSelectedStyle("");
@@ -160,8 +225,8 @@ const Shop = () => {
     setSelectedBrands([]);
     setSelectedSize("all");
     setInStockOnly(false);
-    setPriceMin(0);
-    setPriceMax(1000000);
+    setPriceMin(priceFloor);
+    setPriceMax(priceCeiling);
     setSearchParams({}, { replace: true });
   };
 
@@ -197,7 +262,7 @@ const Shop = () => {
               </h1>
               <p className="text-sm leading-relaxed text-gray-500 sm:text-base">
                 {selectedCategory === "all"
-                  ? "Tees, vests, short-sleeve shirts and shorts from Blantyre. A full streetwear wardrobe built to layer, mix and speak for itself."
+                  ? "Tees, vests, short sleeve shirts and shorts from Blantyre. A full streetwear wardrobe built to layer, mix and speak for itself."
                   : selectedType?.description ||
                     "Explore the category and find the fit that feels like you."}
               </p>
@@ -271,8 +336,8 @@ const Shop = () => {
                 className="h-11 w-full appearance-none rounded-full border border-gray-200 bg-gray-50 pl-10 pr-9 text-xs font-semibold uppercase tracking-[0.08em] text-gray-900 focus:border-primary focus:outline-none sm:w-auto"
               >
                 <option value="newest">Newest</option>
-                <option value="price-low">Price: Low</option>
-                <option value="price-high">Price: High</option>
+                <option value="price-low">Price: low to high</option>
+                <option value="price-high">Price: high to low</option>
                 <option value="name">Name</option>
               </select>
               <ChevronRight className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rotate-90 text-gray-400" />
@@ -284,15 +349,42 @@ const Shop = () => {
                 onClick={clearFilters}
                 className="hidden items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-500 hover:text-primary sm:inline-flex"
               >
-                <RotateCcw className="h-3.5 w-3.5" /> Reset
+                <RotateCcw className="h-3.5 w-3.5" /> Clear all
               </button>
             )}
           </div>
         </div>
 
+        {/* ACTIVE FILTERS */}
+        {activeFilters.length > 0 && (
+          <div className="mb-4 flex flex-wrap items-center gap-2 sm:mb-5">
+            <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-600">
+              Active filters
+            </span>
+            {activeFilters.map((filter) => (
+              <button
+                key={filter.label}
+                type="button"
+                onClick={filter.clear}
+                className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-[11px] font-semibold text-primary hover:bg-primary/10"
+              >
+                {filter.label}
+                <X className="h-3 w-3" />
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-[11px] font-semibold text-gray-600 underline underline-offset-4 hover:text-primary"
+            >
+              Clear all
+            </button>
+          </div>
+        )}
+
         {/* FILTER PANEL */}
         {showFilters && (
-          <div className="mb-5 space-y-5 rounded-2xl border border-gray-200 bg-gray-50 p-4 sm:mb-6 sm:p-6">
+          <div className="mb-5 space-y-5 rounded-2xl border border-gray-200 bg-gray-50 p-4 shadow-sm sm:mb-6 sm:p-6 lg:sticky lg:top-24 lg:z-20">
             <div>
               <h3 className="mb-2.5 text-xs font-bold uppercase tracking-[0.12em] text-gray-900">Brand</h3>
               <div className="flex flex-wrap gap-2">
@@ -362,7 +454,7 @@ const Shop = () => {
                   aria-label="Minimum price"
                   className="h-10 w-24 rounded-full border border-gray-200 bg-white px-3 text-xs text-gray-900 placeholder:text-gray-400 focus:border-primary focus:outline-none"
                 />
-                <span className="text-gray-400">to</span>
+                <span className="text-gray-600">to</span>
                 <input
                   type="number"
                   value={priceMax}
@@ -446,7 +538,7 @@ const Shop = () => {
 
         {/* STYLE CHIPS */}
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-400">Style</span>
+          <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-600">Style</span>
           <button
             type="button"
             onClick={() => {
@@ -482,7 +574,7 @@ const Shop = () => {
 
         {/* VIBE CHIPS */}
         <div className="mb-6 flex flex-wrap items-center gap-2">
-          <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-400">Vibe</span>
+          <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-600">Vibe</span>
           <button
             type="button"
             onClick={() => {
