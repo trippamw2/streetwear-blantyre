@@ -72,48 +72,43 @@ const Home = () => {
       />
 
       {/* HERO — editorial campaign */}
-      <section className="relative overflow-hidden bg-gray-950">
-        <img
-          src={heroImage}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-2xl"
-          loading="eager"
-        />
-        <img
-          src={heroImage}
-          alt="SB streetwear campaign with Malawian models"
-          className="absolute inset-0 h-full w-full object-contain"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/45 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-gray-950/70 to-transparent" />
-
-        <div className="container relative flex min-h-[78vh] flex-col justify-center py-20 sm:min-h-[84vh] sm:py-28 lg:py-36">
-          <div className="max-w-3xl space-y-6 sm:space-y-7">
-            <p className="font-display text-2xl font-black uppercase tracking-[0.35em] text-white sm:text-3xl">SB</p>
-            <h1 className="font-display text-[3rem] font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-7xl lg:text-8xl">
-              {heroPlacement?.headline || heroCampaign?.headline || "Wear What Speaks."}
-            </h1>
-            <p className="max-w-lg text-base leading-relaxed text-white/75 sm:text-lg">
-              {heroPlacement?.body ||
-                heroCampaign?.description ||
-                "A full streetwear wardrobe from Blantyre, Malawi. Built to layer, mix and speak for itself."}
-            </p>
-            <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:gap-4">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
-                <Link to={heroHref}>
-                  {heroPlacement?.ctaLabel || heroCampaign?.ctaLabel || "Shop the collection"} <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white/40 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white"
-              >
-                <Link to="/looks">Explore the looks</Link>
-              </Button>
+      <section className="bg-gray-950">
+        <div className="relative w-full">
+          <img
+            src={heroImage}
+            alt="SB streetwear campaign with Malawian models"
+            className="block h-auto w-full"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950/85 via-gray-950/10 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="container pb-8 sm:pb-12 lg:pb-16">
+              <div className="max-w-3xl space-y-4 rounded-xl bg-gray-950/55 p-5 backdrop-blur-sm sm:space-y-5 sm:p-8">
+                <p className="font-display text-2xl font-black uppercase tracking-[0.35em] text-white sm:text-3xl">SB</p>
+                <h1 className="font-display text-[2.5rem] font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-6xl lg:text-7xl">
+                  {heroPlacement?.headline || heroCampaign?.headline || "Wear What Speaks."}
+                </h1>
+                <p className="max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
+                  {heroPlacement?.body ||
+                    heroCampaign?.description ||
+                    "A full streetwear wardrobe from Blantyre, Malawi. Built to layer, mix and speak for itself."}
+                </p>
+                <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:gap-4">
+                  <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
+                    <Link to={heroHref}>
+                      {heroPlacement?.ctaLabel || heroCampaign?.ctaLabel || "Shop the collection"} <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="border-white/40 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white"
+                  >
+                    <Link to="/looks">Explore the looks</Link>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -320,21 +315,12 @@ const Home = () => {
       <section className="bg-white py-16 sm:py-24">
         <div className="container">
           <div className="overflow-hidden rounded-2xl bg-gray-900">
-            <div className="relative aspect-[16/10] w-full sm:aspect-[8/3]">
-              <img
-                src={streetImage}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-2xl"
-                loading="lazy"
-              />
-              <img
-                src={streetImage}
-                alt="SB Street lifestyle campaign in Blantyre"
-                className="absolute inset-0 h-full w-full object-contain"
-                loading="lazy"
-              />
-            </div>
+            <img
+              src={streetImage}
+              alt="SB Street lifestyle campaign in Blantyre"
+              className="block h-auto w-full"
+              loading="lazy"
+            />
             <div className="flex flex-col gap-5 px-5 py-8 sm:flex-row sm:items-end sm:justify-between sm:px-10 sm:py-10">
               <div className="max-w-2xl">
                 <p className="eyebrow mb-3 text-primary">Campaign</p>
