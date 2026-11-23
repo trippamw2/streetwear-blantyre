@@ -43,6 +43,7 @@ const Home = () => {
   );
   const streetPlacement = placements.find((placement) => placement.sectionKey === "sb_street" && placement.isActive);
   const streetCampaign = campaigns.find((campaign) => campaign.id === streetPlacement?.campaignId);
+  const streetImage = streetPlacement?.imageOverride || streetCampaign?.heroImage || streetHero;
   const streetHref = streetPlacement?.ctaHref || streetCampaign?.ctaHref || "/shop";
 
   const newArrivals = pickBalancedNewArrivals(products);
@@ -74,11 +75,18 @@ const Home = () => {
       <section className="relative overflow-hidden bg-gray-950">
         <img
           src={heroImage}
-          alt="SB streetwear campaign with Malawian models"
-          className="absolute inset-0 h-full w-full object-cover"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-2xl"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-950/95 via-gray-950/70 to-gray-950/20" />
+        <img
+          src={heroImage}
+          alt="SB streetwear campaign with Malawian models"
+          className="absolute inset-0 h-full w-full object-contain"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/45 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-gray-950/70 to-transparent" />
 
         <div className="container relative flex min-h-[78vh] flex-col justify-center py-20 sm:min-h-[84vh] sm:py-28 lg:py-36">
@@ -310,36 +318,43 @@ const Home = () => {
 
       {/* SB STREET */}
       <section className="bg-white py-16 sm:py-24">
-        <div className="grid lg:grid-cols-2">
-          <div className="relative min-h-[22rem] overflow-hidden bg-gray-900 lg:min-h-full">
-            <img
-              src={streetPlacement?.imageOverride || streetCampaign?.heroImage || streetHero}
-              alt="SB Street lifestyle campaign in Blantyre"
-              className="absolute inset-0 h-full w-full object-cover"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-950/70 to-transparent" />
-            <p className="absolute bottom-6 left-6 font-display text-4xl font-black uppercase tracking-tight text-white sm:text-5xl">
-              SB Street
-            </p>
-          </div>
-          <div className="flex flex-col justify-center px-5 py-14 sm:px-10 sm:py-20 lg:px-16">
-            <p className="eyebrow mb-3 text-primary">Campaign</p>
-            <h2 className="font-display max-w-lg text-3xl font-extrabold uppercase leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
-              {streetPlacement?.headline || streetCampaign?.headline || "Made for the streets of Blantyre."}
-            </h2>
-            <p className="mt-5 max-w-lg text-sm leading-relaxed text-gray-500 sm:text-base">
-              {streetPlacement?.body ||
-                streetCampaign?.description ||
-                "Music, movement and everyday hustle. SB Street is the full wardrobe for the city — not just a tee."}
-            </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Button asChild variant="hero" size="lg">
-                <Link to="/stories">Read the stories <ArrowRight className="h-4 w-4" /></Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to={streetHref}>{streetPlacement?.ctaLabel || streetCampaign?.ctaLabel || "Shop the wardrobe"}</Link>
-              </Button>
+        <div className="container">
+          <div className="overflow-hidden rounded-2xl bg-gray-900">
+            <div className="relative aspect-[16/10] w-full sm:aspect-[8/3]">
+              <img
+                src={streetImage}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-2xl"
+                loading="lazy"
+              />
+              <img
+                src={streetImage}
+                alt="SB Street lifestyle campaign in Blantyre"
+                className="absolute inset-0 h-full w-full object-contain"
+                loading="lazy"
+              />
+            </div>
+            <div className="flex flex-col gap-5 px-5 py-8 sm:flex-row sm:items-end sm:justify-between sm:px-10 sm:py-10">
+              <div className="max-w-2xl">
+                <p className="eyebrow mb-3 text-primary">Campaign</p>
+                <h2 className="font-display text-3xl font-extrabold uppercase leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
+                  {streetPlacement?.headline || streetCampaign?.headline || "Made for the streets of Blantyre."}
+                </h2>
+                <p className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base">
+                  {streetPlacement?.body ||
+                    streetCampaign?.description ||
+                    "Music, movement and everyday hustle. SB Street is the full wardrobe for the city — not just a tee."}
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 sm:shrink-0 sm:flex-row">
+                <Button asChild variant="hero" size="lg">
+                  <Link to="/stories">Read the stories <ArrowRight className="h-4 w-4" /></Link>
+                </Button>
+                <Button asChild size="lg" variant="outline">
+                  <Link to={streetHref}>{streetPlacement?.ctaLabel || streetCampaign?.ctaLabel || "Shop the wardrobe"}</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
