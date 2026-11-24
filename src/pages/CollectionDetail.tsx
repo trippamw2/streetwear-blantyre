@@ -45,8 +45,8 @@ const CollectionDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <SEO
-          title="Collection Not Found | Wear What Speaks"
-          description="We couldn't find that collection. Explore the current collections and drops instead."
+          title="Collection Not Found | SB"
+          description="We couldn't find that collection. Explore current SB collections and drops instead."
         />
         <div className="container flex min-h-[65vh] flex-col items-center justify-center py-20 text-center">
           <p className="eyebrow mb-3 text-primary">404 · Collection</p>
@@ -70,10 +70,10 @@ const CollectionDetail = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title={`${collection.name} | Wear What Speaks`}
+        title={`${collection.name} | SB`}
         description={
           collection.description ||
-          `Shop the ${collection.name} ${isDrop ? "limited drop" : "collection"} from Wear What Speaks in Blantyre, Malawi.`
+          `Shop the ${collection.name} ${isDrop ? "limited drop" : "collection"} from SB in Blantyre, Malawi.`
         }
         path={`/collections/${collection.slug}`}
         image={heroImage || undefined}

@@ -280,7 +280,7 @@ const ProductDetail = () => {
 
   const handleShare = (platform: string) => {
     const shareUrl = `${window.location.origin}/product/${product.id}`;
-    const shareText = `${product.name}, ${formatMWK(displayPrice)}. Wear What Speaks.`;
+    const shareText = `${product.name} at SB. ${formatMWK(displayPrice)}.`;
 
     let url = "";
     if (platform === "whatsapp") {
@@ -333,20 +333,20 @@ const ProductDetail = () => {
     },
   ];
 
-  const pillarLabel = product.culture_pillar ? "Hip Hop & Street Lifestyle" : "";
+  const pillarLabel = product.culture_pillar ? "Urban Lifestyle" : "";
   const pillarCopy = product.culture_pillar
-    ? "Hip Hop is more than music. It is how you move, how you speak and how you show up. This piece is made for that lifestyle, built to match your confidence and your voice."
+    ? "Style is personal. This piece is curated for everyday movement, confidence, and the many ways you show up."
     : "";
 
   return (
     <div className="bg-white">
       <div className="container px-4 py-8 sm:px-6 sm:py-14">
         <SEO
-          title={product.name}
+          title={`${product.name} | SB`}
           description={
             product.culture_story ||
             product.benefit ||
-            "Every piece represents a belief. Find the one that speaks for who you are."
+            "Discover curated urban streetwear and lifestyle essentials at SB."
           }
           type="product"
           path={"/product/" + product.id}
@@ -372,7 +372,7 @@ const ProductDetail = () => {
               ) : (
                 <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-gray-100 to-gray-200 px-4 text-center">
                   <span className="font-display text-4xl font-extrabold uppercase tracking-[0.24em] text-primary/20">
-                    WARDROBE
+                    SB
                   </span>
                   <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">
                     {getCategoryLabel(product.category)}
@@ -582,7 +582,7 @@ const ProductDetail = () => {
                 </p>
               )}
               <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
-                <span className="font-semibold text-gray-900">Shipping:</span> Delivery across Malawi in 3 to 5 working days. Blantyre delivery is same day or 1 to 3 days. Store pickup is available.
+                <span className="font-semibold text-gray-900">Delivery:</span> Delivery across Malawi. Blantyre orders usually arrive same day or within 1 to 3 days. Other areas typically take 3 to 5 working days. Store pickup is available.
               </p>
             </div>
 
@@ -849,7 +849,7 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Belief / Story */}
+        {/* Story / Context */}
         {product.culture_pillar && pillarCopy && (
           <div className="mt-16 rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
             <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -857,11 +857,11 @@ const ProductDetail = () => {
                 {pillarLabel}
               </span>
               <span className="text-xs font-semibold uppercase tracking-widest text-gray-600">
-                The belief
+                Style context
               </span>
             </div>
             <h2 className="mb-3 font-display text-xl font-bold text-gray-900 sm:text-2xl">
-              Made for the culture
+              Made for everyday expression
             </h2>
             <p className="max-w-3xl leading-relaxed text-gray-600">{pillarCopy}</p>
           </div>

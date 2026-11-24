@@ -102,7 +102,7 @@ const Collections = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <SEO {...defaultSEO.shop} title="Collections | Wear What Speaks" />
+      <SEO title="Collections | SB" description="Explore curated SB collections and limited drops designed for everyday urban style." path="/collections" />
 
       <section className="border-b border-gray-200 bg-gray-50">
         <div className="container py-16 text-center sm:py-24">

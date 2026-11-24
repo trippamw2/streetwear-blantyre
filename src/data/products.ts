@@ -62,7 +62,7 @@ const titleCase = (value: string) =>
     .trim();
 
 export const getBrandName = (id?: string | null): string => {
-  if (!id) return "Wear What Speaks";
+  if (!id) return "SB";
   return BRANDS.find((brand) => brand.id === id)?.name || titleCase(id);
 };
 
@@ -82,7 +82,7 @@ export interface CulturePillar {
 }
 
 export const culturePillars: CulturePillar[] = [
-  { id: "hip-hop", label: "Hip Hop & Street", description: "The sound, the style, the movement. Streetwear for the culture that raised you.", icon: "Mic2", color: "#111827" },
+  { id: "urban-style", label: "Urban Style", description: "Everyday pieces for campus, the city, weekends, and everything in between.", icon: "Sparkles", color: "#102C54" },
 ];
 
 // ─── Wearable Categories ────────────────────────────────────────────

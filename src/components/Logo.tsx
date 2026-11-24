@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 interface LogoProps {
   className?: string;
-  /** Brand the mark belongs to. Defaults to Wear What Speaks for backwards compatibility. */
+  /** Brand the mark belongs to. Defaults to SB for backwards compatibility. */
   brand?: "sb" | "lf";
 }
 
-export const Logo = ({ className = "h-20 sm:h-24 md:h-32 lg:h-40 w-auto", brand = "sb" }: LogoProps) => {
+export const Logo = ({ className = "h-10 sm:h-12 md:h-14 w-auto", brand = "sb" }: LogoProps) => {
   const isLf = brand === "lf";
   const src = isLf ? "/brand/lake-fresh/logo.png" : logoSb;
-  const alt = isLf ? "Lake Fresh Fish Mart" : "Wear What Speaks";
+  const alt = isLf ? "Lake Fresh Fish Mart" : "SB";
   const home = isLf ? "/lf" : "/";
 
   return (

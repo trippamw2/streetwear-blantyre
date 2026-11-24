@@ -10,8 +10,8 @@ const VALID_PILLARS = ["music", "sports", "faith", "hustle", "street", "hip-hop"
 type Pillar = typeof VALID_PILLARS[number];
 
 const CULTURE_INFO = {
-  name: "Hip Hop & Street Lifestyle",
-  description: "The sound, the style, the movement. Streetwear built for people who live the culture.",
+  name: "Urban Lifestyle & Culture",
+  description: "Style, creativity, and everyday expression. Curated looks and stories for every version of you.",
   color: "text-white",
   bg: "bg-gray-950",
 };
@@ -102,7 +102,7 @@ const Culture = () => {
 
   return (
     <>
-      <SEO title={`${info.name} | Wear What Speaks`} description={info.description} />
+      <SEO title={`${info.name} | SB`} description={info.description} />
 
       <div className="min-h-screen bg-white">
         {/* Hero */}
@@ -114,7 +114,7 @@ const Culture = () => {
             </Link>
             <h1 className={`font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight ${info.color}`}>{info.name}</h1>
             <p className="text-white/75 text-lg mt-4 max-w-xl">
-              Hip Hop is more than music. It is how you move, how you dress and how you show up. Find pieces that match your voice.
+              Style is more than what you wear. It is how you move, how you create, and how you show up. Discover pieces that fit your everyday.
             </p>
             <div className="flex gap-6 mt-8 text-sm text-white/70">
               <span>{stories.length} stor{stories.length !== 1 ? "ies" : "y"}</span>

@@ -61,7 +61,7 @@ const Editorial = () => {
 
   return (
     <>
-      <SEO title="The Culture Journal | Wear What Speaks" description="Stories from the Hip Hop and street lifestyle. Style, movement, and the people living the culture." />
+      <SEO title="Stories | SB" description="Stories, style notes, and culture from the SB community. Everyday inspiration for every version of you." path="/stories" />
 
       <div className="min-h-screen bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
@@ -70,7 +70,7 @@ const Editorial = () => {
             <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.3em] mb-3">Publication</p>
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-4 text-gray-900">The Culture Journal</h1>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Stories from the Hip Hop and street lifestyle. The people, the style, and the culture behind every fit. Read it. Live it. Wear it.
+              Stories, style notes, and community moments from SB. Inspiration for campus days, city moves, creative energy, and weekend life.
             </p>
           </div>
 

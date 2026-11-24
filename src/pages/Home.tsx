@@ -1,359 +1,313 @@
 ﻿import { Link } from "react-router-dom";
+import { ArrowRight, Search, ShieldCheck, Sparkles, Truck, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useProducts } from "@/hooks/useProducts";
-import { useSbMerchandising } from "@/hooks/useSbMerchandising";
-import { SEO } from "@/components/SEO";
 import { ProductCard } from "@/components/ProductCard";
-import { StorefrontTrustStrip } from "@/components/StorefrontTrustStrip";
-import {
-  SB_PRODUCT_TYPES,
-  getCompleteLookProducts,
-  getProductTypeCode,
-  pickBalancedNewArrivals,
-  type SbProductTypeCode,
-} from "@/data/sbArchitecture";
-import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
-import { ArrowRight, ArrowUpRight, Shirt, Sparkles } from "lucide-react";
+import { SEO, defaultSEO } from "@/components/SEO";
+import { useProducts } from "@/hooks/useProducts";
+import { SB_PRODUCT_TYPES } from "@/data/sbArchitecture";
 
-const hero = "/images/sb/home-menu.jpg";
-const streetHero = "/images/sb/home-street.jpg";
+const heroImage = "/images/sb/home-menu.jpg";
+const lifestyleImage = "/images/sb/blue-streetwear-squad.png";
+const editorialImage = "/images/sb/urban-blue-style-duo.png";
 
-const LOOK_COMBINATIONS: { label: string; types: [SbProductTypeCode, SbProductTypeCode] }[] = [
-  { label: "Tee + Shorts", types: ["TEE", "SHORTS"] },
-  { label: "Vest + Shorts", types: ["VEST", "SHORTS"] },
-  { label: "Shirt + Shorts", types: ["SHORT_SLEEVE_SHIRT", "SHORTS"] },
-  { label: "Tee + Shirt", types: ["TEE", "SHORT_SLEEVE_SHIRT"] },
+const CATEGORY_CARDS = [
+  {
+    title: "Clothing",
+    description: "Tees, shirts, vests, shorts and everyday layers.",
+    to: "/shop",
+    image: "/images/sb/home-street.jpg",
+  },
+  {
+    title: "Footwear",
+    description: "Sneakers and shoes made for movement and style.",
+    to: "/shop?search=shoes",
+    image: "/images/sb/look-01.jpg",
+  },
+  {
+    title: "Accessories",
+    description: "Bags, caps, and finishing touches that complete the fit.",
+    to: "/shop?search=accessories",
+    image: "/images/sb/street-campaign.jpg",
+  },
+  {
+    title: "Lifestyle Essentials",
+    description: "Curated everyday picks for your routine and your vibe.",
+    to: "/collections",
+    image: "/images/sb/hero-campaign.jpg",
+  },
+];
+
+const COMMUNITIES = [
+  {
+    title: "Campus Trendsetters",
+    copy: "Clean fits, easy layers, and standout essentials for class, hangouts, and everyday campus life.",
+  },
+  {
+    title: "Thrift Curators",
+    copy: "Unique pieces, smart styling, and character-rich finds for people who love making style personal.",
+  },
+  {
+    title: "Culture Shapers",
+    copy: "Bold looks for creatives, tastemakers, and anyone shaping the vibe around them.",
+  },
+  {
+    title: "Weekend Flexers",
+    copy: "Relaxed, confident outfits for off-duty days, linkups, and moments that call for effortless style.",
+  },
+];
+
+const VALUES = [
+  {
+    icon: Sparkles,
+    title: "Curated Style",
+    copy: "A thoughtful selection of pieces that work together across your lifestyle.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Quality You Can Trust",
+    copy: "Products chosen for everyday wear, comfort, and lasting value.",
+  },
+  {
+    icon: Search,
+    title: "Easy Shopping",
+    copy: "Simple discovery, clear product details, and a smooth path from browse to checkout.",
+  },
+  {
+    icon: Truck,
+    title: "Reliable Delivery",
+    copy: "Convenient delivery across Malawi with clear updates and support.",
+  },
 ];
 
 const Home = () => {
   const { products, loading } = useProducts();
-  const { placements, campaigns, completeLookRules, relations, looks } = useSbMerchandising();
 
-  const heroPlacement = placements.find((placement) => placement.sectionKey === "home_hero" && placement.isActive);
-  const heroCampaign = campaigns.find((campaign) => campaign.id === heroPlacement?.campaignId);
-  const heroImage = heroPlacement?.imageOverride || heroCampaign?.heroImage || hero;
-  const heroHref = heroPlacement?.ctaHref || heroCampaign?.ctaHref || "/shop";
-
-  const newArrivalsPlacement = placements.find(
-    (placement) => placement.sectionKey === "new_arrivals" && placement.isActive,
-  );
-  const teePlacement = placements.find((placement) => placement.sectionKey === "sb_tee" && placement.isActive);
-  const teeHref = teePlacement?.ctaHref || "/shop?category=t-shirts";
-  const completeLookPlacement = placements.find(
-    (placement) => placement.sectionKey === "complete_look" && placement.isActive,
-  );
-  const streetPlacement = placements.find((placement) => placement.sectionKey === "sb_street" && placement.isActive);
-  const streetCampaign = campaigns.find((campaign) => campaign.id === streetPlacement?.campaignId);
-  const streetImage = streetPlacement?.imageOverride || streetCampaign?.heroImage || streetHero;
-  const streetHref = streetPlacement?.ctaHref || streetCampaign?.ctaHref || "/shop";
-
-  const newArrivals = pickBalancedNewArrivals(products);
-  const teeProducts = products.filter((product) => getProductTypeCode(product) === "TEE");
-  const heroTee = teeProducts[0];
-  const featureLook = looks.find((look) => look.isFeatured && look.isPublished) || looks[0];
-
-  const firstOfType = (code: SbProductTypeCode) =>
-    products.find((product) => getProductTypeCode(product) === code && product.image);
-
-  const completeLooks = LOOK_COMBINATIONS.map((combination) => ({
-    ...combination,
-    items: combination.types.map(firstOfType).filter((item): item is NonNullable<typeof item> => Boolean(item)),
-  })).filter((combination) => combination.items.length === 2);
-
-  const suggestions = heroTee
-    ? getCompleteLookProducts(heroTee, products, completeLookRules, relations, 4)
-    : [];
+  const featured = products
+    .filter((p) => p.is_featured || p.is_best_seller || p.is_new_arrival)
+    .slice(0, 8);
+  const fallbackFeatured = products.slice(0, 8);
+  const featuredProducts = featured.length > 0 ? featured : fallbackFeatured;
 
   return (
     <div className="bg-white">
-      <SEO
-        title="Wear What Speaks | Hip Hop Streetwear"
-        description="Streetwear built for the Hip Hop and street lifestyle. Shop tees, vests, shirts, shorts, collections and complete looks from Blantyre, Malawi."
-        path="/"
-      />
+      <SEO {...defaultSEO.home} path="/" />
 
-      {/* HERO — editorial campaign */}
-      <section className="bg-gray-950">
-        <div className="w-full">
-          <img
-            src={heroImage}
-            alt="Streetwear campaign with Malawian models"
-            className="block h-auto w-full"
-            loading="eager"
-          />
-        </div>
+      {/* Hero */}
+      <section className="border-b border-gray-200 bg-[#f7f8fb]">
         <div className="container py-8 sm:py-12 lg:py-16">
-          <div className="max-w-3xl space-y-4 sm:space-y-5">
-            <p className="font-display text-sm font-bold uppercase tracking-[0.3em] text-white/70 sm:text-base">Hip Hop. Street. Lifestyle.</p>
-            <h1 className="font-display text-[2.5rem] font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-6xl lg:text-7xl">
-              {heroPlacement?.headline || heroCampaign?.headline || "Wear What Speaks."}
-            </h1>
-            <p className="max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
-              {heroPlacement?.body ||
-                heroCampaign?.description ||
-                "You live the culture. Your fit should say it loud. Shop streetwear built for the Hip Hop and street lifestyle, ready to wear from Blantyre."}
-            </p>
-            <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:gap-4">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
-                <Link to={heroHref}>
-                  {heroPlacement?.ctaLabel || heroCampaign?.ctaLabel || "Shop all"} <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white/40 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white"
-              >
-                <Link to="/looks">Explore the looks</Link>
-              </Button>
+          <div className="grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12">
+            <div className="order-2 max-w-xl lg:order-1">
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-primary">SB Urban Lifestyle Store</p>
+              <h1 className="font-display text-4xl font-extrabold leading-[0.95] tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
+                Your Style.
+                <span className="block text-primary">Your Everyday.</span>
+              </h1>
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-gray-600 sm:text-lg">
+                Everything your everyday style needs, in one place. Discover curated streetwear and lifestyle essentials for campus, city, weekends, and every version of you.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg" className="h-12 px-7 text-sm font-semibold">
+                  <Link to="/shop">
+                    Shop Now <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="h-12 border-gray-300 px-7 text-sm font-semibold text-gray-900 hover:bg-gray-100">
+                  <Link to="/collections">Explore Collections</Link>
+                </Button>
+              </div>
+              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium uppercase tracking-[0.14em] text-gray-500">
+                <span>Curated for everyday life</span>
+                <span>Blantyre, Malawi</span>
+                <span>Delivery nationwide</span>
+              </div>
+            </div>
+
+            <div className="order-1 lg:order-2">
+              <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-sm">
+                <img
+                  src={heroImage}
+                  alt="SB urban streetwear campaign"
+                  className="block h-auto w-full object-contain"
+                  loading="eager"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CATEGORY PILLARS */}
-      <section className="border-b border-gray-200 bg-white">
-        <div className="container flex flex-wrap items-center justify-center gap-x-6 gap-y-3 py-5 text-[10px] font-bold uppercase tracking-[0.22em] text-gray-600 sm:gap-x-10">
+      {/* Category discovery */}
+      <section className="container py-16 sm:py-20">
+        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">Shop by Category</p>
+            <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
+              Find what fits your day
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
+              From everyday clothing to finishing touches, explore the essentials that make your style feel complete.
+            </p>
+          </div>
+          <Link to="/shop" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+            Shop all <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {CATEGORY_CARDS.map((card) => (
+            <Link
+              key={card.title}
+              to={card.to}
+              className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className="aspect-[4/5] overflow-hidden bg-gray-100">
+                <img src={card.image} alt={card.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+              </div>
+              <div className="p-5">
+                <h3 className="font-display text-xl font-bold text-gray-950">{card.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{card.description}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                  Explore <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-wrap gap-2">
           {SB_PRODUCT_TYPES.map((type) => (
-            <Link key={type.code} to={`/shop?category=${type.slug}`} className="hover:text-primary">
+            <Link
+              key={type.slug}
+              to={`/shop?category=${type.slug}`}
+              className="rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-primary hover:text-primary"
+            >
               {type.label}
             </Link>
           ))}
-          <span className="h-1 w-1 rounded-full bg-primary" />
-          <Link to="/collections" className="hover:text-primary">Collections</Link>
-          <Link to="/looks" className="hover:text-primary">Looks</Link>
         </div>
       </section>
 
-      {/* NEW ARRIVALS — balanced across the wardrobe */}
-      <section className="bg-gray-50 py-16 sm:py-24">
+      {/* Community / Lifestyle */}
+      <section className="bg-gray-950 py-16 text-white sm:py-20">
         <div className="container">
-          <div className="mb-8 flex items-end justify-between gap-4 sm:mb-10">
-            <div>
-              <p className="eyebrow mb-2 text-primary">
-                {newArrivalsPlacement?.headline || "New Arrivals"}
-              </p>
-              <h2 className="font-display text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                {newArrivals.length > 0
-                  ? newArrivalsPlacement?.body || "Fresh from the wardrobe"
-                  : "New drops are landing soon"}
-              </h2>
-              <p className="mt-2 text-sm text-gray-600">
-                Tees, vests, shirts and shorts. The latest pieces across all four categories.
-              </p>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
+            <div className="overflow-hidden rounded-[2rem] border border-white/10">
+              <img src={lifestyleImage} alt="SB community lifestyle" className="h-auto w-full object-contain" loading="lazy" />
             </div>
-            <Link
-              to={newArrivalsPlacement?.ctaHref || "/shop?sort=new"}
-              className="hidden shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-gray-900 hover:text-primary sm:inline-flex"
-            >
-              {newArrivalsPlacement?.ctaLabel || "View all"} <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5">
-              {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="animate-pulse overflow-hidden rounded-2xl border border-gray-200 bg-white">
-                  <div className="aspect-[3/4] bg-gray-100" />
-                  <div className="space-y-2 p-4">
-                    <div className="h-2.5 w-1/3 rounded bg-gray-100" />
-                    <div className="h-3 w-3/4 rounded bg-gray-100" />
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-blue-200">Made for Every Version of You</p>
+              <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+                Style for the way you actually live
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-gray-300 sm:text-base">
+                SB is built around real lifestyles. Whether you are dressing for campus, curating your own look, shaping culture, or stepping out for the weekend, there is something here for you.
+              </p>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {COMMUNITIES.map((community) => (
+                  <div key={community.title} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <h3 className="font-display text-lg font-bold text-white">{community.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-300">{community.copy}</p>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : newArrivals.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5">
-              {newArrivals.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center sm:p-12">
-              <Shirt className="mx-auto mb-4 h-10 w-10 text-primary" />
-              <p className="mx-auto max-w-md text-sm text-gray-600">
-                Message us on WhatsApp to hear about new stock first, or visit the kiosk in Blantyre.
-              </p>
-              <Button asChild className="mt-5" variant="hero">
-                <a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer">Ask About New Stock</a>
-              </Button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* THE ESSENTIAL TEE */}
-      <section className="bg-white py-16 sm:py-24">
-        <div className="container">
-          <div className="mb-8 flex items-end justify-between gap-4 sm:mb-10">
-            <div>
-              <p className="eyebrow mb-2 text-primary">The Essential Tee</p>
-              <h2 className="font-display text-3xl font-extrabold uppercase text-gray-900 sm:text-5xl">
-                {teePlacement?.headline || "The Graphic Tee"}
-              </h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-gray-600 sm:text-base">
-                {teePlacement?.body || "The piece that started the conversation."}
-              </p>
-            </div>
-            <Link
-              to={teeHref}
-              className="hidden shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-gray-900 hover:text-primary sm:inline-flex"
-            >
-              {teePlacement?.ctaLabel || "Shop T Shirts"} <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-            {heroTee ? (
-              <Link
-                to={`/product/${heroTee.id}`}
-                className="group relative col-span-1 overflow-hidden rounded-2xl bg-gray-900 sm:col-span-2"
-              >
-                <img
-                  src={heroTee.image}
-                  alt={heroTee.name}
-                  className="h-full min-h-[22rem] w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/75">The Graphic Tee</p>
-                  <h3 className="font-display text-2xl font-extrabold uppercase">{heroTee.name}</h3>
-                </div>
-              </Link>
-            ) : (
-              <div className="col-span-1 flex min-h-[22rem] items-center justify-center rounded-2xl bg-gray-900 p-8 text-center sm:col-span-2">
-                <div>
-                  <Sparkles className="mx-auto mb-4 h-10 w-10 text-white/70" />
-                  <p className="font-display text-2xl font-extrabold uppercase text-white">The Graphic Tee</p>
-                  <p className="mt-2 text-sm text-white/75">The piece that started the conversation.</p>
-                </div>
-              </div>
-            )}
-            {teeProducts.slice(heroTee ? 1 : 0, heroTee ? 4 : 3).map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
-          </div>
-
-          <div className="mt-8 flex justify-center sm:hidden">
-            <Button asChild variant="hero">
-              <Link to={teeHref}>{teePlacement?.ctaLabel || "Shop T Shirts"} <ArrowRight className="h-4 w-4" /></Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* COMPLETE THE LOOK */}
-      <section className="bg-gray-950 py-16 sm:py-24">
-        <div className="container">
-          <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="eyebrow mb-2 text-white/75">Shop the outfit</p>
-              <h2 className="font-display text-3xl font-extrabold uppercase text-white sm:text-4xl">
-                {completeLookPlacement?.headline || "Complete the Look"}
-              </h2>
-              <p className="mt-2 max-w-lg text-sm text-white/75">
-                {completeLookPlacement?.body ||
-                  "The wardrobe is made to mix. Start with one piece, build the full fit."}
-              </p>
-            </div>
-            <Link
-              to={completeLookPlacement?.ctaHref || "/looks"}
-              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-white hover:text-white/70"
-            >
-              {completeLookPlacement?.ctaLabel || (featureLook ? featureLook.title : "Explore all looks")}{" "}
-              <ArrowUpRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
-            {completeLooks.map((combination) => (
-              <div key={combination.label} className="overflow-hidden rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-                <div className="mb-4 flex items-center justify-between">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/75">Complete the Look</p>
-                  <h3 className="font-display text-lg font-extrabold uppercase text-white">{combination.label}</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {combination.items.map((product) => (
-                    <Link key={product.id} to={`/product/${product.id}`} className="group block">
-                      <div className="aspect-[3/4] overflow-hidden rounded-xl bg-white">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      </div>
-                      <p className="mt-2 truncate text-xs font-bold text-white">{product.name}</p>
-                      <p className="text-[11px] text-white/75">MK {product.price.toLocaleString("en-US")}</p>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {suggestions.length > 0 && (
-            <div className="mt-10">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-white/75">
-                Pairs well with the essential tee
-              </p>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5">
-                {suggestions.map((product, index) => (
-                  <ProductCard key={product.id} product={product} index={index} />
                 ))}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </section>
 
-      {/* STREET CAMPAIGN */}
-      <section className="bg-white py-16 sm:py-24">
+      {/* Featured products */}
+      <section className="container py-16 sm:py-20">
+        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">Featured Picks</p>
+            <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
+              Fresh finds, ready to wear
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
+              Discover popular picks and new arrivals selected from the SB collection.
+            </p>
+          </div>
+          <Link to="/shop?sort=new" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+            View new arrivals <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] animate-pulse rounded-2xl bg-gray-100" />
+            ))}
+          </div>
+        ) : featuredProducts.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+            {featuredProducts.map((product, index) => (
+              <ProductCard key={product.id} product={product} index={index} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-14 text-center">
+            <p className="font-display text-xl font-bold text-gray-900">New products are coming soon</p>
+            <p className="mt-2 text-sm text-gray-600">Check back shortly for fresh arrivals from SB.</p>
+            <Button asChild className="mt-6">
+              <Link to="/shop">Browse Shop</Link>
+            </Button>
+          </div>
+        )}
+      </section>
+
+      {/* Editorial / value */}
+      <section className="border-y border-gray-200 bg-[#f7f8fb] py-16 sm:py-20">
         <div className="container">
-          <div className="overflow-hidden rounded-2xl bg-gray-900">
-            <img
-              src={streetImage}
-              alt="Streetwear lifestyle campaign in Blantyre"
-              className="block h-auto w-full"
-              loading="lazy"
-            />
-            <div className="flex flex-col gap-5 px-5 py-8 sm:flex-row sm:items-end sm:justify-between sm:px-10 sm:py-10">
-              <div className="max-w-2xl">
-                <p className="eyebrow mb-3 text-primary">Campaign</p>
-                <h2 className="font-display text-3xl font-extrabold uppercase leading-tight text-gray-900 sm:text-4xl lg:text-5xl">
-                  {streetPlacement?.headline || streetCampaign?.headline || "Built for the Street."}
-                </h2>
-                <p className="mt-4 text-sm leading-relaxed text-gray-600 sm:text-base">
-                  {streetPlacement?.body ||
-                    streetCampaign?.description ||
-                    "From the block to the stage, your style is your voice. We make streetwear for the Hip Hop lifestyle so you can show up confident, every day."}
-                </p>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">The SB Experience</p>
+              <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
+                More than a store. A style destination.
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-gray-600 sm:text-base">
+                SB brings together urban fashion, lifestyle essentials, and everyday confidence. We curate pieces that help you look good, feel comfortable, and move through your day your way.
+              </p>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {VALUES.map(({ icon: Icon, title, copy }) => (
+                  <div key={title} className="rounded-2xl border border-gray-200 bg-white p-5">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="mt-4 font-display text-lg font-bold text-gray-950">{title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-600">{copy}</p>
+                  </div>
+                ))}
               </div>
-              <div className="flex flex-col gap-3 sm:shrink-0 sm:flex-row">
-                <Button asChild variant="hero" size="lg">
-                  <Link to="/stories">Read the stories <ArrowRight className="h-4 w-4" /></Link>
-                </Button>
-                <Button asChild size="lg" variant="outline">
-                  <Link to={streetHref}>{streetPlacement?.ctaLabel || streetCampaign?.ctaLabel || "Shop the wardrobe"}</Link>
-                </Button>
-              </div>
+            </div>
+            <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white">
+              <img src={editorialImage} alt="SB urban style editorial" className="h-auto w-full object-contain" loading="lazy" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* SHOPPING ASSURANCE */}
-      <section className="border-t border-gray-200 bg-gray-50 py-14 sm:py-20">
-        <div className="container">
-          <div className="mb-6 max-w-2xl">
-            <p className="eyebrow mb-2 text-primary">Shop With Confidence</p>
-            <h2 className="font-display text-2xl font-extrabold text-gray-900 sm:text-3xl">
-              A better experience from checkout to delivery.
-            </h2>
+      {/* Closing CTA */}
+      <section className="container py-16 sm:py-20">
+        <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white sm:px-10 sm:py-16">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-blue-100">SB</p>
+          <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight sm:text-5xl">
+            Your everyday style starts here.
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-blue-50 sm:text-base">
+            Shop the latest drops, discover essentials, and build a wardrobe that moves with you.
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <Button asChild size="lg" className="h-12 bg-white px-7 text-primary hover:bg-blue-50">
+              <Link to="/shop">Shop the Collection</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-12 border-white/40 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white">
+              <Link to="/contact">Contact Us</Link>
+            </Button>
           </div>
-          <StorefrontTrustStrip />
+          <div className="mt-6 flex items-center justify-center gap-2 text-xs text-blue-100">
+            <RefreshCw className="h-4 w-4" />
+            <span>Need help? We are here on WhatsApp and in store.</span>
+          </div>
         </div>
       </section>
     </div>

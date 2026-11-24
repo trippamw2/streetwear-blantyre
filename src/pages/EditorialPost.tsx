@@ -107,7 +107,7 @@ const EditorialPost = () => {
 
   return (
     <>
-      <SEO title={`${story.title} | Wear What Speaks`} description={story.excerpt || story.title} />
+      <SEO title={`${story.title} | SB`} description={story.excerpt || story.title} path={`/stories/${story.slug}`} />
 
       <article className="min-h-screen bg-white">
         {/* Hero Image */}

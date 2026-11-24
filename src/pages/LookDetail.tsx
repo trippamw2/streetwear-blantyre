@@ -47,8 +47,8 @@ const LookDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <SEO
-          title="Look Not Found | Wear What Speaks"
-          description="We couldn't find that look. Explore the current looks and shoppable edits instead."
+          title="Look Not Found | SB"
+          description="We couldn't find that look. Explore current SB looks and shoppable edits instead."
         />
         <div className="container flex min-h-[65vh] flex-col items-center justify-center py-20 text-center">
           <p className="eyebrow mb-3 text-primary">404 · Look</p>
@@ -72,11 +72,11 @@ const LookDetail = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title={`${look.title} | Wear What Speaks`}
+        title={`${look.title} | SB`}
         description={
           look.description ||
           look.subtitle ||
-          `Shop the ${look.title} look from Wear What Speaks. Every piece in the edit is available to buy.`
+          `Shop the ${look.title} look from SB. Every piece in the edit is available to buy.`
         }
         path={`/looks/${look.slug}`}
         image={heroImage || undefined}

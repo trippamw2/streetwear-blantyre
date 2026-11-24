@@ -18,10 +18,10 @@ interface SEOProps {
   jsonLd?: SchemaObject | SchemaObject[];
 }
 
-const SITE_NAME = "Wear What Speaks";
+const SITE_NAME = "SB";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "Streetwear built for the Hip Hop and street lifestyle. Shop tees, vests, shirts and shorts from Blantyre, Malawi. Wear What Speaks.";
-const DEFAULT_IMAGE = "https://placehold.co/600x600/0f172a/ffffff?text=Wear+What+Speaks";
+const DEFAULT_DESC = "SB is your urban streetwear and lifestyle one-stop store in Blantyre, Malawi. Everything your everyday style needs, in one place.";
+const DEFAULT_IMAGE = "https://www.wearsb.com/images/sb/home-menu.jpg";
 
 const BRAND_META: Record<BrandSlug, { siteName: string; siteUrl: string; image: string }> = {
   sb: { siteName: SITE_NAME, siteUrl: SITE_URL, image: DEFAULT_IMAGE },
@@ -210,73 +210,73 @@ export const SEO = ({
 
 export const defaultSEO = {
   home: {
-    title: "Wear What Speaks | Hip Hop Streetwear",
+    title: "SB | Your Style. Your Everyday.",
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop Streetwear | Tees, Vests, Shirts & Shorts",
+    title: "Shop All | SB",
     description:
-      "Find the pieces that match your voice. Shop tees, vests, short sleeve shirts and shorts made for the Hip Hop and street lifestyle.",
+      "Discover urban streetwear and lifestyle essentials at SB. Shop clothing, footwear, accessories, and everyday style pieces in Malawi.",
   },
   combos: {
-    title: "Kits & Bundles | Wear What Speaks",
+    title: "Bundles & Looks | SB",
     description:
-      "Get a full look in one move. Curated streetwear kits with better value and one delivery. Free delivery over MK 50,000.",
+      "Build a complete look with curated SB bundles and everyday style combinations.",
   },
   about: {
-    title: "Our Story | Wear What Speaks",
+    title: "About SB | Your Style. Your Everyday.",
     description:
-      "We make streetwear for people who live the Hip Hop and street lifestyle. Built in Blantyre, Malawi for everyday confidence.",
+      "SB is a modern urban streetwear and lifestyle store in Blantyre, Malawi. We curate style for every version of you.",
   },
   contact: {
-    title: "Contact | Wear What Speaks",
+    title: "Contact SB | Support & Store Info",
     description:
-      "Need help with sizing, stock or delivery? Message us on WhatsApp for fast support. Delivery across Malawi and store pickup in Blantyre.",
+      "Need help with sizing, stock, orders, or delivery? Contact SB on WhatsApp or visit us in Blantyre, Malawi.",
   },
   auth: {
-    title: "Sign In | Wear What Speaks",
-    description: "Sign in to check out faster, track your orders and save your favourite pieces.",
+    title: "Account | SB",
+    description: "Sign in to manage your account, track orders, and shop faster at SB.",
   },
   checkout: {
-    title: "Checkout | Wear What Speaks",
+    title: "Checkout | SB",
     description:
-      "Complete your order securely with Airtel Money, TNM Mpamba, and bank transfer. Delivery across Malawi.",
+      "Complete your SB order securely with mobile money, card, or supported payment options. Delivery across Malawi.",
   },
   orders: {
-    title: "My Orders | Wear What Speaks",
-    description: "Track your orders and deliveries.",
+    title: "My Orders | SB",
+    description: "Track your SB orders and delivery updates.",
   },
   rewards: {
-    title: "Rewards | Wear What Speaks",
+    title: "Rewards | SB",
     description:
-      "Earn points on every purchase, redeem them for discounts and refer friends.",
+      "Earn rewards on every SB purchase and redeem them for future orders.",
   },
   compare: {
-    title: "Compare Pieces | Wear What Speaks",
-    description: "Compare pieces side by side and find the fit that feels like you.",
+    title: "Compare | SB",
+    description: "Compare SB pieces side by side and find the right fit for your style.",
   },
   faq: {
-    title: "FAQ | Wear What Speaks",
+    title: "FAQ | SB",
     description:
-      "Answers about ordering, delivery, sizing, payments, returns and quality cover.",
+      "Answers about ordering, delivery, sizing, payments, returns, and support at SB.",
   },
   terms: {
-    title: "Terms & Conditions | Wear What Speaks",
-    description: "The terms and conditions that apply when you shop with us.",
+    title: "Terms & Conditions | SB",
+    description: "The terms and conditions that apply when you shop with SB.",
   },
   privacy: {
-    title: "Privacy Policy | Wear What Speaks",
-    description: "How we collect, use and protect your personal information.",
+    title: "Privacy Policy | SB",
+    description: "How SB collects, uses, and protects your personal information.",
   },
   returns: {
-    title: "Returns & Exchanges | Wear What Speaks",
+    title: "Returns & Exchanges | SB",
     description:
-      "Our clothing returns and size exchange policy. Unworn items with tags can be returned within 14 days.",
+      "SB returns and exchange policy. Learn how to request an exchange or return eligible items.",
   },
   warranty: {
-    title: "Quality Cover | Wear What Speaks",
+    title: "Quality Cover | SB",
     description:
-      "Our 30 day quality cover on clothing faults. We repair, replace or refund faulty items.",
+      "SB quality cover for eligible product faults. We support repairs, replacements, or refunds where applicable.",
   },
   lfPrivacy: {
     title: "Privacy Policy | Lake Fresh Fish Mart",
@@ -294,13 +294,13 @@ export const defaultSEO = {
       "How Lake Fresh handles refunds, replacements and delivery problems for fresh fish orders in Blantyre, Malawi.",
   },
   giftPacks: {
-    title: "Gift Packs | Wear What Speaks",
+    title: "Gift Packs | SB",
     description:
-      "Gift a curated pack with a personal message and delivery in Blantyre.",
+      "Gift curated style from SB with a personal message and delivery options.",
   },
   scheduledGift: {
-    title: "Schedule a Gift | Wear What Speaks",
+    title: "Schedule a Gift | SB",
     description:
-      "Send a piece for any occasion. Add a personal message and choose the delivery date.",
+      "Send an SB gift for any occasion. Add a personal message and choose the delivery date.",
   },
 };

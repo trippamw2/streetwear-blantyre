@@ -131,8 +131,9 @@ const Looks = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO
-        title="Looks | Wear What Speaks"
-        description="Shoppable streetwear looks from Wear What Speaks. See the pieces, the styling notes and the full look, then add what you love to your bag."
+        title="Looks | SB"
+        description="Shoppable style looks from SB. See the full outfit, explore each piece, and shop the look."
+        path="/looks"
       />
 
       <section className="border-b border-gray-200 bg-gray-50">
@@ -145,7 +146,7 @@ const Looks = () => {
               Looks
             </h1>
             <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
-              Full fits for the Hip Hop and street lifestyle. Every look is built from pieces you can wear, style your way, and buy right now.
+              Full fits for everyday urban life. Every look is built from pieces you can wear, style your way, and shop right now.
             </p>
           </div>
         </div>
