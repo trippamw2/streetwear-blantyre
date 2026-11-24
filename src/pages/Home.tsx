@@ -1,241 +1,198 @@
 ﻿import { Link } from "react-router-dom";
-import { ArrowRight, Search, ShieldCheck, Sparkles, Truck, RefreshCw } from "lucide-react";
+import { ArrowRight, Check, Clock3, ShieldCheck, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
-import { SEO, defaultSEO } from "@/components/SEO";
+import { SEO } from "@/components/SEO";
 import { useProducts } from "@/hooks/useProducts";
 import { SB_PRODUCT_TYPES } from "@/data/sbArchitecture";
 
 const heroImage = "/images/sb/home-menu.jpg";
 const lifestyleImage = "/images/sb/blue-streetwear-squad.png";
-const editorialImage = "/images/sb/urban-blue-style-duo.png";
+const detailImage = "/images/sb/urban-blue-style-duo.png";
 
-const CATEGORY_CARDS = [
+const categoryImages: Record<string, string> = {
+  "t-shirts": "/images/sb/home-street.jpg",
+  vests: "/images/sb/look-01.jpg",
+  "short-sleeve-shirts": "/images/sb/urban-blue-style-duo.png",
+  shorts: "/images/sb/street-campaign.jpg",
+};
+
+const planSteps = [
   {
-    title: "Clothing",
-    description: "Tees, shirts, vests, shorts and everyday layers.",
-    to: "/shop",
-    image: "/images/sb/home-street.jpg",
+    title: "Choose your fit",
+    copy: "Pick from tees, vests, shirts, and shorts designed for everyday wear.",
   },
   {
-    title: "Footwear",
-    description: "Sneakers and shoes made for movement and style.",
-    to: "/shop?search=shoes",
-    image: "/images/sb/look-01.jpg",
+    title: "Order in minutes",
+    copy: "Simple checkout, clear sizing, and support when you need it.",
   },
   {
-    title: "Accessories",
-    description: "Bags, caps, and finishing touches that complete the fit.",
-    to: "/shop?search=accessories",
-    image: "/images/sb/street-campaign.jpg",
-  },
-  {
-    title: "Lifestyle Essentials",
-    description: "Curated everyday picks for your routine and your vibe.",
-    to: "/collections",
-    image: "/images/sb/hero-campaign.jpg",
+    title: "Wear it your way",
+    copy: "Comfortable, quality streetwear that fits campus, city, and weekend life.",
   },
 ];
 
-const COMMUNITIES = [
-  {
-    title: "Campus Trendsetters",
-    copy: "Clean fits, easy layers, and standout essentials for class, hangouts, and everyday campus life.",
-  },
-  {
-    title: "Thrift Curators",
-    copy: "Unique pieces, smart styling, and character-rich finds for people who love making style personal.",
-  },
-  {
-    title: "Culture Shapers",
-    copy: "Bold looks for creatives, tastemakers, and anyone shaping the vibe around them.",
-  },
-  {
-    title: "Weekend Flexers",
-    copy: "Relaxed, confident outfits for off-duty days, linkups, and moments that call for effortless style.",
-  },
-];
-
-const VALUES = [
-  {
-    icon: Sparkles,
-    title: "Curated Style",
-    copy: "A thoughtful selection of pieces that work together across your lifestyle.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Quality You Can Trust",
-    copy: "Products chosen for everyday wear, comfort, and lasting value.",
-  },
-  {
-    icon: Search,
-    title: "Easy Shopping",
-    copy: "Simple discovery, clear product details, and a smooth path from browse to checkout.",
-  },
-  {
-    icon: Truck,
-    title: "Reliable Delivery",
-    copy: "Convenient delivery across Malawi with clear updates and support.",
-  },
+const proofPoints = [
+  { icon: ShieldCheck, title: "Quality you can feel", copy: "Fabric, fit, and finish chosen for everyday confidence." },
+  { icon: Clock3, title: "Convenience first", copy: "Easy browsing, quick checkout, and helpful local support." },
+  { icon: Truck, title: "Delivered across Malawi", copy: "Reliable delivery from Blantyre to your doorstep." },
 ];
 
 const Home = () => {
   const { products, loading } = useProducts();
-
-  const featured = products
-    .filter((p) => p.is_featured || p.is_best_seller || p.is_new_arrival)
-    .slice(0, 8);
-  const fallbackFeatured = products.slice(0, 8);
-  const featuredProducts = featured.length > 0 ? featured : fallbackFeatured;
+  const featuredProducts = (products.filter((p) => p.is_featured || p.is_new_arrival || p.is_best_seller).length > 0
+    ? products.filter((p) => p.is_featured || p.is_new_arrival || p.is_best_seller)
+    : products
+  ).slice(0, 8);
 
   return (
-    <div className="bg-white">
-      <SEO {...defaultSEO.home} path="/" />
+    <div className="bg-white text-gray-950">
+      <SEO
+        title="SB | Your Style. Your Everyday."
+        description="SB makes everyday streetwear simple. Shop quality tees, vests, shirts, and shorts in Malawi, made for comfort, lifestyle, and convenience."
+        path="/"
+      />
 
-      {/* Hero */}
-      <section className="border-b border-gray-200 bg-[#f7f8fb]">
-        <div className="container py-8 sm:py-12 lg:py-16">
-          <div className="grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12">
-            <div className="order-2 max-w-xl lg:order-1">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-primary">SB Urban Lifestyle Store</p>
-              <h1 className="font-display text-4xl font-extrabold leading-[0.95] tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
-                Your Style.
-                <span className="block text-primary">Your Everyday.</span>
-              </h1>
-              <p className="mt-5 max-w-lg text-base leading-relaxed text-gray-600 sm:text-lg">
-                Everything your everyday style needs, in one place. Discover curated streetwear and lifestyle essentials for campus, city, weekends, and every version of you.
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg" className="h-12 px-7 text-sm font-semibold">
-                  <Link to="/shop">
-                    Shop Now <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="h-12 border-gray-300 px-7 text-sm font-semibold text-gray-900 hover:bg-gray-100">
-                  <Link to="/collections">Explore Collections</Link>
-                </Button>
-              </div>
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium uppercase tracking-[0.14em] text-gray-500">
-                <span>Curated for everyday life</span>
-                <span>Blantyre, Malawi</span>
-                <span>Delivery nationwide</span>
-              </div>
+      {/* Hero - StoryBrand: character + problem/desire */}
+      <section className="relative overflow-hidden border-b border-gray-200 bg-[#f5f7fa]">
+        <div className="container grid items-center gap-10 py-10 sm:py-14 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14 lg:py-20">
+          <div className="max-w-xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-primary">Streetwear Clothing | Blantyre, Malawi</p>
+            <h1 className="mt-5 font-display text-[2.75rem] font-extrabold leading-[0.92] tracking-tight text-gray-950 sm:text-6xl lg:text-7xl">
+              Look good.
+              <span className="block text-primary">Feel ready.</span>
+            </h1>
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-gray-600 sm:text-lg">
+              Finding clothes that feel right shouldn't be complicated. SB makes everyday streetwear simple with quality tees, vests, shirts, and shorts built for your lifestyle.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Button asChild size="lg" className="h-12 rounded-none px-8 text-sm font-semibold uppercase tracking-[0.12em]">
+                <Link to="/shop">Shop the Collection <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+              <Button asChild variant="ghost" size="lg" className="h-12 rounded-none px-8 text-sm font-semibold uppercase tracking-[0.12em] text-gray-900 hover:bg-gray-100">
+                <Link to="/collections">New Arrivals</Link>
+              </Button>
             </div>
+            <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs text-gray-500">
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Quality fabrics</span>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Everyday comfort</span>
+              <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Fair everyday prices</span>
+            </div>
+          </div>
 
-            <div className="order-1 lg:order-2">
-              <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-sm">
-                <img
-                  src={heroImage}
-                  alt="SB urban streetwear campaign"
-                  className="block h-auto w-full object-contain"
-                  loading="eager"
-                />
-              </div>
+          <div className="relative">
+            <div className="overflow-hidden bg-gray-100">
+              <img src={heroImage} alt="SB streetwear clothing" className="block h-auto w-full object-contain" loading="eager" />
+            </div>
+            <div className="absolute bottom-4 left-4 bg-white/95 px-4 py-3 shadow-sm backdrop-blur sm:bottom-6 sm:left-6">
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-gray-500">The SB Standard</p>
+              <p className="mt-1 text-sm font-semibold text-gray-900">Streetwear made for real life.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Category discovery */}
+      {/* Guide / value proposition */}
+      <section className="border-b border-gray-200">
+        <div className="container grid gap-8 py-16 sm:py-20 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <div className="overflow-hidden bg-gray-100">
+            <img src={lifestyleImage} alt="People wearing SB streetwear" className="block h-auto w-full object-contain" loading="lazy" />
+          </div>
+          <div className="max-w-xl lg:pl-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-primary">Why SB</p>
+            <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">
+              Clothes that keep up with your day.
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-gray-600">
+              You want to look put together without overthinking it. SB gives you streetwear essentials that feel comfortable, look sharp, and fit your routine, from campus runs to city moves and weekend plans.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-gray-600">
+              We focus on the clothing you actually wear: <span className="font-semibold text-gray-900">tees, vests, shirts, and shorts</span>. No noise, just quality pieces at everyday prices.
+            </p>
+            <div className="mt-8">
+              <Button asChild variant="outline" className="h-11 rounded-none border-gray-300 px-6 text-sm font-semibold uppercase tracking-[0.1em]">
+                <Link to="/about">Our Story <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categories - clothing only */}
       <section className="container py-16 sm:py-20">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">Shop by Category</p>
-            <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
-              Find what fits your day
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
-              From everyday clothing to finishing touches, explore the essentials that make your style feel complete.
-            </p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-primary">Shop by Category</p>
+            <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">The essentials.</h2>
+            <p className="mt-4 text-base leading-relaxed text-gray-600">Four staples. Endless ways to wear them.</p>
           </div>
-          <Link to="/shop" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-            Shop all <ArrowRight className="h-4 w-4" />
+          <Link to="/shop" className="inline-flex items-center gap-2 text-sm font-semibold text-gray-900 underline decoration-gray-300 underline-offset-4 hover:text-primary">
+            View all products <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {CATEGORY_CARDS.map((card) => (
-            <Link
-              key={card.title}
-              to={card.to}
-              className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="aspect-[4/5] overflow-hidden bg-gray-100">
-                <img src={card.image} alt={card.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {SB_PRODUCT_TYPES.map((type) => (
+            <Link key={type.slug} to={`/shop?category=${type.slug}`} className="group relative overflow-hidden bg-gray-100">
+              <div className="aspect-[3/4] overflow-hidden">
+                <img
+                  src={categoryImages[type.slug] || "/images/sb/home-street.jpg"}
+                  alt={type.label}
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  loading="lazy"
+                />
               </div>
-              <div className="p-5">
-                <h3 className="font-display text-xl font-bold text-gray-950">{card.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">{card.description}</p>
-                <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                  Explore <ArrowRight className="h-4 w-4" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/75">SB Clothing</p>
+                <h3 className="mt-2 font-display text-2xl font-bold">{type.label}</h3>
+                <span className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-white/90">
+                  Shop now <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>
               </div>
             </Link>
           ))}
         </div>
-
-        <div className="mt-8 flex flex-wrap gap-2">
-          {SB_PRODUCT_TYPES.map((type) => (
-            <Link
-              key={type.slug}
-              to={`/shop?category=${type.slug}`}
-              className="rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-primary hover:text-primary"
-            >
-              {type.label}
-            </Link>
-          ))}
-        </div>
       </section>
 
-      {/* Community / Lifestyle */}
+      {/* Plan */}
       <section className="bg-gray-950 py-16 text-white sm:py-20">
         <div className="container">
-          <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
-            <div className="overflow-hidden rounded-[2rem] border border-white/10">
-              <img src={lifestyleImage} alt="SB community lifestyle" className="h-auto w-full object-contain" loading="lazy" />
-            </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-blue-200">Made for Every Version of You</p>
-              <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-                Style for the way you actually live
-              </h2>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-gray-300 sm:text-base">
-                SB is built around real lifestyles. Whether you are dressing for campus, curating your own look, shaping culture, or stepping out for the weekend, there is something here for you.
-              </p>
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                {COMMUNITIES.map((community) => (
-                  <div key={community.title} className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                    <h3 className="font-display text-lg font-bold text-white">{community.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-300">{community.copy}</p>
-                  </div>
-                ))}
+          <div className="max-w-2xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-200">How it works</p>
+            <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-5xl">Getting dressed should be easy.</h2>
+          </div>
+          <div className="mt-10 grid gap-px bg-white/10 sm:grid-cols-3">
+            {planSteps.map((step, i) => (
+              <div key={step.title} className="bg-gray-950 p-6 sm:p-8">
+                <p className="text-sm font-semibold text-blue-200">0{i + 1}</p>
+                <h3 className="mt-4 font-display text-xl font-bold">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-300">{step.copy}</p>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Featured products */}
+      {/* Featured products - real DB */}
       <section className="container py-16 sm:py-20">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">Featured Picks</p>
-            <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
-              Fresh finds, ready to wear
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">
-              Discover popular picks and new arrivals selected from the SB collection.
+            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-primary">Featured</p>
+            <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">Ready when you are.</h2>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-600">
+              Popular picks and new arrivals from the latest SB collection.
             </p>
           </div>
-          <Link to="/shop?sort=new" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-            View new arrivals <ArrowRight className="h-4 w-4" />
+          <Link to="/shop?sort=new" className="inline-flex items-center gap-2 text-sm font-semibold text-gray-900 underline decoration-gray-300 underline-offset-4 hover:text-primary">
+            Shop new arrivals <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="aspect-[3/4] animate-pulse rounded-2xl bg-gray-100" />
+              <div key={i} className="aspect-[3/4] animate-pulse bg-gray-100" />
             ))}
           </div>
         ) : featuredProducts.length > 0 ? (
@@ -245,68 +202,71 @@ const Home = () => {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-14 text-center">
-            <p className="font-display text-xl font-bold text-gray-900">New products are coming soon</p>
-            <p className="mt-2 text-sm text-gray-600">Check back shortly for fresh arrivals from SB.</p>
-            <Button asChild className="mt-6">
+          <div className="border border-dashed border-gray-300 bg-gray-50 px-6 py-14 text-center">
+            <p className="font-display text-2xl font-bold text-gray-900">New pieces are landing soon.</p>
+            <p className="mt-2 text-sm text-gray-600">In the meantime, explore the full collection.</p>
+            <Button asChild className="mt-6 rounded-none px-8">
               <Link to="/shop">Browse Shop</Link>
             </Button>
           </div>
         )}
       </section>
 
-      {/* Editorial / value */}
-      <section className="border-y border-gray-200 bg-[#f7f8fb] py-16 sm:py-20">
-        <div className="container">
-          <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">The SB Experience</p>
-              <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
-                More than a store. A style destination.
-              </h2>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-gray-600 sm:text-base">
-                SB brings together urban fashion, lifestyle essentials, and everyday confidence. We curate pieces that help you look good, feel comfortable, and move through your day your way.
-              </p>
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                {VALUES.map(({ icon: Icon, title, copy }) => (
-                  <div key={title} className="rounded-2xl border border-gray-200 bg-white p-5">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="mt-4 font-display text-lg font-bold text-gray-950">{title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-600">{copy}</p>
+      {/* Proof / quality-convenience */}
+      <section className="border-y border-gray-200 bg-[#f5f7fa]">
+        <div className="container grid gap-10 py-16 sm:py-20 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <div className="max-w-xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-primary">The SB Promise</p>
+            <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">
+              Premium feel. Everyday ease.
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-gray-600">
+              Good style shouldn't feel out of reach or hard to buy. SB brings you quality streetwear, a simple shopping experience, and dependable local delivery, all at prices made for everyday life.
+            </p>
+            <div className="mt-8 space-y-5">
+              {proofPoints.map(({ icon: Icon, title, copy }) => (
+                <div key={title} className="flex gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center bg-white text-primary shadow-sm">
+                    <Icon className="h-5 w-5" />
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-950">{title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-gray-600">{copy}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white">
-              <img src={editorialImage} alt="SB urban style editorial" className="h-auto w-full object-contain" loading="lazy" />
-            </div>
+          </div>
+          <div className="overflow-hidden bg-gray-100">
+            <img src={detailImage} alt="SB clothing detail and style" className="block h-auto w-full object-contain" loading="lazy" />
           </div>
         </div>
       </section>
 
-      {/* Closing CTA */}
+      {/* Closing CTA - success */}
       <section className="container py-16 sm:py-20">
-        <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white sm:px-10 sm:py-16">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-blue-100">SB</p>
-          <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight sm:text-5xl">
-            Your everyday style starts here.
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-blue-50 sm:text-base">
-            Shop the latest drops, discover essentials, and build a wardrobe that moves with you.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Button asChild size="lg" className="h-12 bg-white px-7 text-primary hover:bg-blue-50">
-              <Link to="/shop">Shop the Collection</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="h-12 border-white/40 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white">
-              <Link to="/contact">Contact Us</Link>
-            </Button>
+        <div className="grid overflow-hidden bg-primary text-white lg:grid-cols-[1fr_auto]">
+          <div className="px-6 py-12 sm:px-10 sm:py-16 lg:px-14">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-100">SB Streetwear</p>
+            <h2 className="mt-4 max-w-2xl font-display text-3xl font-extrabold tracking-tight sm:text-5xl">
+              Your everyday style, sorted.
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-blue-50">
+              Skip the stress. Find tees, vests, shirts, and shorts you’ll actually want to wear, made for comfort, quality, and real life.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="lg" className="h-12 rounded-none bg-white px-8 text-sm font-semibold uppercase tracking-[0.12em] text-primary hover:bg-blue-50">
+                <Link to="/shop">Shop All Clothing</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-12 rounded-none border-white/40 bg-transparent px-8 text-sm font-semibold uppercase tracking-[0.12em] text-white hover:bg-white/10 hover:text-white">
+                <Link to="/contact">Talk to Us</Link>
+              </Button>
+            </div>
           </div>
-          <div className="mt-6 flex items-center justify-center gap-2 text-xs text-blue-100">
-            <RefreshCw className="h-4 w-4" />
-            <span>Need help? We are here on WhatsApp and in store.</span>
+          <div className="hidden items-end justify-end p-10 lg:flex">
+            <p className="max-w-[14rem] text-right text-sm leading-relaxed text-blue-100">
+              Quality streetwear.<br />Simple shopping.<br />Everyday prices.
+            </p>
           </div>
         </div>
       </section>

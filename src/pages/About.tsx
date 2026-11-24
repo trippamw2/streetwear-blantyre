@@ -38,10 +38,10 @@ const About = () => (
             Your style, your everyday.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-gray-600 sm:text-lg">
-            SB is a modern urban streetwear and lifestyle store built for people who want style that fits real life. We bring together clothing, footwear, accessories, and everyday essentials in one place, curated for confidence, comfort, and self expression.
+            SB is a streetwear clothing brand built for real life. We focus on the essentials you actually wear: tees, vests, shirts, and shorts made for comfort, quality, and everyday confidence.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-gray-600 sm:text-base">
-            We are not here for one look or one lane. SB is for campus days, city moves, creative moments, weekend plans, and everything in between.
+            Our goal is simple: make good style easy to find, easy to buy, and easy to wear, whether you're on campus, in the city, or out for the weekend.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">

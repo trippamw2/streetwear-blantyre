@@ -44,6 +44,7 @@ export const SB_PRODUCT_TYPE_LABELS: Record<string, string> = {
   JACKETS: "Jackets",
   TROUSERS: "Trousers",
   CAPS: "Caps",
+  // Keep enum compatibility; SB storefront is clothing-only (Tees, Vests, Shirts, Shorts).
   ACCESSORIES: "Accessories",
   SETS: "Sets",
 };

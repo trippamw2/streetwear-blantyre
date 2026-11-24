@@ -20,7 +20,7 @@ interface SEOProps {
 
 const SITE_NAME = "SB";
 const SITE_URL = "https://www.wearsb.com";
-const DEFAULT_DESC = "SB is your urban streetwear and lifestyle one-stop store in Blantyre, Malawi. Everything your everyday style needs, in one place.";
+const DEFAULT_DESC = "SB is streetwear clothing made for everyday life. Shop quality tees, vests, shirts, and shorts in Malawi with simple shopping and reliable delivery.";
 const DEFAULT_IMAGE = "https://www.wearsb.com/images/sb/home-menu.jpg";
 
 const BRAND_META: Record<BrandSlug, { siteName: string; siteUrl: string; image: string }> = {
@@ -214,9 +214,9 @@ export const defaultSEO = {
     description: DEFAULT_DESC,
   },
   shop: {
-    title: "Shop All | SB",
+    title: "Shop Clothing | SB",
     description:
-      "Discover urban streetwear and lifestyle essentials at SB. Shop clothing, footwear, accessories, and everyday style pieces in Malawi.",
+      "Shop SB streetwear clothing in Malawi. Find quality tees, vests, shirts, and shorts made for comfort, lifestyle, and everyday wear.",
   },
   combos: {
     title: "Bundles & Looks | SB",
@@ -224,9 +224,9 @@ export const defaultSEO = {
       "Build a complete look with curated SB bundles and everyday style combinations.",
   },
   about: {
-    title: "About SB | Your Style. Your Everyday.",
+    title: "About SB | Streetwear for Everyday Life",
     description:
-      "SB is a modern urban streetwear and lifestyle store in Blantyre, Malawi. We curate style for every version of you.",
+      "SB makes everyday streetwear simple. We focus on quality tees, vests, shirts, and shorts designed for comfort, lifestyle, and convenience in Malawi.",
   },
   contact: {
     title: "Contact SB | Support & Store Info",

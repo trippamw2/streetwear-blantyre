@@ -346,7 +346,7 @@ const ProductDetail = () => {
           description={
             product.culture_story ||
             product.benefit ||
-            "Discover curated urban streetwear and lifestyle essentials at SB."
+            "Quality streetwear clothing from SB. Shop tees, vests, shirts, and shorts made for everyday comfort and style."
           }
           type="product"
           path={"/product/" + product.id}

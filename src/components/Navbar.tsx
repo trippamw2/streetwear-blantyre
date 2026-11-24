@@ -151,7 +151,7 @@ export const Navbar = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for clothing, shoes, accessories..."
+              placeholder="Search tees, vests, shirts, shorts..."
               className="flex-1 bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400"
             />
             {searchQuery && (
