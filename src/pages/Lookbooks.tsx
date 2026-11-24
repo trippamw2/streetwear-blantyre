@@ -45,7 +45,7 @@ const Lookbooks = () => {
 
   return (
     <>
-      <SEO title="Lookbooks | Wear What Speaks" description="Curated collections. Editorial vision. The culture, styled." />
+      <SEO title="Lookbooks | SB" description="Curated collections. Editorial vision. The culture, styled." />
 
       <div className="min-h-screen bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">

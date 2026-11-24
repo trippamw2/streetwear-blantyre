@@ -97,7 +97,7 @@ const LookbookDetail = () => {
 
   return (
     <>
-      <SEO title={`${lookbook.title} | Wear What Speaks`} description={lookbook.description || lookbook.title} />
+      <SEO title={`${lookbook.title} | SB`} description={lookbook.description || lookbook.title} />
 
       <div className="min-h-screen bg-white">
         {/* Hero */}

@@ -19,7 +19,7 @@ const Verify = () => {
   const [registered, setRegistered] = useState(false);
 
   useEffect(() => {
-    document.title = "Verify Product | Wear What Speaks";
+    document.title = "Verify Product | SB";
   }, []);
 
   // Log scan on successful product load
@@ -67,7 +67,7 @@ const Verify = () => {
     if (navigator.share) {
       await navigator.share({
         title: `Verify: ${product?.product_name}`,
-        text: `Authentic Wear What Speaks product, ${product?.product_name}`,
+        text: `Authentic SB product, ${product?.product_name}`,
         url: window.location.href,
       });
     } else {
@@ -103,7 +103,7 @@ const Verify = () => {
             Authentication Failed
           </h1>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            This product cannot be verified by Wear What Speaks.
+            This product cannot be verified by SB.
             The Product ID or Serial Number does not exist in our database.
           </p>
           <p className="text-sm text-gray-600 mb-8">
@@ -121,7 +121,7 @@ const Verify = () => {
               to="/"
               className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
             >
-              Return to Wear What Speaks
+              Return to SB
             </Link>
           </div>
         </motion.div>
@@ -145,7 +145,7 @@ const Verify = () => {
             Product Retired
           </h1>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            This Wear What Speaks product has been retired from our active collection.
+            This SB product has been retired from our active collection.
           </p>
           <div className="bg-gray-50 rounded-2xl p-4 mb-6">
             <p className="text-sm text-gray-600 font-medium">{product.product_name}</p>
@@ -193,7 +193,7 @@ const Verify = () => {
             />
           </div>
           <h1 className="font-display text-2xl font-bold text-gray-900 mt-4 mb-2">
-            Authentic Wear What Speaks Product
+            Authentic SB Product
           </h1>
           <p className="text-sm text-gray-600">Verified and authenticated</p>
         </motion.div>
@@ -416,7 +416,7 @@ const Verify = () => {
         {/* Footer */}
         <div className="text-center pb-8">
           <p className="text-xs text-gray-600">
-            Powered by Wear What Speaks Authentication
+            Powered by SB Authentication
           </p>
         </div>
       </div>

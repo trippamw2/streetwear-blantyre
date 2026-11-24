@@ -1,5 +1,5 @@
 /**
- * Delivery Rules Engine for Wear What Speaks
+ * Delivery Rules Engine for SB
  * 
  * Rules:
  * - Orders ≥ MWK 50,000 = FREE delivery (anywhere in Malawi)

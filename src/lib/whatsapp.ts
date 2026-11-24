@@ -4,7 +4,7 @@
 import { getBrandConfig, normalizeBrandSlug, type BrandSlug } from "@/lib/brands";
 
 export const WHATSAPP_NUMBERS: Record<BrandSlug, string> = {
-  sb: "265991234567",
+  sb: "265982972977",
   // Lake Fresh must never inherit another brand's number. The public number is
   // configured with VITE_LF_WHATSAPP and hidden when it has not been provided.
   "lake-fresh": "",

@@ -68,11 +68,15 @@ const faqGroups = [
       },
       {
         q: "Is it safe to pay online?",
-        a: "Payments are handled by our payment provider. We do not store your full card or mobile money details on our site.",
+        a: "Yes. Payments are handled securely by PayChangu. You can pay with Airtel Money, TNM Mpamba, Visa, or Mastercard. SB does not store your full card or mobile money details.",
       },
       {
         q: "Do you offer cash on delivery?",
-        a: "Cash on delivery is not currently offered. Payment is completed before dispatch.",
+        a: "Cash on delivery is not currently offered. Paying securely online helps us confirm your order and dispatch faster. If you need help before paying, message us on WhatsApp at +265 982 972 977.",
+      },
+      {
+        q: "What if my payment fails?",
+        a: "If payment fails or is interrupted, your order is still saved. You can retry payment from your order page or contact us on WhatsApp for help.",
       },
     ],
   },
@@ -103,7 +107,7 @@ const FAQ = () => {
       seo="faq"
       eyebrow="Good to Know"
       title="Frequently Asked Questions"
-      intro="Quick answers about ordering, sizing, delivery, payments and returns at Wear What Speaks."
+      intro="Quick answers about ordering, sizing, delivery, payments and returns at SB."
     >
       <div className="space-y-8">
         <section id="size-guide" className="scroll-mt-24 space-y-3">

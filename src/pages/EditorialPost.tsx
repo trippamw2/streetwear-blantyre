@@ -67,7 +67,7 @@ const EditorialPost = () => {
           price: p.price,
           category: p.category || "all",
           image: p.image || "",
-          brand: p.brand || "Wear What Speaks",
+          brand: p.brand || "SB",
           types: [],
           stock: p.stock_quantity || 0,
           is_featured: p.is_featured || false,

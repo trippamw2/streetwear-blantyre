@@ -1,4 +1,4 @@
-// Wear What Speaks AI WhatsApp Message Templates
+// SB AI WhatsApp Message Templates
 
 export interface OrderDetails {
   orderId: string;
@@ -32,7 +32,7 @@ export const orderConfirmation = (details: OrderDetails) => {
 
   return `Order Confirmed. ${customerName.split(' ')[0]}
 
-Your Wear What Speaks order has been received.
+Your SB order has been received.
 
 ORDER DETAILS
 ${itemsList}
@@ -81,7 +81,7 @@ export const orderDispatched = (update: StatusUpdate) => {
 
   return `Order On The Way. ${customerName.split(' ')[0]}
 
-Your Wear What Speaks order is out for delivery.
+Your SB order is out for delivery.
 
 ITEMS
 ${itemsList}
@@ -103,14 +103,14 @@ export const orderDelivered = (update: StatusUpdate) => {
 
   return `Order Delivered. ${customerName.split(' ')[0]}
 
-Your Wear What Speaks order has arrived.
+Your SB order has arrived.
 
 DELIVERED ITEMS
 ${itemsList}
 
 Ref: ${trackingCode}
 
-Thank you for choosing Wear What Speaks.
+Thank you for choosing SB.
 
 Please leave a review to help other customers:
 https://www.wearsb.com/product/powerbank-001
@@ -160,7 +160,7 @@ export const statusCheck = (status: string, _eta?: string) => {
 export const reminderMessage = (details: OrderDetails, _daysOverdue: number) => {
   return `Payment Reminder. ${details.customerName.split(' ')[0]}
 
-A friendly reminder about your Wear What Speaks order.
+A friendly reminder about your SB order.
 
 Order: ${generateTrackingCode(details.orderId)}
 Outstanding: ${formatMWK(details.total)}
@@ -174,7 +174,7 @@ Questions? Reply here.`;
 export const thankYouMessage = (_orderId: string, customerName: string) => {
   return `Thanks for your order, ${customerName.split(' ')[0]}.
 
-We appreciate you choosing Wear What Speaks.
+We appreciate you choosing SB.
 
 As a returning customer, you will get an exclusive discount on your next order. Just ask.
 
@@ -184,7 +184,7 @@ Questions? We are here.`;
 };
 
 export const buildWhatsAppLink = (message: string, phone?: string) => {
-  const defaultPhone = "265991234567";
+  const defaultPhone = "265982972977";
   const phoneNumber = phone?.replace(/[^0-9]/g, '') || defaultPhone;
   const formatted = phoneNumber.startsWith('0') 
     ? `265${phoneNumber.slice(1)}` 
@@ -192,6 +192,6 @@ export const buildWhatsAppLink = (message: string, phone?: string) => {
   return `https://wa.me/${formatted}?text=${encodeURIComponent(message)}`;
 };
 
-export const STORE_PHONE = "265991234567";
+export const STORE_PHONE = "265982972977";
 export const STORE_URL = "https://www.wearsb.com";
-export const defaultMessage = "Hi Wear What Speaks. I want to order.";
+export const defaultMessage = "Hi SB. I want to order.";

@@ -245,7 +245,7 @@ const Checkout = () => {
         txRef,
         callbackUrl: `${window.location.origin}/orders/${orderId}?payment=callback`,
         returnUrl: `${window.location.origin}/orders/${orderId}?payment=complete`,
-        title: "Wear What Speaks Order",
+        title: "SB Order",
         description: `Order #${orderRef}`,
       });
       // Browser navigates to PayChangu via form submit, no code after this runs
@@ -343,21 +343,23 @@ const Checkout = () => {
           <h2 className="font-semibold mb-3">
             Payment
           </h2>
-          <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-2 text-sm">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3 text-sm">
+            <div className="flex items-center gap-3">
               <div className="h-12 w-12 rounded-xl bg-gray-100 flex items-center justify-center shadow-sm">
                 <CreditCard className="h-6 w-6 text-gray-900" />
               </div>
               <div>
-                <p className="font-semibold">Pay Online via PayChangu</p>
+                <p className="font-semibold">Secure payment via PayChangu</p>
                 <p className="text-xs text-gray-600">Airtel Money, TNM Mpamba, Visa, Mastercard</p>
               </div>
             </div>
             <ul className="text-xs text-gray-600 space-y-1.5">
-              <li>After placing your order, you will be redirected to PayChangu.</li>
-              <li>Pay with Airtel Money, TNM Mpamba, Visa or Mastercard.</li>
-              <li>You will return to your order page once payment is complete.</li>
+              <li>You’ll be redirected to PayChangu to complete payment securely.</li>
+              <li>After payment, you’ll return to your SB order page for confirmation.</li>
+              <li>If payment fails or is interrupted, your order is saved and you can retry from the order page.</li>
+              <li>Need help before paying? WhatsApp us on <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">+265 982 972 977</a>.</li>
             </ul>
+            <p className="text-[11px] text-gray-500">Cash on delivery is not currently offered. Secure online payment helps us confirm and dispatch your order quickly.</p>
           </div>
         </div>
 
@@ -466,12 +468,9 @@ const Checkout = () => {
 
         <StorefrontTrustStrip compact />
 
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-center text-xs sm:text-sm text-gray-600">
-          30 day quality cover on faults. See our{" "}
-          <Link to="/warranty" className="font-semibold text-primary hover:underline">
-            Quality Cover
-          </Link>{" "}
-          page.
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs sm:text-sm text-gray-600 space-y-2">
+          <p><span className="font-semibold text-gray-900">Before you pay:</span> check your size, delivery location, and phone number.</p>
+          <p>14 day size exchanges on eligible unworn items. 30 day quality cover for faults. <Link to="/returns" className="font-semibold text-primary hover:underline">Returns</Link> · <Link to="/warranty" className="font-semibold text-primary hover:underline">Quality Cover</Link></p>
         </div>
 
         <Button 

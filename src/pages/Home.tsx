@@ -236,6 +236,10 @@ const Home = () => {
                 </div>
               ))}
             </div>
+            <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-5 text-sm text-gray-600">
+              <p className="font-semibold text-gray-950">Buying online should feel safe.</p>
+              <p className="mt-2 leading-relaxed">Pay securely with PayChangu, get order confirmation, and reach a real person on WhatsApp at <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">+265 982 972 977</a> before or after you buy.</p>
+            </div>
           </div>
           <div className="overflow-hidden bg-gray-100">
             <img src={detailImage} alt="SB clothing detail and style" className="block h-auto w-full object-contain" loading="lazy" />

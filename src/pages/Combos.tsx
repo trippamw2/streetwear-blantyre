@@ -40,7 +40,7 @@ const Combos = () => {
             <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
               <Button asChild size="lg" variant="hero">
                 <a
-                  href={buildWhatsAppLink("Hi Wear What Speaks, which kit should I pick?")}
+                  href={buildWhatsAppLink("Hi SB, which kit should I pick?")}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

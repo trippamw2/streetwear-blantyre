@@ -111,7 +111,7 @@ export const useReferral = (brandIdOverride?: string) => {
   const shareReferral = async () => {
     if (!referralCode) return;
     const link = referralLinkFor(referralCode.code, isLf);
-    const brand = isLf ? "Lake Fresh Fish Mart" : "Wear What Speaks";
+    const brand = isLf ? "Lake Fresh Fish Mart" : "SB";
     const text = `Order from ${brand} and use my referral code: ${referralCode.code}. ${link}`;
 
     if (navigator.share) {

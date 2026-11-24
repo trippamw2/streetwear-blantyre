@@ -60,15 +60,12 @@ export const Footer = () => {
             </p>
             <div className="mt-5 space-y-2 text-sm text-gray-300">
               <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-blue-200" /> Blantyre, Malawi</p>
-              <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-blue-200" /> +265 991 234 567</p>
-              <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-blue-200" /> hello@wearsb.com</p>
+              <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-blue-200" /> <a href="tel:+265982972977" className="hover:text-white">+265 982 972 977</a></p>
+              <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-blue-200" /> <a href="mailto:hello@wearsb.com" className="hover:text-white">hello@wearsb.com</a></p>
             </div>
             <div className="mt-5 flex items-center gap-3">
-              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="rounded-full border border-white/15 p-2 text-gray-300 transition-colors hover:border-white/40 hover:text-white">
-                <Instagram className="h-4 w-4" />
-              </a>
-              <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="rounded-full border border-white/15 p-2 text-gray-300 transition-colors hover:border-white/40 hover:text-white">
-                <Facebook className="h-4 w-4" />
+              <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="rounded-full border border-white/15 px-3 py-2 text-xs font-semibold text-gray-300 transition-colors hover:border-white/40 hover:text-white">
+                WhatsApp
               </a>
             </div>
           </div>

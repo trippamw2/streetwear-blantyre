@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { SEO, defaultSEO } from "@/components/SEO";
 import { buildWhatsAppLink, defaultMessage } from "@/lib/whatsapp";
-import { Facebook, MapPin, MessageCircle, Truck } from "lucide-react";
+import { MapPin, MessageCircle, Phone, Truck } from "lucide-react";
 
-const FACEBOOK_URL = import.meta.env.VITE_FACEBOOK_URL || "https://www.facebook.com/";
+const WHATSAPP_NUMBER = "+265 982 972 977";
+const WHATSAPP_LINK = "https://wa.me/265982972977";
 
 const Contact = () => (
   <div className="min-h-screen bg-white">
@@ -53,21 +54,33 @@ const Contact = () => (
 
         <div className="rounded-2xl border border-gray-200 bg-white p-7 sm:p-8">
           <Truck className="h-7 w-7 text-primary" />
-          <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Delivery</h2>
+          <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Delivery & Pickup</h2>
           <p className="mt-2 text-sm leading-relaxed text-gray-600">
             We deliver across Malawi. Blantyre orders usually arrive same day or within 1 to 3 days. Other areas typically take 3 to 5 working days.
           </p>
-          <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-            <Facebook className="h-4 w-4" /> Follow SB on Facebook
-          </a>
+          <p className="mt-4 text-sm text-gray-600">
+            Prefer WhatsApp? <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">{WHATSAPP_NUMBER}</a>
+          </p>
         </div>
       </div>
 
-      <div className="mt-8 rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
-        <h2 className="font-display text-lg font-bold text-gray-900">Payments</h2>
-        <p className="mt-2 text-sm text-gray-600">
-          We accept <span className="font-semibold text-gray-900">Airtel Money</span>, <span className="font-semibold text-gray-900">TNM Mpamba</span>, and <span className="font-semibold text-gray-900">bank/card payments</span> through our secure checkout.
-        </p>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
+          <h2 className="font-display text-lg font-bold text-gray-900">Payments</h2>
+          <p className="mt-2 text-sm text-gray-600">
+            We accept <span className="font-semibold text-gray-900">Airtel Money</span>, <span className="font-semibold text-gray-900">TNM Mpamba</span>, and <span className="font-semibold text-gray-900">Visa/Mastercard</span> through secure PayChangu checkout.
+          </p>
+          <p className="mt-2 text-sm text-gray-600">Cash on delivery is not currently offered. If payment fails, you can retry from your order page or message us on WhatsApp.</p>
+        </div>
+        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
+          <h2 className="font-display text-lg font-bold text-gray-900">Why customers can trust SB</h2>
+          <ul className="mt-3 space-y-2 text-sm text-gray-600">
+            <li>Real WhatsApp support: <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">{WHATSAPP_NUMBER}</a></li>
+            <li>14 day size exchanges on eligible unworn items.</li>
+            <li>30 day quality cover for manufacturing faults.</li>
+            <li>Order confirmation and tracking after checkout.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

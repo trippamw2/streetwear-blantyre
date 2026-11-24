@@ -1,5 +1,5 @@
 /**
- * Barcode generation utilities for Wear What Speaks
+ * Barcode generation utilities for SB
  * Generates unique barcodes for products and supports QR code generation
  */
 
@@ -186,7 +186,7 @@ export async function downloadBarcodeLabel(options: {
   ctx.fillStyle = "#ffffff";
   ctx.font = "600 11px 'DM Sans', Helvetica, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("www.wearsb.com  \u2022  Wear What Speaks  \u2022  Authentic Streetwear", W / 2, H - 20);
+  ctx.fillText("www.wearsb.com  \u2022  SB  \u2022  Authentic Streetwear", W / 2, H - 20);
 
   // Download
   return new Promise<void>((resolve) => {
@@ -273,7 +273,7 @@ export function printBarcodeLabel(options: {
           <p style="font-family:monospace;font-size:9px;color:#9ca3af;">${verificationUrl}</p>
         </div>
         <div class="footer">
-          www.wearsb.com • Wear What Speaks • Authentic Streetwear
+          www.wearsb.com • SB • Authentic Streetwear
         </div>
       </div>
       <script>window.onload = function() { window.print(); }</script>

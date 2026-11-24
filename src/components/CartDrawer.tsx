@@ -90,7 +90,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
                   <span className="font-semibold">{formatMWK(subtotal)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Delivery</span>
+                  <span className="text-muted-foreground">Delivery (estimate)</span>
                   <span className={deliveryFee === 0 ? "text-green-600 font-semibold" : ""}>
                     {deliveryFee === 0 ? "FREE" : formatMWK(deliveryFee)}
                   </span>
@@ -117,6 +117,8 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
                   Complete Checkout <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
+              <p className="text-[11px] text-center text-gray-500">Secure PayChangu checkout · Airtel Money, TNM Mpamba, Visa & Mastercard</p>
+              <p className="text-[11px] text-center text-gray-500">Need help? WhatsApp +265 982 972 977</p>
             </div>
           </>
         )}

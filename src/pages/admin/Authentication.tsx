@@ -191,7 +191,7 @@ async function downloadQRLabel(record: ProductAuthRecord) {
   ctx.fillStyle = "#ffffff";
   ctx.font = "600 11px 'DM Sans', Helvetica, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("www.wearsb.com  \u2022  Wear What Speaks  \u2022  Authentic Streetwear", W / 2, H - 20);
+  ctx.fillText("www.wearsb.com  \u2022  SB  \u2022  Authentic Streetwear", W / 2, H - 20);
 
   // Download
   return new Promise<void>((resolve) => {

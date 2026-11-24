@@ -53,7 +53,7 @@ const AdminCultureStories = () => {
     tags: "",
     is_published: false,
     is_featured: false,
-    author_name: "Wear What Speaks",
+    author_name: "SB",
     read_time_minutes: 5,
   });
 
@@ -144,7 +144,7 @@ const AdminCultureStories = () => {
     setFormData({
       title: "", excerpt: "", content: "", hero_image: "",
       culture_pillar: "music", tags: "", is_published: false,
-      is_featured: false, author_name: "Wear What Speaks", read_time_minutes: 5,
+      is_featured: false, author_name: "SB", read_time_minutes: 5,
     });
   };
 

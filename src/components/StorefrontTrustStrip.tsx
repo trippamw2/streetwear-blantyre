@@ -1,10 +1,10 @@
-import { BadgeCheck, RefreshCw, ShieldCheck, Truck } from "lucide-react";
+import { BadgeCheck, MessageCircle, RefreshCw, ShieldCheck, Truck } from "lucide-react";
 
 const items = [
-  { icon: Truck, title: "Delivery Across Malawi", description: "Reliable delivery from Blantyre to your doorstep." },
-  { icon: ShieldCheck, title: "Secure Checkout", description: "Safe payments with trusted checkout options." },
-  { icon: RefreshCw, title: "Easy Support", description: "Help with orders, sizing, and exchanges when you need it." },
-  { icon: BadgeCheck, title: "Curated Quality", description: "Pieces selected for everyday style, comfort, and value." },
+  { icon: Truck, title: "Delivery across Malawi", description: "Blantyre usually 1 to 3 days. Other areas usually 3 to 5 working days." },
+  { icon: ShieldCheck, title: "Secure PayChangu payment", description: "Pay with Airtel Money, TNM Mpamba, Visa, or Mastercard. We never store your full payment details." },
+  { icon: RefreshCw, title: "Easy exchanges & quality cover", description: "14 day size exchanges on eligible items and 30 day quality cover for faults." },
+  { icon: MessageCircle, title: "Real support on WhatsApp", description: "Questions before or after you order? Chat with us on +265 982 972 977." },
 ];
 
 interface StorefrontTrustStripProps {

@@ -272,7 +272,7 @@ const AdminCommunications = () => {
         <div>
           <h1 className="font-display text-2xl font-bold">Communications</h1>
           <p className="text-sm text-muted-foreground">
-            {isLf ? "Lake Fresh" : "Wear What Speaks"} messages only. Drafts, sends and history stay in this brand.
+            {isLf ? "Lake Fresh" : "SB"} messages only. Drafts, sends and history stay in this brand.
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-xs font-bold text-gray-600">

@@ -127,12 +127,12 @@ const AdminCRM = () => {
         let sent = 0;
         for (const sub of validTargets) {
           if (sub.email) {
-            await sendEmail(sub.email, campaignForm.name || "Wear What Speaks Update", `
+            await sendEmail(sub.email, campaignForm.name || "SB Update", `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #2563eb;">ðŸ’« Wear What Speaks Update</h2>
+                <h2 style="color: #2563eb;">SB Update</h2>
                 <p>${campaignForm.message.replace(/\n/g, "<br/>")}</p>
                 <p style="margin-top: 20px; color: #666;">Thanks for being a valued customer!</p>
-                <p>- Wear What Speaks Team</p>
+                <p>- SB Team</p>
               </div>
             `, undefined, "broadcast");
             sent++;
@@ -148,13 +148,13 @@ const AdminCRM = () => {
             const phone = customer.phone.replace(/[^0-9]/g, "");
             const waPhone = phone.startsWith("0") ? `265${phone.slice(1)}` : phone;
             
-            const msg = `ðŸ’« *Wear What Speaks Update* ðŸ’«
+            const msg = `*SB Update*
 
 ${campaignForm.message}
 
 Thanks for being a valued customer!
 
-- Wear What Speaks Team`;
+- SB Team`;
             
             window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`, "_blank");
             sent++;

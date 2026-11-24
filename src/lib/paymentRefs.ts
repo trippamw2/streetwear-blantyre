@@ -1,5 +1,5 @@
 /**
- * Merchant payment references for Wear What Speaks / gifts.
+ * Merchant payment references for SB / gifts.
  *
  * PayChangu requires a unique `tx_ref`. We derive it deterministically from
  * the row id so a retry (from the order page) reuses the same reference, and

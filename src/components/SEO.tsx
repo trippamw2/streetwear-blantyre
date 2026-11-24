@@ -12,7 +12,7 @@ interface SEOProps {
   path?: string;
   image?: string;
   type?: "website" | "product";
-  /** Brand whose name/domain/metadata should be used. Defaults to Wear What Speaks. */
+  /** Brand whose name/domain/metadata should be used. Defaults to SB. */
   brand?: BrandSlug;
   /** Extra structured data, for example a recipe or breadcrumb trail. */
   jsonLd?: SchemaObject | SchemaObject[];

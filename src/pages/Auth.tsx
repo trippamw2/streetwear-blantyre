@@ -99,7 +99,7 @@ const Auth = () => {
       <SEO {...defaultSEO.auth} />
       <div className="rounded-3xl bg-card border border-gray-100 p-8 shadow-card">
         <div className="space-y-2 mb-6 text-center">
-          <p className="text-sm font-semibold text-gradient uppercase tracking-widest">{mode === "signin" ? "Welcome back" : "Join Wear What Speaks"}</p>
+          <p className="text-sm font-semibold text-gradient uppercase tracking-widest">{mode === "signin" ? "Welcome back" : "Join SB"}</p>
           <h1 className="font-display font-bold text-3xl">{mode === "signin" ? "Sign in" : "Create account"}</h1>
           <p className="text-sm text-gray-600">{mode === "signin" ? "Sign in to checkout and track orders." : "Sign up to earn rewards on every purchase."}</p>
         </div>
@@ -138,7 +138,7 @@ const Auth = () => {
         </form>
 
         <p className="text-sm text-center text-muted-foreground mt-6">
-          {mode === "signin" ? "New to Wear What Speaks?" : "Already have an account?"}{" "}
+          {mode === "signin" ? "New to SB?" : "Already have an account?"}{" "}
           <button type="button" className="text-gradient font-semibold" onClick={() => setMode(mode === "signin" ? "signup" : "signin")}>
             {mode === "signin" ? "Create one" : "Sign in"}
           </button>

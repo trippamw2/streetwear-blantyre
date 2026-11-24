@@ -143,7 +143,7 @@ const Compare = () => {
               className="w-full mt-4 "
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
-              Wear What Speaks
+              SB
             </Button>
           </div>
         ))}
@@ -261,7 +261,7 @@ const Compare = () => {
                     className=""
                   >
                     <ShoppingBag className="h-4 w-4 mr-2" />
-                    Wear What Speaks
+                    SB
                   </Button>
                 </td>
               ))}

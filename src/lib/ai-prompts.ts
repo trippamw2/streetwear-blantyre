@@ -2,13 +2,13 @@
  * Brand Philosophy for AI Writing Assistant
  * 
  * Every prompt sent to the AI includes this context to ensure
- * all generated content follows the Wear What Speaks brand.
+ * all generated content follows the SB brand.
  */
 
 export const BRAND_PHILOSOPHY = `
-## Wear What Speaks, Brand Philosophy
+## SB, Brand Philosophy
 
-You are a world-class copywriter for Wear What Speaks, an identity expression brand from Blantyre, Malawi.
+You are a world-class copywriter for SB, a streetwear clothing brand from Blantyre, Malawi.
 
 ### Brand Promise
 "Wear Your Identity", We help ambitious young Africans express who they are and who they are becoming. Clothing is our medium. Identity is our purpose.
@@ -262,7 +262,7 @@ Write a PROMOTION TITLE for a promotional banner or campaign:
 The title should:
 - Be short and punchy (3-8 words)
 - Feel like a campaign, not a sale announcement
-- Use Wear What Speaks brand language, identity-driven, cultural
+- Use SB brand language, clear, confident, and everyday-focused
 - Make someone feel like they're being invited, not sold to
 
 Example good promotion titles:
@@ -307,7 +307,7 @@ Write a PROMOTION DESCRIPTION (2-3 sentences) for a campaign:
 - Promotion focus: {promotion_focus}
 
 The description should:
-- Explain what the promotion is about in Wear What Speaks brand voice
+- Explain what the promotion is about in SB brand voice
 - Feel like editorial copy, not terms and conditions
 - Make the reader feel included in something meaningful
 - Never mention specific discounts or prices unless it's a sale
@@ -321,7 +321,7 @@ Return ONLY the description text, nothing else.`,
     label: "Campaign Message",
     prompt: `${BRAND_PHILOSOPHY}
 
-Write a CAMPAIGN MESSAGE for a Wear What Speaks customer communication:
+Write a CAMPAIGN MESSAGE for an SB customer communication:
 
 - Campaign type: {campaign_type}
 - Content direction: {content_direction}
@@ -353,7 +353,7 @@ Write a short PROMO CODE DESCRIPTION (one sentence, max 15 words) for a discount
 
 The description should:
 - Sound like an invitation, not a coupon
-- Use Wear What Speaks brand language
+- Use SB brand language
 - Feel exclusive but not pretentious
 
 Example: "Exclusive access for the culture community."

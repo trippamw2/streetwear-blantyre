@@ -171,7 +171,7 @@ export const AdminTestimonials = () => {
                 <Textarea
                   value={formData.message}
                   onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
-                  placeholder="What did they say about Wear What Speaks..."
+                  placeholder="What did they say about SB..."
                   rows={4}
                   required
                 />

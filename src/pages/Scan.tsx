@@ -41,7 +41,7 @@ const Scan = () => {
   const [scanLogged, setScanLogged] = useState(false);
 
   useEffect(() => {
-    document.title = "Scan Product | Wear What Speaks";
+    document.title = "Scan Product | SB";
   }, []);
 
   useEffect(() => {
@@ -110,7 +110,7 @@ const Scan = () => {
     if (navigator.share) {
       await navigator.share({
         title: `Verify: ${product?.name}`,
-        text: `Authentic Wear What Speaks product, ${product?.name}`,
+        text: `Authentic SB product, ${product?.name}`,
         url: window.location.href,
       });
     } else {
@@ -146,7 +146,7 @@ const Scan = () => {
             Product Not Found
           </h1>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            This barcode does not match any Wear What Speaks product in our database.
+            This barcode does not match any SB product in our database.
           </p>
           <p className="text-sm text-gray-600 mb-8">
             This item may be counterfeit or unauthorized.
@@ -163,7 +163,7 @@ const Scan = () => {
               to="/"
               className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
             >
-              Return to Wear What Speaks
+              Return to SB
             </Link>
           </div>
         </motion.div>
@@ -201,7 +201,7 @@ const Scan = () => {
             />
           </div>
           <h1 className="font-display text-2xl font-bold text-gray-900 mt-4 mb-2">
-            Authentic Wear What Speaks Product
+            Authentic SB Product
           </h1>
           <p className="text-sm text-gray-600">Verified and authenticated</p>
         </motion.div>
@@ -341,7 +341,7 @@ const Scan = () => {
         {/* Footer */}
         <div className="text-center pb-8">
           <p className="text-xs text-gray-600">
-            Powered by Wear What Speaks Authentication
+            Powered by SB Authentication
           </p>
         </div>
       </div>

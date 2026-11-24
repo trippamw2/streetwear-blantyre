@@ -584,6 +584,12 @@ const ProductDetail = () => {
               <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
                 <span className="font-semibold text-gray-900">Delivery:</span> Delivery across Malawi. Blantyre orders usually arrive same day or within 1 to 3 days. Other areas typically take 3 to 5 working days. Store pickup is available.
               </p>
+              <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
+                <span className="font-semibold text-gray-900">Exchanges & quality:</span> 14 day size exchanges on eligible unworn items, plus 30 day quality cover for faults. <Link to="/returns" className="font-semibold text-primary hover:underline">Returns</Link> · <Link to="/faq#size-guide" className="font-semibold text-primary hover:underline">Size guide</Link>
+              </p>
+              <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
+                <span className="font-semibold text-gray-900">Need help?</span> WhatsApp us on <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">+265 982 972 977</a> before you order.
+              </p>
             </div>
 
             {(product.reward_points ?? 0) > 0 && (

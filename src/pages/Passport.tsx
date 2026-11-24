@@ -11,13 +11,13 @@ const Passport = () => {
   const { product, loading, error } = useProductAuthByToken(token);
 
   useEffect(() => {
-    document.title = "Digital Product Passport | Wear What Speaks";
+    document.title = "Digital Product Passport | SB";
   }, []);
 
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({
-        title: `Wear What Speaks product passport: ${product?.product_name}`,
+        title: `SB product passport: ${product?.product_name}`,
         text: `Digital Product Passport, ${product?.product_name} (${product?.serial_number})`,
         url: window.location.href,
       });
@@ -47,7 +47,7 @@ const Passport = () => {
           <h1 className="font-display text-xl font-bold text-gray-900 mb-2">Passport Not Found</h1>
           <p className="text-gray-900/40 text-sm">This product does not have a valid digital passport.</p>
           <Link to="/" className="mt-6 inline-block text-sm text-gray-900/60 hover:text-gray-900 transition-colors">
-            Return to Wear What Speaks
+            Return to SB
           </Link>
         </div>
       </div>
@@ -267,7 +267,7 @@ const Passport = () => {
         {/* Footer */}
         <div className="text-center pb-8">
           <p className="text-xs text-gray-900/20">
-            Wear What Speaks, Digital Product Passport
+            SB, Digital Product Passport
           </p>
         </div>
       </div>
