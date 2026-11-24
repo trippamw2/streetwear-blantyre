@@ -1,4 +1,4 @@
-import logoSb from "@/assets/streetwear-blantyre-logo.png";
+import logoSb from "@/assets/sb-logo.png";
 import { Link } from "react-router-dom";
 
 interface LogoProps {
