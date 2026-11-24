@@ -42,3 +42,4 @@ supabase/.temp/
 # Playwright output
 playwright-report/
 test-results/
+.env*

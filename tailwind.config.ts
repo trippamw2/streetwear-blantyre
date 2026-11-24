@@ -76,7 +76,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        display: ["Montserrat", "sans-serif"],
+        display: ["Montserrat", "Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        body: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
       },
       backgroundImage: {

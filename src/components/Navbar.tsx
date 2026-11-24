@@ -59,7 +59,7 @@ export const Navbar = () => {
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
 
-        <Logo className="h-9 w-auto sm:h-11" />
+        <Logo className="h-11 w-auto sm:h-14 md:h-16" />
 
         <nav className="hidden items-center gap-6 lg:flex xl:gap-8" aria-label="Primary">
           {NAV_LINKS.map((link) =>

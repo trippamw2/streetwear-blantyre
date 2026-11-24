@@ -7,7 +7,7 @@ interface LogoProps {
   brand?: "sb" | "lf";
 }
 
-export const Logo = ({ className = "h-10 sm:h-12 md:h-14 w-auto", brand = "sb" }: LogoProps) => {
+export const Logo = ({ className = "h-12 sm:h-14 md:h-16 w-auto", brand = "sb" }: LogoProps) => {
   const isLf = brand === "lf";
   const src = isLf ? "/brand/lake-fresh/logo.png" : logoSb;
   const alt = isLf ? "Lake Fresh Fish Mart" : "SB";

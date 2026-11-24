@@ -54,7 +54,7 @@ export const Footer = () => {
       <div className="container py-14 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1.2fr]">
           <div className="max-w-sm">
-            <Logo className="h-10 w-auto brightness-0 invert sm:h-12" />
+            <Logo className="h-14 w-auto sm:h-16 md:h-20" />
             <p className="mt-4 text-sm leading-relaxed text-gray-300">
               SB is your urban streetwear and lifestyle one-stop store. Curated style for every version of you, from Blantyre to anywhere in Malawi.
             </p>
