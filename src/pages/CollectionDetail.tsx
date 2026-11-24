@@ -50,7 +50,7 @@ const CollectionDetail = () => {
         />
         <div className="container flex min-h-[65vh] flex-col items-center justify-center py-20 text-center">
           <p className="eyebrow mb-3 text-primary">404 · Collection</p>
-          <h1 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
             We couldn&apos;t find that collection
           </h1>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-600">
@@ -102,7 +102,7 @@ const CollectionDetail = () => {
             <p className="eyebrow mb-3 text-white/70">
               {isDrop ? "Limited Drop" : "Curated Collection"}
             </p>
-            <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {collection.name}
             </h1>
             {collection.description && (
@@ -128,8 +128,8 @@ const CollectionDetail = () => {
       <section className="container py-14 sm:py-20">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="eyebrow mb-2 text-primary">The Lineup</p>
-            <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-3xl">
+            <p className="eyebrow mb-2 text-primary">The lineup</p>
+            <h2 className="font-display text-2xl font-extrabold tracking-tight text-gray-950 sm:text-3xl">
               Pieces in this {isDrop ? "drop" : "collection"}
             </h2>
           </div>

@@ -52,7 +52,7 @@ const LookDetail = () => {
         />
         <div className="container flex min-h-[65vh] flex-col items-center justify-center py-20 text-center">
           <p className="eyebrow mb-3 text-primary">404 · Look</p>
-          <h1 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
             We couldn&apos;t find that look
           </h1>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-600">
@@ -102,8 +102,8 @@ const LookDetail = () => {
           </nav>
 
           <div className="mt-12 max-w-2xl">
-            <p className="eyebrow mb-3 text-white/70">Shoppable Look</p>
-            <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <p className="eyebrow mb-3 text-white/70">Shoppable look</p>
+            <h1 className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {look.title}
             </h1>
             {look.subtitle && <p className="mt-4 text-base font-medium text-white/85 sm:text-lg">{look.subtitle}</p>}
@@ -119,8 +119,8 @@ const LookDetail = () => {
 
       <section className="container py-14 sm:py-20">
         <div className="mb-8">
-          <p className="eyebrow mb-2 text-primary">The Edit</p>
-          <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-3xl">
+          <p className="eyebrow mb-2 text-primary">The edit</p>
+          <h2 className="font-display text-2xl font-extrabold tracking-tight text-gray-950 sm:text-3xl">
             Shop this look
           </h2>
           <p className="mt-2 max-w-lg text-sm leading-relaxed text-gray-600">
@@ -208,7 +208,7 @@ const LookDetail = () => {
                       )}
                     </div>
 
-                    <h3 className="mt-2 font-display text-xl font-extrabold uppercase tracking-tight text-gray-900">
+                    <h3 className="mt-2 font-display text-xl font-bold tracking-tight text-gray-950">
                       <Link to={`/product/${item.productId}`} className="transition-colors hover:text-primary">
                         {product?.name || "Piece coming soon"}
                       </Link>
@@ -249,8 +249,8 @@ const LookDetail = () => {
         <section className="border-t border-gray-200 bg-gray-50 py-14 sm:py-20">
           <div className="container">
             <div className="mb-8">
-              <p className="eyebrow mb-2 text-primary">Keep Building</p>
-              <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-3xl">
+              <p className="eyebrow mb-2 text-primary">Keep building</p>
+              <h2 className="font-display text-2xl font-extrabold tracking-tight text-gray-950 sm:text-3xl">
                 More pieces to explore
               </h2>
             </div>

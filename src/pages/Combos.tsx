@@ -28,7 +28,7 @@ const Combos = () => {
             <span className="inline-block rounded-full border border-gray-300 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-600">
               Save up to 25% vs buying separately
             </span>
-            <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
               Your outfit.
               <br />
               One order.

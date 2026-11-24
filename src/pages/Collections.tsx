@@ -41,21 +41,21 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
-            <span className="font-display text-3xl font-extrabold uppercase tracking-[0.24em] text-white/70">
-              WARDROBE
+            <span className="font-display text-3xl font-bold tracking-[0.18em] text-white/70">
+              SB
             </span>
           </div>
         )}
         {isDrop && (
           <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-gray-900 shadow-sm">
-            Limited Drop
+            Limited drop
           </span>
         )}
       </div>
 
       <div className="flex flex-1 flex-col p-5">
         <p className="eyebrow mb-2 text-primary">{isDrop ? "Drop" : "Collection"}</p>
-        <h3 className="font-display text-xl font-extrabold uppercase tracking-tight text-gray-900">
+        <h3 className="font-display text-xl font-bold tracking-tight text-gray-900">
           {collection.name}
         </h3>
         {collection.description && (
@@ -110,8 +110,8 @@ const Collections = () => {
             <span className="eyebrow inline-block rounded-full border border-gray-300 bg-white px-4 py-1.5 text-primary">
               Curated with care
             </span>
-            <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-              Collections &amp; Drops
+            <h1 className="font-display text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
+              Collections &amp; drops
             </h1>
             <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
               Every release is built as a wardrobe, not a one off. Explore the collections that
@@ -138,8 +138,8 @@ const Collections = () => {
       ) : visible.length === 0 ? (
         <section className="container py-16 sm:py-20">
           <div className="rounded-3xl border border-gray-200 bg-gray-50 px-6 py-14 text-center">
-            <p className="eyebrow mb-3 text-primary">Coming Soon</p>
-            <h2 className="font-display text-2xl font-extrabold uppercase text-gray-900 sm:text-3xl">
+            <p className="eyebrow mb-3 text-primary">Coming soon</p>
+            <h2 className="font-display text-2xl font-extrabold tracking-tight text-gray-950 sm:text-3xl">
               New collections are being curated
             </h2>
             <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-600">
@@ -154,8 +154,8 @@ const Collections = () => {
 
           {preview.length > 0 && (
             <div className="mt-12">
-              <p className="eyebrow mb-2 text-primary">Start Here</p>
-              <h3 className="font-display text-xl font-extrabold uppercase text-gray-900">
+              <p className="eyebrow mb-2 text-primary">Start here</p>
+              <h3 className="font-display text-xl font-extrabold tracking-tight text-gray-950">
                 Popular right now
               </h3>
               <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
@@ -170,8 +170,8 @@ const Collections = () => {
         <>
           <section id="collections" className="container scroll-mt-20 py-14 sm:py-20">
             <div className="mb-8">
-              <p className="eyebrow mb-2 text-primary">The Wardrobe</p>
-              <h2 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
+              <p className="eyebrow mb-2 text-primary">The wardrobe</p>
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
                 Collections
               </h2>
               <p className="mt-2 max-w-md text-sm leading-relaxed text-gray-600">
@@ -196,8 +196,8 @@ const Collections = () => {
             <div className="container">
               <div className="mb-8">
                 <p className="eyebrow mb-2 text-primary">Limited Availability</p>
-                <h2 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
-                  Limited Drops
+                <h2 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
+                  Limited drops
                 </h2>
                 <p className="mt-2 max-w-md text-sm leading-relaxed text-gray-600">
                   Small runs, released with intention. When they are gone, they are gone.

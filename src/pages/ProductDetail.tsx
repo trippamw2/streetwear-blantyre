@@ -371,7 +371,7 @@ const ProductDetail = () => {
                 />
               ) : (
                 <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-gray-100 to-gray-200 px-4 text-center">
-                  <span className="font-display text-4xl font-extrabold uppercase tracking-[0.24em] text-primary/20">
+                  <span className="font-display text-4xl font-extrabold tracking-[0.2em] text-primary/20">
                     SB
                   </span>
                   <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">

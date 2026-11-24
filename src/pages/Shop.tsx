@@ -256,9 +256,9 @@ const Shop = () => {
         <div className="container py-10 sm:py-14">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl space-y-3">
-              <p className="eyebrow text-primary">{categoryName || "Shop All"}</p>
-              <h1 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-5xl">
-                {categoryName || "Shop All"}
+              <p className="eyebrow text-primary">{categoryName || "Shop all"}</p>
+              <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">
+                {categoryName || "Shop all"}
               </h1>
               <p className="text-sm leading-relaxed text-gray-600 sm:text-base">
                 {selectedCategory === "all"
@@ -267,7 +267,7 @@ const Shop = () => {
                     "Explore the category and find the fit that feels like you."}
               </p>
             </div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-600">
+            <p className="text-sm font-medium text-gray-500">
               {sorted.length} {sorted.length === 1 ? "piece" : "pieces"} available
             </p>
           </div>
@@ -333,7 +333,7 @@ const Shop = () => {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                 aria-label="Sort products"
-                className="h-11 w-full appearance-none rounded-full border border-gray-200 bg-gray-50 pl-10 pr-9 text-xs font-semibold uppercase tracking-[0.08em] text-gray-900 focus:border-primary focus:outline-none sm:w-auto"
+                className="h-11 w-full appearance-none rounded-full border border-gray-200 bg-gray-50 pl-10 pr-9 text-sm font-medium text-gray-900 focus:border-primary focus:outline-none sm:w-auto"
               >
                 <option value="newest">Newest</option>
                 <option value="price-low">Price: low to high</option>

@@ -78,9 +78,9 @@ button, input, select, textarea {
 
   .eyebrow {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
   }
 }

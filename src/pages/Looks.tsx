@@ -59,15 +59,15 @@ const LookCard = ({
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
-              <span className="font-display text-5xl font-extrabold uppercase tracking-[0.2em] text-white/70">
-                LOOK
+              <span className="font-display text-5xl font-bold tracking-[0.12em] text-white/70">
+                Look
               </span>
             </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-7 sm:p-10">
-            <p className="eyebrow mb-3 text-white/75">Featured Look</p>
-            <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-white sm:text-4xl">
+            <p className="eyebrow mb-3 text-white/75">Featured look</p>
+            <h2 className="font-display text-2xl font-extrabold tracking-tight text-white sm:text-4xl">
               {look.title}
             </h2>
             {look.subtitle && <p className="mt-2 text-sm text-white/80 sm:text-base">{look.subtitle}</p>}
@@ -142,7 +142,7 @@ const Looks = () => {
             <span className="eyebrow inline-block rounded-full border border-gray-300 bg-white px-4 py-1.5 text-primary">
               Styled with intention
             </span>
-            <h1 className="font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
               Looks
             </h1>
             <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
@@ -160,7 +160,7 @@ const Looks = () => {
         ) : publishedLooks.length === 0 ? (
           <div className="rounded-3xl border border-gray-200 bg-gray-50 px-6 py-16 text-center">
             <p className="eyebrow mb-3 text-primary">In the Studio</p>
-            <h2 className="font-display text-2xl font-extrabold uppercase text-gray-900 sm:text-3xl">
+            <h2 className="font-display text-2xl font-extrabold tracking-tight text-gray-950 sm:text-3xl">
               New looks are on the way
             </h2>
             <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-600">
@@ -186,9 +186,9 @@ const Looks = () => {
             {otherLooks.length > 0 ? (
               <>
                 <div className="mb-8 mt-14">
-                  <p className="eyebrow mb-2 text-primary">The Edit</p>
-                  <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-3xl">
-                    More Looks
+                  <p className="eyebrow mb-2 text-primary">The edit</p>
+                  <h2 className="font-display text-2xl font-extrabold tracking-tight text-gray-950 sm:text-3xl">
+                    More looks
                   </h2>
                 </div>
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
@@ -214,8 +214,8 @@ const Looks = () => {
       <section className="border-t border-gray-200 bg-gray-50 py-14 sm:py-20">
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="eyebrow mb-3 text-primary">Shop the Story</p>
-            <h2 className="font-display text-3xl font-extrabold uppercase tracking-tight text-gray-900 sm:text-4xl">
+            <p className="eyebrow mb-3 text-primary">Shop the story</p>
+            <h2 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
               Every look is shoppable
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
@@ -237,7 +237,7 @@ const Looks = () => {
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <Icon className="h-5 w-5" />
                   </span>
-                  <h3 className="mt-4 font-display text-sm font-extrabold uppercase tracking-tight text-gray-900">
+                  <h3 className="mt-4 font-display text-base font-bold tracking-tight text-gray-950">
                     {point.title}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-gray-600">{point.description}</p>
