@@ -117,8 +117,12 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
                   Complete Checkout <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <p className="text-[11px] text-center text-gray-500">Secure PayChangu checkout · Airtel Money, TNM Mpamba, Visa & Mastercard</p>
-              <p className="text-[11px] text-center text-gray-500">Need help? WhatsApp +265 982 972 977</p>
+              <div className="grid grid-cols-3 gap-2 text-[10px] text-gray-600">
+                <div className="rounded-md bg-gray-50 px-2 py-2 text-center font-medium">Safe PayChangu</div>
+                <div className="rounded-md bg-gray-50 px-2 py-2 text-center font-medium">14-day exchange</div>
+                <div className="rounded-md bg-gray-50 px-2 py-2 text-center font-medium">WhatsApp help</div>
+              </div>
+              <p className="text-[11px] text-center text-gray-500">Airtel Money, TNM Mpamba, Visa & Mastercard · <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">+265 982 972 977</a></p>
             </div>
           </>
         )}

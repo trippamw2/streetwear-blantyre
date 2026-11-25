@@ -68,15 +68,15 @@ const faqGroups = [
       },
       {
         q: "Is it safe to pay online?",
-        a: "Yes. Payments are handled securely by PayChangu. You can pay with Airtel Money, TNM Mpamba, Visa, or Mastercard. SB does not store your full card or mobile money details.",
+        a: "Yes. PayChangu handles payment safely. Use Airtel Money, TNM Mpamba, Visa, or Mastercard. SB does not keep your full payment details.",
       },
       {
         q: "Do you offer cash on delivery?",
-        a: "Cash on delivery is not currently offered. Paying securely online helps us confirm your order and dispatch faster. If you need help before paying, message us on WhatsApp at +265 982 972 977.",
+        a: "No cash on delivery now. Secure online pay helps us confirm your order fast. Need help? WhatsApp +265 982 972 977.",
       },
       {
         q: "What if my payment fails?",
-        a: "If payment fails or is interrupted, your order is still saved. You can retry payment from your order page or contact us on WhatsApp for help.",
+        a: "If payment fails, your order is saved. Retry from your order page or WhatsApp us for help.",
       },
     ],
   },

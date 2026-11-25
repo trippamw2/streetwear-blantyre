@@ -5,16 +5,15 @@ const Returns = () => (
     seo="returns"
     eyebrow="Easy Exchanges"
     title="Returns & Exchanges"
-    intro="If a piece does not fit the way you hoped, talk to us. We keep the process simple and human."
+    intro="Wrong size or fault? We keep it simple."
   >
-    <PolicySection title="The basics">
+    <PolicySection title="Quick rules">
       <PolicyList
         items={[
-          "You have 14 days from delivery to request a return or size exchange.",
-          "Items must be unworn, unwashed and still have their original tags attached.",
-          "Original packaging and any included accessories should be returned with the item.",
-          "Proof of purchase, such as your order number or confirmation message, is required.",
-          "To start a return or exchange, WhatsApp us at +265 982 972 977.",
+          "14 days for size exchange on eligible items.",
+          "Item must be unworn, unwashed, with tags.",
+          "Keep your order number.",
+          "Start on WhatsApp: +265 982 972 977.",
         ]}
       />
     </PolicySection>

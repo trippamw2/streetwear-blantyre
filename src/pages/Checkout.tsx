@@ -353,13 +353,16 @@ const Checkout = () => {
                 <p className="text-xs text-gray-600">Airtel Money, TNM Mpamba, Visa, Mastercard</p>
               </div>
             </div>
+            <div className="flex flex-wrap gap-2 text-[11px]">
+              {["Airtel Money", "TNM Mpamba", "Visa", "Mastercard"].map((m) => <span key={m} className="rounded-full bg-gray-100 px-2.5 py-1 font-medium text-gray-700">{m}</span>)}
+            </div>
             <ul className="text-xs text-gray-600 space-y-1.5">
-              <li>You’ll be redirected to PayChangu to complete payment securely.</li>
-              <li>After payment, you’ll return to your SB order page for confirmation.</li>
-              <li>If payment fails or is interrupted, your order is saved and you can retry from the order page.</li>
-              <li>Need help before paying? WhatsApp us on <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">+265 982 972 977</a>.</li>
+              <li>You pay safely on PayChangu.</li>
+              <li>After pay, you come back to your order page.</li>
+              <li>If pay fails, your order is saved. You can try again.</li>
+              <li>Need help? <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">WhatsApp +265 982 972 977</a>.</li>
             </ul>
-            <p className="text-[11px] text-gray-500">Cash on delivery is not currently offered. Secure online payment helps us confirm and dispatch your order quickly.</p>
+            <p className="text-[11px] text-gray-500">No cash on delivery. Secure pay helps us send your order faster.</p>
           </div>
         </div>
 
@@ -469,8 +472,8 @@ const Checkout = () => {
         <StorefrontTrustStrip compact />
 
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs sm:text-sm text-gray-600 space-y-2">
-          <p><span className="font-semibold text-gray-900">Before you pay:</span> check your size, delivery location, and phone number.</p>
-          <p>14 day size exchanges on eligible unworn items. 30 day quality cover for faults. <Link to="/returns" className="font-semibold text-primary hover:underline">Returns</Link> · <Link to="/warranty" className="font-semibold text-primary hover:underline">Quality Cover</Link></p>
+          <p><span className="font-semibold text-gray-900">Before you pay:</span> check size, location, and phone number.</p>
+          <p>14 day size exchange. 30 day quality cover. <Link to="/returns" className="font-semibold text-primary hover:underline">Returns</Link> · <Link to="/warranty" className="font-semibold text-primary hover:underline">Quality Cover</Link></p>
         </div>
 
         <Button 

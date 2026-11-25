@@ -100,13 +100,13 @@ const CollectionDetail = () => {
 
           <div className="mt-12 max-w-2xl">
             <p className="eyebrow mb-3 text-white/70">
-              {isDrop ? "Limited Drop" : "Curated Collection"}
+              {isDrop ? "Limited Drop" : "Collection"}
             </p>
             <h1 className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {collection.name}
             </h1>
             {collection.description && (
-              <p className="mt-5 text-sm leading-relaxed text-white/75 sm:text-base">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 sm:text-base">
                 {collection.description}
               </p>
             )}

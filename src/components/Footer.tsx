@@ -56,17 +56,17 @@ export const Footer = () => {
           <div className="max-w-sm">
             <Logo className="h-14 w-auto sm:h-16 md:h-20" />
             <p className="mt-4 text-sm leading-relaxed text-gray-300">
-              SB is your urban streetwear and lifestyle one-stop store. Curated style for every version of you, from Blantyre to anywhere in Malawi.
+              Everyday streetwear in Malawi. Tees, vests, shirts, and shorts made for real life.
             </p>
             <div className="mt-5 space-y-2 text-sm text-gray-300">
               <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-blue-200" /> Blantyre, Malawi</p>
               <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-blue-200" /> <a href="tel:+265982972977" className="hover:text-white">+265 982 972 977</a></p>
               <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-blue-200" /> <a href="mailto:hello@wearsb.com" className="hover:text-white">hello@wearsb.com</a></p>
             </div>
-            <div className="mt-5 flex items-center gap-3">
-              <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="rounded-full border border-white/15 px-3 py-2 text-xs font-semibold text-gray-300 transition-colors hover:border-white/40 hover:text-white">
-                WhatsApp
-              </a>
+            <div className="mt-5 flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
+              <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="rounded-full border border-white/15 px-3 py-2 font-semibold transition-colors hover:border-white/40 hover:text-white">WhatsApp</a>
+              <span className="rounded-full border border-white/10 px-3 py-2">PayChangu safe pay</span>
+              <span className="rounded-full border border-white/10 px-3 py-2">14 day exchange</span>
             </div>
           </div>
 

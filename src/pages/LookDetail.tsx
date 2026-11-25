@@ -108,7 +108,7 @@ const LookDetail = () => {
             </h1>
             {look.subtitle && <p className="mt-4 text-base font-medium text-white/85 sm:text-lg">{look.subtitle}</p>}
             {look.description && (
-              <p className="mt-4 text-sm leading-relaxed text-white/70 sm:text-base">{look.description}</p>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">{look.description}</p>
             )}
             <span className="mt-7 inline-flex rounded-full border border-white/35 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/85">
               {items.length} {items.length === 1 ? "shoppable piece" : "shoppable pieces"}
@@ -124,8 +124,7 @@ const LookDetail = () => {
             Shop this look
           </h2>
           <p className="mt-2 max-w-lg text-sm leading-relaxed text-gray-600">
-            Every piece below is available on its own. Tap through for sizing, or add it straight to
-            your bag.
+            See the look. Tap a piece. Add to bag.
           </p>
         </div>
 

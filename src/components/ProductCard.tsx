@@ -104,12 +104,33 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       >
         <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
           {product.image ? (
-            <img
-              src={product.image}
-              alt={product.name}
-              loading="lazy"
-              className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
-            />
+            <>
+              {(() => {
+                const images = (product as unknown as { images?: string[] }).images || [];
+                const secondary = images.find((img) => img && img !== product.image);
+                return (
+                  <>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      loading="lazy"
+                      decoding="async"
+                      className={`h-full w-full object-cover object-top transition-all duration-500 ${secondary ? "group-hover:opacity-0" : "group-hover:scale-[1.04]"}`}
+                    />
+                    {secondary && (
+                      <img
+                        src={secondary}
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 h-full w-full object-cover object-top opacity-0 transition-all duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
+                      />
+                    )}
+                  </>
+                );
+              })()}
+            </>
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-100 to-gray-200 px-4 text-center">
               <span className="font-display text-2xl font-extrabold uppercase tracking-[0.24em] text-primary/25">
@@ -187,12 +208,16 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             <span className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-600">
               {getBrandName(product.brand)}
             </span>
-            {rating > 0 && (
-              <span className="flex shrink-0 items-center gap-0.5 text-[10px] font-semibold text-gray-600">
-                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                {rating.toFixed(1)}
-              </span>
-            )}
+            <span className="flex shrink-0 items-center gap-1 text-[10px] font-semibold text-gray-500">
+              {rating > 0 ? (
+                <>
+                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                  {rating.toFixed(1)}
+                </>
+              ) : (
+                <span className="text-primary">Quality checked</span>
+              )}
+            </span>
           </div>
 
           <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-gray-900 sm:text-[15px]">

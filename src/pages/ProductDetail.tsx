@@ -339,7 +339,7 @@ const ProductDetail = () => {
     : "";
 
   return (
-    <div className="bg-white">
+    <div className="bg-white pb-24 md:pb-0">
       <div className="container px-4 py-8 sm:px-6 sm:py-14">
         <SEO
           title={`${product.name} | SB`}
@@ -781,77 +781,47 @@ const ProductDetail = () => {
               </div>
             )}
 
-            {/* Trust Badges */}
-            <div className="grid grid-cols-2 gap-3 border-y border-gray-200 py-4">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Check className="h-5 w-5 text-primary" />
-                <span>Fast checkout</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Truck className="h-5 w-5 text-primary" />
-                <span>Delivery across Malawi</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <ShieldCheck className="h-5 w-5 text-primary" />
-                <span>Quality checked</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Check className="h-5 w-5 text-primary" />
-                <span>30 day fault cover</span>
-              </div>
+            <div className="grid grid-cols-2 gap-2 rounded-xl border border-gray-200 bg-gray-50 p-3 text-xs text-gray-700 sm:grid-cols-4 sm:text-sm">
+              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /><span>Safe PayChangu</span></div>
+              <div className="flex items-center gap-2"><Truck className="h-4 w-4 text-primary" /><span>Malawi delivery</span></div>
+              <div className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /><span>14 day exchange</span></div>
+              <div className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-primary" /><a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">WhatsApp help</a></div>
             </div>
 
-            <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-              <div className="flex items-center rounded-full border border-gray-200 bg-gray-50">
-                <button
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  className="p-3 text-gray-600 hover:text-primary"
-                  aria-label="Decrease quantity"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
-                <button
-                  onClick={() => setQty((q) => Math.max(1, Math.min(q + 1, Math.max(stock, 1))))}
-                  className="p-3 text-gray-600 hover:text-primary"
-                  aria-label="Increase quantity"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center rounded-full border border-gray-200 bg-gray-50">
+                  <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 text-gray-600 hover:text-primary" aria-label="Decrease quantity"><Minus className="h-4 w-4" /></button>
+                  <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
+                  <button onClick={() => setQty((q) => Math.max(1, Math.min(q + 1, Math.max(stock, 1))))} className="p-3 text-gray-600 hover:text-primary" aria-label="Increase quantity"><Plus className="h-4 w-4" /></button>
+                </div>
+                <p className="text-xs text-gray-500">Delivery in 1-5 days in Malawi</p>
               </div>
-              <div className="flex flex-1 flex-col gap-3 sm:flex-row">
-                <Button
-                  onClick={handleAdd}
-                  variant="hero"
-                  size="lg"
-                  className="w-full"
-                  disabled={!inStock}
-                >
-                  <ShoppingBag className="h-5 w-5" /> {inStock ? "Add to bag" : "Sold Out"}
-                </Button>
-                <Button
-                  onClick={handleBuyNow}
-                  size="lg"
-                  variant="outline"
-                  className="w-full"
-                  disabled={!inStock}
-                >
-                  Checkout <ArrowRight className="h-4 w-4" />
-                </Button>
+              <div className="grid grid-cols-2 gap-3">
+                <Button onClick={handleAdd} variant="hero" size="lg" className="w-full" disabled={!inStock}><ShoppingBag className="h-5 w-5" /> {inStock ? "Add to bag" : "Sold Out"}</Button>
+                <Button onClick={handleBuyNow} size="lg" variant="outline" className="w-full" disabled={!inStock}>Buy now <ArrowRight className="h-4 w-4" /></Button>
               </div>
             </div>
 
             <a
-              href={buildWhatsAppLink(
-                productMessage(product.name, displayPrice, `${window.location.origin}/product/${product.id}`),
-              )}
+              href={buildWhatsAppLink(productMessage(product.name, displayPrice, `${window.location.origin}/product/${product.id}`))}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-semibold text-[#1faa53] hover:underline"
             >
               <MessageCircle className="h-4 w-4" />
-              Ask about this piece on WhatsApp
+              Ask about size or stock on WhatsApp
             </a>
+          </div>
+        </div>
+
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 p-3 backdrop-blur md:hidden">
+          <div className="mx-auto flex max-w-lg items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-gray-900">{product.name}</p>
+              <p className="text-xs text-gray-600">{formatMWK(displayPrice)} · {inStock ? "In stock" : "Sold out"}</p>
+            </div>
+            <Button onClick={handleAdd} variant="hero" size="sm" className="shrink-0" disabled={!inStock}>{inStock ? "Add to bag" : "Sold out"}</Button>
           </div>
         </div>
 

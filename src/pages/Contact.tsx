@@ -14,7 +14,7 @@ const Contact = () => (
       <div className="container py-10 sm:py-14">
         <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">Contact SB</p>
         <h1 className="mt-3 font-display text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">Need help?</h1>
-        <p className="mt-3 max-w-xl text-base text-gray-600">Ask us about size, stock, delivery, or your order. We’re happy to help.</p>
+        <p className="mt-3 max-w-xl text-base text-gray-600">Ask about size, stock, delivery, or your order. We reply fast on WhatsApp.</p>
       </div>
     </section>
 
@@ -35,28 +35,31 @@ const Contact = () => (
         <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
           <MapPin className="h-7 w-7 text-primary" />
           <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Pickup</h2>
-          <p className="mt-2 text-sm text-gray-600">Pick up in Blantyre. We’ll message you when it’s ready.</p>
+          <p className="mt-2 text-sm text-gray-600">Pickup in Blantyre. We message you when ready.</p>
+          <p className="mt-3 text-sm text-gray-600">Ask on WhatsApp for pickup details.</p>
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
           <Truck className="h-7 w-7 text-primary" />
           <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Delivery</h2>
-          <p className="mt-2 text-sm text-gray-600">Blantyre: 1-3 days. Other areas: 3-5 working days.</p>
-          <p className="mt-3 text-sm text-gray-600">We deliver across Malawi.</p>
+          <p className="mt-2 text-sm text-gray-600">Blantyre: 1-3 days.</p>
+          <p className="mt-1 text-sm text-gray-600">Other areas: 3-5 working days.</p>
         </div>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
           <h2 className="font-display text-lg font-bold text-gray-900">Safe payment</h2>
-          <p className="mt-2 text-sm text-gray-600">Pay with Airtel Money, TNM Mpamba, Visa, or Mastercard through PayChangu.</p>
-          <p className="mt-2 text-sm text-gray-600">If payment fails, you can retry from your order page.</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            {["Airtel Money", "TNM Mpamba", "Visa", "Mastercard", "PayChangu"].map((m) => <span key={m} className="rounded-full border border-gray-200 bg-white px-3 py-1.5 font-medium text-gray-700">{m}</span>)}
+          </div>
+          <p className="mt-3 text-sm text-gray-600">If payment fails, retry from your order page.</p>
         </div>
         <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
           <h2 className="font-display text-lg font-bold text-gray-900">Buy with confidence</h2>
           <ul className="mt-3 space-y-2 text-sm text-gray-600">
-            <li>WhatsApp help: <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">{WHATSAPP_NUMBER}</a></li>
-            <li>14 day size exchanges on eligible items.</li>
+            <li><a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">{WHATSAPP_NUMBER}</a> on WhatsApp</li>
+            <li>14 day size exchange on eligible items.</li>
             <li>30 day quality cover for faults.</li>
             <li>Order confirmation and tracking.</li>
           </ul>

@@ -34,8 +34,7 @@ const Combos = () => {
               One order.
             </h1>
             <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
-              Not sure what goes together? Our kits put a full look in one place, chosen for the
-              street, the pitch and everyday life.
+              Easy full looks. Pick a kit and get ready faster.
             </p>
             <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
               <Button asChild size="lg" variant="hero">

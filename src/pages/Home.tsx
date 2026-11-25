@@ -1,19 +1,20 @@
 ﻿import { Link } from "react-router-dom";
-import { ArrowRight, Check, Clock3, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, Check, Clock3, MessageCircle, ShieldCheck, Star, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import { SEO } from "@/components/SEO";
 import { useProducts } from "@/hooks/useProducts";
+import { useTestimonials } from "@/hooks/useTestimonials";
 import { SB_PRODUCT_TYPES } from "@/data/sbArchitecture";
 
 const heroImage = "/images/sb/home-menu.jpg";
-const lifestyleImage = "/images/sb/blue-streetwear-squad.png";
-const detailImage = "/images/sb/urban-blue-style-duo.png";
+const lifestyleImage = "/images/sb/blue-streetwear-squad.jpg";
+const detailImage = "/images/sb/urban-blue-style-duo.jpg";
 
 const categoryImages: Record<string, string> = {
   "t-shirts": "/images/sb/home-street.jpg",
   vests: "/images/sb/look-01.jpg",
-  "short-sleeve-shirts": "/images/sb/urban-blue-style-duo.png",
+  "short-sleeve-shirts": "/images/sb/urban-blue-style-duo.jpg",
   shorts: "/images/sb/street-campaign.jpg",
 };
 
@@ -31,6 +32,7 @@ const proofPoints = [
 
 const Home = () => {
   const { products, loading } = useProducts();
+  const { testimonials } = useTestimonials(4);
   const featuredProducts = (products.filter((p) => p.is_featured || p.is_new_arrival || p.is_best_seller).length > 0
     ? products.filter((p) => p.is_featured || p.is_new_arrival || p.is_best_seller)
     : products
@@ -192,32 +194,64 @@ const Home = () => {
         )}
       </section>
 
-      {/* Trust - short, visual */}
+      {/* Real people / trust */}
       <section className="border-y border-gray-200 bg-[#f5f7fa]">
-        <div className="container grid gap-8 py-12 sm:py-16 lg:grid-cols-[1fr_1fr] lg:items-center">
-          <div className="order-2 lg:order-1">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">Why shop SB</p>
-            <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">Simple. Safe. Local.</h2>
-            <div className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-              {proofPoints.map(({ icon: Icon, title, copy }) => (
-                <div key={title} className="flex gap-3 rounded-xl bg-white p-4 shadow-sm">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
+        <div className="container py-12 sm:py-16">
+          <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-center">
+            <div className="order-2 lg:order-1">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">Real SB style</p>
+              <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">See it. Trust it. Wear it.</h2>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                {proofPoints.map(({ icon: Icon, title, copy }) => (
+                  <div key={title} className="flex gap-3 rounded-xl bg-white p-4 shadow-sm">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary/10 text-primary"><Icon className="h-5 w-5" /></div>
+                    <div>
+                      <h3 className="font-semibold text-gray-950">{title}</h3>
+                      <p className="mt-1 text-sm text-gray-600">{copy}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-950">{title}</h3>
-                    <p className="mt-1 text-sm text-gray-600">{copy}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2 text-xs">
+                {["PayChangu", "Airtel Money", "TNM Mpamba", "Visa/Mastercard"].map((p) => (
+                  <span key={p} className="rounded-full border border-gray-200 bg-white px-3 py-1.5 font-medium text-gray-700">{p}</span>
+                ))}
+              </div>
+              <p className="mt-4 text-sm text-gray-600">
+                Need help? <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline inline-flex items-center gap-1"><MessageCircle className="h-4 w-4" /> WhatsApp +265 982 972 977</a>
+              </p>
             </div>
-            <p className="mt-5 text-sm text-gray-600">
-              Safe PayChangu payment. Order updates. WhatsApp help: <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">+265 982 972 977</a>.
-            </p>
+            <div className="order-1 grid grid-cols-2 gap-3 lg:order-2">
+              <img src={detailImage} alt="Person wearing SB streetwear" className="h-full w-full rounded-xl object-cover" loading="lazy" />
+              <img src="/images/sb/blue-streetwear-squad.jpg" alt="People wearing SB clothing" className="h-full w-full rounded-xl object-cover" loading="lazy" />
+            </div>
           </div>
-          <div className="order-1 overflow-hidden bg-gray-100 lg:order-2">
-            <img src={detailImage} alt="SB clothing detail and style" className="block h-auto w-full object-contain" loading="lazy" />
-          </div>
+
+          {testimonials.length > 0 && (
+            <div className="mt-10">
+              <div className="mb-4 flex items-end justify-between gap-4">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">Real reviews</p>
+                  <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-gray-950 sm:text-3xl">What customers say.</h3>
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {testimonials.map((t) => (
+                  <div key={t.id} className="rounded-xl bg-white p-4 shadow-sm">
+                    <div className="flex gap-0.5 text-amber-400">{Array.from({ length: Math.max(1, Math.min(5, Math.round(t.rating))) }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}</div>
+                    <p className="mt-3 text-sm leading-relaxed text-gray-700">"{t.message}"</p>
+                    <div className="mt-4 flex items-center gap-3">
+                      {t.image ? <img src={t.image} alt={t.name} className="h-9 w-9 rounded-full object-cover" loading="lazy" /> : <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">{t.name.slice(0, 1)}</div>}
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">{t.name}</p>
+                        <p className="text-xs text-gray-500">{t.role || "SB customer"}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
