@@ -16,21 +16,9 @@ const lookCover = (look: SbLook, products: Product[]) => {
 };
 
 const shoppablePoints = [
-  {
-    icon: Shirt,
-    title: "The exact pieces",
-    description: "Every item is a real product with its own page, price and size options.",
-  },
-  {
-    icon: ShoppingBag,
-    title: "Add it straight to bag",
-    description: "See how the look works, then add only the pieces you want to your order.",
-  },
-  {
-    icon: Sparkles,
-    title: "Styled with intention",
-    description: "Each piece has a role and a styling note, so you know why it is there.",
-  },
+  { icon: Shirt, title: "Real pieces", description: "Every item is real and ready to buy." },
+  { icon: ShoppingBag, title: "Add to bag", description: "Pick only what you want." },
+  { icon: Sparkles, title: "Easy styling", description: "See how to wear it." },
 ];
 
 const LookCard = ({

@@ -113,9 +113,8 @@ const Collections = () => {
             <h1 className="font-display text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
               Collections &amp; drops
             </h1>
-            <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
-              Every release is built as a wardrobe, not a one off. Explore the collections that
-              define the street, and the limited drops that move fast.
+            <p className="mx-auto max-w-lg text-sm text-gray-600 sm:text-base">
+              Find clothes that go well together. Shop full collections and limited drops.
             </p>
             <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
               <Button asChild size="lg" variant="hero">

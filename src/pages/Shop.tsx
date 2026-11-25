@@ -255,16 +255,15 @@ const Shop = () => {
       <section className="border-b border-gray-200 bg-gray-50">
         <div className="container py-10 sm:py-14">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-2xl space-y-3">
+            <div className="max-w-2xl space-y-2">
               <p className="eyebrow text-primary">{categoryName || "Shop all"}</p>
               <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">
                 {categoryName || "Shop all"}
               </h1>
-              <p className="text-sm leading-relaxed text-gray-600 sm:text-base">
+              <p className="text-sm text-gray-600 sm:text-base">
                 {selectedCategory === "all"
-                  ? "Tees, vests, short sleeve shirts and shorts from Blantyre. A full streetwear wardrobe built to layer, mix and speak for itself."
-                  : selectedType?.description ||
-                    "Explore the category and find the fit that feels like you."}
+                  ? "Find tees, vests, shirts, and shorts you’ll love to wear."
+                  : selectedType?.description || "Find your next favorite piece."}
               </p>
             </div>
             <p className="text-sm font-medium text-gray-500">

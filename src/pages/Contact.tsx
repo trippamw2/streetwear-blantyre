@@ -11,74 +11,54 @@ const Contact = () => (
     <SEO {...defaultSEO.contact} path="/contact" />
 
     <section className="border-b border-gray-200 bg-[#f7f8fb]">
-      <div className="container py-14 sm:py-20">
-        <div className="max-w-2xl space-y-4">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">Contact SB</p>
-          <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">
-            We’re here to help.
-          </h1>
-          <p className="text-sm leading-relaxed text-gray-600 sm:text-lg">
-            Questions about sizing, stock, orders, or delivery? Reach out and we’ll help you find what you need.
-          </p>
-        </div>
+      <div className="container py-10 sm:py-14">
+        <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">Contact SB</p>
+        <h1 className="mt-3 font-display text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">Need help?</h1>
+        <p className="mt-3 max-w-xl text-base text-gray-600">Ask us about size, stock, delivery, or your order. We’re happy to help.</p>
       </div>
     </section>
 
     <div className="container py-12 sm:py-16">
       <div className="grid gap-4 sm:gap-5 lg:grid-cols-3">
-        <div className="flex flex-col justify-between rounded-2xl bg-primary p-7 text-white sm:p-8">
-          <div className="space-y-3">
+        <div className="flex flex-col justify-between rounded-2xl bg-primary p-6 text-white sm:p-8">
+          <div>
             <MessageCircle className="h-7 w-7 text-white/80" />
-            <h2 className="font-display text-2xl font-extrabold">WhatsApp Support</h2>
-            <p className="text-sm leading-relaxed text-white/80">
-              The fastest way to get help with orders, product availability, and styling questions.
-            </p>
+            <h2 className="mt-3 font-display text-2xl font-extrabold">WhatsApp</h2>
+            <p className="mt-2 text-sm text-white/85">Fastest way to get help.</p>
+            <p className="mt-2 text-sm font-semibold text-white">{WHATSAPP_NUMBER}</p>
           </div>
           <Button asChild size="lg" className="mt-6 w-full bg-white text-primary hover:bg-gray-100">
-            <a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer">
-              Chat on WhatsApp
-            </a>
+            <a href={buildWhatsAppLink(defaultMessage)} target="_blank" rel="noopener noreferrer">Chat now</a>
           </Button>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white p-7 sm:p-8">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
           <MapPin className="h-7 w-7 text-primary" />
-          <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Store Pickup</h2>
-          <p className="mt-2 text-sm leading-relaxed text-gray-600">
-            Collect your order in Blantyre. Choose pickup at checkout and we’ll notify you when it’s ready.
-          </p>
-          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
-            Pickup details shared after order confirmation
-          </p>
+          <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Pickup</h2>
+          <p className="mt-2 text-sm text-gray-600">Pick up in Blantyre. We’ll message you when it’s ready.</p>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white p-7 sm:p-8">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
           <Truck className="h-7 w-7 text-primary" />
-          <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Delivery & Pickup</h2>
-          <p className="mt-2 text-sm leading-relaxed text-gray-600">
-            We deliver across Malawi. Blantyre orders usually arrive same day or within 1 to 3 days. Other areas typically take 3 to 5 working days.
-          </p>
-          <p className="mt-4 text-sm text-gray-600">
-            Prefer WhatsApp? <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">{WHATSAPP_NUMBER}</a>
-          </p>
+          <h2 className="mt-3 font-display text-xl font-bold text-gray-900">Delivery</h2>
+          <p className="mt-2 text-sm text-gray-600">Blantyre: 1-3 days. Other areas: 3-5 working days.</p>
+          <p className="mt-3 text-sm text-gray-600">We deliver across Malawi.</p>
         </div>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
-          <h2 className="font-display text-lg font-bold text-gray-900">Payments</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            We accept <span className="font-semibold text-gray-900">Airtel Money</span>, <span className="font-semibold text-gray-900">TNM Mpamba</span>, and <span className="font-semibold text-gray-900">Visa/Mastercard</span> through secure PayChangu checkout.
-          </p>
-          <p className="mt-2 text-sm text-gray-600">Cash on delivery is not currently offered. If payment fails, you can retry from your order page or message us on WhatsApp.</p>
+        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
+          <h2 className="font-display text-lg font-bold text-gray-900">Safe payment</h2>
+          <p className="mt-2 text-sm text-gray-600">Pay with Airtel Money, TNM Mpamba, Visa, or Mastercard through PayChangu.</p>
+          <p className="mt-2 text-sm text-gray-600">If payment fails, you can retry from your order page.</p>
         </div>
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
-          <h2 className="font-display text-lg font-bold text-gray-900">Why customers can trust SB</h2>
+        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
+          <h2 className="font-display text-lg font-bold text-gray-900">Buy with confidence</h2>
           <ul className="mt-3 space-y-2 text-sm text-gray-600">
-            <li>Real WhatsApp support: <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">{WHATSAPP_NUMBER}</a></li>
-            <li>14 day size exchanges on eligible unworn items.</li>
-            <li>30 day quality cover for manufacturing faults.</li>
-            <li>Order confirmation and tracking after checkout.</li>
+            <li>WhatsApp help: <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">{WHATSAPP_NUMBER}</a></li>
+            <li>14 day size exchanges on eligible items.</li>
+            <li>30 day quality cover for faults.</li>
+            <li>Order confirmation and tracking.</li>
           </ul>
         </div>
       </div>
