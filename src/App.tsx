@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
@@ -11,96 +11,97 @@ import { CompareProvider } from "@/contexts/CompareContext";
 import { Layout } from "./components/Layout";
 import { AdminLayout } from "./components/AdminLayout";
 import { ScrollToTop } from "./components/ScrollToTop";
-import Home from "./pages/Home";
-import Shop from "./pages/Shop";
-import ProductDetail from "./pages/ProductDetail";
-import Combos from "./pages/Combos";
-import KitDetail from "./pages/KitDetail";
-import Compare from "./pages/Compare";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Auth from "./pages/Auth";
-import Checkout from "./pages/Checkout";
-import Orders from "./pages/Orders";
-import OrderDetail from "./pages/OrderDetail";
-import NotFound from "./pages/NotFound.tsx";
-import DeliveryTracking from "./pages/DeliveryTracking";
-import GiftPacks from "./pages/GiftPacks";
-import ScheduledGift from "./pages/ScheduledGift";
-import AdminDashboard from "./pages/admin/Dashboard";
-import AdminProducts from "./pages/admin/Products";
-import AdminOrders from "./pages/admin/Orders";
-import AdminSettings from "./pages/admin/Settings";
-import AdminBusiness from "./pages/admin/Business";
-import AdminInventory from "./pages/admin/Inventory";
-import AdminPromotions from "./pages/admin/Promotions";
-import AdminCombos from "./pages/admin/Combos";
-import AdminDelivery from "./pages/admin/Delivery";
-import AdminTestimonials from "./pages/admin/Testimonials";
-import AdminSuppliers from "./pages/admin/Suppliers";
-import AdminPromos from "./pages/admin/Promos";
-import AdminCRM from "./pages/admin/CRM";
-import AdminLoyalty from "./pages/admin/Loyalty";
-import AdminReferrals from "./pages/admin/Referrals";
-import AdminCategories from "./pages/admin/Categories";
-import Terms from "./pages/policy/Terms";
-import Privacy from "./pages/policy/Privacy";
-import FAQ from "./pages/policy/FAQ";
-import Returns from "./pages/policy/Returns";
-import Warranty from "./pages/policy/Warranty";
-import Loyalty from "./pages/Loyalty";
-import Verify from "./pages/Verify";
-import Passport from "./pages/Passport";
-import AdminAuthentication from "./pages/admin/Authentication";
-import AdminGifts from "./pages/admin/Gifts";
-import AdminCultureStories from "./pages/admin/CultureStories";
-import AdminCommunications from "./pages/admin/Communications";
-import AdminLakeFresh from "./pages/admin/LakeFresh";
-import AdminLakeFreshOperations from "./pages/admin/LakeFreshOperations";
-import AdminLookbooks from "./pages/admin/Lookbooks";
 import ProtectedRoute from "./components/ProtectedRoute";
-import GiftTrack from "./pages/GiftTrack";
-import Editorial from "./pages/Editorial";
-import EditorialPost from "./pages/EditorialPost";
-import Culture from "./pages/Culture";
-import Lookbooks from "./pages/Lookbooks";
-import LookbookDetail from "./pages/LookbookDetail";
-import Collections from "./pages/Collections";
-import CollectionDetail from "./pages/CollectionDetail";
-import Looks from "./pages/Looks";
-import LookDetail from "./pages/LookDetail";
-import AdminSbProductTypes from "./pages/admin/SbProductTypes";
-import AdminSbCollections from "./pages/admin/SbCollections";
-import AdminSbLooks from "./pages/admin/SbLooks";
-import AdminSbCampaigns from "./pages/admin/SbCampaigns";
-import AdminSbAnalytics from "./pages/admin/SbAnalytics";
-import AdminSbReturns from "./pages/admin/SbReturns";
-import Scan from "./pages/Scan";
-import LakeFreshHome from "./pages/lf/LakeFreshHome";
-import LakeFreshCatalog from "./pages/lf/LakeFreshCatalog";
-import LakeFreshProduct from "./pages/lf/LakeFreshProduct";
-import LakeFreshCart from "./pages/lf/LakeFreshCart";
-import LakeFreshCheckout from "./pages/lf/LakeFreshCheckout";
-import LakeFreshAuth from "./pages/lf/LakeFreshAuth";
-import LakeFreshOrders from "./pages/lf/LakeFreshOrders";
-import LakeFreshOrder from "./pages/lf/LakeFreshOrder";
-import LakeFreshRecipes from "./pages/lf/LakeFreshRecipes";
-import LakeFreshRecipe from "./pages/lf/LakeFreshRecipe";
-import LakeFreshSpices from "./pages/lf/LakeFreshSpices";
-import LakeFreshSpiceDetail from "./pages/lf/LakeFreshSpiceDetail";
-import LakeFreshPro from "./pages/lf/LakeFreshPro";
-import LakeFreshLoyalty from "./pages/lf/LakeFreshLoyalty";
-import LakeFreshSubscribe from "./pages/lf/LakeFreshSubscribe";
-import LakeFreshTrack from "./pages/lf/LakeFreshTrack";
-import LakeFreshDriver from "./pages/lf/LakeFreshDriver";
-import LakeFreshPrivacy from "./pages/lf/LakeFreshPrivacy";
-import LakeFreshTerms from "./pages/lf/LakeFreshTerms";
-import LakeFreshRefund from "./pages/lf/LakeFreshRefund";
-import LakeFreshSupport from "./pages/lf/LakeFreshSupport";
-import LakeFreshReviews from "./pages/lf/LakeFreshReviews";
 import { LakeFreshLayout } from "./components/lf/LakeFreshLayout";
 import { LakeFreshProtectedRoute } from "./components/lf/LakeFreshProtectedRoute";
 import { IS_DUAL_SITE, IS_LF_SITE, SHOWS_LF, SHOWS_SB } from "./lib/brandSite";
+
+const Home = lazy(() => import("./pages/Home"));
+const Shop = lazy(() => import("./pages/Shop"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const Combos = lazy(() => import("./pages/Combos"));
+const KitDetail = lazy(() => import("./pages/KitDetail"));
+const Compare = lazy(() => import("./pages/Compare"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const Orders = lazy(() => import("./pages/Orders"));
+const OrderDetail = lazy(() => import("./pages/OrderDetail"));
+const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+const DeliveryTracking = lazy(() => import("./pages/DeliveryTracking"));
+const GiftPacks = lazy(() => import("./pages/GiftPacks"));
+const ScheduledGift = lazy(() => import("./pages/ScheduledGift"));
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const AdminProducts = lazy(() => import("./pages/admin/Products"));
+const AdminOrders = lazy(() => import("./pages/admin/Orders"));
+const AdminSettings = lazy(() => import("./pages/admin/Settings"));
+const AdminBusiness = lazy(() => import("./pages/admin/Business"));
+const AdminInventory = lazy(() => import("./pages/admin/Inventory"));
+const AdminPromotions = lazy(() => import("./pages/admin/Promotions"));
+const AdminCombos = lazy(() => import("./pages/admin/Combos"));
+const AdminDelivery = lazy(() => import("./pages/admin/Delivery"));
+const AdminTestimonials = lazy(() => import("./pages/admin/Testimonials"));
+const AdminSuppliers = lazy(() => import("./pages/admin/Suppliers"));
+const AdminPromos = lazy(() => import("./pages/admin/Promos"));
+const AdminCRM = lazy(() => import("./pages/admin/CRM"));
+const AdminLoyalty = lazy(() => import("./pages/admin/Loyalty"));
+const AdminReferrals = lazy(() => import("./pages/admin/Referrals"));
+const AdminCategories = lazy(() => import("./pages/admin/Categories"));
+const Terms = lazy(() => import("./pages/policy/Terms"));
+const Privacy = lazy(() => import("./pages/policy/Privacy"));
+const FAQ = lazy(() => import("./pages/policy/FAQ"));
+const Returns = lazy(() => import("./pages/policy/Returns"));
+const Warranty = lazy(() => import("./pages/policy/Warranty"));
+const Loyalty = lazy(() => import("./pages/Loyalty"));
+const Verify = lazy(() => import("./pages/Verify"));
+const Passport = lazy(() => import("./pages/Passport"));
+const AdminAuthentication = lazy(() => import("./pages/admin/Authentication"));
+const AdminGifts = lazy(() => import("./pages/admin/Gifts"));
+const AdminCultureStories = lazy(() => import("./pages/admin/CultureStories"));
+const AdminCommunications = lazy(() => import("./pages/admin/Communications"));
+const AdminLakeFresh = lazy(() => import("./pages/admin/LakeFresh"));
+const AdminLakeFreshOperations = lazy(() => import("./pages/admin/LakeFreshOperations"));
+const AdminLookbooks = lazy(() => import("./pages/admin/Lookbooks"));
+const GiftTrack = lazy(() => import("./pages/GiftTrack"));
+const Editorial = lazy(() => import("./pages/Editorial"));
+const EditorialPost = lazy(() => import("./pages/EditorialPost"));
+const Culture = lazy(() => import("./pages/Culture"));
+const Lookbooks = lazy(() => import("./pages/Lookbooks"));
+const LookbookDetail = lazy(() => import("./pages/LookbookDetail"));
+const Collections = lazy(() => import("./pages/Collections"));
+const CollectionDetail = lazy(() => import("./pages/CollectionDetail"));
+const Looks = lazy(() => import("./pages/Looks"));
+const LookDetail = lazy(() => import("./pages/LookDetail"));
+const AdminSbProductTypes = lazy(() => import("./pages/admin/SbProductTypes"));
+const AdminSbCollections = lazy(() => import("./pages/admin/SbCollections"));
+const AdminSbLooks = lazy(() => import("./pages/admin/SbLooks"));
+const AdminSbCampaigns = lazy(() => import("./pages/admin/SbCampaigns"));
+const AdminSbAnalytics = lazy(() => import("./pages/admin/SbAnalytics"));
+const AdminSbReturns = lazy(() => import("./pages/admin/SbReturns"));
+const Scan = lazy(() => import("./pages/Scan"));
+const LakeFreshHome = lazy(() => import("./pages/lf/LakeFreshHome"));
+const LakeFreshCatalog = lazy(() => import("./pages/lf/LakeFreshCatalog"));
+const LakeFreshProduct = lazy(() => import("./pages/lf/LakeFreshProduct"));
+const LakeFreshCart = lazy(() => import("./pages/lf/LakeFreshCart"));
+const LakeFreshCheckout = lazy(() => import("./pages/lf/LakeFreshCheckout"));
+const LakeFreshAuth = lazy(() => import("./pages/lf/LakeFreshAuth"));
+const LakeFreshOrders = lazy(() => import("./pages/lf/LakeFreshOrders"));
+const LakeFreshOrder = lazy(() => import("./pages/lf/LakeFreshOrder"));
+const LakeFreshRecipes = lazy(() => import("./pages/lf/LakeFreshRecipes"));
+const LakeFreshRecipe = lazy(() => import("./pages/lf/LakeFreshRecipe"));
+const LakeFreshSpices = lazy(() => import("./pages/lf/LakeFreshSpices"));
+const LakeFreshSpiceDetail = lazy(() => import("./pages/lf/LakeFreshSpiceDetail"));
+const LakeFreshPro = lazy(() => import("./pages/lf/LakeFreshPro"));
+const LakeFreshLoyalty = lazy(() => import("./pages/lf/LakeFreshLoyalty"));
+const LakeFreshSubscribe = lazy(() => import("./pages/lf/LakeFreshSubscribe"));
+const LakeFreshTrack = lazy(() => import("./pages/lf/LakeFreshTrack"));
+const LakeFreshDriver = lazy(() => import("./pages/lf/LakeFreshDriver"));
+const LakeFreshPrivacy = lazy(() => import("./pages/lf/LakeFreshPrivacy"));
+const LakeFreshTerms = lazy(() => import("./pages/lf/LakeFreshTerms"));
+const LakeFreshRefund = lazy(() => import("./pages/lf/LakeFreshRefund"));
+const LakeFreshSupport = lazy(() => import("./pages/lf/LakeFreshSupport"));
+const LakeFreshReviews = lazy(() => import("./pages/lf/LakeFreshReviews"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -181,6 +182,7 @@ const App = () => {
                 <Sonner />
                 <BrowserRouter>
                   <ScrollToTop />
+                  <Suspense fallback={<div className="min-h-[40vh]" aria-hidden="true" />}>
                   <Routes>
                     {/* SB storefront, never mounted on the LF domain */}
                     {SHOWS_SB && (
@@ -303,6 +305,7 @@ const App = () => {
                     {/* 404 catch-all, must be LAST so it doesn't swallow /admin */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>
+                  </Suspense>
                 </BrowserRouter>
               </CompareProvider>
             </CartProvider>

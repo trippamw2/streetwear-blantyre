@@ -44,7 +44,7 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
               {items.map((i) => (
                 <div key={i.productKey} className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-xl">
                   <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-lg overflow-hidden shrink-0 bg-white">
-                    <img src={i.image} alt={i.name} className="h-full w-full object-cover" />
+                    <img src={i.image} alt={i.name} className="h-full w-full object-cover" loading="lazy" decoding="async" />
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col justify-between">
                     <div className="flex items-start justify-between gap-2">

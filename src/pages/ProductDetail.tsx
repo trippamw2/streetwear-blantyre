@@ -368,6 +368,10 @@ const ProductDetail = () => {
                   src={selectedImageSrc}
                   alt={product.name}
                   className="h-full w-full object-cover"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
               ) : (
                 <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-gray-100 to-gray-200 px-4 text-center">
@@ -487,7 +491,7 @@ const ProductDetail = () => {
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <img src={img} alt={galleryLabels[i] || `Photo ${i + 1}`} className="h-full w-full object-cover" />
+                  <img src={img} alt={galleryLabels[i] || `Photo ${i + 1}`} className="h-full w-full object-cover" loading="lazy" decoding="async" />
                   <span className="absolute inset-x-0 bottom-0 truncate bg-gray-950/70 px-1 py-0.5 text-[8px] font-bold uppercase text-white">
                     {galleryLabels[i] || `Photo ${i + 1}`}
                   </span>
@@ -678,24 +682,25 @@ const ProductDetail = () => {
               <div className="space-y-4">
                 {sizeOptions.length > 0 && (
                   <div className="space-y-2">
-                    <div className="flex items-baseline justify-between">
+                    <div className="flex items-baseline justify-between gap-3">
                       <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-900">
                         Select Size
                       </p>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         <Link
                           to="/faq#size-guide"
-                          className="text-xs font-semibold text-primary underline underline-offset-4 hover:text-primary/80"
+                          className="inline-flex items-center rounded-full border border-primary/25 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10"
                         >
                           Size guide
                         </Link>
                         {selectedVariant && (
-                          <p className="text-[11px] text-gray-600">
+                          <p className="hidden text-[11px] text-gray-600 sm:block">
                             SKU {selectedVariant.sku} · {selectedVariant.color}
                           </p>
                         )}
                       </div>
                     </div>
+                    {selectedVariant && <p className="text-[11px] text-gray-600 sm:hidden">SKU {selectedVariant.sku} · {selectedVariant.color}</p>}
                     <div className="flex flex-wrap gap-2">
                       {sizeOptions.map((option, optionIndex) => {
                         const isSelected =

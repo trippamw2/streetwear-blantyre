@@ -85,7 +85,7 @@ const LookDetail = () => {
       <section className="relative isolate overflow-hidden bg-gray-900">
         <div className="absolute inset-0">
           {heroImage ? (
-            <img src={heroImage} alt="" className="h-full w-full object-cover object-top" />
+            <img src={heroImage} alt="" className="h-full w-full object-cover object-top" loading="eager" fetchPriority="high" decoding="async" />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700" />
           )}
