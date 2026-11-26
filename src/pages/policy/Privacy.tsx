@@ -5,7 +5,7 @@ const Privacy = () => (
     seo="privacy"
     eyebrow="Your Data"
     title="Privacy Policy"
-    intro="This policy explains what information SB collects, why we collect it and how we look after it."
+    intro="We keep your info safe and use it only to help with your order."
   >
     <PolicySection title="Information we collect">
       <PolicyList

@@ -554,42 +554,22 @@ const ProductDetail = () => {
               )}
             </div>
 
-            {/* Fit, fabric and care information */}
-            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600 sm:p-5">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-gray-900">
-                Fit &amp; Details
-              </p>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <p>
-                  <span className="font-semibold text-gray-900">Fit:</span> {product.fit || "Relaxed fit"}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-900">Material:</span>{" "}
-                  {product.material || "Cotton blend"}
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-900">Cut:</span>{" "}
-                  {product.gender_classification === "unisex" ? "Unisex" : product.gender_classification || "Unisex"}
-                </p>
+            <div className="rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-gray-900">Quick facts</p>
+              <div className="grid gap-2 sm:grid-cols-2 text-xs sm:text-sm">
+                <p><span className="font-semibold text-gray-900">Fit:</span> {product.fit || "Relaxed fit"}</p>
+                <p><span className="font-semibold text-gray-900">Material:</span> {product.material || "Check product details"}</p>
+                <p><span className="font-semibold text-gray-900">Delivery:</span> Blantyre 1-3 days, other areas 3-5 days</p>
+                <p><span className="font-semibold text-gray-900">Exchange:</span> 14 days on eligible items</p>
               </div>
-              <p className="mt-3">{product.model_fit_note || 'Model is 6\'0" and wears size L'}</p>
-              {product.description && product.description !== product.benefit && (
-                <p className="mt-3 leading-relaxed">{product.description}</p>
-              )}
-              {product.care_instructions && (
-                <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
-                  <span className="font-semibold text-gray-900">Care:</span> {product.care_instructions}
-                </p>
-              )}
-              <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
-                <span className="font-semibold text-gray-900">Delivery:</span> Delivery across Malawi. Blantyre orders usually arrive same day or within 1 to 3 days. Other areas typically take 3 to 5 working days. Store pickup is available.
-              </p>
-              <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
-                <span className="font-semibold text-gray-900">Exchanges & quality:</span> 14 day size exchanges on eligible unworn items, plus 30 day quality cover for faults. <Link to="/returns" className="font-semibold text-primary hover:underline">Returns</Link> · <Link to="/faq#size-guide" className="font-semibold text-primary hover:underline">Size guide</Link>
-              </p>
-              <p className="mt-3 border-t border-gray-200 pt-3 text-xs leading-relaxed">
-                <span className="font-semibold text-gray-900">Need help?</span> WhatsApp us on <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">+265 982 972 977</a> before you order.
-              </p>
+              <p className="mt-3 text-xs leading-relaxed text-gray-600">{product.model_fit_note || "Need size help? Check the size guide or WhatsApp us."}</p>
+              {product.care_instructions && <p className="mt-2 text-xs leading-relaxed"><span className="font-semibold text-gray-900">Care:</span> {product.care_instructions}</p>}
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 border-t border-gray-200 pt-3 text-xs font-semibold">
+                <Link to="/faq#size-guide" className="text-primary hover:underline">Size guide</Link>
+                <Link to="/returns" className="text-primary hover:underline">Returns & exchange</Link>
+                <Link to="/warranty" className="text-primary hover:underline">Quality cover</Link>
+                <a href="https://wa.me/265982972977" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">WhatsApp help</a>
+              </div>
             </div>
 
             {(product.reward_points ?? 0) > 0 && (

@@ -5,17 +5,14 @@ const Terms = () => (
     seo="terms"
     eyebrow="The Fine Print"
     title="Terms & Conditions"
-    intro="These terms apply when you browse or shop with SB. By using the site, you agree to them."
+    intro="Simple rules for shopping with SB."
   >
     <PolicySection title="1. About us">
       <p>
-        SB is a clothing retailer based in Blantyre, Malawi. We sell tees, vests, shirts, and shorts
-        jerseys and short sleeve shirts, along with other wearable categories we may add from time to
-        time.
+        SB sells streetwear clothing in Malawi: tees, vests, shirts, and shorts.
       </p>
       <p>
-        We are a retailer, not a manufacturer. Branded items are supplied by their respective brands
-        and suppliers.
+        We are a retailer. Some branded items come from other suppliers.
       </p>
     </PolicySection>
 

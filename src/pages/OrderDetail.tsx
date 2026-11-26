@@ -191,9 +191,11 @@ const OrderDetailPage = () => {
         {/* Payment */}
         {isOrderPayable(order.payment_status) && order.status !== "cancelled" && (
           <div className="rounded-2xl bg-gray-50 border border-gray-200 p-5 space-y-3">
-            <p className="font-display font-bold text-lg">Make Payment</p>
-            <p className="text-sm text-muted-foreground">
-              Pay <span className="font-bold text-gray-900">{formatMWK(order.total_mwk)}</span> securely online.
+            <p className="font-display font-bold text-lg">{paymentNotice?.tone === "error" ? "Payment not finished" : "Pay for your order"}</p>
+            <p className="text-sm text-gray-600">
+              {paymentNotice?.tone === "error"
+                ? "Your order is saved. Tap below to try again."
+                : <>Pay <span className="font-bold text-gray-900">{formatMWK(order.total_mwk)}</span> safely with PayChangu.</>}
             </p>
             <Button
               onClick={() =>
@@ -209,21 +211,20 @@ const OrderDetailPage = () => {
                   description: "SB order payment",
                 })
               }
-              className="w-full  rounded-full py-3 font-semibold"
+              className="w-full rounded-full py-3 font-semibold"
             >
               <CreditCard className="h-4 w-4 mr-2" />
-              Pay {formatMWK(order.total_mwk)} via PayChangu
+              {paymentNotice?.tone === "error" ? "Try payment again" : `Pay ${formatMWK(order.total_mwk)} now`}
             </Button>
-            <p className="text-xs text-muted-foreground text-center">
-              Ref: <span className="font-bold">{buildSbPaymentRef(order.id)}</span>
-            </p>
+            <p className="text-xs text-gray-500 text-center">Airtel Money, TNM Mpamba, Visa, Mastercard. Your order is saved if payment fails.</p>
+            <p className="text-xs text-muted-foreground text-center">Ref: <span className="font-bold">{buildSbPaymentRef(order.id)}</span></p>
           </div>
         )}
 
         {order.status === "delivered" && (
-          <div className="rounded-2xl bg-gradient-brand-soft border border-primary/30 p-5 space-y-3">
-            <p className="font-display font-bold text-lg">Stay Fresh</p>
-            <p className="text-sm text-muted-foreground">Thanks for choosing SB. Loved your order? Send us a quick photo or feedback on WhatsApp. We’re here if you need anything.</p>
+          <div className="rounded-2xl bg-primary/5 border border-primary/20 p-5 space-y-3">
+            <p className="font-display font-bold text-lg">Thanks for shopping SB</p>
+            <p className="text-sm text-gray-600">Love your order? Send us a photo or feedback on WhatsApp. Need help with size or quality? We are here.</p>
             <Button asChild variant="whatsapp" size="sm">
               <a href={buildWhatsAppLink(`Hi SB, I just received order #${order.id.slice(0,8).toUpperCase()}. Here's my feedback:`)} target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="h-4 w-4" /> Share feedback
@@ -232,18 +233,17 @@ const OrderDetailPage = () => {
           </div>
         )}
 
-        {/* Post purchase upsell */}
         <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-3">
-          <p className="font-semibold text-sm">Complete your look.</p>
+          <p className="font-semibold text-sm">Need anything else?</p>
           <p className="text-xs text-gray-600">
-            Another tee, different cap, or a fresh bundle. Every order benefits from our 30 day guarantee.
+            Shop more tees, vests, shirts, or shorts. 14 day size exchange on eligible items. 30 day quality cover for faults.
           </p>
           <div className="flex gap-2">
             <Button asChild variant="outline" size="sm" className="text-xs">
-              <Link to="/combos">View kits</Link>
+              <Link to="/shop">Shop more</Link>
             </Button>
             <Button asChild variant="outline" size="sm" className="text-xs">
-              <Link to="/shop">Shop all</Link>
+              <Link to="/returns">Returns</Link>
             </Button>
           </div>
         </div>

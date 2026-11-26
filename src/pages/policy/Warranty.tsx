@@ -5,7 +5,7 @@ const Warranty = () => (
     seo="warranty"
     eyebrow="Quality Cover"
     title="Quality Cover"
-    intro="Every piece is checked before it leaves us. If something is wrong with the item itself, we will put it right."
+    intro="If something is wrong with the item, we will help make it right."
   >
     <PolicySection title="What is covered">
       <PolicyList
