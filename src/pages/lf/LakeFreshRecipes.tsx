@@ -75,7 +75,7 @@ const LakeFreshRecipes = () => {
                     <LakeFreshImage
                       src={r.image}
                       alt={r.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center transition-transform duration-500 group-hover:scale-105"
                     />
                     <span className="absolute left-3 top-3 rounded-full bg-[#7ED321] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]">
                       Free

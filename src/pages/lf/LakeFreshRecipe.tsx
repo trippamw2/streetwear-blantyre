@@ -266,7 +266,7 @@ const LakeFreshRecipe = () => {
               <LakeFreshImage
                 src={data.image}
                 alt={data.title}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center"
               />
               <span className="absolute left-3 top-3 rounded-full bg-[#7ED321] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#073B78]">
                 Free with fish
