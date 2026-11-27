@@ -29,45 +29,45 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
   return (
     <Link
       to={`/collections/${collection.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-gray-900/5"
+      className="group flex h-full flex-col overflow-hidden border border-black/[0.06] bg-white transition-all duration-500 hover:border-black/15 hover:shadow-[0_20px_50px_-20px_rgba(0,0,0,0.18)]"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#f0f0ee]">
         {cover ? (
           <img
             src={cover}
             alt={collection.name}
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.05]"
+            className="h-full w-full object-cover object-top transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700">
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#141414] via-primary/70 to-[#2a2a2a]">
             <span className="font-display text-3xl font-bold tracking-[0.18em] text-white/70">
               SB
             </span>
           </div>
         )}
         {isDrop && (
-          <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-gray-900 shadow-sm">
+          <span className="absolute left-3 top-3 bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#141414] backdrop-blur-sm">
             Limited drop
           </span>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <p className="eyebrow mb-2 text-primary">{isDrop ? "Drop" : "Collection"}</p>
-        <h3 className="font-display text-xl font-bold tracking-tight text-gray-900">
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-primary">{isDrop ? "Drop" : "Collection"}</p>
+        <h3 className="mt-3 font-display text-2xl font-bold tracking-tight text-[#141414]">
           {collection.name}
         </h3>
         {collection.description && (
           <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-600">{collection.description}</p>
         )}
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
-          <span className="text-xs text-gray-600">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gray-500">
             {items.length} {items.length === 1 ? "piece" : "pieces"}
             {released ? ` · ${released}` : ""}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-gray-900 group-hover:text-primary">
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#141414] transition-colors group-hover:text-primary">
             Explore <ArrowRight className="h-3.5 w-3.5" />
           </span>
         </div>
@@ -77,8 +77,8 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
 };
 
 const EmptySection = ({ title, message }: { title: string; message: string }) => (
-  <div className="rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-12 text-center">
-    <p className="font-display text-lg font-extrabold uppercase text-gray-900">{title}</p>
+  <div className="border border-dashed border-black/15 bg-white px-6 py-14 text-center">
+    <p className="font-display text-xl font-extrabold tracking-tight text-[#141414]">{title}</p>
     <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-gray-600">{message}</p>
   </div>
 );
@@ -102,63 +102,59 @@ const Collections = () => {
   const preview = featuredPreview.length > 0 ? featuredPreview : products.slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fbfbfc] text-[#141414]">
       <SEO title="Collections | SB" description="Explore curated SB collections and limited drops designed for everyday urban style." path="/collections" />
 
-      <section className="border-b border-gray-200 bg-gray-50">
-        <div className="container py-16 text-center sm:py-24">
-          <div className="mx-auto max-w-2xl space-y-5">
-            <span className="eyebrow inline-block rounded-full border border-gray-300 bg-white px-4 py-1.5 text-primary">
-              Curated with care
-            </span>
-            <h1 className="font-display text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
-              Collections &amp; drops
-            </h1>
-            <p className="mx-auto max-w-lg text-sm text-gray-600 sm:text-base">
-              Find clothes that go well together. Shop full collections and limited drops.
-            </p>
-            <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
-              <Button asChild size="lg" variant="hero">
-                <a href="#collections">Explore Collections</a>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/shop">
-                  Shop all <ArrowRight />
-                </Link>
-              </Button>
-            </div>
+      <section className="relative overflow-hidden border-b border-black/[0.06] bg-[#0a0a0a] text-white">
+        <div className="absolute inset-0">
+          <img src="/images/sb/home-street.jpg" alt="" aria-hidden="true" className="h-full w-full object-cover object-top opacity-30" loading="eager" fetchPriority="high" decoding="async" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/35" />
+        </div>
+        <div className="container relative py-20 sm:py-28 lg:py-32">
+          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/60">Curated with care</p>
+          <h1 className="mt-4 max-w-4xl font-display text-4xl font-extrabold leading-[0.9] tracking-[-0.03em] sm:text-6xl lg:text-7xl text-balance">
+            Collections <span className="text-white/45">&amp; drops.</span>
+          </h1>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg">
+            Clothes that go well together. Shop full collections and limited drops.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="#collections" className="inline-flex h-13 items-center justify-center gap-2 bg-white px-8 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-[#0a0a0a] transition-all duration-300 hover:bg-primary hover:text-white">
+              Explore collections
+            </a>
+            <Link to="/shop" className="inline-flex h-13 items-center justify-center gap-2 border border-white/25 px-8 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:border-white hover:bg-white/10">
+              Shop all <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
 
       {loading ? (
         <div className="container flex justify-center py-24">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-900 border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#141414] border-t-transparent" />
         </div>
       ) : visible.length === 0 ? (
-        <section className="container py-16 sm:py-20">
-          <div className="rounded-3xl border border-gray-200 bg-gray-50 px-6 py-14 text-center">
-            <p className="eyebrow mb-3 text-primary">Coming soon</p>
-            <h2 className="font-display text-2xl font-extrabold tracking-tight text-gray-950 sm:text-3xl">
+        <section className="container py-16 sm:py-24">
+          <div className="border border-black/[0.08] bg-white px-6 py-16 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary">Coming soon</p>
+            <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-[#141414] sm:text-4xl">
               New collections are being curated
             </h2>
             <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-600">
-              Nothing is live here just yet. In the meantime, explore the pieces already in the shop.
+              Nothing is live here just yet. Explore the pieces already in the shop.
             </p>
-            <Button asChild variant="hero" size="lg" className="mt-7">
-              <Link to="/shop">
-                Shop collection <ArrowRight />
-              </Link>
-            </Button>
+            <Link to="/shop" className="mt-8 inline-flex h-12 items-center justify-center gap-2 bg-[#141414] px-8 text-[12px] font-bold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:bg-primary">
+              Shop collection <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
 
           {preview.length > 0 && (
-            <div className="mt-12">
-              <p className="eyebrow mb-2 text-primary">Start here</p>
-              <h3 className="font-display text-xl font-extrabold tracking-tight text-gray-950">
+            <div className="mt-14">
+              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary">Start here</p>
+              <h3 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-[#141414]">
                 Popular right now
               </h3>
-              <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
+              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
                 {preview.map((product, index) => (
                   <ProductCard key={product.id} product={product} index={index} />
                 ))}
@@ -168,13 +164,13 @@ const Collections = () => {
         </section>
       ) : (
         <>
-          <section id="collections" className="container scroll-mt-20 py-14 sm:py-20">
-            <div className="mb-8">
-              <p className="eyebrow mb-2 text-primary">The wardrobe</p>
-              <h2 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
+          <section id="collections" className="container scroll-mt-24 py-16 sm:py-24">
+            <div className="mb-10 sm:mb-14">
+              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary">The wardrobe</p>
+              <h2 className="mt-3 font-display text-4xl font-extrabold leading-[0.92] tracking-[-0.03em] text-[#141414] sm:text-5xl">
                 Collections
               </h2>
-              <p className="mt-2 max-w-md text-sm leading-relaxed text-gray-600">
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-gray-600 sm:text-base">
                 Core lines made to mix, match and wear every day.
               </p>
             </div>
@@ -192,14 +188,14 @@ const Collections = () => {
             )}
           </section>
 
-          <section id="drops" className="scroll-mt-20 border-t border-gray-200 bg-gray-50 py-14 sm:py-20">
+          <section id="drops" className="scroll-mt-24 border-t border-black/[0.06] bg-[#f6f6f4] py-16 sm:py-24">
             <div className="container">
-              <div className="mb-8">
-                <p className="eyebrow mb-2 text-primary">Limited Availability</p>
-                <h2 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
+              <div className="mb-10 sm:mb-14">
+                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary">Limited availability</p>
+                <h2 className="mt-3 font-display text-4xl font-extrabold leading-[0.92] tracking-[-0.03em] text-[#141414] sm:text-5xl">
                   Limited drops
                 </h2>
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-gray-600">
+                <p className="mt-4 max-w-md text-sm leading-relaxed text-gray-600 sm:text-base">
                   Small runs, released with intention. When they are gone, they are gone.
                 </p>
               </div>

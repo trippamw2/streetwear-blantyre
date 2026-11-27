@@ -67,11 +67,11 @@ export const Navbar = () => {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90">
-      <div className="container flex h-16 items-center justify-between gap-3 sm:h-20">
+    <header className="sticky top-0 z-50 border-b border-black/[0.06] bg-white/92 backdrop-blur-xl supports-[backdrop-filter]:bg-white/85">
+      <div className="container flex h-16 items-center justify-between gap-3 sm:h-[76px]">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="rounded-md p-2 text-gray-900 transition-colors hover:bg-gray-100 lg:hidden"
+          className="-ml-2 rounded-md p-2 text-gray-900 transition-colors hover:bg-black/5 lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -79,14 +79,14 @@ export const Navbar = () => {
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
 
-        <Logo className="h-11 w-auto sm:h-14 md:h-16" />
+        <Logo className="h-10 w-auto sm:h-12 md:h-14" />
 
-        <nav className="hidden items-center gap-6 lg:flex xl:gap-8" aria-label="Primary">
+        <nav className="hidden items-center gap-7 lg:flex xl:gap-9" aria-label="Primary">
           {NAV_LINKS.map((link) =>
             link.label === "Shop" ? (
               <DropdownMenu key={link.to}>
-                <DropdownMenuTrigger className="inline-flex items-center gap-1 text-sm font-medium text-gray-700 transition-colors hover:text-primary">
-                  Shop <ChevronDown className="h-4 w-4" />
+                <DropdownMenuTrigger className="group inline-flex items-center gap-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-gray-700 transition-colors hover:text-primary">
+                  Shop <ChevronDown className="h-3.5 w-3.5 transition-transform group-data-[state=open]:rotate-180" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56 border-gray-200 bg-white p-2 text-gray-900 shadow-xl">
                   <DropdownMenuItem asChild>
@@ -108,7 +108,7 @@ export const Navbar = () => {
               <Link
                 key={link.to + link.label}
                 to={link.to}
-                className="text-sm font-medium text-gray-700 transition-colors hover:text-primary"
+                className="text-[13px] font-semibold uppercase tracking-[0.1em] text-gray-700 transition-colors hover:text-primary"
               >
                 {link.label}
               </Link>
@@ -116,19 +116,19 @@ export const Navbar = () => {
           )}
         </nav>
 
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-0.5 sm:gap-1">
           <button
             onClick={() => setSearchOpen(!searchOpen)}
-            className="rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary"
+            className="rounded-full p-2.5 text-gray-800 transition-colors hover:bg-black/5 hover:text-primary"
             aria-label="Search"
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-[18px] w-[18px]" />
           </button>
 
           {user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary" aria-label="Account">
-                <User className="h-5 w-5" />
+              <DropdownMenuTrigger className="rounded-full p-2.5 text-gray-800 transition-colors hover:bg-black/5 hover:text-primary" aria-label="Account">
+                <User className="h-[18px] w-[18px]" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48 border-gray-200 bg-white text-gray-900 shadow-xl">
                 <DropdownMenuItem asChild>
@@ -144,16 +144,16 @@ export const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Link to="/auth" className="hidden rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary sm:block" aria-label="Account">
-              <User className="h-5 w-5" />
+            <Link to="/auth" className="hidden rounded-full p-2.5 text-gray-800 transition-colors hover:bg-black/5 hover:text-primary sm:block" aria-label="Account">
+              <User className="h-[18px] w-[18px]" />
             </Link>
           )}
 
           <CartDrawer>
-            <button className="relative rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary" aria-label={count > 0 ? `Bag, ${count} items` : "Bag"}>
-              <ShoppingBag className="h-5 w-5" />
+            <button className="relative rounded-full p-2.5 text-gray-800 transition-colors hover:bg-black/5 hover:text-primary" aria-label={count > 0 ? `Bag, ${count} items` : "Bag"}>
+              <ShoppingBag className="h-[18px] w-[18px]" />
               {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white" aria-hidden="true">
+                <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-white" aria-hidden="true">
                   {count > 99 ? "99+" : count}
                 </span>
               )}

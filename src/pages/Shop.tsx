@@ -252,26 +252,27 @@ const Shop = () => {
       <SEO {...defaultSEO.shop} />
 
       {/* PAGE HEADER */}
-      <section className="border-b border-gray-200 bg-gray-50">
-        <div className="container py-10 sm:py-14">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-2xl space-y-2">
-              <p className="eyebrow text-primary">{categoryName || "Shop all"}</p>
-              <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">
+      <section className="relative overflow-hidden border-b border-black/[0.06] bg-[#f6f6f4]">
+        <div className="sb-grid-bg absolute inset-0 opacity-60" aria-hidden="true" />
+        <div className="container relative py-12 sm:py-16 lg:py-20">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-3xl">
+              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary">{categoryName || "The collection"}</p>
+              <h1 className="mt-3 font-display text-4xl font-extrabold leading-[0.9] tracking-[-0.03em] text-[#0a0a0a] sm:text-6xl lg:text-7xl">
                 {categoryName || "Shop all"}
               </h1>
-              <p className="text-sm text-gray-600 sm:text-base">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-gray-600 sm:text-base">
                 {selectedCategory === "all"
-                  ? "Find tees, vests, shirts, and shorts you’ll love to wear."
+                  ? "Tees, vests, shirts, and shorts. Simple pieces for every day."
                   : selectedType?.description || "Find your next favorite piece."}
               </p>
             </div>
-            <p className="text-sm font-medium text-gray-500">
-              {sorted.length} {sorted.length === 1 ? "piece" : "pieces"} available
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-gray-500">
+              {sorted.length} {sorted.length === 1 ? "piece" : "pieces"}
             </p>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-8">
             <PromotionSlider page="shop" />
           </div>
         </div>
@@ -289,7 +290,7 @@ const Shop = () => {
                 setSearchQuery(e.target.value);
                 updateParam("q", e.target.value);
               }}
-              className="h-11 rounded-full border-gray-200 bg-gray-50 pl-11 pr-10 text-sm text-gray-900 placeholder:text-gray-500"
+              className="h-11 rounded-none border-black/10 bg-white pl-11 pr-10 text-sm text-gray-900 placeholder:text-gray-500 focus-visible:ring-primary"
             />
             {searchQuery && (
               <button
