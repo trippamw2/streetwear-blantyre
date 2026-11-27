@@ -7,10 +7,11 @@ import { useProducts } from "@/hooks/useProducts";
 import { useTestimonials } from "@/hooks/useTestimonials";
 import { SB_PRODUCT_TYPES } from "@/data/sbArchitecture";
 
-const heroImage = "/images/sb/home-menu.jpg";
+const heroImage = "/images/sb/hero-campaign.jpg";
 const lifestyleImage = "/images/sb/blue-streetwear-squad.jpg";
 const detailImage = "/images/sb/urban-blue-style-duo.jpg";
-const campaignImage = "/images/sb/street-campaign.jpg";
+const campaignImage = "/images/sb/home-street.jpg";
+const editorialImage = "/images/sb/home-menu.jpg";
 
 const categoryImages: Record<string, string> = {
   "t-shirts": "/images/sb/home-street.jpg",
@@ -316,7 +317,7 @@ const Home = () => {
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <img src={detailImage} alt="Person wearing SB streetwear" className="h-full min-h-[260px] w-full object-cover sm:min-h-[360px]" loading="lazy" decoding="async" />
-              <img src="/images/sb/look-01.jpg" alt="SB streetwear look" className="h-full min-h-[260px] w-full object-cover sm:min-h-[360px]" loading="lazy" decoding="async" />
+              <img src={editorialImage} alt="SB streetwear look" className="h-full min-h-[260px] w-full object-cover object-top sm:min-h-[360px]" loading="lazy" decoding="async" />
             </div>
           </div>
 
