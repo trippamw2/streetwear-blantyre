@@ -28,7 +28,7 @@ const About = () => (
           </div>
         </div>
         <div className="order-1 overflow-hidden rounded-[2rem] border border-gray-200 bg-white lg:order-2">
-          <img src="/images/sb/urban-blue-style-duo.jpg" alt="SB urban lifestyle style" className="h-auto w-full object-contain" loading="eager" fetchPriority="high" />
+          <img src="/images/sb/urban-blue-style-duo.jpg" alt="SB urban lifestyle style" className="h-auto w-full object-contain" loading="eager" fetchPriority="high" decoding="async" />
         </div>
       </div>
     </section>

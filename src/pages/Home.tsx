@@ -222,8 +222,8 @@ const Home = () => {
               </p>
             </div>
             <div className="order-1 grid grid-cols-2 gap-3 lg:order-2">
-              <img src={detailImage} alt="Person wearing SB streetwear" className="h-full w-full rounded-xl object-cover" loading="lazy" />
-              <img src="/images/sb/blue-streetwear-squad.jpg" alt="People wearing SB clothing" className="h-full w-full rounded-xl object-cover" loading="lazy" />
+              <img src={detailImage} alt="Person wearing SB streetwear" className="h-full w-full rounded-xl object-cover" loading="lazy" decoding="async" />
+              <img src="/images/sb/blue-streetwear-squad.jpg" alt="People wearing SB clothing" className="h-full w-full rounded-xl object-cover" loading="lazy" decoding="async" />
             </div>
           </div>
 
@@ -241,7 +241,7 @@ const Home = () => {
                     <div className="flex gap-0.5 text-amber-400">{Array.from({ length: Math.max(1, Math.min(5, Math.round(t.rating))) }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}</div>
                     <p className="mt-3 text-sm leading-relaxed text-gray-700">"{t.message}"</p>
                     <div className="mt-4 flex items-center gap-3">
-                      {t.image ? <img src={t.image} alt={t.name} className="h-9 w-9 rounded-full object-cover" loading="lazy" /> : <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">{t.name.slice(0, 1)}</div>}
+                      {t.image ? <img src={t.image} alt={t.name} className="h-9 w-9 rounded-full object-cover" loading="lazy" decoding="async" /> : <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">{t.name.slice(0, 1)}</div>}
                       <div>
                         <p className="text-sm font-semibold text-gray-900">{t.name}</p>
                         <p className="text-xs text-gray-500">{t.role || "SB customer"}</p>

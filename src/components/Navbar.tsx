@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ChevronDown, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { cn } from "@/lib/utils";
@@ -29,12 +29,30 @@ export const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const { count } = useCart();
   const { user, signOut } = useAuth();
 
   useEffect(() => {
+    setMobileOpen(false);
+    setSearchOpen(false);
+  }, [location.pathname, location.search]);
+
+  useEffect(() => {
     if (searchOpen) searchRef.current?.focus();
   }, [searchOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen && !searchOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen, searchOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +72,9 @@ export const Navbar = () => {
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="rounded-md p-2 text-gray-900 transition-colors hover:bg-gray-100 lg:hidden"
-          aria-label="Toggle menu"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-nav"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -130,10 +150,10 @@ export const Navbar = () => {
           )}
 
           <CartDrawer>
-            <button className="relative rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary" aria-label="Bag">
+            <button className="relative rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-primary" aria-label={count > 0 ? `Bag, ${count} items` : "Bag"}>
               <ShoppingBag className="h-5 w-5" />
               {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white" aria-hidden="true">
                   {count > 99 ? "99+" : count}
                 </span>
               )}
@@ -164,12 +184,13 @@ export const Navbar = () => {
       )}
 
       <div
+        id="mobile-nav"
         className={cn(
           "overflow-hidden border-t border-gray-200 bg-white transition-all duration-300 lg:hidden",
           mobileOpen ? "max-h-[80vh] overflow-y-auto" : "max-h-0 border-t-0",
         )}
       >
-        <nav className="container flex flex-col py-4" aria-label="Mobile">
+        <nav className="container flex flex-col py-4" aria-label="Mobile" aria-hidden={!mobileOpen}>
           {NAV_LINKS.map((link) => (
             <Link
               key={link.to + link.label}

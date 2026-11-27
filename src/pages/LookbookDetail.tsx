@@ -146,7 +146,7 @@ const LookbookDetail = () => {
                   {/* Product Image */}
                   <div className="w-full sm:w-48 h-48 rounded-xl overflow-hidden bg-gray-100 shrink-0">
                     {item.products?.image ? (
-                      <img src={item.products.image} alt={item.products.name} className="w-full h-full object-cover" />
+                      <img src={item.products.image} alt={item.products.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <span className="text-gray-600 font-display text-2xl font-bold">{index + 1}</span>

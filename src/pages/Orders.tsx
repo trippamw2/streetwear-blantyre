@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { formatMWK } from "@/data/products";
 import { SEO, defaultSEO } from "@/components/SEO";
 import { PageSkeleton } from "@/components/Skeletons";
-import { Package } from "lucide-react";
+import { Package, ShoppingBag } from "lucide-react";
 import { format } from "date-fns";
 
 interface OrderRow {
@@ -42,12 +42,8 @@ const Orders = () => {
       });
   }, [user]);
 
-  if (authLoading || (!user && !authLoading)) {
-    if (!user) {
-      window.location.href = "/auth?redirect=/orders";
-      return null;
-    }
-  }
+  if (authLoading) return <PageSkeleton />;
+  if (!user) return <Navigate to="/auth?redirect=/orders" replace />;
 
   return (
     <div className="container py-12 sm:py-16 max-w-3xl">
@@ -60,10 +56,11 @@ const Orders = () => {
       {loading ? (
         <PageSkeleton />
       ) : orders.length === 0 ? (
-        <div className="text-center py-20 space-y-4 rounded-3xl bg-gray-50 border border-gray-100">
-          <Package className="h-12 w-12 mx-auto text-gray-600" />
-          <p className="text-gray-600">No orders yet.</p>
-          <Button asChild variant="hero"><Link to="/shop">Discover Culture</Link></Button>
+        <div className="rounded-3xl border border-gray-200 bg-gray-50 px-6 py-16 text-center">
+          <ShoppingBag className="mx-auto h-12 w-12 text-gray-400" />
+          <h2 className="mt-4 font-display text-xl font-bold text-gray-900">No orders yet</h2>
+          <p className="mt-2 text-sm text-gray-600">When you place an order, it will show up here.</p>
+          <Button asChild variant="hero" className="mt-6"><Link to="/shop">Shop now</Link></Button>
         </div>
       ) : (
         <div className="space-y-3">

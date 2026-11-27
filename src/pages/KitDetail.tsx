@@ -181,7 +181,7 @@ const KitDetail = () => {
                 </li>
                 <li className="flex items-start gap-2">
                   <Star className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
-                  <span>Quality checked before dispatch</span>
+                  <span>Packed with care before dispatch</span>
                 </li>
               </ul>
             </div>

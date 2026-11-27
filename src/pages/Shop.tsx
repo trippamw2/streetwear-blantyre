@@ -281,7 +281,7 @@ const Shop = () => {
         {/* SEARCH + TOOLBAR */}
         <div className="mb-4 flex flex-col gap-2 sm:mb-6 sm:flex-row sm:items-center sm:gap-3">
           <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" aria-hidden="true" />
             <Input
               placeholder="Search pieces, brands, styles..."
               value={searchQuery}
@@ -312,6 +312,7 @@ const Shop = () => {
               onClick={() => setShowFilters((v) => !v)}
               className="h-11 gap-2 px-5"
               aria-expanded={showFilters}
+              aria-controls="shop-filters"
             >
               <SlidersHorizontal className="h-4 w-4" />
               Filters
@@ -389,7 +390,7 @@ const Shop = () => {
               onClick={() => setShowFilters(false)}
               aria-hidden="true"
             />
-            <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-3xl border border-gray-200 bg-white p-4 shadow-2xl sm:p-6 lg:static lg:z-20 lg:mb-6 lg:max-h-none lg:overflow-visible lg:rounded-2xl lg:bg-gray-50 lg:p-6 lg:shadow-sm lg:sticky lg:top-24">
+            <div id="shop-filters" role="region" aria-label="Product filters" className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-3xl border border-gray-200 bg-white p-4 shadow-2xl sm:p-6 lg:static lg:z-20 lg:mb-6 lg:max-h-none lg:overflow-visible lg:rounded-2xl lg:bg-gray-50 lg:p-6 lg:shadow-sm lg:sticky lg:top-24">
               <div className="mb-4 flex items-center justify-between lg:hidden">
                 <h2 className="font-display text-lg font-bold text-gray-900">Filters</h2>
                 <button

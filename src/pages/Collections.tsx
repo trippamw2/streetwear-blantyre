@@ -37,6 +37,7 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
             src={cover}
             alt={collection.name}
             loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.05]"
           />
         ) : (

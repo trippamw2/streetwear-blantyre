@@ -36,7 +36,7 @@ const Loyalty = () => {
                 <Link to="/auth">Sign In</Link>
               </Button>
               <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-white/90">
-                <Link to="/shop">Discover Culture</Link>
+                <Link to="/shop">Shop now</Link>
               </Button>
             </div>
           </div>

@@ -209,13 +209,11 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               {getBrandName(product.brand)}
             </span>
             <span className="flex shrink-0 items-center gap-1 text-[10px] font-semibold text-gray-500">
-              {rating > 0 ? (
+              {rating > 0 && (
                 <>
                   <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                   {rating.toFixed(1)}
                 </>
-              ) : (
-                <span className="text-primary">Quality checked</span>
               )}
             </span>
           </div>
