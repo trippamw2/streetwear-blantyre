@@ -85,7 +85,7 @@ const LookDetail = () => {
       <section className="relative isolate overflow-hidden bg-gray-900">
         <div className="absolute inset-0">
           {heroImage ? (
-            <img src={heroImage} alt="" className="h-full w-full object-cover object-top" loading="eager" fetchPriority="high" decoding="async" />
+            <img src={heroImage} alt="" className="h-full w-full object-contain object-center bg-black/0 sm:object-cover sm:object-top" loading="eager" fetchPriority="high" decoding="async" />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-gray-900 via-primary/80 to-gray-700" />
           )}
@@ -181,7 +181,7 @@ const LookDetail = () => {
                         src={product.image}
                         alt={product.name}
                         loading="lazy"
-                        className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.05]"
+                        className="h-full w-full object-contain object-center bg-black/0 sm:object-cover sm:object-top transition-transform duration-500 group-hover:scale-[1.05]"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">

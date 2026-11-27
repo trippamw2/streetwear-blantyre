@@ -115,7 +115,7 @@ const Editorial = () => {
             >
               <div className="relative h-72 sm:h-96 bg-gray-100">
                 {story.hero_image ? (
-                  <img src={story.hero_image} alt={story.title} className="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105" />
+                  <img src={story.hero_image} alt={story.title} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center opacity-70 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105" />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-700" />
                 )}
@@ -152,7 +152,7 @@ const Editorial = () => {
                 >
                   <div className="relative h-48 bg-gray-100 overflow-hidden">
                     {story.hero_image ? (
-                      <img src={story.hero_image} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={story.hero_image} alt={story.title} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center">
                         <span className="text-gray-900/20 font-display text-3xl font-bold">{story.title[0]}</span>

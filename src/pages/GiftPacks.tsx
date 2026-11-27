@@ -235,7 +235,7 @@ const GiftPacks = () => {
 
                   <div className="bg-gray-100 border-b border-gray-200">
                     <div className="w-full aspect-[4/3] overflow-hidden">
-                      <img src={kit.image} alt={kit.name} className="w-full h-full object-cover" />
+                      <img src={kit.image} alt={kit.name} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center" />
                     </div>
                   </div>
 
@@ -248,7 +248,7 @@ const GiftPacks = () => {
                       <div className="space-y-1">
                         {kitProducts.slice(0, 3).map((p) => (
                           <div key={p.id} className="flex items-center gap-2 text-[11px]">
-                            <img src={p.image} alt={p.name} className="h-7 w-7 rounded-lg object-cover shrink-0 border border-gray-200" />
+                            <img src={p.image} alt={p.name} className="h-7 w-7 rounded-lg object-contain object-center bg-gray-100 sm:object-cover sm:object-center shrink-0 border border-gray-200" />
                             <span className="text-gray-600 truncate">{p.name}</span>
                           </div>
                         ))}

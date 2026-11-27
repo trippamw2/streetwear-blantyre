@@ -113,7 +113,7 @@ const EditorialPost = () => {
         {/* Hero Image */}
         <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] bg-gray-100">
           {story.hero_image ? (
-            <img src={story.hero_image} alt={story.title} className="w-full h-full object-cover" />
+            <img src={story.hero_image} alt={story.title} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center" />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700" />
           )}

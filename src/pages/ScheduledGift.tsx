@@ -202,7 +202,7 @@ const ScheduledGift = () => {
                   }`}
                 >
                   <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden mb-2">
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={product.image} alt={product.name} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center group-hover:scale-105 transition-transform duration-300" />
                   </div>
                   <p className="text-[11px] text-gray-600 uppercase tracking-wider">{product.category}</p>
                   <p className="text-sm font-semibold text-gray-900 leading-tight mt-0.5">{product.name}</p>
@@ -226,7 +226,7 @@ const ScheduledGift = () => {
             </div>
 
             <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl mb-8">
-              <img src={selectedProduct.image} alt={selectedProduct.name} className="h-16 w-16 rounded-lg object-cover border border-gray-100" />
+              <img src={selectedProduct.image} alt={selectedProduct.name} className="h-16 w-16 rounded-lg object-contain object-center bg-gray-100 sm:object-cover sm:object-center border border-gray-100" />
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] text-gray-600 uppercase tracking-wider">{selectedProduct.category}</p>
                 <p className="text-sm font-semibold text-gray-900 truncate">{selectedProduct.name}</p>
@@ -312,7 +312,7 @@ const ScheduledGift = () => {
 
             <div className="p-5 bg-gray-50 rounded-xl mb-6 space-y-3">
               <div className="flex items-center gap-3">
-                <img src={selectedProduct.image} alt={selectedProduct.name} className="h-12 w-12 rounded-lg object-cover border border-gray-100" />
+                <img src={selectedProduct.image} alt={selectedProduct.name} className="h-12 w-12 rounded-lg object-contain object-center bg-gray-100 sm:object-cover sm:object-center border border-gray-100" />
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-gray-900">{selectedProduct.name}</p>
                   <p className="text-sm font-bold text-gray-900">{formatMWK(selectedProduct.price)}</p>

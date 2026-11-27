@@ -137,7 +137,7 @@ const Culture = () => {
                   >
                     <div className="relative h-44 bg-gray-100 overflow-hidden">
                       {story.hero_image ? (
-                        <img src={story.hero_image} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <img src={story.hero_image} alt={story.title} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center group-hover:scale-105 transition-transform duration-500" />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center">
                           <span className="text-gray-900/20 font-display text-3xl font-bold">{story.title[0]}</span>

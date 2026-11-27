@@ -115,7 +115,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                       alt={product.name}
                       loading="lazy"
                       decoding="async"
-                      className={`h-full w-full object-cover object-top transition-transform duration-[800ms] ease-out ${secondary ? "group-hover:opacity-0" : "group-hover:scale-[1.035]"}`}
+                      className={`h-full w-full object-contain object-center bg-[#f0f0ee] transition-transform duration-[800ms] ease-out sm:object-cover sm:object-top ${secondary ? "group-hover:opacity-0" : "group-hover:scale-[1.035]"}`}
                     />
                     {secondary && (
                       <img
@@ -124,7 +124,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                         aria-hidden="true"
                         loading="lazy"
                         decoding="async"
-                        className="absolute inset-0 h-full w-full object-cover object-top opacity-0 transition-all duration-[800ms] ease-out group-hover:scale-[1.02] group-hover:opacity-100"
+                        className="absolute inset-0 h-full w-full object-contain object-center bg-[#f0f0ee] opacity-0 transition-all duration-[800ms] ease-out group-hover:scale-[1.02] group-hover:opacity-100 sm:object-cover sm:object-top"
                       />
                     )}
                   </>

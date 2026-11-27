@@ -65,7 +65,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
             <img
               src={kit.image}
               alt={kit.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         </div>
@@ -98,7 +98,7 @@ export const KitCard = ({ kit, index = 0, compact = false }: KitCardProps) => {
                   <img
                     src={p.image}
                     alt={p.name}
-                    className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg object-cover shrink-0 border border-gray-100"
+                    className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg object-contain object-center bg-gray-100 sm:object-cover sm:object-center shrink-0 border border-gray-100"
                   />
                   <span className="text-gray-600 truncate">{p.name}</span>
                   {!compact && (

@@ -64,7 +64,7 @@ const Passport = () => {
             <img
               src={product.product_image}
               alt={product.product_name}
-              className="w-full h-full object-cover opacity-80"
+              className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center opacity-80"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">

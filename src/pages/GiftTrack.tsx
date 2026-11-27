@@ -228,7 +228,7 @@ const GiftTrack = () => {
               <p className="text-xs font-semibold text-gray-600 uppercase tracking-[0.15em] mb-3">Item</p>
               {gift.gift_items?.map((item, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <img src={item.product_image} alt={item.product_name} className="h-12 w-12 rounded-lg object-cover border border-gray-100" />
+                  <img src={item.product_image} alt={item.product_name} className="h-12 w-12 rounded-lg object-contain object-center bg-gray-100 sm:object-cover sm:object-center border border-gray-100" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-900 truncate">{item.product_name}</p>
                     <p className="text-xs text-gray-600">Qty: {item.quantity}</p>

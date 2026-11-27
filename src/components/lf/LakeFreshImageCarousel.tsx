@@ -63,7 +63,7 @@ const LakeFreshImageCarousel = ({
       <LakeFreshImage
         src={photo}
         alt={alt}
-        className={`h-full w-full object-cover ${imageClassName}`}
+        className={`h-full w-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center ${imageClassName}`}
         onError={() => markFailed(photo)}
       />
     );
@@ -129,7 +129,7 @@ const LakeFreshImageCarousel = ({
                 <LakeFreshImage
                   src={image}
                   alt=""
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center"
                   onError={() => markFailed(image)}
                 />
               </button>

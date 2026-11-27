@@ -367,7 +367,7 @@ const ProductDetail = () => {
                 <img
                   src={selectedImageSrc}
                   alt={product.name}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain object-center bg-gray-100 sm:object-cover sm:object-top"
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
@@ -491,7 +491,7 @@ const ProductDetail = () => {
                       : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <img src={img} alt={galleryLabels[i] || `Photo ${i + 1}`} className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                  <img src={img} alt={galleryLabels[i] || `Photo ${i + 1}`} className="h-full w-full object-contain object-center bg-gray-100 sm:object-cover sm:object-top" loading="lazy" decoding="async" />
                   <span className="absolute inset-x-0 bottom-0 truncate bg-gray-950/70 px-1 py-0.5 text-[8px] font-bold uppercase text-white">
                     {galleryLabels[i] || `Photo ${i + 1}`}
                   </span>

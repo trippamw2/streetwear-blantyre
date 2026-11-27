@@ -85,7 +85,7 @@ const Lookbooks = () => {
             >
               <div className="relative h-72 sm:h-96 bg-gray-100">
                 {lb.hero_image ? (
-                  <img src={lb.hero_image} alt={lb.title} className="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition-opacity duration-500 group-hover:scale-105 transition-transform" loading="lazy" decoding="async" />
+                  <img src={lb.hero_image} alt={lb.title} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center opacity-70 group-hover:opacity-60 transition-opacity duration-500 group-hover:scale-105 transition-transform" loading="lazy" decoding="async" />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-700" />
                 )}
@@ -118,7 +118,7 @@ const Lookbooks = () => {
                 >
                   <div className="relative h-56 sm:h-64 bg-gray-100 overflow-hidden">
                     {lb.hero_image ? (
-                      <img src={lb.hero_image} alt={lb.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+                      <img src={lb.hero_image} alt={lb.title} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                         <span className="text-gray-600 font-display text-4xl font-bold">{lb.title[0]}</span>

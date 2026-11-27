@@ -38,7 +38,7 @@ const CollectionCard = ({ collection, products }: { collection: SbCollection; pr
             alt={collection.name}
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover object-top transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
+            className="h-full w-full object-contain object-center bg-black/0 sm:object-cover sm:object-top transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#141414] via-primary/70 to-[#2a2a2a]">
@@ -107,7 +107,7 @@ const Collections = () => {
 
       <section className="relative overflow-hidden border-b border-black/[0.06] bg-[#0a0a0a] text-white">
         <div className="absolute inset-0">
-          <img src="/images/sb/home-street.jpg" alt="" aria-hidden="true" className="h-full w-full object-cover object-top opacity-30" loading="eager" fetchPriority="high" decoding="async" />
+          <img src="/images/sb/home-street.jpg" alt="" aria-hidden="true" className="h-full w-full object-contain object-center bg-black/0 sm:object-cover sm:object-top opacity-30" loading="eager" fetchPriority="high" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/35" />
         </div>
         <div className="container relative py-20 sm:py-28 lg:py-32">

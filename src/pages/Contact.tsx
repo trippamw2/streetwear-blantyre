@@ -11,7 +11,7 @@ const Contact = () => (
 
     <section className="relative overflow-hidden border-b border-black/[0.06] bg-[#0a0a0a] text-white">
       <div className="absolute inset-0">
-        <img src="/images/sb/street-campaign.jpg" alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-25" loading="eager" fetchPriority="high" decoding="async" />
+        <img src="/images/sb/street-campaign.jpg" alt="" aria-hidden="true" className="h-full w-full object-contain object-center opacity-25 sm:object-cover sm:object-center" loading="eager" fetchPriority="high" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/40" />
       </div>
       <div className="container relative py-20 sm:py-28">

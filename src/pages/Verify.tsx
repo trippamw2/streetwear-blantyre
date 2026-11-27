@@ -211,7 +211,7 @@ const Verify = () => {
               <img
                 src={product.product_image}
                 alt={product.product_name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">

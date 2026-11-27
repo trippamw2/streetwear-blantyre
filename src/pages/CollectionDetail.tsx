@@ -79,7 +79,7 @@ const CollectionDetail = () => {
       <section className="relative isolate overflow-hidden bg-[#0a0a0a]">
         <div className="absolute inset-0">
           {heroImage ? (
-            <img src={heroImage} alt="" className="h-full w-full object-cover object-top opacity-75" loading="eager" fetchPriority="high" decoding="async" />
+            <img src={heroImage} alt="" className="h-full w-full object-contain object-center bg-black/0 sm:object-cover sm:object-top opacity-75" loading="eager" fetchPriority="high" decoding="async" />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-[#141414] via-primary/70 to-[#2a2a2a]" />
           )}

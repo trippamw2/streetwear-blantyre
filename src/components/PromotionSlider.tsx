@@ -68,7 +68,7 @@ export const PromotionSlider = ({ page, className }: PromotionSliderProps) => {
       <Link to={promo.link || "/shop"} className="block relative w-full h-full">
         {promo.image ? (
           <div className="absolute inset-0">
-            <img src={promo.image} alt={promo.title} className="w-full h-full object-cover" />
+            <img src={promo.image} alt={promo.title} className="w-full h-full object-contain object-center bg-gray-100 sm:object-cover sm:object-center" />
             <div className="absolute inset-0 bg-black/30" />
           </div>
         ) : (

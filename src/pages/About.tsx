@@ -15,7 +15,7 @@ const About = () => (
 
     <section className="relative overflow-hidden border-b border-black/[0.06] bg-[#0a0a0a] text-white">
       <div className="absolute inset-0">
-        <img src="/images/sb/urban-blue-style-duo.jpg" alt="" aria-hidden="true" className="h-full w-full object-cover object-top opacity-35" loading="eager" fetchPriority="high" decoding="async" />
+        <img src="/images/sb/urban-blue-style-duo.jpg" alt="" aria-hidden="true" className="h-full w-full object-contain object-center opacity-35 sm:object-cover sm:object-top" loading="eager" fetchPriority="high" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/30" />
       </div>
       <div className="container relative py-20 sm:py-28 lg:py-32">
@@ -58,7 +58,9 @@ const About = () => (
 
     <section className="border-y border-black/[0.06] bg-white">
       <div className="grid lg:grid-cols-2">
-        <img src="/images/sb/blue-streetwear-squad.jpg" alt="SB streetwear in everyday life" className="h-full min-h-[320px] w-full object-cover object-top" loading="lazy" decoding="async" />
+        <div className="bg-[#111]">
+          <img src="/images/sb/blue-streetwear-squad.jpg" alt="SB streetwear in everyday life" className="h-full min-h-[320px] w-full object-contain object-center sm:object-cover sm:object-top" loading="lazy" decoding="async" />
+        </div>
         <div className="flex items-center px-6 py-14 sm:px-10 lg:px-16">
           <div className="max-w-xl">
             <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary">SB Promise</p>

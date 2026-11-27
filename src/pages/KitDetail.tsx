@@ -208,7 +208,7 @@ const KitDetail = () => {
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="h-32 w-32 sm:h-40 sm:w-40 lg:h-48 lg:w-48 rounded-2xl object-cover border border-gray-200"
+                        className="h-32 w-32 sm:h-40 sm:w-40 lg:h-48 lg:w-48 rounded-2xl object-contain object-center bg-gray-100 sm:object-cover sm:object-center border border-gray-200"
                       />
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
