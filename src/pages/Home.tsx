@@ -7,11 +7,11 @@ import { useProducts } from "@/hooks/useProducts";
 import { useTestimonials } from "@/hooks/useTestimonials";
 import { SB_PRODUCT_TYPES } from "@/data/sbArchitecture";
 
-const heroImage = "/images/sb/hero-campaign.jpg";
+const heroImage = "/images/sb/home-menu.jpg";
 const lifestyleImage = "/images/sb/blue-streetwear-squad.jpg";
 const detailImage = "/images/sb/urban-blue-style-duo.jpg";
 const campaignImage = "/images/sb/home-street.jpg";
-const editorialImage = "/images/sb/home-menu.jpg";
+const editorialImage = "/images/sb/hero-campaign.jpg";
 
 const categoryImages: Record<string, string> = {
   "t-shirts": "/images/sb/home-street.jpg",
@@ -47,14 +47,16 @@ const Home = () => {
 
       {/* HERO - cinematic, full bleed */}
       <section className="relative isolate min-h-[78svh] overflow-hidden bg-[#0a0a0a] sm:min-h-[88svh]">
-        <img
-          src={heroImage}
-          alt="SB streetwear clothing"
-          className="absolute inset-0 h-full w-full object-cover object-[center_20%]"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-        />
+        <div className="absolute inset-0 bg-[#0a0a0a]">
+          <img
+            src={heroImage}
+            alt="SB streetwear clothing"
+            className="h-full w-full object-contain object-center sm:object-cover sm:object-[center_20%]"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </div>
         <div className="sb-hero-overlay absolute inset-0" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_80%,rgba(16,44,84,0.35),transparent_55%)]" />
 
@@ -154,11 +156,11 @@ const Home = () => {
           {SB_PRODUCT_TYPES.map((type, index) => (
             <motion.div key={type.slug} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} custom={index}>
               <Link to={`/shop?category=${type.slug}`} className="group relative block overflow-hidden bg-[#111]">
-                <div className="aspect-[3/4] overflow-hidden">
+                <div className="aspect-[3/4] overflow-hidden bg-[#111]">
                   <img
                     src={categoryImages[type.slug] || "/images/sb/home-street.jpg"}
                     alt={type.label}
-                    className="h-full w-full object-cover object-top transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
+                    className="h-full w-full object-contain object-center p-2 transition-transform duration-[900ms] ease-out group-hover:scale-[1.02] sm:object-cover sm:object-top sm:p-0"
                     loading="lazy"
                     decoding="async"
                   />
@@ -184,7 +186,7 @@ const Home = () => {
             <img
               src={lifestyleImage}
               alt="People wearing SB streetwear in Malawi"
-              className="absolute inset-0 h-full w-full object-cover object-top"
+              className="absolute inset-0 h-full w-full object-contain object-center sm:object-cover sm:object-top"
               loading="lazy"
               decoding="async"
             />
@@ -259,9 +261,9 @@ const Home = () => {
 
       {/* CAMPAIGN BANNER */}
       <section className="relative overflow-hidden bg-[#0a0a0a]">
-        <div className="absolute inset-0">
-          <img src={campaignImage} alt="SB streetwear campaign" className="h-full w-full object-cover object-center opacity-55" loading="lazy" decoding="async" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/20" />
+        <div className="absolute inset-0 bg-[#0a0a0a]">
+          <img src={campaignImage} alt="SB streetwear campaign" className="h-full w-full object-contain object-center opacity-70 sm:object-cover sm:object-center sm:opacity-55" loading="lazy" decoding="async" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30 sm:from-black/80 sm:via-black/45 sm:to-black/20" />
         </div>
         <div className="container relative py-20 sm:py-28 lg:py-32">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/60">Everyday streetwear</p>
@@ -316,8 +318,12 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <img src={detailImage} alt="Person wearing SB streetwear" className="h-full min-h-[260px] w-full object-cover sm:min-h-[360px]" loading="lazy" decoding="async" />
-              <img src={editorialImage} alt="SB streetwear look" className="h-full min-h-[260px] w-full object-cover object-top sm:min-h-[360px]" loading="lazy" decoding="async" />
+              <div className="overflow-hidden bg-[#111]">
+                <img src={detailImage} alt="Person wearing SB streetwear" className="h-full min-h-[260px] w-full object-contain object-center sm:min-h-[360px] sm:object-cover sm:object-top" loading="lazy" decoding="async" />
+              </div>
+              <div className="overflow-hidden bg-[#111]">
+                <img src={editorialImage} alt="SB streetwear look" className="h-full min-h-[260px] w-full object-contain object-center sm:min-h-[360px] sm:object-cover sm:object-top" loading="lazy" decoding="async" />
+              </div>
             </div>
           </div>
 
